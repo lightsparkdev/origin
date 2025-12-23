@@ -2,6 +2,9 @@
  * Global Styles
  */
 
+// Import fonts (must come first)
+@use '../tokens/fonts';
+
 // Import design tokens (CSS custom properties)
 @use '../tokens/variables';
 

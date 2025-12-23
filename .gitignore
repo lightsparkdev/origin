@@ -28,6 +28,10 @@ npm-debug.log*
 .env.local
 .env.*.local
 
+# Licensed Fonts (not for public distribution)
+public/fonts/
+Suisse font/
+
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
