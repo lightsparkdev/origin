@@ -1,0 +1,74 @@
+# AGENTS.md
+
+> Quick reference for AI agents working on this project.
+
+## Quick Setup
+
+```bash
+npm install --legacy-peer-deps   # Install dependencies
+npm run dev                       # Start dev server
+npm run tokens:build              # Build tokens from Figma exports
+```
+
+## Project Overview
+
+**Origin v2** is a design system using:
+- **Base UI** for component behavior/accessibility
+- **Figma Dev Mode CSS** for styling (directly, no generation)
+- **Central Icons** for iconography
+
+## Key Directories
+
+| Path | Purpose |
+|------|---------|
+| `src/components/` | React components |
+| `src/components/Icon/` | CentralIcon system (complete registry) |
+| `src/tokens/` | Generated SCSS variables |
+| `tokens/figma/` | Raw Figma token exports (DTCG format) |
+| `tools/base-ui-lint/` | Figma plugin for structure validation |
+
+## Figma Lint Plugin
+
+Validates Figma components against Base UI structure.
+
+```bash
+cd tools/base-ui-lint
+npm install
+npm run build
+```
+
+Import `manifest.json` in Figma → Plugins → Development.
+
+**37 rules** covering all Base UI components in `tools/base-ui-lint/rules/`.
+
+## Component Workflow
+
+1. Design component in Figma with proper frame names
+2. Run Base UI Lint Plugin → fix any issues
+3. Copy CSS from Figma Dev Mode
+4. Create React component with Base UI + copied CSS
+5. Add to Storybook
+
+## Commands
+
+```bash
+npm run dev              # Next.js dev server
+npm run storybook        # Storybook
+npm run build            # Production build
+npm run tokens:build     # Transform Figma tokens → SCSS
+npm run lint             # ESLint
+```
+
+## Do / Do Not
+
+- **Do** use Base UI components for interactive elements
+- **Do** copy CSS directly from Figma Dev Mode
+- **Do** run the lint plugin before implementing a component
+- **Do not** create complex generation pipelines
+- **Do not** manually write token values (use variables)
+- **Do not** modify `tools/base-ui-lint/rules/*.json` unless Base UI's API changes
+
+## Full Context
+
+See `CONTEXT.md` for complete project history and technical details.
+

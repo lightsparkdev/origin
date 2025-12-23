@@ -1,0 +1,28 @@
+/**
+ * Global Styles
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+// ===== ICON SYSTEM =====
+// Apply absolute stroke width to all Central Icons
+// Strokes remain 1.5px regardless of icon size
+.central-icon-absolute-stroke path {
+  vector-effect: non-scaling-stroke;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-sans, 'Suisse Intl', system-ui, sans-serif);
+  font-size: var(--font-size-base, 14px);
+  line-height: var(--font-leading-base, 20px);
+  color: var(--text-primary, #1a1a1a);
+  background: var(--surface-primary, #ffffff);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
