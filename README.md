@@ -73,5 +73,5 @@ All ~100 icons from the Figma design system are available.
 
 ## Documentation
 
-- `AGENTS.md` — Quick reference for AI assistants
+- `.cursor/rules` — Auto-injected context for AI assistants
 - `CONTEXT.md` — Full project context and history
