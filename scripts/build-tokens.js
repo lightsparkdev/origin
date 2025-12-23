@@ -110,10 +110,45 @@ function figmaColorToCSS(colorObj) {
 }
 
 /**
+ * Check if a token name suggests it's a font family
+ */
+function isFontFamilyToken(tokenName) {
+  return tokenName.toLowerCase().includes('font-family') || 
+         tokenName.toLowerCase().includes('font/family');
+}
+
+/**
+ * Check if a token needs px units based on its name
+ * Token names use '/' as separator (e.g., 'spacing/md')
+ */
+function needsPxUnits(tokenName) {
+  const pxPatterns = [
+    'spacing/',
+    'corner-radius/',
+    'stroke/',
+    'font/size',
+    'font/leading',
+    'max-width/',
+    'screens/',
+  ];
+  const lower = tokenName.toLowerCase();
+  return pxPatterns.some(pattern => lower.includes(pattern));
+}
+
+/**
+ * Escape and quote font family values for CSS
+ */
+function quoteFontFamily(value) {
+  // Escape any existing quotes and wrap in quotes
+  const escaped = String(value).replace(/"/g, '\\"');
+  return `"${escaped}"`;
+}
+
+/**
  * Convert token value to CSS value
  */
 function toCSSValue(token) {
-  const { value, type } = token;
+  const { value, type, name } = token;
   
   // Handle alias references (e.g., "{color.primary}")
   if (typeof value === 'string' && value.startsWith('{') && value.endsWith('}')) {
@@ -128,14 +163,26 @@ function toCSSValue(token) {
     case 'dimension':
       return typeof value === 'number' ? `${value}px` : value;
     case 'number':
-      // Numbers without units (like font-weight, line-height ratios)
+      // Some "number" tokens actually need px units (spacing, font-size, etc.)
+      if (needsPxUnits(name)) {
+        return `${value}px`;
+      }
+      // Pure numbers (font-weight, opacity, etc.)
       return String(value);
     case 'fontFamily':
-      return `"${value}"`;
+      return quoteFontFamily(value);
     case 'fontWeight':
       return String(value);
     default:
-      // For unknown types, try to be smart about units
+      // Check if this looks like a font family by name
+      if (isFontFamilyToken(name)) {
+        return quoteFontFamily(value);
+      }
+      // Check if this needs px units based on name
+      if (typeof value === 'number' && needsPxUnits(name)) {
+        return `${value}px`;
+      }
+      // For unknown types, return as-is
       if (typeof value === 'number') {
         return String(value);
       }

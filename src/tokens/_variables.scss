@@ -16,69 +16,69 @@
   /* ═══ BASELINE ═══ */
 
   /* spacing */
-  --spacing-neg6xs: -12;
-  --spacing-neg5xs: -8;
-  --spacing-neg4xs: -6;
-  --spacing-neg3xs: -4;
-  --spacing-neg2xs: -2;
-  --spacing-negpx: -1;
-  --spacing-none: 0;
-  --spacing-px: 1;
-  --spacing-4xs: 2;
-  --spacing-3xs: 4;
-  --spacing-2xs: 6;
-  --spacing-xs: 8;
-  --spacing-sm: 12;
-  --spacing-md: 16;
-  --spacing-lg: 20;
-  --spacing-xl: 24;
-  --spacing-2xl: 32;
-  --spacing-3xl: 40;
-  --spacing-4xl: 48;
-  --spacing-5xl: 56;
-  --spacing-6xl: 64;
-  --spacing-7xl: 72;
-  --spacing-8xl: 80;
-  --spacing-9xl: 96;
-  --spacing-10xl: 112;
-  --spacing-11xl: 128;
-  --spacing-12xl: 144;
-  --spacing-13xl: 160;
-  --spacing-14xl: 176;
-  --spacing-15xl: 192;
-  --spacing-16xl: 208;
-  --spacing-17xl: 224;
-  --spacing-18xl: 240;
-  --spacing-19xl: 256;
-  --spacing-20xl: 288;
-  --spacing-21xl: 320;
+  --spacing-neg6xs: -12px;
+  --spacing-neg5xs: -8px;
+  --spacing-neg4xs: -6px;
+  --spacing-neg3xs: -4px;
+  --spacing-neg2xs: -2px;
+  --spacing-negpx: -1px;
+  --spacing-none: 0px;
+  --spacing-px: 1px;
+  --spacing-4xs: 2px;
+  --spacing-3xs: 4px;
+  --spacing-2xs: 6px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+  --spacing-3xl: 40px;
+  --spacing-4xl: 48px;
+  --spacing-5xl: 56px;
+  --spacing-6xl: 64px;
+  --spacing-7xl: 72px;
+  --spacing-8xl: 80px;
+  --spacing-9xl: 96px;
+  --spacing-10xl: 112px;
+  --spacing-11xl: 128px;
+  --spacing-12xl: 144px;
+  --spacing-13xl: 160px;
+  --spacing-14xl: 176px;
+  --spacing-15xl: 192px;
+  --spacing-16xl: 208px;
+  --spacing-17xl: 224px;
+  --spacing-18xl: 240px;
+  --spacing-19xl: 256px;
+  --spacing-20xl: 288px;
+  --spacing-21xl: 320px;
 
   /* corner-radius */
-  --corner-radius-2xs: 2;
-  --corner-radius-xs: 4;
-  --corner-radius-sm: 6;
-  --corner-radius-md: 8;
-  --corner-radius-lg: 12;
-  --corner-radius-xl: 16;
-  --corner-radius-2xl: 24;
-  --corner-radius-3xl: 32;
-  --corner-radius-4xl: 40;
-  --corner-radius-round: 999;
-  --corner-radius-square: 0;
+  --corner-radius-2xs: 2px;
+  --corner-radius-xs: 4px;
+  --corner-radius-sm: 6px;
+  --corner-radius-md: 8px;
+  --corner-radius-lg: 12px;
+  --corner-radius-xl: 16px;
+  --corner-radius-2xl: 24px;
+  --corner-radius-3xl: 32px;
+  --corner-radius-4xl: 40px;
+  --corner-radius-round: 999px;
+  --corner-radius-square: 0px;
 
   /* max-width */
-  --max-width-0: 0;
-  --max-width-xs: 320;
-  --max-width-sm: 384;
-  --max-width-md: 448;
-  --max-width-lg: 512;
-  --max-width-xl: 576;
-  --max-width-2xl: 672;
-  --max-width-3xl: 768;
-  --max-width-4xl: 896;
-  --max-width-5xl: 1024;
-  --max-width-6xl: 1152;
-  --max-width-7xl: 1280;
+  --max-width-0: 0px;
+  --max-width-xs: 320px;
+  --max-width-sm: 384px;
+  --max-width-md: 448px;
+  --max-width-lg: 512px;
+  --max-width-xl: 576px;
+  --max-width-2xl: 672px;
+  --max-width-3xl: 768px;
+  --max-width-4xl: 896px;
+  --max-width-5xl: 1024px;
+  --max-width-6xl: 1152px;
+  --max-width-7xl: 1280px;
 
   /* opacity */
   --opacity-0: 0;
@@ -104,20 +104,20 @@
   --opacity-100: 100;
 
   /* screens */
-  --screens-sm: 640;
-  --screens-md: 768;
-  --screens-lg: 1024;
-  --screens-xl: 1280;
-  --screens-2xl: 1536;
+  --screens-sm: 640px;
+  --screens-md: 768px;
+  --screens-lg: 1024px;
+  --screens-xl: 1280px;
+  --screens-2xl: 1536px;
 
   /* stroke */
-  --stroke-none: 0;
-  --stroke-1xs: 0.33000001311302185;
-  --stroke-xs: 0.5;
-  --stroke-sm: 1;
-  --stroke-md: 1.5;
-  --stroke-lg: 2;
-  --stroke-xl: 4;
+  --stroke-none: 0px;
+  --stroke-1xs: 0.33000001311302185px;
+  --stroke-xs: 0.5px;
+  --stroke-sm: 1px;
+  --stroke-md: 1.5px;
+  --stroke-lg: 2px;
+  --stroke-xl: 4px;
 
   /* ═══ PRIMITIVES ═══ */
 
@@ -237,21 +237,21 @@
   --color-blue-050: #EEF7FF;
 
   /* font */
-  --font-family-sans: Suisse Intl;
-  --font-family-mono: Suisse Int'l Mono;
-  --font-leading-2xs: 12;
-  --font-leading-xs: 16;
-  --font-leading-sm: 18;
-  --font-leading-base: 20;
-  --font-leading-lg: 24;
-  --font-leading-xl: 32;
-  --font-size-2xs: 10;
-  --font-size-xs: 12;
-  --font-size-sm: 13;
-  --font-size-base: 14;
-  --font-size-lg: 16;
-  --font-size-xl: 18;
-  --font-size-2xl: 24;
+  --font-family-sans: "Suisse Intl";
+  --font-family-mono: "Suisse Int'l Mono";
+  --font-leading-2xs: 12px;
+  --font-leading-xs: 16px;
+  --font-leading-sm: 18px;
+  --font-leading-base: 20px;
+  --font-leading-lg: 24px;
+  --font-leading-xl: 32px;
+  --font-size-2xs: 10px;
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 24px;
   --font-style-italic: italic;
   --font-style-not-italic: normal;
   --font-tracking-tighter: -0.699999988079071;
