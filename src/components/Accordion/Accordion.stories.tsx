@@ -40,20 +40,20 @@ export const Default: StoryObj = {
   ),
 };
 
-export const Single: StoryObj = {
+export const Multiple: StoryObj = {
   render: () => (
-    <Accordion.Root type="single">
+    <Accordion.Root multiple>
       <Accordion.Item value="item-1">
         <Accordion.Header>
           <Accordion.Trigger>First</Accordion.Trigger>
         </Accordion.Header>
-        <Accordion.Panel>Only one item open at a time.</Accordion.Panel>
+        <Accordion.Panel>Multiple items can be open.</Accordion.Panel>
       </Accordion.Item>
       <Accordion.Item value="item-2">
         <Accordion.Header>
           <Accordion.Trigger>Second</Accordion.Trigger>
         </Accordion.Header>
-        <Accordion.Panel>Opening this closes the first.</Accordion.Panel>
+        <Accordion.Panel>This stays open when others open.</Accordion.Panel>
       </Accordion.Item>
     </Accordion.Root>
   ),

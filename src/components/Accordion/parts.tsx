@@ -6,16 +6,13 @@ import { CentralIcon } from '@/components/Icon';
 import clsx from 'clsx';
 import styles from './Accordion.module.scss';
 
-export interface RootProps extends Omit<BaseAccordion.Root.Props, 'multiple'> {
-  type?: 'single' | 'multiple';
-}
+export interface RootProps extends BaseAccordion.Root.Props {}
 
 export const Root = React.forwardRef<HTMLDivElement, RootProps>(
-  function Root({ className, type = 'multiple', ...props }, ref) {
+  function Root({ className, ...props }, ref) {
     return (
       <BaseAccordion.Root
         ref={ref}
-        multiple={type === 'multiple'}
         className={clsx(styles.root, className)}
         {...props}
       />

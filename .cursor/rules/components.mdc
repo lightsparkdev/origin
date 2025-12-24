@@ -24,9 +24,10 @@ globs:
 3. Use `clsx` for className merging
 4. Use `forwardRef` on DOM components (not Root/Portal)
 5. Use `render` prop for composition
-6. Include Storybook story
-7. Include Playwright tests
-8. **Preserve working behavior** — don't break existing UX when refactoring
+6. Pass through Base UI props directly (don't create abstractions like `type` over `multiple`)
+7. Include Storybook story
+8. Include Playwright tests
+9. **Preserve working behavior** — don't break existing UX when refactoring
 
 ## Code Style
 
