@@ -23,6 +23,6 @@
 ## Code Style
 
 - No decorative comment dividers
-- No token lists in file headers
-- No "From Figma" inline comments
+- No verbose headers or token lists
+- No emojis in code or console output
 - Code is self-documenting

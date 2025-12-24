@@ -62,6 +62,8 @@ npm run lint             # ESLint
 - **Do** run `npm run figma:styles` after Figma style changes
 - **Do not** hardcode colors, spacing, shadows, z-index
 - **Do not** edit generated files (`_text-styles.scss`, `_effects.scss`)
+- **Do not** use emojis in code or console output
+- **Do not** add decorative comment dividers
 
 ## Full Context
 

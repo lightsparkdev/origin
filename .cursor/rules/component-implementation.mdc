@@ -30,35 +30,10 @@ globs:
 
 ## Code Style
 
-```tsx
-// ✅ Do
-export const Title = React.forwardRef<HTMLHeadingElement, TitleProps>(
-  function Title({ className, ...props }, ref) {
-    return <Base.Title ref={ref} className={clsx(styles.title, className)} {...props} />;
-  }
-);
-
-// ❌ Don't
-/* ============================================================================
- * Title - This is the title component for the dialog
- * ============================================================================ */
-```
-
-```scss
-@use '../../tokens/text-styles' as *;
-
-// ✅ Do
-.title {
-  @include headline-sm;
-  padding: var(--spacing-xl);
-}
-
-// ❌ Don't
-/**
- * Title Styles
- * Tokens used: --spacing-xl, headline-sm
- */
-```
+- No decorative comment dividers
+- No verbose headers or token lists
+- No emojis in code or console output
+- Code is self-documenting
 
 ## File Structure
 
