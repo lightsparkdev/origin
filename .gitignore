@@ -37,3 +37,7 @@ Suisse font/
 next-env.d.ts
 
 .playwright-mcp/
+# Playwright
+playwright-report/
+test-results/
+playwright/.cache/

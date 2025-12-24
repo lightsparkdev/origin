@@ -1,7 +1,8 @@
 /**
  * Button Component Styles
  * 
- * Converted from Figma Dev Mode CSS using semantic tokens.
+ * Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2051-337
+ * 
  * Four variants: Filled, Outline, Ghost, Critical
  * Three sizes: SM (30px), MD (36px), LG (40px)
  */
@@ -96,7 +97,7 @@
 .outline {
   background-color: transparent;
   color: var(--text-primary, #1A1A1A);
-  border: var(--stroke-sm, 1px) solid var(--border-primary, #1A1A1A);
+  border: var(--stroke-sm, 1px) solid var(--border-tertiary);
   
   @media (hover: hover) {
     &:hover:not(:disabled) {

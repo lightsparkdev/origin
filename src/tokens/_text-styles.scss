@@ -1,0 +1,127 @@
+/**
+ * Text Style Mixins (Auto-generated from Figma)
+ * 
+ * DO NOT EDIT MANUALLY - Run: npm run figma:styles
+ * Source: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4
+ */
+
+@mixin body {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-base, 20px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin body-lg {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-lg, 24px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin body-sm {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-sm, 18px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin body-xs {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-2xs, 12px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin btn {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-base, 20px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin btn-lg {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-lg, 24px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin btn-sm {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-2xs, 12px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm, 13px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-sm, 18px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin headline {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: var(--font-weight-medium, 500);
+  line-height: var(--font-leading-xl, 32px);
+  letter-spacing: var(--font-tracking-tighter, -0.7px);
+}
+
+@mixin headline-sm {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xl, 18px);
+  font-weight: var(--font-weight-medium, 500);
+  line-height: var(--font-leading-lg, 24px);
+  letter-spacing: var(--font-tracking-tight, -0.2px);
+}
+
+@mixin label {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-base, 20px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin label-lg {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-lg, 24px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin label-sm {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-sm, 18px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin label-xl {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-2xl, 24px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-xl, 32px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin label-xs {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-2xs, 10px);
+  font-weight: var(--font-weight-book, 450);
+  line-height: var(--font-leading-xs, 16px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+

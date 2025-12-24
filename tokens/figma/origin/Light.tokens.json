@@ -844,12 +844,12 @@
       "$value": {
         "colorSpace": "srgb",
         "components": [
-          0.9725490212440491,
-          0.9725490212440491,
-          0.9686274528503418
+          0.10196078568696976,
+          0.10196078568696976,
+          0.10196078568696976
         ],
         "alpha": 0.5,
-        "hex": "#F8F8F7"
+        "hex": "#1A1A1A"
       },
       "$extensions": {
         "com.figma.variableId": "VariableID:2746:7325",
@@ -858,8 +858,8 @@
           "SHAPE_FILL"
         ],
         "com.figma.aliasData": {
-          "targetVariableId": "VariableID:3d46ac49de531cb24913a2807a6a7640ab049001/-1:-1",
-          "targetVariableName": "color/alpha/gray/050-50",
+          "targetVariableId": "VariableID:938e2b5926a3370cddebb51c88b236ad3c90924e/-1:-1",
+          "targetVariableName": "color/alpha/gray/950-50",
           "targetVariableSetId": "VariableCollectionId:adf8a2cf9464a08e3c0fc9ba15cff9e85ce1d417/-1:-1",
           "targetVariableSetName": "primitives"
         }

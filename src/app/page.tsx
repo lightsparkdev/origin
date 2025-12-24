@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
   AccordionPanel,
 } from '@/components/Accordion';
+import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Loader } from '@/components/Loader';
 import { CentralIcon } from '@/components/Icon';
@@ -72,6 +73,56 @@ export default function Home() {
           <Loader size="lg" />
           <p style={{ fontSize: '12px', marginTop: '8px' }}>Large</p>
         </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Alert Dialog Component</h2>
+      
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+        <AlertDialog.Root>
+          <AlertDialog.Trigger render={<Button variant="outline" />}>
+            Open Alert Dialog
+          </AlertDialog.Trigger>
+          <AlertDialog.Portal>
+            <AlertDialog.Backdrop />
+            <AlertDialog.Popup>
+              <AlertDialog.Title>Delete Item?</AlertDialog.Title>
+              <AlertDialog.Description>
+                This action cannot be undone. The item will be permanently removed from your account.
+              </AlertDialog.Description>
+              <AlertDialog.Actions>
+                <AlertDialog.Close render={<Button variant="outline" />}>
+                  Cancel
+                </AlertDialog.Close>
+                <AlertDialog.Close render={<Button variant="filled" />}>
+                  Delete
+                </AlertDialog.Close>
+              </AlertDialog.Actions>
+            </AlertDialog.Popup>
+          </AlertDialog.Portal>
+        </AlertDialog.Root>
+        
+        <AlertDialog.Root>
+          <AlertDialog.Trigger render={<Button variant="critical" />}>
+            Destructive Action
+          </AlertDialog.Trigger>
+          <AlertDialog.Portal>
+            <AlertDialog.Backdrop />
+            <AlertDialog.Popup>
+              <AlertDialog.Title>Are you sure?</AlertDialog.Title>
+              <AlertDialog.Description>
+                This will permanently delete your account and all associated data.
+              </AlertDialog.Description>
+              <AlertDialog.Actions>
+                <AlertDialog.Close render={<Button variant="outline" />}>
+                  Cancel
+                </AlertDialog.Close>
+                <AlertDialog.Close render={<Button variant="critical" />}>
+                  Delete Account
+                </AlertDialog.Close>
+              </AlertDialog.Actions>
+            </AlertDialog.Popup>
+          </AlertDialog.Portal>
+        </AlertDialog.Root>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>

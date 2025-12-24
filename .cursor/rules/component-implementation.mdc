@@ -1,0 +1,76 @@
+---
+description: Rules for implementing components from Figma designs
+globs:
+  - src/components/**/*.tsx
+  - src/components/**/*.scss
+---
+
+# Component Implementation
+
+## Sources
+
+| Source | Purpose |
+|--------|---------|
+| Figma MCP | CSS values (`get_design_context`) |
+| Base UI docs | Component API, accessibility |
+| `src/tokens/_variables.scss` | Color, spacing, sizing tokens |
+| `src/tokens/_text-styles.scss` | Typography mixins (generated) |
+| `src/tokens/_effects.scss` | Shadow variables (generated) |
+
+## Rules
+
+1. **Fetch before writing** — Always call Figma MCP before writing CSS
+2. **Zero hardcoded values** — Use `var(--token)` or `@include mixin`
+3. **Use clsx** — For className merging
+4. **Use forwardRef** — All components forward refs
+5. **Use render prop** — For composition: `render={<Button />}`
+6. **Include Storybook** — With controlled examples
+7. **Include Tests** — a11y, keyboard, reduced-motion
+
+## Token Usage
+
+```scss
+@use '@/tokens/text-styles' as *;
+
+.title {
+  @include headline-sm;           // Typography mixin
+  color: var(--text-primary);     // Color token
+  padding: var(--spacing-md);     // Spacing token
+  box-shadow: var(--shadow-lg);   // Effect token
+  z-index: var(--z-modal);        // z-index token
+}
+```
+
+## File Structure
+
+```
+src/components/{Name}/
+├── parts.tsx           # Sub-components
+├── {Name}.module.scss  # Styles
+├── {Name}.test.tsx     # Tests
+├── {Name}.stories.tsx  # Stories
+└── index.ts            # import * as Name from './parts'
+```
+
+## Reduced Motion
+
+All animations must include:
+
+```scss
+@media (prefers-reduced-motion: reduce) {
+  transition: none;
+  animation: none;
+}
+```
+
+## Quality Checklist
+
+- [ ] Figma MCP called
+- [ ] All values tokenized
+- [ ] Typography uses mixins from `_text-styles.scss`
+- [ ] Shadows use vars from `_effects.scss`
+- [ ] forwardRef + clsx
+- [ ] Reduced motion handled
+- [ ] z-index uses tokens
+- [ ] Tests pass (`npm test`)
+- [ ] Storybook story exists

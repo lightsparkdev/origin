@@ -2,10 +2,14 @@
  * Typography System
  * 
  * Global typography reset and semantic text styles.
- * These styles match the Figma text styles exactly.
+ * Classes are generated from mixins which are synced from Figma.
  * 
- * Source of truth: Figma Origin Design System > Typography
+ * Source of truth: Figma → _text-styles.scss (mixins) → this file (classes)
+ * 
+ * To update: npm run figma:styles
  */
+
+@use 'text-styles' as *;
 
 // ═══════════════════════════════════════════════════════════════════════════
 // RESET — Remove default browser margins and inherit base styles
@@ -26,138 +30,38 @@ p {
 // HEADLINE — Primary headings with tighter tracking
 // ═══════════════════════════════════════════════════════════════════════════
 
-.headline {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-2xl, 24px);
-  font-weight: var(--font-weight-medium, 500);
-  line-height: var(--font-leading-xl, 32px);
-  letter-spacing: var(--font-tracking-tighter, -0.7px);
-}
-
-.headline-sm {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xl, 18px);
-  font-weight: var(--font-weight-medium, 500);
-  line-height: var(--font-leading-lg, 24px);
-  letter-spacing: var(--font-tracking-tight, -0.2px);
-}
+.headline { @include headline; }
+.headline-sm { @include headline-sm; }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BODY — Standard body text with regular weight
 // ═══════════════════════════════════════════════════════════════════════════
 
-.body-lg {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-lg, 16px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-leading-lg, 24px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.body {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-base, 14px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-leading-base, 20px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.body-sm {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xs, 12px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-leading-sm, 18px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.body-xs {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xs, 12px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-leading-2xs, 12px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
+.body-lg { @include body-lg; }
+.body { @include body; }
+.body-sm { @include body-sm; }
+.body-xs { @include body-xs; }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// LABEL — UI labels with book weight (some with medium)
+// LABEL — UI labels with book weight
 // ═══════════════════════════════════════════════════════════════════════════
 
-.label-xl {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-2xl, 24px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-xl, 32px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.label-lg {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-lg, 16px);
-  font-weight: var(--font-weight-medium, 500);
-  line-height: var(--font-leading-lg, 24px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.label {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-base, 14px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-base, 20px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.label-sm {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xs, 12px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-sm, 18px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.label-xs {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-2xs, 10px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-xs, 16px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
+.label-xl { @include label-xl; }
+.label-lg { @include label-lg; }
+.label { @include label; }
+.label-sm { @include label-sm; }
+.label-xs { @include label-xs; }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CODE — Monospace text for code snippets
 // ═══════════════════════════════════════════════════════════════════════════
 
-.code {
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-sm, 13px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-leading-sm, 18px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
+.code { @include code; }
 
 // ═══════════════════════════════════════════════════════════════════════════
 // BUTTON — Button text styles with book weight
 // ═══════════════════════════════════════════════════════════════════════════
 
-.btn-lg {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-lg, 16px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-lg, 24px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.btn {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-base, 14px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-base, 20px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
-
-.btn-sm {
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xs, 12px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-2xs, 12px);
-  letter-spacing: var(--font-tracking-normal, 0);
-}
+.btn-lg { @include btn-lg; }
+.btn { @include btn; }
+.btn-sm { @include btn-sm; }

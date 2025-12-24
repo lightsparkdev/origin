@@ -9,20 +9,26 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "playwright test -c playwright-ct.config.ts",
+    "test:ui": "playwright test -c playwright-ct.config.ts --ui",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "tokens:build": "node scripts/build-tokens.js"
+    "tokens:build": "node scripts/build-tokens.js",
+    "figma:styles": "npx tsx tools/figma-styles/fetch-styles.ts"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-alpha.10",
     "@central-icons-react/round-filled-radius-3-stroke-1.5": "^1.1.83",
     "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.83",
     "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.83",
+    "clsx": "^2.1.1",
     "next": "^16.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/experimental-ct-react": "^1.57.0",
     "@storybook/addon-essentials": "^8.4.0",
     "@storybook/addon-interactions": "^8.4.0",
     "@storybook/addon-links": "^10.1.10",
@@ -31,6 +37,7 @@
     "@types/node": "^25.0.3",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "dotenv": "^17.2.3",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.1.1",
     "sass": "^1.80.0",
