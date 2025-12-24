@@ -1,50 +1,19 @@
-/**
- * Typography System
- * 
- * Global typography reset and semantic text styles.
- * Classes are generated from mixins which are synced from Figma.
- * 
- * Source of truth: Figma → _text-styles.scss (mixins) → this file (classes)
- * 
- * To update: npm run figma:styles
- */
+// Generated from _text-styles.scss — run: npm run figma:styles
 
 @use 'text-styles' as *;
 
-// ═══════════════════════════════════════════════════════════════════════════
-// RESET — Remove default browser margins and inherit base styles
-// ═══════════════════════════════════════════════════════════════════════════
+// Reset
+h1, h2, h3, h4, h5, h6 { margin: 0; font: inherit; }
+p { margin: 0; }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  font-weight: inherit;
-  font-size: inherit;
-  line-height: inherit;
-}
-
-p {
-  margin: 0;
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// HEADLINE — Primary headings with tighter tracking
-// ═══════════════════════════════════════════════════════════════════════════
-
+// Text style classes
 .headline { @include headline; }
 .headline-sm { @include headline-sm; }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// BODY — Standard body text with regular weight
-// ═══════════════════════════════════════════════════════════════════════════
 
 .body-lg { @include body-lg; }
 .body { @include body; }
 .body-sm { @include body-sm; }
 .body-xs { @include body-xs; }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// LABEL — UI labels with book weight
-// ═══════════════════════════════════════════════════════════════════════════
 
 .label-xl { @include label-xl; }
 .label-lg { @include label-lg; }
@@ -52,15 +21,7 @@ p {
 .label-sm { @include label-sm; }
 .label-xs { @include label-xs; }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// CODE — Monospace text for code snippets
-// ═══════════════════════════════════════════════════════════════════════════
-
 .code { @include code; }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// BUTTON — Button text styles with book weight
-// ═══════════════════════════════════════════════════════════════════════════
 
 .btn-lg { @include btn-lg; }
 .btn { @include btn; }

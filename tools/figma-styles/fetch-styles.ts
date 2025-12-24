@@ -188,12 +188,7 @@ function rgbaToString(color: { r: number; g: number; b: number; a: number }): st
 }
 
 function generateEffectSCSS(styles: Array<{ name: string; effects: any[] }>): string {
-  let scss = `/**
- * Effect Styles (Auto-generated from Figma)
- * 
- * DO NOT EDIT MANUALLY - Run: npm run figma:styles
- * Source: https://figma.com/design/${FILE_KEY}
- */
+  let scss = `// Auto-generated — do not edit. Run: npm run figma:styles
 
 :root {\n`;
 
@@ -231,12 +226,7 @@ function generateTextMixinsSCSS(styles: Array<{
   lineHeightPx?: number;
   letterSpacing?: number;
 }>): string {
-  let scss = `/**
- * Text Style Mixins (Auto-generated from Figma)
- * 
- * DO NOT EDIT MANUALLY - Run: npm run figma:styles
- * Source: https://figma.com/design/${FILE_KEY}
- */
+  let scss = `// Auto-generated — do not edit. Run: npm run figma:styles
 
 `;
 
