@@ -119,12 +119,12 @@ function toVarName(tokenPath) {
 }
 
 function build() {
-  console.log('🎨 Building tokens from Figma export...\n');
+  console.log('Building tokens from Figma export...\n');
   
   const tokenFiles = findTokenFiles(TOKENS_DIR);
   
   if (tokenFiles.length === 0) {
-    console.error('❌ No token files found in', TOKENS_DIR);
+    console.error('Error: No token files found in', TOKENS_DIR);
     process.exit(1);
   }
   
@@ -138,7 +138,7 @@ function build() {
     const content = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
     const tokens = extractTokens(content);
     
-    console.log(`  📄 ${relativePath}: ${tokens.length} tokens`);
+    console.log(`  ${relativePath}: ${tokens.length} tokens`);
     
     for (const token of tokens) {
       if (relativePath.startsWith('baseline/')) {
@@ -202,7 +202,7 @@ function build() {
   fs.writeFileSync(OUTPUT_FILE, scss);
   
   const totalTokens = baselineTokens.size + originPrimitives.size + lightTokens.size + darkTokens.size;
-  console.log(`\n✅ Generated ${OUTPUT_FILE}`);
+  console.log(`\nGenerated ${OUTPUT_FILE}`);
   console.log(`   ${totalTokens} total tokens`);
   console.log(`   - Baseline: ${baselineTokens.size}`);
   console.log(`   - Primitives: ${originPrimitives.size}`);

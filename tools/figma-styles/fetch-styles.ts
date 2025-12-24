@@ -10,7 +10,7 @@ const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
 const FILE_KEY = '3JvbUyTqbbPL8cCpwSX0j4';
 
 if (!FIGMA_TOKEN) {
-  console.error('❌ FIGMA_TOKEN not found in environment');
+  console.error('Error: FIGMA_TOKEN not found in environment');
   console.error('   Add it to .env.local: FIGMA_TOKEN=your-token');
   process.exit(1);
 }
@@ -231,7 +231,7 @@ function generateTextMixinsSCSS(styles: Array<{
 }
 
 async function main() {
-  console.log('🎨 Fetching styles from Figma...');
+  console.log('Fetching styles from Figma...');
   
   try {
     const stylesResponse: FigmaStylesResponse = await fetchFromFigma(`/files/${FILE_KEY}/styles`);
@@ -288,17 +288,17 @@ async function main() {
     const effectsSCSS = generateEffectSCSS(effectStyles);
     const effectsPath = resolve(process.cwd(), 'src/tokens/_effects.scss');
     writeFileSync(effectsPath, effectsSCSS);
-    console.log(`  ✅ Generated: src/tokens/_effects.scss`);
+    console.log('  Generated: src/tokens/_effects.scss');
     
     const textMixinsSCSS = generateTextMixinsSCSS(textStyles);
     const textMixinsPath = resolve(process.cwd(), 'src/tokens/_text-styles.scss');
     writeFileSync(textMixinsPath, textMixinsSCSS);
-    console.log(`  ✅ Generated: src/tokens/_text-styles.scss`);
+    console.log('  Generated: src/tokens/_text-styles.scss');
     
-    console.log('\n  Done! 🎉\n');
+    console.log('\n  Done.\n');
     
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('Error:', error);
     process.exit(1);
   }
 }
