@@ -6,11 +6,9 @@ import clsx from 'clsx';
 import styles from './AlertDialog.module.scss';
 
 export interface RootProps extends BaseAlertDialog.Root.Props {}
-export const Root = React.forwardRef<HTMLDivElement, RootProps>(
-  function Root(props, ref) {
-    return <BaseAlertDialog.Root ref={ref} {...props} />;
-  }
-);
+export function Root(props: RootProps) {
+  return <BaseAlertDialog.Root {...props} />;
+}
 
 export interface TriggerProps extends BaseAlertDialog.Trigger.Props {}
 export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
@@ -20,11 +18,9 @@ export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
 );
 
 export interface PortalProps extends BaseAlertDialog.Portal.Props {}
-export const Portal = React.forwardRef<HTMLDivElement, PortalProps>(
-  function Portal(props, ref) {
-    return <BaseAlertDialog.Portal ref={ref} {...props} />;
-  }
-);
+export function Portal(props: PortalProps) {
+  return <BaseAlertDialog.Portal {...props} />;
+}
 
 export interface BackdropProps extends BaseAlertDialog.Backdrop.Props {}
 export const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(

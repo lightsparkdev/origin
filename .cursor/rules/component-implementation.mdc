@@ -1,0 +1,56 @@
+---
+description: Rules for implementing components from Figma designs
+globs:
+  - src/components/**/*.tsx
+  - src/components/**/*.scss
+---
+
+# Component Implementation
+
+## Sources
+
+| Source | Purpose |
+|--------|---------|
+| Figma MCP | CSS (`get_design_context`) |
+| Base UI docs | API, accessibility |
+| `_variables.scss` | Tokens |
+| `_text-styles.scss` | Typography mixins |
+| `_effects.scss` | Shadows |
+
+## Rules
+
+1. Fetch Figma MCP before writing CSS
+2. Zero hardcoded values — use tokens or mixins
+3. Use `clsx` for className merging
+4. Use `forwardRef` on all components
+5. Use `render` prop for composition
+6. Include Storybook story
+7. Include Playwright tests
+8. **No verbose comments** — code is self-documenting
+
+## Code Style
+
+- No decorative comment dividers
+- No verbose headers or token lists
+- No emojis in code or console output
+- Code is self-documenting
+
+## File Structure
+
+```
+src/components/{Name}/
+├── parts.tsx
+├── {Name}.module.scss
+├── {Name}.test.tsx
+├── {Name}.stories.tsx
+└── index.ts
+```
+
+## Checklist
+
+- [ ] Figma MCP called
+- [ ] All values tokenized
+- [ ] forwardRef + clsx
+- [ ] Reduced motion handled
+- [ ] Tests pass
+- [ ] No decorative comments

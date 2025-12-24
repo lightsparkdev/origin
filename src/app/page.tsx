@@ -1,10 +1,4 @@
-import {
-  Accordion,
-  AccordionItem,
-  AccordionHeader,
-  AccordionTrigger,
-  AccordionPanel,
-} from '@/components/Accordion';
+import { Accordion } from '@/components/Accordion';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Loader } from '@/components/Loader';
@@ -127,38 +121,38 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
-      <Accordion defaultValue={['item-1']}>
-        <AccordionItem value="item-1">
-          <AccordionHeader>
-            <AccordionTrigger>What is Origin?</AccordionTrigger>
-          </AccordionHeader>
-          <AccordionPanel>
+      <Accordion.Root defaultValue={['item-1']}>
+        <Accordion.Item value="item-1">
+          <Accordion.Header>
+            <Accordion.Trigger>What is Origin?</Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Panel>
             Origin is a design system that combines Base UI for accessibility 
             and behavior with Figma Dev Mode CSS for pixel-perfect styling.
-          </AccordionPanel>
-        </AccordionItem>
+          </Accordion.Panel>
+        </Accordion.Item>
         
-        <AccordionItem value="item-2">
-          <AccordionHeader>
-            <AccordionTrigger>How does it work?</AccordionTrigger>
-          </AccordionHeader>
-          <AccordionPanel>
+        <Accordion.Item value="item-2">
+          <Accordion.Header>
+            <Accordion.Trigger>How does it work?</Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Panel>
             Components are designed in Figma using tokenized properties. 
             The Figma lint plugin validates structure against Base UI anatomy.
             CSS is extracted from Dev Mode and transformed to use semantic tokens.
-          </AccordionPanel>
-        </AccordionItem>
+          </Accordion.Panel>
+        </Accordion.Item>
         
-        <AccordionItem value="item-3">
-          <AccordionHeader>
-            <AccordionTrigger>Why this approach?</AccordionTrigger>
-          </AccordionHeader>
-          <AccordionPanel>
+        <Accordion.Item value="item-3">
+          <Accordion.Header>
+            <Accordion.Trigger>Why this approach?</Accordion.Trigger>
+          </Accordion.Header>
+          <Accordion.Panel>
             This approach ensures perfect design-to-code fidelity while 
             maintaining full accessibility through Base UI primitives.
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+          </Accordion.Panel>
+        </Accordion.Item>
+      </Accordion.Root>
     </main>
   );
 }

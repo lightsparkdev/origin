@@ -11,6 +11,7 @@
    ├── parts.tsx
    ├── {Name}.module.scss
    ├── {Name}.test.tsx
+   ├── {Name}.test-stories.tsx
    ├── {Name}.stories.tsx
    └── index.ts
    ```
@@ -18,7 +19,10 @@
 6. Add `@media (prefers-reduced-motion: reduce)` for animations
 7. Create tests: a11y, keyboard, focus, reduced-motion
 8. Create Storybook story with controlled example
-9. Run `npm test`, verify in browser
+9. **Update consumers** — if refactoring, update imports in `page.tsx` and other files
+10. **Run verification**:
+    - `npm run build` — catch export/import errors
+    - `npm test` — run Playwright tests
 
 ## Code Style
 

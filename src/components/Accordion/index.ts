@@ -1,15 +1,11 @@
-export { default as Accordion } from './Accordion';
-export {
-  AccordionItem,
-  AccordionHeader,
-  AccordionTrigger,
-  AccordionPanel,
-} from './Accordion';
+import * as Accordion from './parts';
+
+export { Accordion };
 
 export type {
-  AccordionProps,
-  AccordionItemProps,
-  AccordionHeaderProps,
-  AccordionTriggerProps,
-  AccordionPanelProps,
-} from './Accordion';
+  RootProps as AccordionRootProps,
+  ItemProps as AccordionItemProps,
+  HeaderProps as AccordionHeaderProps,
+  TriggerProps as AccordionTriggerProps,
+  PanelProps as AccordionPanelProps,
+} from './parts';

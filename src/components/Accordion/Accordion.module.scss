@@ -1,56 +1,39 @@
-/**
- * Accordion Component Styles
- * 
- * Converted from Figma Dev Mode CSS using semantic tokens.
- * Uses Base UI data attributes for state styling.
- * 
- * Note: Token CSS custom properties are defined globally via globals.scss.
- * Components can use var(--token-name) without importing.
- */
+@use '../../tokens/text-styles' as *;
 
 .root {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
 }
 
 .item {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
   overflow: hidden;
-  padding: var(--spacing-none, 0);
-  
-  // Border between items (except last)
+
   &:not(:last-child) {
-    border-bottom: var(--stroke-sm, 1px) solid var(--border-tertiary);
+    border-bottom: var(--stroke-sm) solid var(--border-tertiary);
   }
 }
 
 .header {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   width: 100%;
 }
 
 .trigger {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs, 8px);
+  gap: var(--spacing-xs);
   width: 100%;
-  padding: var(--spacing-md, 16px) 0;
-  
-  // Reset button styles
+  padding: var(--spacing-md) 0;
   background: transparent;
   border: none;
   cursor: pointer;
   text-align: left;
-  
-  
-  // Focus state
+
   &:focus-visible {
     outline: 2px solid var(--input-focus);
     outline-offset: -2px;
@@ -58,17 +41,11 @@
 }
 
 .title {
-  flex: 1 0 0;
-  font-family: var(--font-family-sans, 'Suisse Intl', sans-serif);
-  font-size: var(--font-size-base, 14px);
-  font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-base, 20px);
-  letter-spacing: var(--font-tracking-normal, 0);
+  flex: 1;
+  @include label;
   color: var(--text-primary);
 }
 
-// Hover state - underline title when trigger is hovered
-// Using @media (hover: hover) to avoid sticky hover on touch devices
 @media (hover: hover) {
   .trigger:hover .title {
     text-decoration: underline;
@@ -80,33 +57,29 @@
   width: 24px;
   height: 24px;
   color: var(--icon-primary);
-  transition: transform 200ms ease;
+  transition: transform var(--duration-normal) var(--ease-out);
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
-// Icon rotation when panel is open (Base UI uses data-open on Item)
 .item[data-open] .icon {
   transform: rotate(180deg);
 }
 
 .panel {
   display: flex;
-  align-items: flex-start;
   width: 100%;
-  padding: 0 0 var(--spacing-sm, 12px) 0;
-  
-  // Base UI uses [hidden] attribute for collapsed panels
+  padding-bottom: var(--spacing-sm);
+
   &[hidden] {
     display: none;
   }
 }
 
 .content {
-  flex: 1 0 0;
-  font-family: var(--font-family-sans, 'Suisse Intl', sans-serif);
-  font-size: var(--font-size-base, 14px);
-  font-weight: var(--font-weight-regular, 400);
-  line-height: var(--font-leading-base, 20px);
-  letter-spacing: var(--font-tracking-normal, 0);
+  flex: 1;
+  @include body;
   color: var(--text-primary);
 }
-
