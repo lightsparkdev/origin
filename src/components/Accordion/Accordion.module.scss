@@ -57,7 +57,7 @@
   width: 24px;
   height: 24px;
   color: var(--icon-primary);
-  transition: transform var(--duration-normal) var(--ease-out);
+  transition: transform 200ms ease;
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;

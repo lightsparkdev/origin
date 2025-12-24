@@ -20,13 +20,13 @@ globs:
 ## Rules
 
 1. Fetch Figma MCP before writing CSS
-2. Zero hardcoded values — use tokens or mixins
+2. Use tokens where they exist; raw values where they don't (don't invent tokens)
 3. Use `clsx` for className merging
-4. Use `forwardRef` on all components
+4. Use `forwardRef` on DOM components (not Root/Portal)
 5. Use `render` prop for composition
 6. Include Storybook story
 7. Include Playwright tests
-8. **No verbose comments** — code is self-documenting
+8. **Preserve working behavior** — don't break existing UX when refactoring
 
 ## Code Style
 
@@ -49,8 +49,9 @@ src/components/{Name}/
 ## Checklist
 
 - [ ] Figma MCP called
-- [ ] All values tokenized
+- [ ] Tokens used where they exist
 - [ ] forwardRef + clsx
 - [ ] Reduced motion handled
-- [ ] Tests pass
-- [ ] No decorative comments
+- [ ] Build passes (`npm run build`)
+- [ ] Tests pass (`npm test`)
+- [ ] Visual/UX behavior preserved

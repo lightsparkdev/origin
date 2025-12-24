@@ -15,7 +15,7 @@
    ├── {Name}.stories.tsx
    └── index.ts
    ```
-5. Tokenize all values (no hardcoded colors, spacing, shadows, z-index)
+5. Use tokens where they exist; use raw values where they don't (don't invent tokens)
 6. Add `@media (prefers-reduced-motion: reduce)` for animations
 7. Create tests: a11y, keyboard, focus, reduced-motion
 8. Create Storybook story with controlled example
