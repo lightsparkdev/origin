@@ -25,7 +25,10 @@
    ```
 6. Use tokens where they exist; raw values where they don't (don't invent tokens)
 7. Add `@media (prefers-reduced-motion: reduce)` for animations
-8. Create tests: a11y, keyboard, focus, reduced-motion
+8. Create tests from Base UI prop matrix:
+   - **Core**: a11y (axe), keyboard nav, focus management, reduced-motion
+   - **Per behavioral prop**: test both states (e.g., `multiple: true` AND `multiple: false`)
+   - **Controlled/uncontrolled**: test `value`+`onValueChange` AND `defaultValue`
 9. Create Storybook story with controlled example
 10. **Update consumers** — if refactoring, update imports in `page.tsx` and other files
 11. **Run verification**:

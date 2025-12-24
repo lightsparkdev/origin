@@ -47,12 +47,24 @@ src/components/{Name}/
 └── index.ts
 ```
 
+## Test Matrix
+
+Derive tests from Base UI props — if a prop exists, test both states:
+
+| Prop Type | Test |
+|-----------|------|
+| `multiple` | Single closes others, multiple keeps open |
+| `disabled` | Cannot interact, not focusable |
+| `value`/`onChange` | Controlled mode |
+| `defaultValue` | Uncontrolled initial state |
+| Keyboard | Enter, Space, Arrow keys, Home, End |
+
 ## Checklist
 
 - [ ] Figma MCP called
 - [ ] Tokens used where they exist
 - [ ] forwardRef + clsx
 - [ ] Reduced motion handled
+- [ ] Test matrix covered (all behavioral props)
 - [ ] Build passes (`npm run build`)
 - [ ] Tests pass (`npm test`)
-- [ ] Visual/UX behavior preserved
