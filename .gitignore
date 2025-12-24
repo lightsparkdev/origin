@@ -36,3 +36,4 @@ Suisse font/
 *.tsbuildinfo
 next-env.d.ts
 
+.playwright-mcp/

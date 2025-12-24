@@ -5,12 +5,29 @@ import {
   AccordionTrigger,
   AccordionPanel,
 } from '@/components/Accordion';
+import { Loader } from '@/components/Loader';
 
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
       <h1>Origin v2</h1>
       <p style={{ marginBottom: '2rem' }}>Design system rebuild — Base UI + Figma-first approach.</p>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Loader Component</h2>
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
+        <div style={{ textAlign: 'center' }}>
+          <Loader size="sm" />
+          <p style={{ fontSize: '12px', marginTop: '8px' }}>Small</p>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <Loader size="md" />
+          <p style={{ fontSize: '12px', marginTop: '8px' }}>Medium</p>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <Loader size="lg" />
+          <p style={{ fontSize: '12px', marginTop: '8px' }}>Large</p>
+        </div>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
