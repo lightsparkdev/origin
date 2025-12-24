@@ -1,37 +1,16 @@
-/**
- * Alert Dialog Styles
- * 
- * Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5779-340
- * 
- * Tokens used:
- * - Surface: --surface-elevated, --surface-scrim
- * - Border: --border-tertiary, --stroke-xs
- * - Corner radius: --corner-radius-md
- * - Spacing: --spacing-3xs, --spacing-xs, --spacing-sm, --spacing-md, --spacing-xl
- * - Typography: headline-sm, body
- * - Shadow: --shadow-lg
- * - z-index: --z-overlay, --z-modal
- * - Duration: --duration-normal
- * - Easing: --ease-out
- */
+@use '../../tokens/text-styles' as *;
 
 .backdrop {
   position: fixed;
   inset: 0;
   z-index: var(--z-overlay);
   background-color: var(--surface-scrim);
-  
   opacity: 0;
   transition: opacity var(--duration-normal) var(--ease-out);
-  
-  &[data-open] {
-    opacity: 1;
-  }
-  
-  &[data-ending-style] {
-    opacity: 0;
-  }
-  
+
+  &[data-open] { opacity: 1; }
+  &[data-ending-style] { opacity: 0; }
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
@@ -43,8 +22,6 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: var(--z-modal);
-  
-  // From Figma
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -52,58 +29,44 @@
   width: 420px;
   max-width: calc(100vw - var(--spacing-2xl));
   overflow: clip;
-  
   background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-md);
   box-shadow: var(--shadow-lg);
-  
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.96);
-  transition: 
+  transition:
     opacity var(--duration-normal) var(--ease-out),
     transform var(--duration-normal) var(--ease-out);
-  
+
   &[data-open] {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-  
+
   &[data-ending-style] {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.96);
   }
-  
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
 .title {
+  @include headline-sm;
   width: 100%;
   padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-3xs);
   margin: 0;
-  
-  // Typography: headline-sm (from Figma)
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-leading-lg);
-  letter-spacing: var(--font-tracking-tight);
   color: var(--text-primary);
 }
 
 .description {
+  @include body;
   width: 100%;
   padding: 0 var(--spacing-xl) var(--spacing-sm);
   margin: 0;
-  
-  // Typography: body (from Figma)
-  font-family: var(--font-family-sans);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-leading-base);
-  letter-spacing: var(--font-tracking-normal);
   color: var(--text-secondary);
 }
 

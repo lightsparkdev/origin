@@ -11,66 +11,71 @@ globs:
 
 | Source | Purpose |
 |--------|---------|
-| Figma MCP | CSS values (`get_design_context`) |
-| Base UI docs | Component API, accessibility |
-| `src/tokens/_variables.scss` | Color, spacing, sizing tokens |
-| `src/tokens/_text-styles.scss` | Typography mixins (generated) |
-| `src/tokens/_effects.scss` | Shadow variables (generated) |
+| Figma MCP | CSS (`get_design_context`) |
+| Base UI docs | API, accessibility |
+| `_variables.scss` | Tokens |
+| `_text-styles.scss` | Typography mixins |
+| `_effects.scss` | Shadows |
 
 ## Rules
 
-1. **Fetch before writing** — Always call Figma MCP before writing CSS
-2. **Zero hardcoded values** — Use `var(--token)` or `@include mixin`
-3. **Use clsx** — For className merging
-4. **Use forwardRef** — All components forward refs
-5. **Use render prop** — For composition: `render={<Button />}`
-6. **Include Storybook** — With controlled examples
-7. **Include Tests** — a11y, keyboard, reduced-motion
+1. Fetch Figma MCP before writing CSS
+2. Zero hardcoded values — use tokens or mixins
+3. Use `clsx` for className merging
+4. Use `forwardRef` on all components
+5. Use `render` prop for composition
+6. Include Storybook story
+7. Include Playwright tests
+8. **No verbose comments** — code is self-documenting
 
-## Token Usage
+## Code Style
+
+```tsx
+// ✅ Do
+export const Title = React.forwardRef<HTMLHeadingElement, TitleProps>(
+  function Title({ className, ...props }, ref) {
+    return <Base.Title ref={ref} className={clsx(styles.title, className)} {...props} />;
+  }
+);
+
+// ❌ Don't
+/* ============================================================================
+ * Title - This is the title component for the dialog
+ * ============================================================================ */
+```
 
 ```scss
-@use '@/tokens/text-styles' as *;
+@use '../../tokens/text-styles' as *;
 
+// ✅ Do
 .title {
-  @include headline-sm;           // Typography mixin
-  color: var(--text-primary);     // Color token
-  padding: var(--spacing-md);     // Spacing token
-  box-shadow: var(--shadow-lg);   // Effect token
-  z-index: var(--z-modal);        // z-index token
+  @include headline-sm;
+  padding: var(--spacing-xl);
 }
+
+// ❌ Don't
+/**
+ * Title Styles
+ * Tokens used: --spacing-xl, headline-sm
+ */
 ```
 
 ## File Structure
 
 ```
 src/components/{Name}/
-├── parts.tsx           # Sub-components
-├── {Name}.module.scss  # Styles
-├── {Name}.test.tsx     # Tests
-├── {Name}.stories.tsx  # Stories
-└── index.ts            # import * as Name from './parts'
+├── parts.tsx
+├── {Name}.module.scss
+├── {Name}.test.tsx
+├── {Name}.stories.tsx
+└── index.ts
 ```
 
-## Reduced Motion
-
-All animations must include:
-
-```scss
-@media (prefers-reduced-motion: reduce) {
-  transition: none;
-  animation: none;
-}
-```
-
-## Quality Checklist
+## Checklist
 
 - [ ] Figma MCP called
 - [ ] All values tokenized
-- [ ] Typography uses mixins from `_text-styles.scss`
-- [ ] Shadows use vars from `_effects.scss`
 - [ ] forwardRef + clsx
 - [ ] Reduced motion handled
-- [ ] z-index uses tokens
-- [ ] Tests pass (`npm test`)
-- [ ] Storybook story exists
+- [ ] Tests pass
+- [ ] No decorative comments
