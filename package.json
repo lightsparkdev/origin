@@ -23,6 +23,7 @@
     "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.83",
     "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.83",
     "clsx": "^2.1.1",
+    "motion": "^12.23.26",
     "next": "^16.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
