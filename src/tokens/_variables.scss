@@ -1,21 +1,6 @@
-/**
- * Origin Design System — Token Variables
- * 
- * Auto-generated from Figma's native token export.
- * Do not edit manually — regenerate with: npm run tokens:build
- * 
- * Sources:
- *   - baseline/Value.tokens.json (spacing, radius, sizing)
- *   - origin/Value.tokens.json (color primitives, typography)
- *   - origin/Light.tokens.json (semantic tokens, light mode)
- *   - origin/Dark.tokens.json (semantic tokens, dark mode)
- */
+// Auto-generated — do not edit. Run: npm run tokens:build
 
 :root {
-
-  /* ═══ BASELINE ═══ */
-
-  /* spacing */
   --spacing-neg6xs: -12px;
   --spacing-neg5xs: -8px;
   --spacing-neg4xs: -6px;
@@ -52,8 +37,6 @@
   --spacing-19xl: 256px;
   --spacing-20xl: 288px;
   --spacing-21xl: 320px;
-
-  /* corner-radius */
   --corner-radius-2xs: 2px;
   --corner-radius-xs: 4px;
   --corner-radius-sm: 6px;
@@ -65,8 +48,6 @@
   --corner-radius-4xl: 40px;
   --corner-radius-round: 999px;
   --corner-radius-square: 0px;
-
-  /* max-width */
   --max-width-0: 0px;
   --max-width-xs: 320px;
   --max-width-sm: 384px;
@@ -79,8 +60,6 @@
   --max-width-5xl: 1024px;
   --max-width-6xl: 1152px;
   --max-width-7xl: 1280px;
-
-  /* opacity */
   --opacity-0: 0;
   --opacity-5: 5;
   --opacity-10: 10;
@@ -102,15 +81,11 @@
   --opacity-90: 90;
   --opacity-95: 95;
   --opacity-100: 100;
-
-  /* screens */
   --screens-sm: 640px;
   --screens-md: 768px;
   --screens-lg: 1024px;
   --screens-xl: 1280px;
   --screens-2xl: 1536px;
-
-  /* stroke */
   --stroke-none: 0px;
   --stroke-1xs: 0.33000001311302185px;
   --stroke-xs: 0.5px;
@@ -118,10 +93,6 @@
   --stroke-md: 1.5px;
   --stroke-lg: 2px;
   --stroke-xl: 4px;
-
-  /* ═══ PRIMITIVES ═══ */
-
-  /* color */
   --color-alpha-white-10: rgba(255, 255, 255, 0.10);
   --color-alpha-white-20: rgba(255, 255, 255, 0.20);
   --color-alpha-white-30: rgba(255, 255, 255, 0.30);
@@ -235,8 +206,6 @@
   --color-blue-900: #024481;
   --color-blue-950: #012750;
   --color-blue-050: #EEF7FF;
-
-  /* font */
   --font-family-sans: "Suisse Intl";
   --font-family-mono: "Suisse Int'l Mono";
   --font-leading-2xs: 12px;
@@ -268,17 +237,11 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-black: 900;
-
-  /* ═══ SEMANTIC (Light Mode - Default) ═══ */
-
-  /* border */
   --border-primary: #1A1A1A;
   --border-secondary: #C1C0B8;
   --border-tertiary: rgba(0, 0, 0, 0.10);
   --border-inverted: rgba(255, 255, 255, 0.20);
   --border-critical: #CC0909;
-
-  /* icon */
   --icon-primary: #1A1A1A;
   --icon-secondary: #7C7C7C;
   --icon-tertiary: #C1C0B8;
@@ -291,12 +254,8 @@
   --icon-success-inverted: #F0FDF7;
   --icon-warning-inverted: #FFFDEA;
   --icon-critical-inverted: #FFF1F1;
-
-  /* input */
   --input-focus: rgba(0, 0, 0, 0.10);
   --input-focus-critical: #FFC4C4;
-
-  /* surface */
   --surface-base: #FFFFFF;
   --surface-primary: #F8F8F7;
   --surface-secondary: #F0F0EE;
@@ -324,8 +283,6 @@
   --surface-critical-elevated: #FFDFDF;
   --surface-critical-strong: #CC0909;
   --surface-alpha-primary-00: rgba(248, 248, 247, 0.00);
-
-  /* text */
   --text-primary: #1A1A1A;
   --text-secondary: #7C7C7C;
   --text-tertiary: #989898;
@@ -339,7 +296,6 @@
   --text-critical: #CC0909;
 }
 
-/* ═══ DARK MODE ═══ */
 [data-theme="dark"],
 .dark {
   --border-primary: #F8F8F7;
@@ -401,7 +357,6 @@
   --text-critical: #EF0D0D;
 }
 
-/* ═══ SYSTEM PREFERENCE ═══ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --border-primary: #F8F8F7;

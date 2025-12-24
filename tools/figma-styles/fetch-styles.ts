@@ -1,17 +1,9 @@
-/**
- * Figma Styles Fetcher
- * 
- * Fetches all Text Styles and Effect Styles from a Figma file
- * and generates SCSS mixins/variables.
- * 
- * Usage: npx tsx tools/figma-styles/fetch-styles.ts
- */
+// Fetches Figma styles → generates _text-styles.scss and _effects.scss
 
 import { config } from 'dotenv';
 import { resolve } from 'path';
 import { writeFileSync } from 'fs';
 
-// Load .env.local (where secrets live)
 config({ path: resolve(process.cwd(), '.env.local') });
 
 const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
@@ -22,10 +14,6 @@ if (!FIGMA_TOKEN) {
   console.error('   Add it to .env.local: FIGMA_TOKEN=your-token');
   process.exit(1);
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Types
-// ═══════════════════════════════════════════════════════════════════════════
 
 interface FigmaStyle {
   key: string;
@@ -45,13 +33,11 @@ interface FigmaStylesResponse {
 interface FigmaStyleDetail {
   name: string;
   style_type: string;
-  // Text style properties
   fontSize?: number;
   fontFamily?: string;
   fontWeight?: number;
   lineHeight?: { value: number; unit: string } | number;
   letterSpacing?: { value: number; unit: string } | number;
-  // Effect properties
   effects?: Array<{
     type: 'DROP_SHADOW' | 'INNER_SHADOW' | 'LAYER_BLUR' | 'BACKGROUND_BLUR';
     visible: boolean;
@@ -87,10 +73,6 @@ interface FigmaNodeResponse {
   }>;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// API Helpers
-// ═══════════════════════════════════════════════════════════════════════════
-
 async function fetchFromFigma(endpoint: string): Promise<any> {
   const response = await fetch(`https://api.figma.com/v1${endpoint}`, {
     headers: {
@@ -105,10 +87,6 @@ async function fetchFromFigma(endpoint: string): Promise<any> {
   
   return response.json();
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Token Mappings (raw value → semantic token)
-// ═══════════════════════════════════════════════════════════════════════════
 
 const FONT_SIZE_MAP: Record<number, string> = {
   10: '--font-size-2xs',
@@ -171,10 +149,6 @@ function mapLetterSpacing(px: number): string {
   return token ? `var(${token}, ${rounded}px)` : `${rounded}px`;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// SCSS Generators
-// ═══════════════════════════════════════════════════════════════════════════
-
 function rgbaToString(color: { r: number; g: number; b: number; a: number }): string {
   const r = Math.round(color.r * 255);
   const g = Math.round(color.g * 255);
@@ -234,10 +208,8 @@ function generateTextMixinsSCSS(styles: Array<{
     scss += `@mixin ${style.name} {\n`;
     
     if (style.fontFamily) {
-      // Use mono font family for code styles
-      const isMonospace = style.fontFamily.toLowerCase().includes('mono');
-      const fontVar = isMonospace ? '--font-family-mono' : '--font-family-sans';
-      scss += `  font-family: var(${fontVar});\n`;
+      const isMono = style.fontFamily.toLowerCase().includes('mono');
+      scss += `  font-family: var(${isMono ? '--font-family-mono' : '--font-family-sans'});\n`;
     }
     if (style.fontSize) {
       scss += `  font-size: ${mapFontSize(style.fontSize)};\n`;
@@ -258,32 +230,19 @@ function generateTextMixinsSCSS(styles: Array<{
   return scss;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// Main
-// ═══════════════════════════════════════════════════════════════════════════
-
 async function main() {
-  console.log('🎨 Fetching styles from Figma...\n');
+  console.log('🎨 Fetching styles from Figma...');
   
   try {
-    // Step 1: Get all style references
-    console.log('  1. Fetching style list...');
     const stylesResponse: FigmaStylesResponse = await fetchFromFigma(`/files/${FILE_KEY}/styles`);
     
     const textStyleRefs = stylesResponse.meta.styles.filter(s => s.style_type === 'TEXT');
     const effectStyleRefs = stylesResponse.meta.styles.filter(s => s.style_type === 'EFFECT');
     
-    console.log(`     Found ${textStyleRefs.length} text styles, ${effectStyleRefs.length} effect styles\n`);
-    
-    // Step 2: Fetch full details for each style via node IDs
-    console.log('  2. Fetching style details...');
+    console.log(`   Found ${textStyleRefs.length} text styles, ${effectStyleRefs.length} effect styles`);
     
     const allNodeIds = [...textStyleRefs, ...effectStyleRefs].map(s => s.node_id).join(',');
     const nodesResponse: FigmaNodeResponse = await fetchFromFigma(`/files/${FILE_KEY}/nodes?ids=${allNodeIds}`);
-    
-    console.log(`     Fetched ${Object.keys(nodesResponse.nodes).length} node details\n`);
-    
-    // Step 3: Parse text styles
     const textStyles: Array<{
       name: string;
       fontFamily?: string;
@@ -308,7 +267,6 @@ async function main() {
       }
     }
     
-    // Step 4: Parse effect styles
     const effectStyles: Array<{ name: string; effects: any[] }> = [];
     
     for (const ref of effectStyleRefs) {
@@ -321,47 +279,11 @@ async function main() {
       }
     }
     
-    // Step 5: Output results
-    console.log('═══════════════════════════════════════════════════════════════');
-    console.log('TEXT STYLES');
-    console.log('═══════════════════════════════════════════════════════════════\n');
-    
     textStyles.sort((a, b) => a.name.localeCompare(b.name));
-    for (const style of textStyles) {
-      console.log(`  ${style.name}`);
-      console.log(`    font-family: ${style.fontFamily || 'inherit'}`);
-      console.log(`    font-size: ${style.fontSize}px`);
-      console.log(`    font-weight: ${style.fontWeight}`);
-      console.log(`    line-height: ${style.lineHeightPx}px`);
-      if (style.letterSpacing) {
-        console.log(`    letter-spacing: ${style.letterSpacing}px`);
-      }
-      console.log('');
-    }
-    
-    console.log('═══════════════════════════════════════════════════════════════');
-    console.log('EFFECT STYLES');
-    console.log('═══════════════════════════════════════════════════════════════\n');
-    
     effectStyles.sort((a, b) => a.name.localeCompare(b.name));
-    for (const style of effectStyles) {
-      console.log(`  ${style.name}`);
-      for (const effect of style.effects) {
-        if (effect.type === 'DROP_SHADOW' || effect.type === 'INNER_SHADOW') {
-          const x = effect.offset?.x ?? 0;
-          const y = effect.offset?.y ?? 0;
-          const blur = effect.radius;
-          const color = rgbaToString(effect.color);
-          console.log(`    ${effect.type}: ${x}px ${y}px ${blur}px ${color}`);
-        }
-      }
-      console.log('');
-    }
     
-    // Step 6: Generate SCSS files
-    console.log('═══════════════════════════════════════════════════════════════');
-    console.log('GENERATING SCSS');
-    console.log('═══════════════════════════════════════════════════════════════\n');
+    console.log(`\n  Text styles: ${textStyles.map(s => s.name).join(', ')}`);
+    console.log(`  Effect styles: ${effectStyles.map(s => s.name).join(', ')}\n`);
     
     const effectsSCSS = generateEffectSCSS(effectStyles);
     const effectsPath = resolve(process.cwd(), 'src/tokens/_effects.scss');
