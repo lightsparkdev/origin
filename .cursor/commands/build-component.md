@@ -37,6 +37,7 @@
 
 ## Code Style
 
+- Add Figma URL as first line of SCSS: `// Figma: https://figma.com/design/...`
 - No decorative comment dividers
 - No verbose headers or token lists
 - No emojis in code or console output

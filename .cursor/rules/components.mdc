@@ -31,10 +31,10 @@ globs:
 
 ## Code Style
 
+- SCSS starts with Figma URL: `// Figma: https://figma.com/design/...`
 - No decorative comment dividers
-- No verbose headers or token lists
+- No verbose headers
 - No emojis in code or console output
-- Code is self-documenting
 
 ## File Structure
 
