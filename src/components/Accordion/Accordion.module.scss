@@ -49,15 +49,6 @@
   cursor: pointer;
   text-align: left;
   
-  // Hover state
-  &:hover {
-    background-color: var(--surface-hover);
-  }
-  
-  // Pressed state
-  &:active {
-    background-color: var(--surface-pressed);
-  }
   
   // Focus state
   &:focus-visible {
@@ -74,6 +65,14 @@
   line-height: var(--font-leading-base, 20px);
   letter-spacing: var(--font-tracking-normal, 0);
   color: var(--text-primary);
+}
+
+// Hover state - underline title when trigger is hovered
+// Using @media (hover: hover) to avoid sticky hover on touch devices
+@media (hover: hover) {
+  .trigger:hover .title {
+    text-decoration: underline;
+  }
 }
 
 .icon {
@@ -95,8 +94,8 @@
   width: 100%;
   padding: 0 0 var(--spacing-sm, 12px) 0;
   
-  // Hidden state (Base UI handles this via data attributes)
-  &[data-state="closed"] {
+  // Base UI uses [hidden] attribute for collapsed panels
+  &[hidden] {
     display: none;
   }
 }

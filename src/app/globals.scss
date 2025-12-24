@@ -8,6 +8,9 @@
 // Import design tokens (CSS custom properties)
 @use '../tokens/variables';
 
+// Import typography reset and text styles
+@use '../tokens/typography';
+
 *,
 *::before,
 *::after {

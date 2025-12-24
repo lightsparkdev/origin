@@ -64,8 +64,7 @@ import { IconFileBend } from '@central-icons-react/round-outlined-radius-0-strok
 import { IconFilter2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconFilter2';
 import { IconFingerPrint1 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconFingerPrint1';
 import { IconForYou } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconForYou';
-import { IconFullscreen } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconFullscreen';
-import { IconGlobus } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconGlobus';
+import { IconFullScreen } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconFullScreen';
 import { IconHeart2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconHeart2';
 import { IconHome } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconHome';
 import { IconImport2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconImport2';
@@ -118,7 +117,6 @@ import { IconTextareaDrag } from '@central-icons-react/round-outlined-radius-0-s
 import { IconTimeFlies } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconTimeFlies';
 import { IconToggle } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconToggle';
 import { IconTrashCanSimple } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconTrashCanSimple';
-import { IconTriangleExclamation } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconTriangleExclamation';
 import { IconUnblur } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconUnblur';
 import { IconUsbC } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconUsbC';
 import { IconVariables } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconVariables';
@@ -194,8 +192,7 @@ export const ICON_REGISTRY = {
   IconFilter2,
   IconFingerPrint1,
   IconForYou,
-  IconFullscreen,
-  IconGlobus,
+  IconFullScreen,
   IconHeart2,
   IconHome,
   IconImport2,
@@ -248,7 +245,6 @@ export const ICON_REGISTRY = {
   IconTimeFlies,
   IconToggle,
   IconTrashCanSimple,
-  IconTriangleExclamation,
   IconUnblur,
   IconUsbC,
   IconVariables,
