@@ -1,7 +1,3 @@
-/**
- * Test stories for Playwright Component Testing
- * These components are used by AlertDialog.test.tsx
- */
 import { AlertDialog } from './index';
 import { Button } from '../Button';
 

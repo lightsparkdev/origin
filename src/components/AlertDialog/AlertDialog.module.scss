@@ -4,10 +4,10 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: var(--z-overlay);
+  z-index: 50;
   background-color: var(--surface-scrim);
   opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out);
+  transition: opacity 200ms ease-out;
 
   &[data-open] { opacity: 1; }
   &[data-ending-style] { opacity: 0; }
@@ -22,7 +22,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: var(--z-modal);
+  z-index: 100;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -36,9 +36,7 @@
   box-shadow: var(--shadow-lg);
   opacity: 0;
   transform: translate(-50%, -50%) scale(0.96);
-  transition:
-    opacity var(--duration-normal) var(--ease-out),
-    transform var(--duration-normal) var(--ease-out);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
 
   &[data-open] {
     opacity: 1;
