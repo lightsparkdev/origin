@@ -1,13 +1,8 @@
-// Fetches Figma styles → generates _text-styles.scss and _effects.scss
+// Fetches Figma styles and generates _text-styles.scss and _effects.scss
 
-import { config } from 'dotenv';
-import { resolve } from 'path';
 import { writeFileSync } from 'fs';
-
-config({ path: resolve(process.cwd(), '.env.local') });
-
-const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
-const FILE_KEY = '3JvbUyTqbbPL8cCpwSX0j4';
+import { resolve } from 'path';
+import { FIGMA_TOKEN, FILE_KEY, FigmaEffect, fetchFromFigma, colorToCSS } from './utils.js';
 
 if (!FIGMA_TOKEN) {
   console.error('Error: FIGMA_TOKEN not found in environment');
@@ -30,24 +25,6 @@ interface FigmaStylesResponse {
   };
 }
 
-interface FigmaStyleDetail {
-  name: string;
-  style_type: string;
-  fontSize?: number;
-  fontFamily?: string;
-  fontWeight?: number;
-  lineHeight?: { value: number; unit: string } | number;
-  letterSpacing?: { value: number; unit: string } | number;
-  effects?: Array<{
-    type: 'DROP_SHADOW' | 'INNER_SHADOW' | 'LAYER_BLUR' | 'BACKGROUND_BLUR';
-    visible: boolean;
-    color: { r: number; g: number; b: number; a: number };
-    offset?: { x: number; y: number };
-    radius: number;
-    spread?: number;
-  }>;
-}
-
 interface FigmaNodeResponse {
   nodes: Record<string, {
     document: {
@@ -57,35 +34,10 @@ interface FigmaNodeResponse {
         fontSize?: number;
         letterSpacing?: number;
         lineHeightPx?: number;
-        lineHeightPercent?: number;
-        lineHeightPercentFontSize?: number;
-        lineHeightUnit?: string;
       };
-      effects?: Array<{
-        type: string;
-        visible: boolean;
-        color: { r: number; g: number; b: number; a: number };
-        offset?: { x: number; y: number };
-        radius: number;
-        spread?: number;
-      }>;
+      effects?: FigmaEffect[];
     };
   }>;
-}
-
-async function fetchFromFigma(endpoint: string): Promise<any> {
-  const response = await fetch(`https://api.figma.com/v1${endpoint}`, {
-    headers: {
-      'X-Figma-Token': FIGMA_TOKEN!,
-    },
-  });
-  
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Figma API error: ${response.status} - ${text}`);
-  }
-  
-  return response.json();
 }
 
 const FONT_SIZE_MAP: Record<number, string> = {
@@ -149,19 +101,7 @@ function mapLetterSpacing(px: number): string {
   return token ? `var(${token}, ${rounded}px)` : `${rounded}px`;
 }
 
-function rgbaToString(color: { r: number; g: number; b: number; a: number }): string {
-  const r = Math.round(color.r * 255);
-  const g = Math.round(color.g * 255);
-  const b = Math.round(color.b * 255);
-  const a = Math.round(color.a * 100) / 100;
-  
-  if (a === 1) {
-    return `rgb(${r}, ${g}, ${b})`;
-  }
-  return `rgba(${r}, ${g}, ${b}, ${a})`;
-}
-
-function generateEffectSCSS(styles: Array<{ name: string; effects: any[] }>): string {
+function generateEffectSCSS(styles: Array<{ name: string; effects: FigmaEffect[] }>): string {
   let scss = `// Auto-generated — do not edit. Run: npm run figma:styles
 
 :root {\n`;
@@ -175,7 +115,7 @@ function generateEffectSCSS(styles: Array<{ name: string; effects: any[] }>): st
         const y = effect.offset?.y ?? 0;
         const blur = effect.radius;
         const spread = effect.spread ?? 0;
-        const color = rgbaToString(effect.color);
+        const color = effect.color ? colorToCSS(effect.color) : 'rgba(0,0,0,0.1)';
         
         if (spread !== 0) {
           return `${inset}${x}px ${y}px ${blur}px ${spread}px ${color}`;
@@ -234,7 +174,7 @@ async function main() {
   console.log('Fetching styles from Figma...');
   
   try {
-    const stylesResponse: FigmaStylesResponse = await fetchFromFigma(`/files/${FILE_KEY}/styles`);
+    const stylesResponse = await fetchFromFigma<FigmaStylesResponse>(`/files/${FILE_KEY}/styles`);
     
     const textStyleRefs = stylesResponse.meta.styles.filter(s => s.style_type === 'TEXT');
     const effectStyleRefs = stylesResponse.meta.styles.filter(s => s.style_type === 'EFFECT');
@@ -242,7 +182,8 @@ async function main() {
     console.log(`   Found ${textStyleRefs.length} text styles, ${effectStyleRefs.length} effect styles`);
     
     const allNodeIds = [...textStyleRefs, ...effectStyleRefs].map(s => s.node_id).join(',');
-    const nodesResponse: FigmaNodeResponse = await fetchFromFigma(`/files/${FILE_KEY}/nodes?ids=${allNodeIds}`);
+    const nodesResponse = await fetchFromFigma<FigmaNodeResponse>(`/files/${FILE_KEY}/nodes?ids=${allNodeIds}`);
+    
     const textStyles: Array<{
       name: string;
       fontFamily?: string;
@@ -267,7 +208,7 @@ async function main() {
       }
     }
     
-    const effectStyles: Array<{ name: string; effects: any[] }> = [];
+    const effectStyles: Array<{ name: string; effects: FigmaEffect[] }> = [];
     
     for (const ref of effectStyleRefs) {
       const node = nodesResponse.nodes[ref.node_id];

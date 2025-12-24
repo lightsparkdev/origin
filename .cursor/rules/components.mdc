@@ -7,11 +7,23 @@ globs:
 
 # Component Implementation
 
+## Figma Tooling
+
+| Tool | Reliability | Use Case |
+|------|-------------|----------|
+| MCP `get_screenshot` | 100% | Visual verification |
+| MCP `get_metadata` | 100% | Structure/node IDs |
+| MCP `get_design_context` | ~70% | CSS extraction (may timeout) |
+| `npm run figma:node` | 100% | CSS fallback when MCP times out |
+| `npm run figma:styles` | 100% | Text/effect token sync |
+
+**Strategy**: MCP first, REST API as fallback for CSS.
+
 ## Sources
 
 | Source | Purpose |
 |--------|---------|
-| Figma MCP | CSS (`get_design_context`) |
+| Figma MCP / REST API | CSS properties |
 | Base UI docs | API, accessibility |
 | `_variables.scss` | Tokens |
 | `_text-styles.scss` | Typography mixins |
@@ -19,7 +31,7 @@ globs:
 
 ## Rules
 
-1. Fetch Figma MCP before writing CSS
+1. Fetch Figma CSS before writing styles (MCP or fallback)
 2. Use tokens where they exist; raw values where they don't (don't invent tokens)
 3. Use `clsx` for className merging
 4. Use `forwardRef` on DOM components (not Root/Portal)
@@ -61,7 +73,7 @@ Derive tests from Base UI props — if a prop exists, test both states:
 
 ## Checklist
 
-- [ ] Figma MCP called
+- [ ] Figma CSS fetched (MCP or `npm run figma:node`)
 - [ ] Tokens used where they exist
 - [ ] forwardRef + clsx
 - [ ] Reduced motion handled

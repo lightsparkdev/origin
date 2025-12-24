@@ -6,7 +6,7 @@
   justify-content: center;
   gap: var(--spacing-xs);
   border: none;
-  border-radius: var(--corner-radius-md);
+  border-radius: var(--corner-radius-sm);
   cursor: pointer;
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-medium);
@@ -20,7 +20,7 @@
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.15;
   }
 
   @media (prefers-reduced-motion: reduce) {

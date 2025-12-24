@@ -41,6 +41,7 @@ npm run dev              # Next.js dev server
 npm run storybook        # Storybook
 npm run build            # Production build
 npm run figma:styles     # Sync text styles + effects from Figma
+npm run figma:node       # Fetch CSS from any Figma node (fallback for MCP)
 npm run tokens:build     # Build color/spacing tokens
 npm run test             # Playwright component tests
 npm run lint             # ESLint
