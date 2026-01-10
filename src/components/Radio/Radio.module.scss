@@ -1,0 +1,225 @@
+// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5805-1516
+
+// =============================================================================
+// Field Wrapper
+// =============================================================================
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+// =============================================================================
+// RadioGroup
+// =============================================================================
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+// =============================================================================
+// Legend (Group Title)
+// =============================================================================
+
+.legend {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-3xs);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-book);
+  line-height: var(--font-leading-base);
+  letter-spacing: var(--font-tracking-normal);
+  color: var(--text-primary);
+}
+
+// =============================================================================
+// Help Text (Default State)
+// =============================================================================
+
+.helpText {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-3xs);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-leading-base);
+  letter-spacing: var(--font-tracking-normal);
+  color: var(--text-secondary);
+}
+
+// =============================================================================
+// Error Text (Critical State)
+// =============================================================================
+
+.errorText {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-3xs);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-leading-base);
+  letter-spacing: var(--font-tracking-normal);
+  color: var(--text-critical);
+}
+
+// =============================================================================
+// RadioItem (Default variant)
+// =============================================================================
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    .radio {
+      box-shadow: var(--input-focus);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// =============================================================================
+// RadioItem (Card variant)
+// =============================================================================
+
+.card {
+  padding: var(--spacing-md);
+  padding-right: var(--spacing-3xl);
+  border: var(--stroke-sm) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-md);
+  overflow: hidden;
+  transition: border-color 150ms ease;
+
+  // Progressive enhancement: iOS-style corner smoothing (60%)
+  // superellipse approximates continuous corners where supported
+  @supports (corner-shape: superellipse) {
+    corner-shape: superellipse;
+  }
+
+  &:hover:not([data-disabled]) {
+    border-color: var(--border-secondary);
+  }
+
+  &[data-checked] {
+    border-color: var(--border-primary);
+  }
+
+  &:focus-visible {
+    box-shadow: var(--input-focus);
+
+    .radio {
+      box-shadow: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// =============================================================================
+// Radio Circle
+// =============================================================================
+
+.radio {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  position: relative;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    border: var(--stroke-sm) solid var(--border-secondary);
+    border-radius: var(--corner-radius-round);
+    background-color: var(--surface-primary);
+    transition: border-color 150ms ease;
+  }
+
+  .item:hover:not([data-disabled]) &::before {
+    border-color: var(--border-primary);
+  }
+
+  .item[data-checked] &::before {
+    border-color: var(--border-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      transition: none;
+    }
+  }
+}
+
+// =============================================================================
+// Radio Indicator (inner dot)
+// =============================================================================
+
+.indicator {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--corner-radius-round);
+  background-color: var(--surface-inverted);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 150ms ease, transform 150ms ease;
+
+  .item[data-checked] & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// =============================================================================
+// Content (Label + Description)
+// =============================================================================
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: var(--font-size-base);
+  line-height: var(--font-leading-base);
+  letter-spacing: var(--font-tracking-normal);
+}
+
+.label {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-book);
+  color: var(--text-primary);
+}
+
+.description {
+  font-family: var(--font-family-sans);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+}

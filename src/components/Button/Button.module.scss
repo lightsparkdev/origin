@@ -13,6 +13,11 @@
   text-decoration: none;
   transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 
+  // Progressive enhancement: iOS-style corner smoothing (60%)
+  @supports (corner-shape: superellipse) {
+    corner-shape: superellipse;
+  }
+
   &:focus-visible {
     outline: 2px solid var(--border-primary);
     outline-offset: 2px;

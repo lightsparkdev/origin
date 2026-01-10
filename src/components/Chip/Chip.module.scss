@@ -9,6 +9,11 @@
   border-radius: var(--corner-radius-sm);
   background-color: var(--surface-secondary);
 
+  // Progressive enhancement: iOS-style corner smoothing (60%)
+  @supports (corner-shape: superellipse) {
+    corner-shape: superellipse;
+  }
+
   &.sm {
     height: 24px;
   }

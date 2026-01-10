@@ -5,6 +5,7 @@ import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Loader } from '@/components/Loader';
+import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
 import { CentralIcon } from '@/components/Icon';
 
@@ -183,6 +184,40 @@ export default function Home() {
           <span style={{ width: '100px', fontSize: '14px' }}>No dismiss</span>
           <Chip>label</Chip>
         </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Radio Component</h2>
+      
+      <div style={{ display: 'flex', gap: '3rem', marginBottom: '2rem' }}>
+        {/* Default variant */}
+        <Radio.Field>
+          <Radio.Legend>Legend</Radio.Legend>
+          <Radio.Group defaultValue="opt1">
+            <Radio.Item value="opt1" label="Label" description="Description goes here." />
+            <Radio.Item value="opt2" label="Label" description="Description goes here." />
+          </Radio.Group>
+          <Radio.Description>Help text goes here.</Radio.Description>
+        </Radio.Field>
+
+        {/* Card variant */}
+        <Radio.Field style={{ width: 280 }}>
+          <Radio.Legend>Legend</Radio.Legend>
+          <Radio.Group defaultValue="card1" variant="card">
+            <Radio.Item value="card1" label="Label" description="Description goes here." />
+            <Radio.Item value="card2" label="Label" description="Description goes here." />
+          </Radio.Group>
+          <Radio.Description>Help text goes here.</Radio.Description>
+        </Radio.Field>
+
+        {/* Critical state */}
+        <Radio.Field invalid style={{ width: 280 }}>
+          <Radio.Legend>Legend</Radio.Legend>
+          <Radio.Group variant="card">
+            <Radio.Item value="err1" label="Label" description="Description goes here." />
+            <Radio.Item value="err2" label="Label" description="Description goes here." />
+          </Radio.Group>
+          <Radio.Error match>Error text goes here.</Radio.Error>
+        </Radio.Field>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>

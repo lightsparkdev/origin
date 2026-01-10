@@ -38,6 +38,11 @@
   transform: translate(-50%, -50%) scale(0.96);
   transition: opacity 200ms ease-out, transform 200ms ease-out;
 
+  // Progressive enhancement: iOS-style corner smoothing (60%)
+  @supports (corner-shape: superellipse) {
+    corner-shape: superellipse;
+  }
+
   &[data-open] {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
