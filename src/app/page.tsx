@@ -1,6 +1,9 @@
+'use client';
+
 import { Accordion } from '@/components/Accordion';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
+import { Chip, ChipFilter } from '@/components/Chip';
 import { Loader } from '@/components/Loader';
 import { Switch } from '@/components/Switch';
 import { CentralIcon } from '@/components/Icon';
@@ -150,6 +153,35 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>Read Only</span>
           <Switch size="md" readOnly defaultChecked />
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Chip Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Default MD</span>
+          <Chip onDismiss={() => console.log('dismissed')}>label</Chip>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Default SM</span>
+          <Chip size="sm" onDismiss={() => console.log('dismissed')}>label</Chip>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Filter MD</span>
+          <ChipFilter property="Status" operator="is" value="Active" onDismiss={() => console.log('dismissed')} />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Filter SM</span>
+          <ChipFilter size="sm" property="Status" operator="is" value="Active" onDismiss={() => console.log('dismissed')} />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Disabled</span>
+          <Chip disabled onDismiss={() => console.log('dismissed')}>label</Chip>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>No dismiss</span>
+          <Chip>label</Chip>
         </div>
       </div>
       
