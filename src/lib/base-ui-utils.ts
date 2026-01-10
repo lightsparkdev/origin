@@ -7,6 +7,12 @@
  *
  * Zero drift from Base UI patterns.
  *
+ * @baseui-version 1.0.0-rc.0
+ * @synced 2026-01-09
+ *
+ * To check for updates: npm run check:baseui
+ * To sync: Compare files below with node_modules/@base-ui-components/react/esm/utils/
+ *
  * ## Direct imports (always prefer these)
  *
  * ```tsx

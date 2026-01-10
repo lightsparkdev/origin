@@ -15,7 +15,8 @@
     "build-storybook": "storybook build",
     "tokens:build": "node scripts/build-tokens.js",
     "figma:styles": "npx tsx tools/figma-styles/fetch-styles.ts",
-    "figma:node": "npx tsx tools/figma-styles/fetch-node-css.ts"
+    "figma:node": "npx tsx tools/figma-styles/fetch-node-css.ts",
+    "check:baseui": "node scripts/check-baseui-version.js"
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-alpha.10",
