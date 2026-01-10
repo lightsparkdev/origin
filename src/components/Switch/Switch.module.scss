@@ -10,15 +10,19 @@
   cursor: pointer;
   transition: background-color 150ms ease;
 
-  &:hover:not([data-disabled]):not([data-readonly]) {
-    background-color: var(--surface-secondary);
+  @media (hover: hover) {
+    &:hover:not([data-disabled]):not([data-readonly]) {
+      background-color: var(--surface-secondary);
+    }
   }
 
   &[data-checked] {
     background-color: var(--color-green-600);
 
-    &:hover:not([data-disabled]):not([data-readonly]) {
-      background-color: var(--color-green-700);
+    @media (hover: hover) {
+      &:hover:not([data-disabled]):not([data-readonly]) {
+        background-color: var(--color-green-700);
+      }
     }
   }
 

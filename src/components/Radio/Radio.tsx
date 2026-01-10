@@ -7,26 +7,32 @@ import { Field } from '@base-ui-components/react/field';
 import clsx from 'clsx';
 import styles from './Radio.module.scss';
 
-// =============================================================================
-// RadioGroup
-// =============================================================================
+interface RadioGroupContextValue {
+  variant: 'default' | 'card';
+}
+
+const RadioGroupContext = React.createContext<RadioGroupContextValue | undefined>(undefined);
+
+if (process.env.NODE_ENV !== 'production') {
+  RadioGroupContext.displayName = 'RadioGroupContext';
+}
+
+function useRadioGroupContext() {
+  const context = React.useContext(RadioGroupContext);
+  if (context === undefined) {
+    throw new Error('Radio.Item must be used within a Radio.Group');
+  }
+  return context;
+}
 
 export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
-  /** The controlled value of the selected radio. */
   value?: unknown;
-  /** The uncontrolled default value. */
   defaultValue?: unknown;
-  /** Callback fired when the value changes. */
   onValueChange?: (value: unknown) => void;
-  /** Whether the group is disabled. */
   disabled?: boolean;
-  /** Whether the group is read-only. */
   readOnly?: boolean;
-  /** Whether a selection is required. */
   required?: boolean;
-  /** The name attribute for form submission. */
   name?: string;
-  /** Visual variant of the radio items. */
   variant?: 'default' | 'card';
 }
 
@@ -47,8 +53,10 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       ...other
     } = props;
 
+    const contextValue = React.useMemo(() => ({ variant }), [variant]);
+
     return (
-      <RadioGroupContext.Provider value={{ variant }}>
+      <RadioGroupContext.Provider value={contextValue}>
         <BaseRadioGroup
           ref={ref}
           value={value}
@@ -69,39 +77,16 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
   }
 );
 
-// Context for variant propagation
-interface RadioGroupContextValue {
-  variant: 'default' | 'card';
-}
-
-const RadioGroupContext = React.createContext<RadioGroupContextValue>({
-  variant: 'default',
-});
-
-function useRadioGroupContext() {
-  return React.useContext(RadioGroupContext);
-}
-
-// =============================================================================
-// RadioItem
-// =============================================================================
-
 export interface RadioItemProps {
-  /** The unique value of this radio option. */
   value: unknown;
-  /** Whether this radio is disabled. */
   disabled?: boolean;
-  /** The label text for the radio option. */
   label?: string;
-  /** The description text for the radio option. */
   description?: string;
-  /** Additional class name. */
   className?: string;
-  /** Children to render instead of label/description. */
   children?: React.ReactNode;
 }
 
-export const RadioItem = React.forwardRef<HTMLSpanElement, RadioItemProps>(
+export const RadioItem = React.forwardRef<HTMLButtonElement, RadioItemProps>(
   function RadioItem(props, ref) {
     const { value, disabled = false, label, description, className, children, ...other } = props;
     const { variant } = useRadioGroupContext();
@@ -136,14 +121,6 @@ export const RadioItem = React.forwardRef<HTMLSpanElement, RadioItemProps>(
   }
 );
 
-// =============================================================================
-// Field Parts (re-exported for convenience)
-// =============================================================================
-
-/**
- * Wraps the RadioGroup to provide field-level state and accessibility.
- * Use Field.Label as the legend, and Field.Description/Field.Error for help/error text.
- */
 export const RadioField = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<typeof Field.Root> & { className?: string }
@@ -152,10 +129,6 @@ export const RadioField = React.forwardRef<
   return <Field.Root ref={ref} className={clsx(styles.field, className)} {...other} />;
 });
 
-/**
- * The legend/title for the radio group.
- * Renders as a label but semantically titles the group.
- */
 export const RadioLegend = React.forwardRef<
   HTMLLabelElement,
   React.ComponentPropsWithoutRef<typeof Field.Label> & { className?: string }
@@ -164,10 +137,6 @@ export const RadioLegend = React.forwardRef<
   return <Field.Label ref={ref} className={clsx(styles.legend, className)} {...other} />;
 });
 
-/**
- * Help text displayed below the radio group (default state).
- * Renders a `<p>` element.
- */
 export const RadioDescription = React.forwardRef<
   HTMLParagraphElement,
   React.ComponentPropsWithoutRef<typeof Field.Description> & { className?: string }
@@ -176,10 +145,6 @@ export const RadioDescription = React.forwardRef<
   return <Field.Description ref={ref} className={clsx(styles.helpText, className)} {...other} />;
 });
 
-/**
- * Error text displayed below the radio group (critical state).
- * Renders a `<div>` element.
- */
 export const RadioError = React.forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<typeof Field.Error> & { className?: string }
@@ -188,22 +153,21 @@ export const RadioError = React.forwardRef<
   return <Field.Error ref={ref} className={clsx(styles.errorText, className)} {...other} />;
 });
 
-// =============================================================================
-// Compound Component Export
-// =============================================================================
+if (process.env.NODE_ENV !== 'production') {
+  RadioGroup.displayName = 'RadioGroup';
+  RadioItem.displayName = 'RadioItem';
+  RadioField.displayName = 'RadioField';
+  RadioLegend.displayName = 'RadioLegend';
+  RadioDescription.displayName = 'RadioDescription';
+  RadioError.displayName = 'RadioError';
+}
 
 export const Radio = {
-  /** The radiogroup container. */
   Group: RadioGroup,
-  /** Individual radio option. */
   Item: RadioItem,
-  /** Field wrapper for accessibility (wraps Group + Legend + Description/Error). */
   Field: RadioField,
-  /** Group title/legend. */
   Legend: RadioLegend,
-  /** Help text (default state). */
   Description: RadioDescription,
-  /** Error text (critical state). */
   Error: RadioError,
 };
 

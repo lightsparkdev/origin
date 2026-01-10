@@ -1,9 +1,3 @@
-/**
- * SCSS Mixins
- * 
- * Reusable patterns for common styling needs.
- */
-
 /// Apply the "label" text style
 @mixin text-label {
   font-family: var(--font-family-sans);
@@ -23,7 +17,7 @@
   font: inherit;
   color: inherit;
   cursor: pointer;
-  
+
   &:focus {
     outline: none;
   }
@@ -42,3 +36,12 @@
   border: 0;
 }
 
+/// iOS-style corner smoothing (continuous corners)
+/// @param {String} $radius - The border-radius value
+@mixin smooth-corners($radius) {
+  border-radius: $radius;
+
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+}

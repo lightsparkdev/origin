@@ -1,8 +1,4 @@
-// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5805-1516
-
-// =============================================================================
-// Field Wrapper
-// =============================================================================
+// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2826-743
 
 .field {
   display: flex;
@@ -10,19 +6,11 @@
   gap: var(--spacing-md);
 }
 
-// =============================================================================
-// RadioGroup
-// =============================================================================
-
 .group {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
 }
-
-// =============================================================================
-// Legend (Group Title)
-// =============================================================================
 
 .legend {
   display: flex;
@@ -36,10 +24,6 @@
   color: var(--text-primary);
 }
 
-// =============================================================================
-// Help Text (Default State)
-// =============================================================================
-
 .helpText {
   display: flex;
   align-items: center;
@@ -52,10 +36,6 @@
   color: var(--text-secondary);
 }
 
-// =============================================================================
-// Error Text (Critical State)
-// =============================================================================
-
 .errorText {
   display: flex;
   align-items: center;
@@ -67,10 +47,6 @@
   letter-spacing: var(--font-tracking-normal);
   color: var(--text-critical);
 }
-
-// =============================================================================
-// RadioItem (Default variant)
-// =============================================================================
 
 .item {
   display: flex;
@@ -97,29 +73,25 @@
   }
 }
 
-// =============================================================================
-// RadioItem (Card variant)
-// =============================================================================
-
 .card {
   padding: var(--spacing-md);
   padding-right: var(--spacing-3xl);
   border: var(--stroke-sm) solid var(--border-tertiary);
   border-radius: var(--corner-radius-md);
   overflow: hidden;
-  transition: border-color 150ms ease;
 
-  // Progressive enhancement: iOS-style corner smoothing (60%)
-  // superellipse approximates continuous corners where supported
-  @supports (corner-shape: superellipse) {
-    corner-shape: superellipse;
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
   }
 
-  &:hover:not([data-disabled]) {
-    border-color: var(--border-secondary);
+  @media (hover: hover) {
+    &:hover:not([data-disabled]) {
+      background-color: var(--surface-hover);
+    }
   }
 
   &[data-checked] {
+    border-width: var(--stroke-md);
     border-color: var(--border-primary);
   }
 
@@ -130,15 +102,7 @@
       box-shadow: none;
     }
   }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
 }
-
-// =============================================================================
-// Radio Circle
-// =============================================================================
 
 .radio {
   display: flex;
@@ -157,15 +121,18 @@
     border: var(--stroke-sm) solid var(--border-secondary);
     border-radius: var(--corner-radius-round);
     background-color: var(--surface-primary);
-    transition: border-color 150ms ease;
+    transition: background-color 150ms ease;
   }
 
-  .item:hover:not([data-disabled]) &::before {
-    border-color: var(--border-primary);
+  @media (hover: hover) {
+    .item:not([data-disabled]):not([data-checked]) &:hover::before {
+      background-color: var(--surface-hover);
+    }
   }
 
   .item[data-checked] &::before {
-    border-color: var(--border-secondary);
+    background-color: var(--surface-inverted);
+    border-color: transparent;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -175,16 +142,12 @@
   }
 }
 
-// =============================================================================
-// Radio Indicator (inner dot)
-// =============================================================================
-
 .indicator {
   position: absolute;
   width: 8px;
   height: 8px;
   border-radius: var(--corner-radius-round);
-  background-color: var(--surface-inverted);
+  background-color: var(--surface-primary);
   opacity: 0;
   transform: scale(0);
   transition: opacity 150ms ease, transform 150ms ease;
@@ -198,10 +161,6 @@
     transition: none;
   }
 }
-
-// =============================================================================
-// Content (Label + Description)
-// =============================================================================
 
 .content {
   display: flex;
