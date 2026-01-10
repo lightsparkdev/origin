@@ -2,6 +2,7 @@ import { Accordion } from '@/components/Accordion';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Loader } from '@/components/Loader';
+import { Switch } from '@/components/Switch';
 import { CentralIcon } from '@/components/Icon';
 
 export default function Home() {
@@ -117,6 +118,39 @@ export default function Home() {
             </AlertDialog.Popup>
           </AlertDialog.Portal>
         </AlertDialog.Root>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Switch Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>SM Off</span>
+          <Switch size="sm" />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>SM On</span>
+          <Switch size="sm" defaultChecked />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>MD Off</span>
+          <Switch size="md" />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>MD On</span>
+          <Switch size="md" defaultChecked />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Disabled Off</span>
+          <Switch size="md" disabled />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Disabled On</span>
+          <Switch size="md" disabled defaultChecked />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Read Only</span>
+          <Switch size="md" readOnly defaultChecked />
+        </div>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>

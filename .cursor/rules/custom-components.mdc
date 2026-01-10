@@ -1,0 +1,441 @@
+---
+description: Guidelines for building components without Base UI equivalents
+globs:
+  - src/components/**/*.tsx
+  - src/components/**/*.scss
+alwaysApply: false
+---
+
+# Custom Components (Non-Base UI)
+
+Build custom components to Base UI contribution quality.
+
+## TDD: Tests First (Interactive Components)
+
+For interactive components, write tests before implementation:
+
+```
+1. Define behavior contract via tests
+2. Build component to pass tests
+3. Refactor
+```
+
+**Minimum test coverage before building:**
+
+```tsx
+// Example: Switch component test contract
+test.describe('Switch', () => {
+  // State
+  test('renders unchecked by default');
+  test('renders checked when defaultChecked');
+  test('toggles on click');
+  test('respects controlled checked prop');
+  test('calls onCheckedChange with (value, { event })');
+  
+  // Disabled
+  test('does not toggle when disabled');
+  test('has data-disabled attribute when disabled');
+  
+  // Keyboard
+  test('toggles on Space key');
+  test('toggles on Enter key');
+  test('is focusable');
+  test('is not focusable when disabled');
+  
+  // Accessibility
+  test('has role="switch"');
+  test('has aria-checked matching state');
+  
+  // Edge cases
+  test('handles rapid clicking');
+  test('consumer can cancel state change');
+});
+```
+
+Write these tests first. They define the component contract.
+
+## Utilities
+
+### From Base UI (public APIs)
+
+```tsx
+// Hooks from @base-ui-components/utils
+import { useControlled } from '@base-ui-components/utils/useControlled';
+import { useStableCallback } from '@base-ui-components/utils/useStableCallback';
+import { useMergedRefs } from '@base-ui-components/utils/useMergedRefs';
+import { useIsoLayoutEffect } from '@base-ui-components/utils/useIsoLayoutEffect';
+import { useId } from '@base-ui-components/utils/useId';
+import { visuallyHidden } from '@base-ui-components/utils/visuallyHidden';
+
+// Public APIs from @base-ui-components/react
+import { mergeProps } from '@base-ui-components/react/merge-props';
+import { useRender } from '@base-ui-components/react/use-render';
+```
+
+| Utility | Purpose |
+|---------|---------|
+| `useControlled` | Controlled/uncontrolled state management |
+| `useStableCallback` | Stable callback identity |
+| `useMergedRefs` | Merge multiple refs |
+| `useIsoLayoutEffect` | SSR-safe useLayoutEffect |
+| `useId` | Unique ID generation |
+| `visuallyHidden` | CSS for hidden but accessible elements |
+| `mergeProps` | Smart prop merging (events, className, style) |
+| `useRender` | The render prop pattern (element override) |
+
+### From Our Utils (copied from Base UI source - MIT license)
+
+Internal Base UI utilities not exported in their package.json.
+Copied verbatim from: https://github.com/mui/base-ui
+
+```tsx
+import {
+  getStateAttributesProps,
+  createChangeEventDetails,
+  createGenericEventDetails,
+  REASONS,
+} from '@/lib/base-ui-utils';
+```
+
+| Utility | Purpose |
+|---------|---------|
+| `getStateAttributesProps` | Convert state → `data-*` attributes |
+| `createChangeEventDetails` | Cancelable event details |
+| `createGenericEventDetails` | Non-cancelable event details |
+| `REASONS` | Standard reason strings |
+
+## Component Structure
+
+```tsx
+'use client';
+
+import * as React from 'react';
+import { useControlled } from '@base-ui-components/utils/useControlled';
+import { useStableCallback } from '@base-ui-components/utils/useStableCallback';
+import { useMergedRefs } from '@base-ui-components/utils/useMergedRefs';
+import { visuallyHidden } from '@base-ui-components/utils/visuallyHidden';
+import clsx from 'clsx';
+import {
+  createChangeEventDetails,
+  getStateAttributesProps,
+  type ChangeEventDetails,
+} from '@/lib/base-ui-utils';
+import styles from './Component.module.scss';
+
+export interface ComponentProps {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean, details: ChangeEventDetails) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
+  name?: string;
+  className?: string;
+  children?: React.ReactNode;
+}
+
+/**
+ * Brief description of what component does.
+ * Renders a `<span>` element.
+ */
+export const Component = React.forwardRef<HTMLSpanElement, ComponentProps>(
+  function Component(props, forwardedRef) {
+    const {
+      checked: checkedProp,
+      defaultChecked = false,
+      onCheckedChange: onCheckedChangeProp,
+      disabled = false,
+      readOnly = false,
+      name,
+      className,
+      children,
+      ...elementProps
+    } = props;
+
+    // Stable callback identity
+    const onCheckedChange = useStableCallback(onCheckedChangeProp);
+
+    // Controlled/uncontrolled support
+    const [checked, setChecked] = useControlled({
+      controlled: checkedProp,
+      default: defaultChecked,
+      name: 'Component',
+      state: 'checked',
+    });
+
+    // Merge refs
+    const internalRef = React.useRef<HTMLSpanElement>(null);
+    const handleRef = useMergedRefs(internalRef, forwardedRef);
+
+    // State for data attributes
+    const state = { checked, disabled, readOnly };
+    const stateProps = getStateAttributesProps(state);
+
+    const toggle = (
+      event: React.MouseEvent | React.KeyboardEvent,
+      reason: 'click' | 'keyboard'
+    ) => {
+      if (disabled || readOnly) return;
+
+      const nextChecked = !checked;
+      const details = createChangeEventDetails(reason, event);
+
+      onCheckedChange?.(nextChecked, details);
+
+      if (details.isCanceled) return; // Consumer prevented change
+
+      setChecked(nextChecked);
+    };
+
+    const handleClick = (event: React.MouseEvent) => {
+      toggle(event, 'click');
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent) => {
+      if (event.key === ' ' || event.key === 'Enter') {
+        event.preventDefault();
+        toggle(event, 'keyboard');
+      }
+    };
+
+    return (
+      <>
+        <span
+          ref={handleRef}
+          role="switch"
+          aria-checked={checked}
+          aria-readonly={readOnly || undefined}
+          tabIndex={disabled ? undefined : 0}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
+          className={clsx(styles.root, className)}
+          {...stateProps}
+          {...elementProps}
+        >
+          {children}
+        </span>
+        {/* Hidden native input for form behavior */}
+        <input
+          type="checkbox"
+          checked={checked}
+          disabled={disabled}
+          name={name}
+          onChange={() => {}} // Controlled by span
+          style={visuallyHidden}
+          tabIndex={-1}
+          aria-hidden
+        />
+      </>
+    );
+  }
+);
+
+if (process.env.NODE_ENV !== 'production') {
+  Component.displayName = 'Component';
+}
+```
+
+## useRender Pattern (Element Override)
+
+Base UI exports `useRender` for the `render` prop pattern:
+
+```tsx
+import { useRender } from '@base-ui-components/react/use-render';
+
+interface Props {
+  render?: React.ReactElement | ((props: any, state: State) => React.ReactElement);
+  className?: string | ((state: State) => string);
+  // ... other props
+}
+
+function Component(props: Props) {
+  const { render, className, disabled, ...rest } = props;
+  
+  const state = { disabled };
+  
+  // useRender handles:
+  // - Merging props
+  // - State → data-* attributes
+  // - className as function
+  // - render prop (element or function)
+  // - Ref merging
+  const element = useRender({
+    render,
+    ref: forwardedRef,
+    state,
+    props: {
+      className,
+      role: 'button',
+      ...rest,
+    },
+    defaultTagName: 'span',
+  });
+  
+  return element;
+}
+```
+
+**Why use it:** Enables `<Component render={<motion.div />} />` pattern that Base UI uses everywhere.
+
+## Cancelable Events Pattern
+
+Use `createChangeEventDetails` from our utils:
+
+```tsx
+import { createChangeEventDetails } from '@/lib/base-ui-utils';
+
+// In component
+const details = createChangeEventDetails('click', event);
+onCheckedChange?.(nextValue, details);
+
+if (details.isCanceled) return; // Consumer called cancel()
+
+setValue(nextValue);
+```
+
+```tsx
+// Consumer usage - prevent unchecking
+<Switch
+  onCheckedChange={(checked, details) => {
+    if (!checked && !confirmUncheck()) {
+      details.cancel(); // Prevent the change
+    }
+  }}
+/>
+```
+
+**Why:** Gives consumers control over state transitions (confirmations, validation).
+
+## Event Details Pattern
+
+The `ChangeEventDetails` interface from our utils:
+
+```tsx
+interface ChangeEventDetails<E = Event> {
+  reason: string;      // 'click', 'keyboard', etc.
+  event: E;            // Native event
+  cancel: () => void;  // Prevent state change
+  isCanceled: boolean; // Check if canceled
+}
+```
+
+**Why:** Consumers can distinguish click vs keyboard, access native event, track analytics.
+
+## Contribution-Ready Checklist
+
+### Structure
+- [ ] `'use client';` at top
+- [ ] `forwardRef` with named function (not arrow)
+- [ ] Props destructured with defaults inline
+- [ ] JSDoc: one sentence + "Renders a `<element>`."
+- [ ] `displayName` set in dev only (bottom of file)
+- [ ] Props spread last (consumer wins)
+
+### State
+- [ ] `useControlled` for controlled/uncontrolled
+- [ ] `useStableCallback` wraps consumer callbacks
+- [ ] `useMergedRefs` merges refs
+- [ ] `useIsoLayoutEffect` instead of `useLayoutEffect` (SSR)
+- [ ] Cancelable events via `cancel()` in details
+- [ ] Event details: `(value, { event, reason, cancel })`
+
+### Data Attributes
+- [ ] `data-checked`, `data-disabled`, `data-readonly` (not classes)
+- [ ] Value is `true || undefined` (omit when false)
+
+### Accessibility
+- [ ] Correct ARIA `role`
+- [ ] `aria-checked`, `aria-pressed`, etc. as applicable
+- [ ] `aria-labelledby` or `aria-label`
+- [ ] Keyboard: Enter, Space (activate), Arrows (navigate)
+- [ ] Focus visible styling (`:focus-visible`)
+- [ ] `tabIndex={disabled ? undefined : 0}`
+
+### Forms (if applicable)
+- [ ] Hidden native `<input>` with `visuallyHidden`
+- [ ] `name` prop passed to native input
+- [ ] `aria-hidden` on native input
+- [ ] `tabIndex={-1}` on native input
+
+### Context (compound components)
+- [ ] Context with `undefined` default
+- [ ] `displayName` on Context in dev
+- [ ] Hook that throws helpful error if missing
+- [ ] State hoisted to Root
+
+Write inline (Base UI pattern):
+
+```tsx
+// ComponentContext.ts
+import * as React from 'react';
+
+export const ComponentContext = React.createContext<State | undefined>(undefined);
+
+if (process.env.NODE_ENV !== 'production') {
+  ComponentContext.displayName = 'ComponentContext';
+}
+
+export function useComponentContext() {
+  const context = React.useContext(ComponentContext);
+  if (context === undefined) {
+    throw new Error('Component parts must be placed within <Component.Root>.');
+  }
+  return context;
+}
+```
+
+### TypeScript
+- [ ] Explicit prop interface exported
+- [ ] Correct generic on `forwardRef<HTMLElement, Props>`
+- [ ] Optional props marked with `?`
+- [ ] Union types for variants: `size?: 'sm' | 'md'`
+
+### CSS
+- [ ] Attribute selectors for state: `&[data-checked]`
+- [ ] CSS variables for theming
+- [ ] `@media (prefers-reduced-motion: reduce)`
+- [ ] No hardcoded colors/spacing (use tokens)
+
+### Testing (TDD)
+- [ ] Tests written before implementation
+- [ ] Every prop has at least one test
+- [ ] Keyboard navigation tested
+- [ ] Disabled state tested
+- [ ] Controlled + uncontrolled modes tested
+- [ ] Cancelable events tested
+- [ ] Edge cases: rapid clicks, disabled mid-action
+
+## Research First (Interactive Components)
+
+Before building, check:
+
+| Source | What to Check |
+|--------|---------------|
+| [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) | Patterns, roles, keyboard |
+| [Radix UI](https://radix-ui.com) | Implementation approach |
+| [React Aria](https://react-spectrum.adobe.com/react-aria/) | Adobe's patterns |
+
+## What to Avoid
+
+| Anti-Pattern | Use Instead |
+|--------------|-------------|
+| `isDisabled`, `isChecked` | `disabled`, `checked` |
+| Class names for state | `data-*` attributes |
+| `cloneElement` | Context |
+| Arrow function in `forwardRef` | Named function |
+| Manual controlled/uncontrolled | `useControlled` hook |
+| `useLayoutEffect` | `useIsoLayoutEffect` |
+| Inline `displayName = 'X'` | Wrap in `NODE_ENV` check |
+
+## File Structure
+
+```
+src/components/{Name}/
+├── {Name}.tsx           # Simple components
+├── parts.tsx            # Compound components
+├── {Name}Context.tsx    # Context (if compound)
+├── {Name}.module.scss
+├── {Name}.stories.tsx
+├── {Name}.test.tsx
+├── {Name}.test-stories.tsx
+└── index.ts
+```
