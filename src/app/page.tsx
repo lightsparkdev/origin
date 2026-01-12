@@ -8,6 +8,7 @@ import { Chip, ChipFilter } from '@/components/Chip';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
+import { Tooltip } from '@/components/Tooltip';
 import { CentralIcon } from '@/components/Icon';
 
 export default function Home() {
@@ -254,6 +255,62 @@ export default function Home() {
           <Checkbox.Error match>Error text goes here.</Checkbox.Error>
         </Checkbox.Field>
       </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Tooltip Component</h2>
+      
+      <Tooltip.Provider>
+        <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem', alignItems: 'center' }}>
+          <Tooltip.Root>
+            <Tooltip.Trigger render={<Button variant="outline">Hover me</Button>} />
+            <Tooltip.Portal>
+              <Tooltip.Positioner sideOffset={8}>
+                <Tooltip.Popup>
+                  This is a tooltip
+                  <Tooltip.Arrow />
+                </Tooltip.Popup>
+              </Tooltip.Positioner>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+
+          <Tooltip.Root>
+            <Tooltip.Trigger render={<Button variant="outline">Long text</Button>} />
+            <Tooltip.Portal>
+              <Tooltip.Positioner sideOffset={8}>
+                <Tooltip.Popup>
+                  This is a longer tooltip that demonstrates text wrapping within the max-width constraint.
+                  <Tooltip.Arrow />
+                </Tooltip.Popup>
+              </Tooltip.Positioner>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+
+          <Tooltip.Root>
+            <Tooltip.Trigger
+              render={
+                <button
+                  aria-label="Info"
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: '8px',
+                  }}
+                >
+                  <CentralIcon name="IconInfoCircle" size={20} />
+                </button>
+              }
+            />
+            <Tooltip.Portal>
+              <Tooltip.Positioner sideOffset={8}>
+                <Tooltip.Popup>
+                  Icon trigger tooltip
+                  <Tooltip.Arrow />
+                </Tooltip.Popup>
+              </Tooltip.Positioner>
+            </Tooltip.Portal>
+          </Tooltip.Root>
+        </div>
+      </Tooltip.Provider>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
