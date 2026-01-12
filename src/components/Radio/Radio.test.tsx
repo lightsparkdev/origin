@@ -104,7 +104,7 @@ test.describe('Radio', () => {
 
       const card1 = page.getByTestId('card1');
       await expect(card1).toBeVisible();
-      await expect(page.getByText('Description')).toBeVisible();
+      await expect(page.getByText('Description').first()).toBeVisible();
     });
 
     test('card selection changes', async ({ mount, page }) => {
@@ -129,8 +129,8 @@ test.describe('Radio', () => {
       await mount(<TestRadioCritical />);
 
       const field = page.getByTestId('radio-field');
-      // Field.Root sets data-invalid when invalid prop is true
-      await expect(page.locator('[data-invalid]')).toBeVisible();
+      // Field.Root sets aria-invalid when invalid prop is true
+      await expect(field).toHaveAttribute('data-invalid', '');
     });
   });
 });

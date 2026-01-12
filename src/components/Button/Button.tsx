@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Button as BaseButton } from '@base-ui-components/react/button';
+import { Button as BaseButton } from '@base-ui/react/button';
 import clsx from 'clsx';
 import { Loader } from '@/components/Loader';
 import styles from './Button.module.scss';

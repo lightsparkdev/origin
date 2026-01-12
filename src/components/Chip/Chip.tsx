@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { useStableCallback } from '@base-ui-components/utils/useStableCallback';
-import { useMergedRefs } from '@base-ui-components/utils/useMergedRefs';
+import { useStableCallback } from '@base-ui/utils/useStableCallback';
+import { useMergedRefs } from '@base-ui/utils/useMergedRefs';
 import clsx from 'clsx';
 import { CentralIcon } from '@/components/Icon';
 import { createChangeEventDetails, type ChangeEventDetails } from '@/lib/base-ui-utils';

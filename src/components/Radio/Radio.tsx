@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { RadioGroup as BaseRadioGroup } from '@base-ui-components/react/radio-group';
-import { Radio as BaseRadio } from '@base-ui-components/react/radio';
-import { Field } from '@base-ui-components/react/field';
+import { RadioGroup as BaseRadioGroup } from '@base-ui/react/radio-group';
+import { Radio as BaseRadio } from '@base-ui/react/radio';
+import { Field } from '@base-ui/react/field';
 import clsx from 'clsx';
 import styles from './Radio.module.scss';
 

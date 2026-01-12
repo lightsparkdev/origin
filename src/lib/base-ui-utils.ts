@@ -11,22 +11,22 @@
  * @synced 2026-01-09
  *
  * To check for updates: npm run check:baseui
- * To sync: Compare files below with node_modules/@base-ui-components/react/esm/utils/
+ * To sync: Compare files below with node_modules/@base-ui/react/esm/utils/
  *
  * ## Direct imports (always prefer these)
  *
  * ```tsx
- * // From @base-ui-components/utils
- * import { useControlled } from '@base-ui-components/utils/useControlled';
- * import { useStableCallback } from '@base-ui-components/utils/useStableCallback';
- * import { useMergedRefs } from '@base-ui-components/utils/useMergedRefs';
- * import { useIsoLayoutEffect } from '@base-ui-components/utils/useIsoLayoutEffect';
- * import { useId } from '@base-ui-components/utils/useId';
- * import { visuallyHidden } from '@base-ui-components/utils/visuallyHidden';
+ * // From @base-ui/utils
+ * import { useControlled } from '@base-ui/utils/useControlled';
+ * import { useStableCallback } from '@base-ui/utils/useStableCallback';
+ * import { useMergedRefs } from '@base-ui/utils/useMergedRefs';
+ * import { useIsoLayoutEffect } from '@base-ui/utils/useIsoLayoutEffect';
+ * import { useId } from '@base-ui/utils/useId';
+ * import { visuallyHidden } from '@base-ui/utils/visuallyHidden';
  *
- * // From @base-ui-components/react
- * import { mergeProps } from '@base-ui-components/react/merge-props';
- * import { useRender } from '@base-ui-components/react/use-render';
+ * // From @base-ui/react
+ * import { mergeProps } from '@base-ui/react/merge-props';
+ * import { useRender } from '@base-ui/react/use-render';
  * ```
  */
 
@@ -34,18 +34,18 @@
 // Re-exports of Base UI public APIs
 // -----------------------------------------------------------------------------
 
-export { mergeProps } from '@base-ui-components/react/merge-props';
-export { useRender } from '@base-ui-components/react/use-render';
+export { mergeProps } from '@base-ui/react/merge-props';
+export { useRender } from '@base-ui/react/use-render';
 
 // -----------------------------------------------------------------------------
-// Copied from @base-ui-components/utils/empty
+// Copied from @base-ui/utils/empty
 // Source: https://github.com/mui/base-ui
 // -----------------------------------------------------------------------------
 
 const EMPTY_OBJECT = Object.freeze({});
 
 // -----------------------------------------------------------------------------
-// Copied from @base-ui-components/react/esm/utils/getStateAttributesProps.js
+// Copied from @base-ui/react/esm/utils/getStateAttributesProps.js
 // Source: https://github.com/mui/base-ui
 // -----------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ export function getStateAttributesProps<S extends Record<string, unknown>>(
 }
 
 // -----------------------------------------------------------------------------
-// Copied from @base-ui-components/react/esm/utils/createBaseUIEventDetails.js
+// Copied from @base-ui/react/esm/utils/createBaseUIEventDetails.js
 // Source: https://github.com/mui/base-ui
 // -----------------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ export function createGenericEventDetails<E = Event>(
 }
 
 // -----------------------------------------------------------------------------
-// Copied from @base-ui-components/react/esm/utils/reason-parts.js
+// Copied from @base-ui/react/esm/utils/reason-parts.js
 // Source: https://github.com/mui/base-ui
 // -----------------------------------------------------------------------------
 

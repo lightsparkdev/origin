@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { CheckboxGroup as BaseCheckboxGroup } from '@base-ui-components/react/checkbox-group';
-import { Checkbox as BaseCheckbox } from '@base-ui-components/react/checkbox';
-import { Field } from '@base-ui-components/react/field';
+import { CheckboxGroup as BaseCheckboxGroup } from '@base-ui/react/checkbox-group';
+import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox';
+import { Field } from '@base-ui/react/field';
 import clsx from 'clsx';
 import { CentralIcon } from '@/components/Icon';
 import styles from './Checkbox.module.scss';

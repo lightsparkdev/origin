@@ -19,7 +19,8 @@
     "check:baseui": "node scripts/check-baseui-version.js"
   },
   "dependencies": {
-    "@base-ui-components/react": "^1.0.0-alpha.10",
+    "@base-ui/react": "^1.0.0",
+    "@base-ui/utils": "^0.2.3",
     "@central-icons-react/round-filled-radius-3-stroke-1.5": "^1.1.83",
     "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.83",
     "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.83",

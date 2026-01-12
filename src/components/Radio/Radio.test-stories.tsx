@@ -72,13 +72,13 @@ export function TestRadioCard() {
 
 export function TestRadioCritical() {
   return (
-    <Radio.Field invalid>
+    <Radio.Field invalid data-testid="radio-field">
       <Radio.Legend data-testid="legend">Critical State</Radio.Legend>
       <Radio.Group data-testid="radio-group">
         <Radio.Item value="opt1" label="Option 1" data-testid="opt1" />
         <Radio.Item value="opt2" label="Option 2" data-testid="opt2" />
       </Radio.Group>
-      <Radio.Error data-testid="error">This field is required</Radio.Error>
+      <Radio.Error data-testid="error" match>This field is required</Radio.Error>
     </Radio.Field>
   );
 }
