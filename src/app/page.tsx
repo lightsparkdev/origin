@@ -291,10 +291,13 @@ export default function Home() {
                 <button
                   aria-label="Info"
                   style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
-                    padding: '8px',
+                    padding: 0,
                   }}
                 >
                   <CentralIcon name="IconCircleInfo" size={20} />
