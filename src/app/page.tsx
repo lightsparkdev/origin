@@ -3,6 +3,7 @@
 import { Accordion } from '@/components/Accordion';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
+import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
@@ -218,6 +219,40 @@ export default function Home() {
           </Radio.Group>
           <Radio.Error match>Error text goes here.</Radio.Error>
         </Radio.Field>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Checkbox Component</h2>
+      
+      <div style={{ display: 'flex', gap: '3rem', marginBottom: '2rem' }}>
+        {/* Default variant */}
+        <Checkbox.Field>
+          <Checkbox.Legend>Legend</Checkbox.Legend>
+          <Checkbox.Group defaultValue={['opt1']}>
+            <Checkbox.Item value="opt1" label="Label" description="Description goes here." />
+            <Checkbox.Item value="opt2" label="Label" description="Description goes here." />
+          </Checkbox.Group>
+          <Checkbox.Description>Help text goes here.</Checkbox.Description>
+        </Checkbox.Field>
+
+        {/* Card variant */}
+        <Checkbox.Field style={{ width: 280 }}>
+          <Checkbox.Legend>Legend</Checkbox.Legend>
+          <Checkbox.Group defaultValue={['card1']} variant="card">
+            <Checkbox.Item value="card1" label="Label" description="Description goes here." />
+            <Checkbox.Item value="card2" label="Label" description="Description goes here." />
+          </Checkbox.Group>
+          <Checkbox.Description>Help text goes here.</Checkbox.Description>
+        </Checkbox.Field>
+
+        {/* Critical state */}
+        <Checkbox.Field invalid style={{ width: 280 }}>
+          <Checkbox.Legend>Legend</Checkbox.Legend>
+          <Checkbox.Group variant="card">
+            <Checkbox.Item value="err1" label="Label" description="Description goes here." />
+            <Checkbox.Item value="err2" label="Label" description="Description goes here." />
+          </Checkbox.Group>
+          <Checkbox.Error match>Error text goes here.</Checkbox.Error>
+        </Checkbox.Field>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>

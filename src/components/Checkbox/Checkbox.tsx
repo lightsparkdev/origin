@@ -1,0 +1,204 @@
+'use client';
+
+import * as React from 'react';
+import { CheckboxGroup as BaseCheckboxGroup } from '@base-ui-components/react/checkbox-group';
+import { Checkbox as BaseCheckbox } from '@base-ui-components/react/checkbox';
+import { Field } from '@base-ui-components/react/field';
+import clsx from 'clsx';
+import { CentralIcon } from '@/components/Icon';
+import styles from './Checkbox.module.scss';
+
+interface CheckboxGroupContextValue {
+  variant: 'default' | 'card';
+}
+
+const CheckboxGroupContext = React.createContext<CheckboxGroupContextValue | undefined>(undefined);
+
+if (process.env.NODE_ENV !== 'production') {
+  CheckboxGroupContext.displayName = 'CheckboxGroupContext';
+}
+
+function useCheckboxGroupContext() {
+  const context = React.useContext(CheckboxGroupContext);
+  if (context === undefined) {
+    throw new Error('Checkbox.Item must be used within a Checkbox.Group');
+  }
+  return context;
+}
+
+export interface CheckboxGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
+  value?: string[];
+  defaultValue?: string[];
+  onValueChange?: (value: string[], eventDetails: { reason: 'none' }) => void;
+  allValues?: string[];
+  disabled?: boolean;
+  variant?: 'default' | 'card';
+}
+
+export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
+  function CheckboxGroup(props, ref) {
+    const {
+      value,
+      defaultValue,
+      onValueChange,
+      allValues,
+      disabled = false,
+      variant = 'default',
+      className,
+      children,
+      style,
+      ...other
+    } = props;
+
+    const contextValue = React.useMemo(() => ({ variant }), [variant]);
+
+    return (
+      <CheckboxGroupContext.Provider value={contextValue}>
+        <BaseCheckboxGroup
+          ref={ref}
+          value={value}
+          defaultValue={defaultValue}
+          onValueChange={onValueChange}
+          allValues={allValues}
+          disabled={disabled}
+          className={clsx(styles.group, className)}
+          style={style}
+          {...other}
+        >
+          {children}
+        </BaseCheckboxGroup>
+      </CheckboxGroupContext.Provider>
+    );
+  }
+);
+
+export interface CheckboxItemProps extends React.HTMLAttributes<HTMLElement> {
+  value?: string;
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean, eventDetails: { reason: 'none' }) => void;
+  indeterminate?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+  name?: string;
+  parent?: boolean;
+  label?: string;
+  description?: string;
+}
+
+export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
+  function CheckboxItem(props, ref) {
+    const {
+      value,
+      checked,
+      defaultChecked,
+      onCheckedChange,
+      indeterminate = false,
+      disabled = false,
+      readOnly = false,
+      required = false,
+      name,
+      parent = false,
+      label,
+      description,
+      className,
+      children,
+      ...other
+    } = props;
+    const { variant } = useCheckboxGroupContext();
+
+    return (
+      <BaseCheckbox.Root
+        ref={ref}
+        value={value}
+        checked={checked}
+        defaultChecked={defaultChecked}
+        onCheckedChange={onCheckedChange}
+        indeterminate={indeterminate}
+        disabled={disabled}
+        readOnly={readOnly}
+        required={required}
+        name={name}
+        parent={parent}
+        className={clsx(
+          styles.item,
+          variant === 'card' && styles.card,
+          className
+        )}
+        {...other}
+      >
+        <span className={styles.checkbox}>
+          <BaseCheckbox.Indicator className={styles.indicator}>
+            <CentralIcon name="IconCheckmark2Small" size={12} className={styles.checkIcon} />
+          </BaseCheckbox.Indicator>
+          <BaseCheckbox.Indicator className={styles.indicator} keepMounted>
+            <CentralIcon name="IconMinusSmall" size={12} className={styles.indeterminateIcon} />
+          </BaseCheckbox.Indicator>
+        </span>
+        {(label || description || children) && (
+          <span className={styles.content}>
+            {children || (
+              <>
+                {label && <span className={styles.label}>{label}</span>}
+                {description && <span className={styles.description}>{description}</span>}
+              </>
+            )}
+          </span>
+        )}
+      </BaseCheckbox.Root>
+    );
+  }
+);
+
+export const CheckboxField = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof Field.Root> & { className?: string }
+>(function CheckboxField(props, ref) {
+  const { className, ...other } = props;
+  return <Field.Root ref={ref} className={clsx(styles.field, className)} {...other} />;
+});
+
+export const CheckboxLegend = React.forwardRef<
+  HTMLLabelElement,
+  React.ComponentPropsWithoutRef<typeof Field.Label> & { className?: string }
+>(function CheckboxLegend(props, ref) {
+  const { className, ...other } = props;
+  return <Field.Label ref={ref} className={clsx(styles.legend, className)} {...other} />;
+});
+
+export const CheckboxDescription = React.forwardRef<
+  HTMLParagraphElement,
+  React.ComponentPropsWithoutRef<typeof Field.Description> & { className?: string }
+>(function CheckboxDescription(props, ref) {
+  const { className, ...other } = props;
+  return <Field.Description ref={ref} className={clsx(styles.helpText, className)} {...other} />;
+});
+
+export const CheckboxError = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentPropsWithoutRef<typeof Field.Error> & { className?: string }
+>(function CheckboxError(props, ref) {
+  const { className, ...other } = props;
+  return <Field.Error ref={ref} className={clsx(styles.errorText, className)} {...other} />;
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  CheckboxGroup.displayName = 'CheckboxGroup';
+  CheckboxItem.displayName = 'CheckboxItem';
+  CheckboxField.displayName = 'CheckboxField';
+  CheckboxLegend.displayName = 'CheckboxLegend';
+  CheckboxDescription.displayName = 'CheckboxDescription';
+  CheckboxError.displayName = 'CheckboxError';
+}
+
+export const Checkbox = {
+  Group: CheckboxGroup,
+  Item: CheckboxItem,
+  Field: CheckboxField,
+  Legend: CheckboxLegend,
+  Description: CheckboxDescription,
+  Error: CheckboxError,
+};
+
+export default Checkbox;

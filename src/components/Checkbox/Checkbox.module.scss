@@ -1,4 +1,4 @@
-// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2826-743
+// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2003-338
 
 .field {
   display: flex;
@@ -63,7 +63,7 @@
   &:focus-visible {
     outline: none;
 
-    .radio {
+    .checkbox {
       box-shadow: var(--input-focus);
     }
   }
@@ -90,7 +90,8 @@
     }
   }
 
-  &[data-checked] {
+  &[data-checked],
+  &[data-indeterminate] {
     border-color: var(--border-primary);
     box-shadow: inset 0 0 0 1px var(--border-primary);
   }
@@ -98,43 +99,45 @@
   &:focus-visible {
     box-shadow: var(--input-focus);
 
-    .radio {
+    .checkbox {
       box-shadow: none;
     }
   }
 
-  &[data-checked]:focus-visible {
+  &[data-checked]:focus-visible,
+  &[data-indeterminate]:focus-visible {
     box-shadow: inset 0 0 0 1px var(--border-primary), var(--input-focus);
   }
 }
 
-.radio {
+.checkbox {
   display: flex;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
+  padding: var(--spacing-4xs);
   position: relative;
 
   &::before {
     content: '';
-    display: block;
-    width: 20px;
-    height: 20px;
+    position: absolute;
+    inset: var(--spacing-4xs);
     border: var(--stroke-sm) solid var(--border-secondary);
-    border-radius: var(--corner-radius-round);
+    border-radius: var(--corner-radius-xs);
     background-color: var(--surface-primary);
-    transition: background-color 150ms ease;
+    transition: background-color 150ms ease, border-color 150ms ease;
   }
 
   @media (hover: hover) {
-    .item:not([data-disabled]):not([data-checked]) &:hover::before {
+    .item:not([data-disabled]):not([data-checked]):not([data-indeterminate]) &:hover::before {
       background-color: var(--surface-hover);
     }
   }
 
-  .item[data-checked] &::before {
+  .item[data-checked] &::before,
+  .item[data-indeterminate] &::before {
     background-color: var(--surface-inverted);
     border-color: transparent;
   }
@@ -147,16 +150,36 @@
 }
 
 .indicator {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: var(--corner-radius-round);
-  background-color: var(--surface-primary);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--surface-primary);
+}
+
+.checkIcon {
   opacity: 0;
   transform: scale(0);
   transition: opacity 150ms ease, transform 150ms ease;
 
   .item[data-checked] & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.indeterminateIcon {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 150ms ease, transform 150ms ease;
+
+  .item[data-indeterminate] & {
     opacity: 1;
     transform: scale(1);
   }
