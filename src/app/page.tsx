@@ -16,11 +16,11 @@ export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
       <h1>Origin v2</h1>
-      <p style={{ marginBottom: '2rem' }}>Design system rebuild — Base UI + Figma-first approach.</p>
+      <p style={{ marginBottom: '128px' }}>Design system rebuild — Base UI + Figma-first approach.</p>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
-      <Accordion.Root defaultValue={['item-1']} style={{ marginBottom: '2rem' }}>
+      <Accordion.Root defaultValue={['item-1']} style={{ marginBottom: '128px' }}>
         <Accordion.Item value="item-1">
           <Accordion.Header>
             <Accordion.Trigger>What is Origin?</Accordion.Trigger>
@@ -55,7 +55,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Action Bar Component</h2>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
         <ActionBar>
           <ActionBarLabel>4 transactions selected</ActionBarLabel>
           <ActionBarActions>
@@ -83,7 +83,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Alert Dialog Component</h2>
       
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '128px' }}>
         <AlertDialog.Root>
           <AlertDialog.Trigger render={<Button variant="outline" />}>
             Open Alert Dialog
@@ -168,7 +168,7 @@ export default function Home() {
       </div>
       
       {/* States */}
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '128px' }}>
         <Button>Default</Button>
         <Button loading>Loading</Button>
         <Button disabled>Disabled</Button>
@@ -176,7 +176,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Checkbox Component</h2>
       
-      <div style={{ display: 'flex', gap: '3rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '3rem', marginBottom: '128px' }}>
         {/* Default variant */}
         <Checkbox.Field>
           <Checkbox.Legend>Legend</Checkbox.Legend>
@@ -210,7 +210,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Chip Component</h2>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>Default MD</span>
           <Chip onDismiss={() => console.log('dismissed')}>label</Chip>
@@ -239,7 +239,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Loader Component</h2>
       
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '128px' }}>
         <div style={{ textAlign: 'center' }}>
           <Loader size="sm" />
           <p style={{ fontSize: '12px', marginTop: '8px' }}>Small</p>
@@ -256,7 +256,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Radio Component</h2>
       
-      <div style={{ display: 'flex', gap: '3rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', gap: '3rem', marginBottom: '128px' }}>
         {/* Default variant */}
         <Radio.Field>
           <Radio.Legend>Legend</Radio.Legend>
@@ -290,7 +290,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Switch Component</h2>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>SM Off</span>
           <Switch size="sm" />
@@ -324,7 +324,7 @@ export default function Home() {
       <h2 style={{ marginBottom: '1rem' }}>Tooltip Component</h2>
       
       <Tooltip.Provider>
-        <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '2rem', marginBottom: '128px', alignItems: 'center' }}>
           <Tooltip.Root>
             <Tooltip.Trigger render={<Button variant="outline">Hover me</Button>} />
             <Tooltip.Portal>
