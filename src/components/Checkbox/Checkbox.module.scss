@@ -110,37 +110,29 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding-top: var(--spacing-4xs);
   position: relative;
-
-  &::before {
-    content: '';
-    width: 16px;
-    height: 16px;
-    border: var(--stroke-sm) solid var(--border-secondary);
-    border-radius: var(--corner-radius-xs);
-    background-color: var(--surface-primary);
-    transition: background-color 150ms ease, border-color 150ms ease;
-  }
+  width: 16px;
+  height: 16px;
+  margin-top: var(--spacing-4xs);
+  border: var(--stroke-sm) solid var(--border-secondary);
+  border-radius: var(--corner-radius-xs);
+  background-color: var(--surface-primary);
+  transition: background-color 150ms ease, border-color 150ms ease;
 
   @media (hover: hover) {
-    .item:not([data-disabled]):not([data-checked]):not([data-indeterminate]):not(.card) &:hover::before {
+    .item:not([data-disabled]):not([data-checked]):not([data-indeterminate]):not(.card) &:hover {
       background-color: var(--surface-hover);
     }
   }
 
-  .item[data-checked] &::before,
-  .item[data-indeterminate] &::before {
+  .item[data-checked] &,
+  .item[data-indeterminate] & {
     background-color: var(--surface-inverted);
     border-color: transparent;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    &::before {
-      transition: none;
-    }
+    transition: none;
   }
 }
 
