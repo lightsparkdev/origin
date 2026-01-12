@@ -129,7 +129,7 @@
   }
 
   @media (hover: hover) {
-    .item:not([data-disabled]):not([data-checked]) &:hover::before {
+    .item:not([data-disabled]):not([data-checked]):not(.card) &:hover::before {
       background-color: var(--surface-hover);
     }
   }
