@@ -91,11 +91,6 @@
     }
   }
 
-  &[data-checked],
-  &[data-indeterminate] {
-    border-color: var(--border-primary);
-  }
-
   &:focus-visible {
     box-shadow: var(--input-focus);
 
