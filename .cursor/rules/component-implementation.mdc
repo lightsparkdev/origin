@@ -42,7 +42,7 @@ globs:
 Use `surface-with-hover` mixin for surfaces that need hover overlay (preserves base color):
 
 ```scss
-@use '../tokens/mixins' as *;
+@use '../../tokens/mixins' as *;
 
 .card {
   @include surface-with-hover(var(--surface-secondary));
