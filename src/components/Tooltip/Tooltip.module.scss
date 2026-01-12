@@ -8,7 +8,7 @@
 .popup {
   max-width: 240px;
   padding: var(--spacing-2xs) var(--spacing-sm);
-  background-color: var(--surface-base);
+  background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
   box-shadow: var(--shadow-sm);
@@ -39,7 +39,7 @@
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
-  background-color: var(--surface-base);
+  background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
 
   &[data-side='top'] {

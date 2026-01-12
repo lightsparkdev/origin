@@ -8,6 +8,9 @@
 // Import design tokens (CSS custom properties)
 @use '../tokens/variables';
 
+// Import effect tokens (shadows, focus rings)
+@use '../tokens/effects';
+
 // Import typography reset and text styles
 @use '../tokens/typography';
 
