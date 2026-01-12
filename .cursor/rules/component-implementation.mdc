@@ -62,6 +62,15 @@ src/components/{Name}/
 └── index.ts
 ```
 
+## Token Imports
+
+From component SCSS files, use `../../tokens/` to reach token files:
+
+```scss
+@use '../../tokens/mixins' as *;
+@use '../../tokens/text-styles' as *;
+```
+
 ## Checklist
 
 - [ ] Figma MCP called
