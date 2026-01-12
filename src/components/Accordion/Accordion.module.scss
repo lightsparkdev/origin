@@ -70,17 +70,23 @@
 }
 
 .panel {
-  display: flex;
   width: 100%;
-  padding-bottom: var(--spacing-sm);
+  height: var(--accordion-panel-height);
+  overflow: hidden;
+  transition: height 200ms ease-out;
 
-  &[hidden] {
-    display: none;
+  &[data-starting-style],
+  &[data-ending-style] {
+    height: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 }
 
 .content {
-  flex: 1;
+  padding-bottom: var(--spacing-sm);
   @include body;
   color: var(--text-primary);
 }
