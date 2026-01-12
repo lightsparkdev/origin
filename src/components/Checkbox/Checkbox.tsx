@@ -136,10 +136,8 @@ export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
         {...other}
       >
         <span className={styles.checkbox}>
-          <BaseCheckbox.Indicator className={styles.indicator}>
-            <span className={styles.checkIcon}>{checkedIcon}</span>
-          </BaseCheckbox.Indicator>
           <BaseCheckbox.Indicator className={styles.indicator} keepMounted>
+            <span className={styles.checkIcon}>{checkedIcon}</span>
             <span className={styles.indeterminateIcon}>{indeterminateIcon}</span>
           </BaseCheckbox.Indicator>
         </span>
