@@ -1,6 +1,7 @@
 'use client';
 
 import { Accordion } from '@/components/Accordion';
+import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/ActionBar';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
@@ -296,7 +297,7 @@ export default function Home() {
                     padding: '8px',
                   }}
                 >
-                  <CentralIcon name="IconInfoCircle" size={20} />
+                  <CentralIcon name="IconCircleInfo" size={20} />
                 </button>
               }
             />
@@ -311,6 +312,34 @@ export default function Home() {
           </Tooltip.Root>
         </div>
       </Tooltip.Provider>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Action Bar Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2rem' }}>
+        <ActionBar>
+          <ActionBarLabel>4 transactions selected</ActionBarLabel>
+          <ActionBarActions>
+            <Button variant="outline" size="md">
+              Clear
+            </Button>
+            <Button variant="filled" size="md" iconLeft={<CentralIcon name="IconArrowOutOfBox" size={16} />}>
+              Export
+            </Button>
+          </ActionBarActions>
+        </ActionBar>
+        
+        <ActionBar>
+          <ActionBarLabel>3 users selected</ActionBarLabel>
+          <ActionBarActions>
+            <Button variant="outline" size="md">
+              Cancel
+            </Button>
+            <Button variant="critical" size="md">
+              Delete users
+            </Button>
+          </ActionBarActions>
+        </ActionBar>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       

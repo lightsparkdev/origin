@@ -4,7 +4,6 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xs);
   border: none;
   border-radius: var(--corner-radius-sm);
   cursor: pointer;
@@ -35,37 +34,55 @@
 
 .sm {
   height: 30px;
-  padding: 0 var(--spacing-sm);
+  padding: 0 var(--spacing-xs); // 8px
+  gap: var(--spacing-3xs); // 4px
   font-size: var(--font-size-xs);
   line-height: var(--font-leading-xs);
 
   &.iconOnly {
     width: 30px;
     padding: 0;
+
+    .iconLeft {
+      width: 16px;
+      height: 16px;
+    }
   }
 }
 
 .md {
   height: 36px;
-  padding: 0 var(--spacing-md);
+  padding: 0 var(--spacing-sm); // 12px
+  gap: var(--spacing-3xs); // 4px
   font-size: var(--font-size-base);
   line-height: var(--font-leading-base);
 
   &.iconOnly {
     width: 36px;
     padding: 0;
+
+    .iconLeft {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
 .lg {
   height: 40px;
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--spacing-sm); // 12px
+  gap: var(--spacing-2xs); // 6px
   font-size: var(--font-size-base);
   line-height: var(--font-leading-base);
 
   &.iconOnly {
     width: 40px;
     padding: 0;
+
+    .iconLeft {
+      width: 20px;
+      height: 20px;
+    }
   }
 }
 
@@ -145,6 +162,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  width: 16px;
+  height: 16px;
 }
 
 .label {

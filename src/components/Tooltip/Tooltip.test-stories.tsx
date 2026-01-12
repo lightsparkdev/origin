@@ -125,8 +125,8 @@ export function TestTooltipControlled() {
 
 export function TestTooltipDelay() {
   return (
-    <Tooltip.Provider>
-      <Tooltip.Root delay={100}>
+    <Tooltip.Provider delay={100}>
+      <Tooltip.Root>
         <Tooltip.Trigger data-testid="trigger">
           <button>Delayed</button>
         </Tooltip.Trigger>

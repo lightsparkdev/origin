@@ -1,0 +1,30 @@
+// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5119-21325
+
+@use '../../tokens/text-styles' as *;
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-xl);
+  background-color: var(--surface-elevated);
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-sm);
+  box-shadow: var(--shadow-lg);
+
+  @supports (corner-shape: superellipse) {
+    corner-shape: superellipse;
+  }
+}
+
+.label {
+  @include body;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}

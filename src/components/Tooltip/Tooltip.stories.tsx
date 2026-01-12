@@ -66,7 +66,7 @@ export const IconTrigger: StoryObj = {
               padding: '8px',
             }}
           >
-            <CentralIcon name="IconInfoCircle" size={20} />
+            <CentralIcon name="IconCircleInfo" size={20} />
           </button>
         }
       />
@@ -104,17 +104,19 @@ export const Placements: StoryObj = {
 
 export const DelayedOpen: StoryObj = {
   render: () => (
-    <Tooltip.Root delay={500}>
-      <Tooltip.Trigger render={<Button variant="outline">500ms delay</Button>} />
-      <Tooltip.Portal>
-        <Tooltip.Positioner sideOffset={8}>
-          <Tooltip.Popup>
-            This tooltip has a 500ms delay
-            <Tooltip.Arrow />
-          </Tooltip.Popup>
-        </Tooltip.Positioner>
-      </Tooltip.Portal>
-    </Tooltip.Root>
+    <Tooltip.Provider delay={500}>
+      <Tooltip.Root>
+        <Tooltip.Trigger render={<Button variant="outline">500ms delay</Button>} />
+        <Tooltip.Portal>
+          <Tooltip.Positioner sideOffset={8}>
+            <Tooltip.Popup>
+              This tooltip has a 500ms delay
+              <Tooltip.Arrow />
+            </Tooltip.Popup>
+          </Tooltip.Positioner>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   ),
 };
 
