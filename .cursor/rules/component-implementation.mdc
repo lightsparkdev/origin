@@ -24,7 +24,7 @@ globs:
 3. Use `clsx` for className merging
 4. Use `forwardRef` on all components
 5. Use `render` prop for composition
-6. **Use slots for nested elements** — icons, indicators, and decorative elements should be `React.ReactNode` props with sensible defaults
+6. **Use slots for nested elements** — any nested component (icons, indicators, trailing actions, decorative elements) should be a `React.ReactNode` prop with sensible defaults when applicable
 7. Include Storybook story
 8. Include Playwright tests
 9. **No verbose comments** — code is self-documenting
@@ -52,7 +52,7 @@ src/components/{Name}/
 - [ ] Figma MCP called
 - [ ] All values tokenized
 - [ ] forwardRef + clsx
-- [ ] Slots for nested elements (icons, indicators)
+- [ ] Slots for nested elements (icons, trailing actions, etc.)
 - [ ] Reduced motion handled
 - [ ] Tests pass
 - [ ] No decorative comments
