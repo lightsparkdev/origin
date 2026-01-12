@@ -76,7 +76,8 @@
 .card {
   padding: var(--spacing-md);
   padding-right: var(--spacing-3xl);
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  background-color: var(--surface-sunken);
+  border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-md);
   overflow: hidden;
 
@@ -117,13 +118,13 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  padding: var(--spacing-4xs);
+  padding-top: var(--spacing-4xs);
   position: relative;
 
   &::before {
     content: '';
-    position: absolute;
-    inset: var(--spacing-4xs);
+    width: 16px;
+    height: 16px;
     border: var(--stroke-sm) solid var(--border-secondary);
     border-radius: var(--corner-radius-xs);
     background-color: var(--surface-primary);
