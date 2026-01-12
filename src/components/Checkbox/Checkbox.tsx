@@ -85,7 +85,12 @@ export interface CheckboxItemProps extends React.HTMLAttributes<HTMLElement> {
   parent?: boolean;
   label?: string;
   description?: string;
+  checkedIcon?: React.ReactNode;
+  indeterminateIcon?: React.ReactNode;
 }
+
+const defaultCheckedIcon = <CentralIcon name="IconCheckmark2Small" size={12} />;
+const defaultIndeterminateIcon = <CentralIcon name="IconMinusSmall" size={12} />;
 
 export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
   function CheckboxItem(props, ref) {
@@ -102,6 +107,8 @@ export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
       parent = false,
       label,
       description,
+      checkedIcon = defaultCheckedIcon,
+      indeterminateIcon = defaultIndeterminateIcon,
       className,
       children,
       ...other
@@ -130,10 +137,10 @@ export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
       >
         <span className={styles.checkbox}>
           <BaseCheckbox.Indicator className={styles.indicator}>
-            <CentralIcon name="IconCheckmark2Small" size={12} className={styles.checkIcon} />
+            <span className={styles.checkIcon}>{checkedIcon}</span>
           </BaseCheckbox.Indicator>
           <BaseCheckbox.Indicator className={styles.indicator} keepMounted>
-            <CentralIcon name="IconMinusSmall" size={12} className={styles.indeterminateIcon} />
+            <span className={styles.indeterminateIcon}>{indeterminateIcon}</span>
           </BaseCheckbox.Indicator>
         </span>
         {(label || description || children) && (

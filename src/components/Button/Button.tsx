@@ -10,11 +10,14 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: 'filled' | 'outline' | 'ghost' | 'critical';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
+  loadingIndicator?: React.ReactNode;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   iconOnly?: boolean;
   children?: React.ReactNode;
 }
+
+const defaultLoadingIndicator = <Loader size="sm" />;
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
@@ -22,6 +25,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant = 'filled',
       size = 'md',
       loading = false,
+      loadingIndicator = defaultLoadingIndicator,
       disabled = false,
       iconLeft,
       iconRight,
@@ -49,7 +53,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {loading ? (
-          <Loader size="sm" className={styles.loader} />
+          <span className={styles.loader}>{loadingIndicator}</span>
         ) : (
           <>
             {iconLeft && <span className={styles.iconLeft}>{iconLeft}</span>}

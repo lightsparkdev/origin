@@ -19,6 +19,8 @@ export interface ChipProps {
   disabled?: boolean;
   /** Callback when dismiss is clicked */
   onDismiss?: (details: ChangeEventDetails<React.MouseEvent | React.KeyboardEvent>) => void;
+  /** Custom dismiss icon */
+  dismissIcon?: React.ReactNode;
   /** Additional class name */
   className?: string;
 }
@@ -44,6 +46,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
       variant = 'default',
       disabled = false,
       onDismiss: onDismissProp,
+      dismissIcon,
       className,
       ...elementProps
     } = props;
@@ -67,6 +70,8 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
     };
 
     const label = typeof children === 'string' ? children : 'chip';
+    const iconSize = size === 'sm' ? 10 : 12;
+    const resolvedDismissIcon = dismissIcon ?? <CentralIcon name="IconCrossSmall" size={iconSize} />;
 
     return (
       <span
@@ -85,7 +90,7 @@ export const Chip = React.forwardRef<HTMLSpanElement, ChipProps>(
             disabled={disabled}
             aria-label={`Remove ${label}`}
           >
-            <CentralIcon name="IconCrossSmall" size={size === 'sm' ? 10 : 12} />
+            {resolvedDismissIcon}
           </button>
         )}
       </span>
@@ -106,6 +111,7 @@ export const ChipFilter = React.forwardRef<HTMLSpanElement, ChipFilterProps>(
       size = 'md',
       disabled = false,
       onDismiss: onDismissProp,
+      dismissIcon,
       className,
       ...elementProps
     } = props;
@@ -129,6 +135,8 @@ export const ChipFilter = React.forwardRef<HTMLSpanElement, ChipFilterProps>(
     };
 
     const label = `${property} ${operator} ${value}`;
+    const iconSize = size === 'sm' ? 10 : 12;
+    const resolvedDismissIcon = dismissIcon ?? <CentralIcon name="IconCrossSmall" size={iconSize} />;
 
     return (
       <span
@@ -155,7 +163,7 @@ export const ChipFilter = React.forwardRef<HTMLSpanElement, ChipFilterProps>(
             disabled={disabled}
             aria-label={`Remove filter ${label}`}
           >
-            <CentralIcon name="IconCrossSmall" size={size === 'sm' ? 10 : 12} />
+            {resolvedDismissIcon}
           </button>
         )}
       </span>
