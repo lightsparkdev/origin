@@ -2,6 +2,7 @@
 
 import { Accordion } from '@/components/Accordion';
 import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/ActionBar';
+import { Alert } from '@/components/Alert';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
@@ -79,6 +80,15 @@ export default function Home() {
             </Button>
           </ActionBarActions>
         </ActionBar>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Alert Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
+        <Alert variant="default" title="Title" description="Description here." />
+        <Alert variant="critical" title="Title" description="Description here." />
+        <Alert variant="default" title="Title only alert" />
+        <Alert variant="default" title="No icon alert" description="This alert has no icon." icon={false} />
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Alert Dialog Component</h2>
