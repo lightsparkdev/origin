@@ -45,3 +45,17 @@
     corner-shape: squircle;
   }
 }
+
+/// Surface with hover overlay (preserves base color)
+/// @param {String} $base - The base background color
+@mixin surface-with-hover($base) {
+  background-color: $base;
+
+  @media (hover: hover) {
+    &:hover:not([data-disabled]) {
+      background:
+        linear-gradient(var(--surface-hover), var(--surface-hover)),
+        $base;
+    }
+  }
+}

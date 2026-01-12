@@ -1,4 +1,5 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2003-338
+@use '../tokens/mixins' as *;
 
 .field {
   display: flex;
@@ -76,19 +77,13 @@
 .card {
   padding: var(--spacing-md);
   padding-right: var(--spacing-3xl);
-  background-color: var(--surface-secondary);
+  @include surface-with-hover(var(--surface-secondary));
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-md);
   overflow: hidden;
 
   @supports (corner-shape: squircle) {
     corner-shape: squircle;
-  }
-
-  @media (hover: hover) {
-    &:hover:not([data-disabled]) {
-      background-color: var(--surface-hover);
-    }
   }
 
   &:focus-visible {

@@ -16,6 +16,7 @@ globs:
 | `_variables.scss` | Tokens |
 | `_text-styles.scss` | Typography mixins |
 | `_effects.scss` | Shadows |
+| `_mixins.scss` | Utility mixins |
 
 ## Rules
 
@@ -35,6 +36,20 @@ globs:
 - No verbose headers or token lists
 - No emojis in code or console output
 - Code is self-documenting
+
+## Hover States
+
+Use `surface-with-hover` mixin for surfaces that need hover overlay (preserves base color):
+
+```scss
+@use '../tokens/mixins' as *;
+
+.card {
+  @include surface-with-hover(var(--surface-secondary));
+}
+```
+
+This layers `--surface-hover` on top of the base color instead of replacing it.
 
 ## File Structure
 
