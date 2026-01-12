@@ -6,11 +6,16 @@
   inset: 0;
   z-index: 50;
   background-color: var(--surface-scrim);
-  opacity: 0;
   transition: opacity 200ms ease-out;
 
-  &[data-open] { opacity: 1; }
-  &[data-ending-style] { opacity: 0; }
+  &[data-open] {
+    opacity: 1;
+  }
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
@@ -21,7 +26,6 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -34,13 +38,10 @@
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-md);
   box-shadow: var(--shadow-lg);
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.96);
   transition: opacity 200ms ease-out, transform 200ms ease-out;
 
-  // Progressive enhancement: iOS-style corner smoothing (60%)
-  @supports (corner-shape: superellipse) {
-    corner-shape: superellipse;
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
   }
 
   &[data-open] {
@@ -48,6 +49,7 @@
     transform: translate(-50%, -50%) scale(1);
   }
 
+  &[data-starting-style],
   &[data-ending-style] {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.96);
