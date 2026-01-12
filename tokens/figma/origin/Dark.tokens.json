@@ -75,6 +75,31 @@
         }
       }
     },
+    "hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.30000001192092896,
+        "hex": "#FFFFFF"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:5807:51",
+        "com.figma.scopes": [
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:47100d9ee86fe416d640e3829dccf9d1fd680bcf/-1:-1",
+          "targetVariableName": "color/alpha/white/30",
+          "targetVariableSetId": "VariableCollectionId:adf8a2cf9464a08e3c0fc9ba15cff9e85ce1d417/-1:-1",
+          "targetVariableSetName": "primitives"
+        }
+      }
+    },
     "inverted": {
       "$type": "color",
       "$value": {
@@ -666,7 +691,7 @@
           1,
           1
         ],
-        "alpha": 0.05999999865889549,
+        "alpha": 0.03999999910593033,
         "hex": "#FFFFFF"
       },
       "$extensions": {
@@ -676,8 +701,8 @@
           "SHAPE_FILL"
         ],
         "com.figma.aliasData": {
-          "targetVariableId": "VariableID:6d29556848e2e94ea1df5de3e3e6ee84d8307c5e/-1:-1",
-          "targetVariableName": "color/alpha/white/06",
+          "targetVariableId": "VariableID:6a2056176d63bf1febac6eccc4babd2a88e7d408/-1:-1",
+          "targetVariableName": "color/alpha/white/04",
           "targetVariableSetId": "VariableCollectionId:adf8a2cf9464a08e3c0fc9ba15cff9e85ce1d417/-1:-1",
           "targetVariableSetName": "primitives"
         }

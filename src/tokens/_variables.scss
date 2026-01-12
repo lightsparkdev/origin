@@ -240,6 +240,7 @@
   --border-primary: #1A1A1A;
   --border-secondary: #C1C0B8;
   --border-tertiary: rgba(0, 0, 0, 0.10);
+  --border-hover: rgba(0, 0, 0, 0.30);
   --border-inverted: rgba(255, 255, 255, 0.20);
   --border-critical: #CC0909;
   --icon-primary: #1A1A1A;
@@ -262,7 +263,7 @@
   --surface-tertiary: #C1C0B8;
   --surface-elevated: #FAFAF9;
   --surface-sunken: #F4F4F3;
-  --surface-hover: rgba(0, 0, 0, 0.06);
+  --surface-hover: rgba(0, 0, 0, 0.04);
   --surface-pressed: rgba(0, 0, 0, 0.10);
   --surface-active: rgba(0, 0, 0, 0.04);
   --surface-inverted: #1A1A1A;
@@ -301,6 +302,7 @@
   --border-primary: #F8F8F7;
   --border-secondary: #464646;
   --border-tertiary: rgba(255, 255, 255, 0.10);
+  --border-hover: rgba(255, 255, 255, 0.30);
   --border-inverted: rgba(0, 0, 0, 0.20);
   --border-critical: #EF0D0D;
   --icon-primary: #F8F8F7;
@@ -323,7 +325,7 @@
   --surface-tertiary: #3D3D3D;
   --surface-elevated: #111111;
   --surface-sunken: #212121;
-  --surface-hover: rgba(255, 255, 255, 0.06);
+  --surface-hover: rgba(255, 255, 255, 0.04);
   --surface-pressed: rgba(255, 255, 255, 0.10);
   --surface-active: rgba(255, 255, 255, 0.04);
   --surface-inverted: #F8F8F7;
@@ -362,6 +364,7 @@
     --border-primary: #F8F8F7;
     --border-secondary: #464646;
     --border-tertiary: rgba(255, 255, 255, 0.10);
+    --border-hover: rgba(255, 255, 255, 0.30);
     --border-inverted: rgba(0, 0, 0, 0.20);
     --border-critical: #EF0D0D;
     --icon-primary: #F8F8F7;
@@ -384,7 +387,7 @@
     --surface-tertiary: #3D3D3D;
     --surface-elevated: #111111;
     --surface-sunken: #212121;
-    --surface-hover: rgba(255, 255, 255, 0.06);
+    --surface-hover: rgba(255, 255, 255, 0.04);
     --surface-pressed: rgba(255, 255, 255, 0.10);
     --surface-active: rgba(255, 255, 255, 0.04);
     --surface-inverted: #F8F8F7;
