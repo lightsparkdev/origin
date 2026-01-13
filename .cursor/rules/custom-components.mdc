@@ -517,6 +517,85 @@ export function useComponentContext() {
 - [ ] Controlled + uncontrolled modes tested
 - [ ] Cancelable events tested
 - [ ] Edge cases: rapid clicks, disabled mid-action
+- [ ] Conformance tests for each component part (see below)
+
+### Conformance Tests (Base UI-style)
+
+Base UI uses conformance tests to verify component contracts. Our Playwright-adapted versions:
+
+**Location:** `test-utils/describeConformance.tsx`
+
+**Test fixtures pattern (in test-stories.tsx):**
+
+```tsx
+// Prop forwarding: custom data attributes and lang
+export function PropForwardingComponent() {
+  return (
+    <Component data-testid="test-root" data-custom="custom-value" lang="fr">
+      {/* minimal children */}
+    </Component>
+  );
+}
+
+// Style forwarding
+export function StyleForwardingComponent() {
+  return (
+    <Component data-testid="test-root" style={{ color: 'green' }}>
+      {/* minimal children */}
+    </Component>
+  );
+}
+
+// ClassName forwarding
+export function ClassNameComponent() {
+  return (
+    <Component data-testid="test-root" className="custom-class-name">
+      {/* minimal children */}
+    </Component>
+  );
+}
+```
+
+**Conformance test assertions:**
+
+```tsx
+test.describe('Component conformance', () => {
+  test('forwards custom data attributes', async ({ mount, page }) => {
+    await mount(<PropForwardingComponent />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveAttribute('data-custom', 'custom-value');
+  });
+
+  test('forwards lang attribute', async ({ mount, page }) => {
+    await mount(<PropForwardingComponent />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveAttribute('lang', 'fr');
+  });
+
+  test('forwards style attribute', async ({ mount, page }) => {
+    await mount(<StyleForwardingComponent />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveCSS('color', 'rgb(0, 128, 0)');
+  });
+
+  test('forwards className', async ({ mount, page }) => {
+    await mount(<ClassNameComponent />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveClass(/custom-class-name/);
+  });
+});
+```
+
+**What conformance tests verify:**
+
+| Test | What it verifies |
+|------|------------------|
+| Prop forwarding | Custom props (data-*, lang) reach the DOM |
+| Style forwarding | Inline styles are applied |
+| ClassName forwarding | className merges with internal classes |
+| Ref forwarding | Ref attaches to correct DOM element |
+
+**For compound components:** Add conformance tests for each major part (Root, Link, Item, etc.)
 
 ## What to Avoid
 

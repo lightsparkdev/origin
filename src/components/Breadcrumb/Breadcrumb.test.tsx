@@ -5,6 +5,11 @@ import {
   WithLinksBreadcrumb,
   CustomSeparatorBreadcrumb,
   CollapsedBreadcrumb,
+  PropForwardingBreadcrumb,
+  StyleForwardingBreadcrumb,
+  ClassNameBreadcrumb,
+  LinkPropForwarding,
+  PagePropForwarding,
 } from './Breadcrumb.test-stories';
 
 test.describe('Breadcrumb', () => {
@@ -93,5 +98,63 @@ test.describe('Breadcrumb', () => {
     await mount(<DefaultBreadcrumb />);
     const nav = page.getByRole('navigation', { name: 'Breadcrumb' });
     await expect(nav).toBeVisible();
+  });
+});
+
+// ============================================================================
+// Conformance Tests (Base UI-style component contracts)
+// ============================================================================
+
+test.describe('Breadcrumb.Root conformance', () => {
+  test('forwards custom data attributes', async ({ mount, page }) => {
+    await mount(<PropForwardingBreadcrumb />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveAttribute('data-custom', 'custom-value');
+  });
+
+  test('forwards lang attribute', async ({ mount, page }) => {
+    await mount(<PropForwardingBreadcrumb />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveAttribute('lang', 'fr');
+  });
+
+  test('forwards style attribute', async ({ mount, page }) => {
+    await mount(<StyleForwardingBreadcrumb />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveCSS('color', 'rgb(0, 128, 0)');
+  });
+
+  test('forwards className', async ({ mount, page }) => {
+    await mount(<ClassNameBreadcrumb />);
+    const root = page.locator('[data-testid="test-root"]');
+    await expect(root).toHaveClass(/custom-class-name/);
+  });
+});
+
+test.describe('Breadcrumb.Link conformance', () => {
+  test('forwards custom data attributes', async ({ mount, page }) => {
+    await mount(<LinkPropForwarding />);
+    const link = page.locator('[data-testid="test-link"]');
+    await expect(link).toHaveAttribute('data-custom', 'link-value');
+  });
+
+  test('forwards lang attribute', async ({ mount, page }) => {
+    await mount(<LinkPropForwarding />);
+    const link = page.locator('[data-testid="test-link"]');
+    await expect(link).toHaveAttribute('lang', 'de');
+  });
+});
+
+test.describe('Breadcrumb.Page conformance', () => {
+  test('forwards custom data attributes', async ({ mount, page }) => {
+    await mount(<PagePropForwarding />);
+    const pageEl = page.locator('[data-testid="test-page"]');
+    await expect(pageEl).toHaveAttribute('data-custom', 'page-value');
+  });
+
+  test('forwards lang attribute', async ({ mount, page }) => {
+    await mount(<PagePropForwarding />);
+    const pageEl = page.locator('[data-testid="test-page"]');
+    await expect(pageEl).toHaveAttribute('lang', 'es');
   });
 });
