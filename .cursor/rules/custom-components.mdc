@@ -8,7 +8,121 @@ alwaysApply: false
 
 # Custom Components (Non-Base UI)
 
-Build custom components to Base UI contribution quality.
+Build custom components to Base UI contribution quality so they could be submitted as PRs.
+
+## Pre-Build Research (MANDATORY)
+
+**Complete this research BEFORE writing any code.**
+
+### Step 1: Check Base UI for Existing Component
+
+```bash
+# Search Base UI repo for the component
+curl -s "https://api.github.com/repos/mui/base-ui/contents/packages/react/src" | grep -i "componentname"
+```
+
+If it exists → use it via our wrapper pattern. If not → continue research.
+
+### Step 2: Check Base UI Issues for Feature Request
+
+```bash
+# Search for existing feature request
+curl -s "https://api.github.com/search/issues?q=repo:mui/base-ui+componentname" | head -60
+```
+
+If found, read the issue for:
+- Desired API/behavior
+- Accessibility requirements discussed
+- Any team member comments on implementation approach
+- Status labels ("waiting for 👍", "approved", etc.)
+
+### Step 3: Study Base UI Source Code Patterns
+
+Fetch and study a similar existing component from Base UI:
+
+```bash
+# Get component structure
+curl -s "https://api.github.com/repos/mui/base-ui/contents/packages/react/src/accordion" | grep '"name"'
+
+# Get the main component file
+curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/root/AccordionRoot.tsx
+
+# Get the context pattern
+curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/root/AccordionRootContext.ts
+
+# Get the index exports pattern
+curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/index.ts
+curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/index.parts.ts
+```
+
+**Document these patterns:**
+
+| Pattern | What to Extract |
+|---------|-----------------|
+| File structure | Subdirectory per part, index.ts + index.parts.ts |
+| Component signature | `forwardRef`, named function, namespace types |
+| useRenderElement | How props, state, refs are passed |
+| Context | createContext, useXContext with error throwing |
+| Data attributes | Enum file defining `data-*` attributes |
+| Cancelable events | `createChangeEventDetails`, `REASONS` usage |
+| Test structure | What their tests cover, assertion patterns |
+
+### Step 4: Study Accessibility Standards
+
+| Source | What to Check |
+|--------|---------------|
+| [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) | Official patterns, roles, keyboard requirements |
+| [Radix UI](https://radix-ui.com) | Implementation approach, API design |
+| [React Aria](https://react-spectrum.adobe.com/react-aria/) | Adobe's accessibility patterns |
+| [shadcn/ui](https://ui.shadcn.com) | Developer-friendly API patterns |
+
+**Document:**
+- Required ARIA roles and properties
+- Keyboard interaction requirements
+- Screen reader behavior expectations
+- Focus management rules
+
+### Step 5: Create Research Summary
+
+Before building, document:
+
+```markdown
+## [Component Name] Research Summary
+
+### Base UI Status
+- [ ] Component exists in Base UI: YES/NO
+- [ ] Feature request exists: Issue #XXX (link)
+- [ ] Request status: waiting for 👍 / approved / in progress
+
+### Similar Component Studied
+- Component: [e.g., Accordion, Tabs]
+- Patterns extracted: [list key patterns]
+
+### ARIA Requirements
+- Role: [e.g., navigation]
+- Required attributes: [e.g., aria-label, aria-current]
+- Keyboard: [e.g., Tab to navigate, Enter to activate]
+- Focus: [e.g., roving focus, focus trap]
+
+### Proposed API
+- Parts: [e.g., Root, List, Item, Link, Separator]
+- Key props: [e.g., separator, current]
+- State: [e.g., current page indication]
+
+### Confidence Level
+- [X]% confident this matches Base UI contribution standards
+- Gaps: [list any unknowns]
+```
+
+### Step 6: Decide Go/No-Go
+
+| Confidence | Action |
+|------------|--------|
+| 90%+ | Proceed with build |
+| 70-89% | Proceed but flag for review |
+| <70% | More research needed OR consider alternative approach |
+
+---
 
 ## TDD: Tests First (Interactive Components)
 
@@ -404,16 +518,6 @@ export function useComponentContext() {
 - [ ] Cancelable events tested
 - [ ] Edge cases: rapid clicks, disabled mid-action
 
-## Research First (Interactive Components)
-
-Before building, check:
-
-| Source | What to Check |
-|--------|---------------|
-| [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) | Patterns, roles, keyboard |
-| [Radix UI](https://radix-ui.com) | Implementation approach |
-| [React Aria](https://react-spectrum.adobe.com/react-aria/) | Adobe's patterns |
-
 ## What to Avoid
 
 | Anti-Pattern | Use Instead |
@@ -428,14 +532,132 @@ Before building, check:
 
 ## File Structure
 
+### Simple Components (single element)
+
 ```
 src/components/{Name}/
-├── {Name}.tsx           # Simple components
-├── parts.tsx            # Compound components
-├── {Name}Context.tsx    # Context (if compound)
+├── {Name}.tsx
 ├── {Name}.module.scss
 ├── {Name}.stories.tsx
 ├── {Name}.test.tsx
 ├── {Name}.test-stories.tsx
 └── index.ts
+```
+
+### Compound Components (multiple parts)
+
+Follow Base UI's actual structure for contribution-readiness:
+
+```
+src/components/{Name}/
+├── root/
+│   ├── {Name}Root.tsx
+│   ├── {Name}Root.test.tsx
+│   └── {Name}RootContext.ts
+├── item/
+│   └── {Name}Item.tsx
+├── trigger/
+│   └── {Name}Trigger.tsx
+├── {Name}.module.scss        # Shared styles
+├── {Name}.stories.tsx
+├── {Name}.test-stories.tsx
+├── index.ts                  # Namespace export
+└── index.parts.ts            # Aliased part exports
+```
+
+**index.ts pattern:**
+```tsx
+export * as ComponentName from './index.parts';
+
+export type * from './root/ComponentNameRoot';
+export type * from './item/ComponentNameItem';
+// ... other parts
+```
+
+**index.parts.ts pattern:**
+```tsx
+export { ComponentNameRoot as Root } from './root/ComponentNameRoot';
+export { ComponentNameItem as Item } from './item/ComponentNameItem';
+// ... other parts
+```
+
+**Usage:**
+```tsx
+import { ComponentName } from '@/components/ComponentName';
+
+<ComponentName.Root>
+  <ComponentName.Item />
+</ComponentName.Root>
+```
+
+## Base UI Component Patterns (Reference)
+
+These patterns are extracted from Base UI source code for contribution-quality builds:
+
+### Namespace Types Pattern
+
+```tsx
+export interface ComponentNameProps extends BaseProps {
+  // props
+}
+
+export interface ComponentNameState {
+  // state for className callback and data attributes
+}
+
+export namespace ComponentName {
+  export type Props = ComponentNameProps;
+  export type State = ComponentNameState;
+}
+```
+
+### useRenderElement Pattern
+
+Base UI uses `useRenderElement` for consistent rendering with state-aware props:
+
+```tsx
+const element = useRenderElement('div', componentProps, {
+  state,
+  ref: forwardedRef,
+  props: [
+    { role: 'group', 'aria-label': label },
+    elementProps,
+  ],
+});
+
+return element;
+```
+
+**Why:** Enables `render` prop, state-based className, automatic data attributes.
+
+### Context with Error Boundary
+
+```tsx
+export const ComponentContext = React.createContext<ComponentContext | undefined>(undefined);
+
+export function useComponentContext() {
+  const context = React.useContext(ComponentContext);
+  if (context === undefined) {
+    throw new Error(
+      'Base UI: ComponentContext is missing. Component parts must be placed within <Component.Root>.'
+    );
+  }
+  return context;
+}
+```
+
+### Data Attributes Enum
+
+```tsx
+// ComponentDataAttributes.ts
+export enum ComponentDataAttributes {
+  /**
+   * Present when the component is disabled.
+   */
+  disabled = 'data-disabled',
+  /**
+   * Indicates the orientation.
+   */
+  orientation = 'data-orientation',
+}
 ```
