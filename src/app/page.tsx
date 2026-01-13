@@ -7,6 +7,7 @@ import { AlertDialog } from '@/components/AlertDialog';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
+import { Badge } from '@/components/Badge';
 import { CentralIcon } from '@/components/Icon';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
@@ -244,6 +245,31 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>No dismiss</span>
           <Chip>label</Chip>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Badge Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span style={{ width: '80px', fontSize: '14px' }}>Subtle:</span>
+          <Badge variant="gray">Label</Badge>
+          <Badge variant="purple">Label</Badge>
+          <Badge variant="blue">Label</Badge>
+          <Badge variant="pink">Label</Badge>
+          <Badge variant="green">Label</Badge>
+          <Badge variant="yellow">Label</Badge>
+          <Badge variant="red">Label</Badge>
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span style={{ width: '80px', fontSize: '14px' }}>Vibrant:</span>
+          <Badge variant="gray" vibrant>Label</Badge>
+          <Badge variant="purple" vibrant>Label</Badge>
+          <Badge variant="blue" vibrant>Label</Badge>
+          <Badge variant="pink" vibrant>Label</Badge>
+          <Badge variant="green" vibrant>Label</Badge>
+          <Badge variant="yellow" vibrant>Label</Badge>
+          <Badge variant="red" vibrant>Label</Badge>
         </div>
       </div>
       

@@ -1,0 +1,87 @@
+// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2355-1102
+
+@use '../../tokens/text-styles' as *;
+
+.root {
+  @include label;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 var(--spacing-xs);
+  border-radius: var(--corner-radius-xs);
+
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+}
+
+.gray {
+  background-color: var(--surface-secondary);
+  color: var(--text-primary);
+
+  &.vibrant {
+    background-color: var(--surface-inverted);
+    color: var(--text-surface);
+  }
+}
+
+.purple {
+  background-color: var(--surface-purple);
+  color: var(--text-purple);
+
+  &.vibrant {
+    background-color: var(--surface-purple-strong);
+    color: var(--text-surface);
+  }
+}
+
+.blue {
+  background-color: var(--surface-blue);
+  color: var(--text-blue);
+
+  &.vibrant {
+    background-color: var(--surface-blue-strong);
+    color: var(--text-surface);
+  }
+}
+
+.pink {
+  background-color: var(--surface-pink);
+  color: var(--text-pink);
+
+  &.vibrant {
+    background-color: var(--surface-pink-strong);
+    color: var(--text-surface);
+  }
+}
+
+.green {
+  background-color: var(--surface-green);
+  color: var(--text-green);
+
+  &.vibrant {
+    background-color: var(--surface-green-strong);
+    color: var(--text-surface);
+  }
+}
+
+.yellow {
+  background-color: var(--surface-yellow);
+  color: var(--text-yellow);
+
+  &.vibrant {
+    background-color: var(--surface-yellow-strong);
+    color: var(--text-surface);
+  }
+}
+
+.red {
+  background-color: var(--surface-red);
+  color: var(--text-red);
+
+  &.vibrant {
+    background-color: var(--surface-red-strong);
+    color: var(--text-surface);
+  }
+}
