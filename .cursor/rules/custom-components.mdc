@@ -1,327 +1,21 @@
 ---
-description: Guidelines for building components without Base UI equivalents
+description: Rules for building custom components (Path C)
 globs:
   - src/components/**/*.tsx
   - src/components/**/*.scss
 alwaysApply: false
 ---
 
-# Custom Components (Non-Base UI)
+# Custom Components (Path C)
 
-Build custom components to Base UI contribution quality so they could be submitted as PRs.
+Use when Base UI doesn't have the component.
 
-## Pre-Build Research (MANDATORY)
+## Before Building
 
-**Complete this research BEFORE writing any code.**
-
-### Step 1: Check Base UI for Existing Component
-
-```bash
-# Search Base UI repo for the component
-curl -s "https://api.github.com/repos/mui/base-ui/contents/packages/react/src" | grep -i "componentname"
-```
-
-If it exists → use it via our wrapper pattern. If not → continue research.
-
-### Step 2: Check Base UI Issues for Feature Request
-
-```bash
-# Search for existing feature request
-curl -s "https://api.github.com/search/issues?q=repo:mui/base-ui+componentname" | head -60
-```
-
-If found, read the issue for:
-- Desired API/behavior
-- Accessibility requirements discussed
-- Any team member comments on implementation approach
-- Status labels ("waiting for 👍", "approved", etc.)
-
-### Step 3: Study Base UI Source Code Patterns
-
-Fetch and study a similar existing component from Base UI:
-
-```bash
-# Get component structure
-curl -s "https://api.github.com/repos/mui/base-ui/contents/packages/react/src/accordion" | grep '"name"'
-
-# Get the main component file
-curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/root/AccordionRoot.tsx
-
-# Get the context pattern
-curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/root/AccordionRootContext.ts
-
-# Get the index exports pattern
-curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/index.ts
-curl -s https://raw.githubusercontent.com/mui/base-ui/master/packages/react/src/accordion/index.parts.ts
-```
-
-**Document these patterns:**
-
-| Pattern | What to Extract |
-|---------|-----------------|
-| File structure | Subdirectory per part, index.ts + index.parts.ts |
-| Component signature | `forwardRef`, named function, namespace types |
-| useRenderElement | How props, state, refs are passed |
-| Context | createContext, useXContext with error throwing |
-| Data attributes | Enum file defining `data-*` attributes |
-| Cancelable events | `createChangeEventDetails`, `REASONS` usage |
-| Test structure | What their tests cover, assertion patterns |
-
-### Step 4: Study Accessibility Standards
-
-| Source | What to Check |
-|--------|---------------|
-| [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/) | Official patterns, roles, keyboard requirements |
-| [Radix UI](https://radix-ui.com) | Implementation approach, API design |
-| [React Aria](https://react-spectrum.adobe.com/react-aria/) | Adobe's accessibility patterns |
-| [shadcn/ui](https://ui.shadcn.com) | Developer-friendly API patterns |
-
-**Document:**
-- Required ARIA roles and properties
-- Keyboard interaction requirements
-- Screen reader behavior expectations
-- Focus management rules
-
-### Step 5: Create Research Summary
-
-Before building, document:
-
-```markdown
-## [Component Name] Research Summary
-
-### Base UI Status
-- [ ] Component exists in Base UI: YES/NO
-- [ ] Feature request exists: Issue #XXX (link)
-- [ ] Request status: waiting for 👍 / approved / in progress
-
-### Similar Component Studied
-- Component: [e.g., Accordion, Tabs]
-- Patterns extracted: [list key patterns]
-
-### ARIA Requirements
-- Role: [e.g., navigation]
-- Required attributes: [e.g., aria-label, aria-current]
-- Keyboard: [e.g., Tab to navigate, Enter to activate]
-- Focus: [e.g., roving focus, focus trap]
-
-### Proposed API
-- Parts: [e.g., Root, List, Item, Link, Separator]
-- Key props: [e.g., separator, current]
-- State: [e.g., current page indication]
-
-### Confidence Level
-- [X]% confident this matches Base UI contribution standards
-- Gaps: [list any unknowns]
-```
-
-### Step 6: Decide Go/No-Go
-
-| Confidence | Action |
-|------------|--------|
-| 90%+ | Proceed with build |
-| 70-89% | Proceed but flag for review |
-| <70% | More research needed OR consider alternative approach |
-
----
-
-## Testing Strategy by Decision Path
-
-Testing approach depends on whether you're wrapping Base UI or building custom.
-
-### Path A/B: Base UI Wrapper
-
-**Tool:** Playwright CT only
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  WRAPPER TESTING (Path A/B)                                 │
-├─────────────────────────────────────────────────────────────┤
-│  npm run test (Playwright CT)                               │
-│  ├── Props forward correctly                                │
-│  ├── Styles apply from design tokens                        │
-│  ├── Accessibility tree is correct                          │
-│  └── Can write alongside implementation                     │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### Path C: Custom Build
-
-**Tools:** Vitest (unit) + Playwright CT (integration)
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  CUSTOM COMPONENT TESTING (Path C)                          │
-├─────────────────────────────────────────────────────────────┤
-│                                                             │
-│  PHASE 1: UNIT TESTS (TDD - write FIRST)                    │
-│  npm run test:unit                                          │
-│  ├── Conformance tests (prop/className/style forwarding)   │
-│  ├── Structure tests (correct elements rendered)            │
-│  ├── Logic tests (state, callbacks, context)                │
-│  └── Commit test contract BEFORE implementation             │
-│                                                             │
-│  PHASE 2: IMPLEMENTATION                                    │
-│  ├── Make unit tests pass one by one                        │
-│  └── Refactor                                               │
-│                                                             │
-│  PHASE 3: INTEGRATION TESTS                                 │
-│  npm run test (Playwright CT)                               │
-│  ├── Real accessibility (screen reader, focus)              │
-│  ├── Real keyboard navigation                               │
-│  └── Complex interactions                                   │
-│                                                             │
-└─────────────────────────────────────────────────────────────┘
-```
-
-### TDD Process for Custom Components
-
-```
-1. Write unit test contract (all tests RED)
-2. Commit: "test: add ComponentName behavior contract"
-3. Implement to pass first test
-4. Run tests, see GREEN
-5. Refactor
-6. Repeat for next test
-7. Commit: "feat: implement ComponentName"
-8. Add Playwright CT tests
-9. Verify all pass
-```
-
-### Unit Test Example (Vitest)
-
-File: `ComponentName.unit.test.tsx`
-
-```tsx
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { ComponentName } from './';
-
-describe('ComponentName conformance', () => {
-  describe('prop forwarding', () => {
-    it('forwards data-* attributes to the DOM', () => {
-      render(<ComponentName data-testid="root" data-custom="value" />);
-      const element = screen.getByTestId('root');
-      expect(element).toHaveAttribute('data-custom', 'value');
-    });
-
-    it('forwards lang attribute to the DOM', () => {
-      render(<ComponentName data-testid="root" lang="fr" />);
-      const element = screen.getByTestId('root');
-      expect(element).toHaveAttribute('lang', 'fr');
-    });
-  });
-
-  describe('className', () => {
-    it('applies custom className', () => {
-      render(<ComponentName data-testid="root" className="custom" />);
-      const element = screen.getByTestId('root');
-      expect(element).toHaveClass('custom');
-    });
-  });
-
-  describe('style', () => {
-    it('applies inline styles', () => {
-      render(<ComponentName data-testid="root" style={{ color: 'rgb(0, 128, 0)' }} />);
-      const element = screen.getByTestId('root');
-      expect(element).toHaveStyle({ color: 'rgb(0, 128, 0)' });
-    });
-  });
-});
-
-describe('ComponentName structure', () => {
-  it('renders correct element with role', () => {
-    render(<ComponentName />);
-    const element = screen.getByRole('button'); // or appropriate role
-    expect(element).toBeInTheDocument();
-  });
-});
-
-describe('ComponentName behavior', () => {
-  // State tests
-  it('renders unchecked by default');
-  it('toggles on click');
-  it('respects controlled prop');
-  it('calls onChange with (value, details)');
-  
-  // Disabled tests
-  it('does not toggle when disabled');
-  it('has data-disabled attribute');
-  
-  // Edge cases
-  it('handles rapid clicking');
-  it('consumer can cancel state change');
-});
-```
-
-### Available Test Commands
-
-| Command | What it runs | Speed |
-|---------|--------------|-------|
-| `npm run test:unit` | Vitest (JSDOM) | ~5ms/test |
-| `npm run test:unit:watch` | Vitest watch mode | Interactive |
-| `npm run test` | Playwright CT | ~200ms/test |
-| `npm run test:all` | Unit + Playwright | Full suite |
-
-### When to Use Each
-
-| Test Type | Tool | Use For |
-|-----------|------|---------|
-| Conformance | Vitest | Prop/className/style forwarding |
-| Structure | Vitest | Correct elements, ARIA attributes |
-| Logic | Vitest | State, callbacks, context |
-| Accessibility | Playwright | Real a11y tree, screen readers |
-| Keyboard | Playwright | Real keyboard events, focus |
-| Visual | Playwright | Computed styles, hover states |
-
-## Utilities
-
-### From Base UI (public APIs)
-
-```tsx
-// Hooks from @base-ui-components/utils
-import { useControlled } from '@base-ui-components/utils/useControlled';
-import { useStableCallback } from '@base-ui-components/utils/useStableCallback';
-import { useMergedRefs } from '@base-ui-components/utils/useMergedRefs';
-import { useIsoLayoutEffect } from '@base-ui-components/utils/useIsoLayoutEffect';
-import { useId } from '@base-ui-components/utils/useId';
-import { visuallyHidden } from '@base-ui-components/utils/visuallyHidden';
-
-// Public APIs from @base-ui-components/react
-import { mergeProps } from '@base-ui-components/react/merge-props';
-import { useRender } from '@base-ui-components/react/use-render';
-```
-
-| Utility | Purpose |
-|---------|---------|
-| `useControlled` | Controlled/uncontrolled state management |
-| `useStableCallback` | Stable callback identity |
-| `useMergedRefs` | Merge multiple refs |
-| `useIsoLayoutEffect` | SSR-safe useLayoutEffect |
-| `useId` | Unique ID generation |
-| `visuallyHidden` | CSS for hidden but accessible elements |
-| `mergeProps` | Smart prop merging (events, className, style) |
-| `useRender` | The render prop pattern (element override) |
-
-### From Our Utils (copied from Base UI source - MIT license)
-
-Internal Base UI utilities not exported in their package.json.
-Copied verbatim from: https://github.com/mui/base-ui
-
-```tsx
-import {
-  getStateAttributesProps,
-  createChangeEventDetails,
-  createGenericEventDetails,
-  REASONS,
-} from '@/lib/base-ui-utils';
-```
-
-| Utility | Purpose |
-|---------|---------|
-| `getStateAttributesProps` | Convert state → `data-*` attributes |
-| `createChangeEventDetails` | Cancelable event details |
-| `createGenericEventDetails` | Non-cancelable event details |
-| `REASONS` | Standard reason strings |
+1. Check Base UI repo: `curl -s "https://api.github.com/repos/mui/base-ui/contents/packages/react/src" | grep -i "name"`
+2. Check for feature request: `curl -s "https://api.github.com/search/issues?q=repo:mui/base-ui+name"`
+3. Study WAI-ARIA APG for the pattern
+4. Look at a similar Base UI component for patterns
 
 ## Component Structure
 
@@ -329,121 +23,25 @@ import {
 'use client';
 
 import * as React from 'react';
-import { useControlled } from '@base-ui-components/utils/useControlled';
-import { useStableCallback } from '@base-ui-components/utils/useStableCallback';
-import { useMergedRefs } from '@base-ui-components/utils/useMergedRefs';
-import { visuallyHidden } from '@base-ui-components/utils/visuallyHidden';
 import clsx from 'clsx';
-import {
-  createChangeEventDetails,
-  getStateAttributesProps,
-  type ChangeEventDetails,
-} from '@/lib/base-ui-utils';
 import styles from './Component.module.scss';
 
-export interface ComponentProps {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  onCheckedChange?: (checked: boolean, details: ChangeEventDetails) => void;
-  disabled?: boolean;
-  readOnly?: boolean;
-  name?: string;
-  className?: string;
+export interface ComponentProps extends React.ComponentPropsWithoutRef<'div'> {
   children?: React.ReactNode;
 }
 
-/**
- * Brief description of what component does.
- * Renders a `<span>` element.
- */
-export const Component = React.forwardRef<HTMLSpanElement, ComponentProps>(
+export const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
   function Component(props, forwardedRef) {
-    const {
-      checked: checkedProp,
-      defaultChecked = false,
-      onCheckedChange: onCheckedChangeProp,
-      disabled = false,
-      readOnly = false,
-      name,
-      className,
-      children,
-      ...elementProps
-    } = props;
-
-    // Stable callback identity
-    const onCheckedChange = useStableCallback(onCheckedChangeProp);
-
-    // Controlled/uncontrolled support
-    const [checked, setChecked] = useControlled({
-      controlled: checkedProp,
-      default: defaultChecked,
-      name: 'Component',
-      state: 'checked',
-    });
-
-    // Merge refs
-    const internalRef = React.useRef<HTMLSpanElement>(null);
-    const handleRef = useMergedRefs(internalRef, forwardedRef);
-
-    // State for data attributes
-    const state = { checked, disabled, readOnly };
-    const stateProps = getStateAttributesProps(state);
-
-    const toggle = (
-      event: React.MouseEvent | React.KeyboardEvent,
-      reason: 'click' | 'keyboard'
-    ) => {
-      if (disabled || readOnly) return;
-
-      const nextChecked = !checked;
-      const details = createChangeEventDetails(reason, event);
-
-      onCheckedChange?.(nextChecked, details);
-
-      if (details.isCanceled) return; // Consumer prevented change
-
-      setChecked(nextChecked);
-    };
-
-    const handleClick = (event: React.MouseEvent) => {
-      toggle(event, 'click');
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-      if (event.key === ' ' || event.key === 'Enter') {
-        event.preventDefault();
-        toggle(event, 'keyboard');
-      }
-    };
+    const { className, children, ...elementProps } = props;
 
     return (
-      <>
-        <span
-          ref={handleRef}
-          role="switch"
-          aria-checked={checked}
-          aria-readonly={readOnly || undefined}
-          tabIndex={disabled ? undefined : 0}
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          className={clsx(styles.root, className)}
-          {...stateProps}
-          {...elementProps}
-        >
-          {children}
-        </span>
-        {/* Hidden native input for form behavior */}
-        <input
-          type="checkbox"
-          checked={checked}
-          disabled={disabled}
-          name={name}
-          onChange={() => {}} // Controlled by span
-          style={visuallyHidden}
-          tabIndex={-1}
-          aria-hidden
-        />
-      </>
+      <div
+        ref={forwardedRef}
+        className={clsx(styles.root, className)}
+        {...elementProps}
+      >
+        {children}
+      </div>
     );
   }
 );
@@ -453,147 +51,14 @@ if (process.env.NODE_ENV !== 'production') {
 }
 ```
 
-## useRender Pattern (Element Override)
+## Compound Components
 
-Base UI exports `useRender` for the `render` prop pattern:
-
-```tsx
-import { useRender } from '@base-ui-components/react/use-render';
-
-interface Props {
-  render?: React.ReactElement | ((props: any, state: State) => React.ReactElement);
-  className?: string | ((state: State) => string);
-  // ... other props
-}
-
-function Component(props: Props) {
-  const { render, className, disabled, ...rest } = props;
-  
-  const state = { disabled };
-  
-  // useRender handles:
-  // - Merging props
-  // - State → data-* attributes
-  // - className as function
-  // - render prop (element or function)
-  // - Ref merging
-  const element = useRender({
-    render,
-    ref: forwardedRef,
-    state,
-    props: {
-      className,
-      role: 'button',
-      ...rest,
-    },
-    defaultTagName: 'span',
-  });
-  
-  return element;
-}
-```
-
-**Why use it:** Enables `<Component render={<motion.div />} />` pattern that Base UI uses everywhere.
-
-## Cancelable Events Pattern
-
-Use `createChangeEventDetails` from our utils:
+Use context for state sharing:
 
 ```tsx
-import { createChangeEventDetails } from '@/lib/base-ui-utils';
+const ComponentContext = React.createContext<State | undefined>(undefined);
 
-// In component
-const details = createChangeEventDetails('click', event);
-onCheckedChange?.(nextValue, details);
-
-if (details.isCanceled) return; // Consumer called cancel()
-
-setValue(nextValue);
-```
-
-```tsx
-// Consumer usage - prevent unchecking
-<Switch
-  onCheckedChange={(checked, details) => {
-    if (!checked && !confirmUncheck()) {
-      details.cancel(); // Prevent the change
-    }
-  }}
-/>
-```
-
-**Why:** Gives consumers control over state transitions (confirmations, validation).
-
-## Event Details Pattern
-
-The `ChangeEventDetails` interface from our utils:
-
-```tsx
-interface ChangeEventDetails<E = Event> {
-  reason: string;      // 'click', 'keyboard', etc.
-  event: E;            // Native event
-  cancel: () => void;  // Prevent state change
-  isCanceled: boolean; // Check if canceled
-}
-```
-
-**Why:** Consumers can distinguish click vs keyboard, access native event, track analytics.
-
-## Contribution-Ready Checklist
-
-### Structure
-- [ ] `'use client';` at top
-- [ ] `forwardRef` with named function (not arrow)
-- [ ] Props destructured with defaults inline
-- [ ] JSDoc: one sentence + "Renders a `<element>`."
-- [ ] `displayName` set in dev only (bottom of file)
-- [ ] Props spread last (consumer wins)
-
-### State
-- [ ] `useControlled` for controlled/uncontrolled
-- [ ] `useStableCallback` wraps consumer callbacks
-- [ ] `useMergedRefs` merges refs
-- [ ] `useIsoLayoutEffect` instead of `useLayoutEffect` (SSR)
-- [ ] Cancelable events via `cancel()` in details
-- [ ] Event details: `(value, { event, reason, cancel })`
-
-### Data Attributes
-- [ ] `data-checked`, `data-disabled`, `data-readonly` (not classes)
-- [ ] Value is `true || undefined` (omit when false)
-
-### Accessibility
-- [ ] Correct ARIA `role`
-- [ ] `aria-checked`, `aria-pressed`, etc. as applicable
-- [ ] `aria-labelledby` or `aria-label`
-- [ ] Keyboard: Enter, Space (activate), Arrows (navigate)
-- [ ] Focus visible styling (`:focus-visible`)
-- [ ] `tabIndex={disabled ? undefined : 0}`
-
-### Forms (if applicable)
-- [ ] Hidden native `<input>` with `visuallyHidden`
-- [ ] `name` prop passed to native input
-- [ ] `aria-hidden` on native input
-- [ ] `tabIndex={-1}` on native input
-
-### Context (compound components)
-- [ ] Context with `undefined` default
-- [ ] `displayName` on Context in dev
-- [ ] Hook that throws helpful error if missing
-- [ ] State hoisted to Root
-
-Write inline (Base UI pattern):
-
-```tsx
-// ComponentContext.ts
-import * as React from 'react';
-
-export const ComponentContext = React.createContext<State | undefined>(undefined);
-
-if (process.env.NODE_ENV !== 'production') {
-  ComponentContext.displayName = 'ComponentContext';
-}
-
-export function useComponentContext() {
+function useComponentContext() {
   const context = React.useContext(ComponentContext);
   if (context === undefined) {
     throw new Error('Component parts must be placed within <Component.Root>.');
@@ -602,246 +67,36 @@ export function useComponentContext() {
 }
 ```
 
-### TypeScript
-- [ ] Explicit prop interface exported
-- [ ] Correct generic on `forwardRef<HTMLElement, Props>`
-- [ ] Optional props marked with `?`
-- [ ] Union types for variants: `size?: 'sm' | 'md'`
-
-### CSS
-- [ ] Attribute selectors for state: `&[data-checked]`
-- [ ] CSS variables for theming
-- [ ] `@media (prefers-reduced-motion: reduce)`
-- [ ] No hardcoded colors/spacing (use tokens)
-
-### Testing (TDD)
-- [ ] Tests written before implementation
-- [ ] Every prop has at least one test
-- [ ] Keyboard navigation tested
-- [ ] Disabled state tested
-- [ ] Controlled + uncontrolled modes tested
-- [ ] Cancelable events tested
-- [ ] Edge cases: rapid clicks, disabled mid-action
-- [ ] Conformance tests for each component part (see below)
-
-### Conformance Tests (Base UI-style)
-
-Base UI uses conformance tests to verify component contracts. Our Playwright-adapted versions:
-
-**Location:** `test-utils/describeConformance.tsx`
-
-**Test fixtures pattern (in test-stories.tsx):**
+## Data Attributes (not classes)
 
 ```tsx
-// Prop forwarding: custom data attributes and lang
-export function PropForwardingComponent() {
-  return (
-    <Component data-testid="test-root" data-custom="custom-value" lang="fr">
-      {/* minimal children */}
-    </Component>
-  );
-}
+// State → data attributes
+<div data-checked={checked || undefined} data-disabled={disabled || undefined} />
+```
 
-// Style forwarding
-export function StyleForwardingComponent() {
-  return (
-    <Component data-testid="test-root" style={{ color: 'green' }}>
-      {/* minimal children */}
-    </Component>
-  );
-}
-
-// ClassName forwarding
-export function ClassNameComponent() {
-  return (
-    <Component data-testid="test-root" className="custom-class-name">
-      {/* minimal children */}
-    </Component>
-  );
+```scss
+// Style with attribute selectors
+.root {
+  &[data-checked] { /* checked styles */ }
+  &[data-disabled] { /* disabled styles */ }
 }
 ```
 
-**Conformance test assertions:**
+## Testing
 
-```tsx
-test.describe('Component conformance', () => {
-  test('forwards custom data attributes', async ({ mount, page }) => {
-    await mount(<PropForwardingComponent />);
-    const root = page.locator('[data-testid="test-root"]');
-    await expect(root).toHaveAttribute('data-custom', 'custom-value');
-  });
+Playwright CT is sufficient for most custom components.
 
-  test('forwards lang attribute', async ({ mount, page }) => {
-    await mount(<PropForwardingComponent />);
-    const root = page.locator('[data-testid="test-root"]');
-    await expect(root).toHaveAttribute('lang', 'fr');
-  });
+Add unit tests (Vitest) only when there's complex logic:
+- State machines
+- Date/time calculations
+- Filtering/sorting algorithms
 
-  test('forwards style attribute', async ({ mount, page }) => {
-    await mount(<StyleForwardingComponent />);
-    const root = page.locator('[data-testid="test-root"]');
-    await expect(root).toHaveCSS('color', 'rgb(0, 128, 0)');
-  });
+## Checklist
 
-  test('forwards className', async ({ mount, page }) => {
-    await mount(<ClassNameComponent />);
-    const root = page.locator('[data-testid="test-root"]');
-    await expect(root).toHaveClass(/custom-class-name/);
-  });
-});
-```
-
-**What conformance tests verify:**
-
-| Test | What it verifies |
-|------|------------------|
-| Prop forwarding | Custom props (data-*, lang) reach the DOM |
-| Style forwarding | Inline styles are applied |
-| ClassName forwarding | className merges with internal classes |
-| Ref forwarding | Ref attaches to correct DOM element |
-
-**For compound components:** Add conformance tests for each major part (Root, Link, Item, etc.)
-
-## What to Avoid
-
-| Anti-Pattern | Use Instead |
-|--------------|-------------|
-| `isDisabled`, `isChecked` | `disabled`, `checked` |
-| Class names for state | `data-*` attributes |
-| `cloneElement` | Context |
-| Arrow function in `forwardRef` | Named function |
-| Manual controlled/uncontrolled | `useControlled` hook |
-| `useLayoutEffect` | `useIsoLayoutEffect` |
-| Inline `displayName = 'X'` | Wrap in `NODE_ENV` check |
-
-## File Structure
-
-### Simple Components (single element)
-
-```
-src/components/{Name}/
-├── {Name}.tsx
-├── {Name}.module.scss
-├── {Name}.stories.tsx
-├── {Name}.test.tsx
-├── {Name}.test-stories.tsx
-└── index.ts
-```
-
-### Compound Components (multiple parts)
-
-Follow Base UI's actual structure for contribution-readiness:
-
-```
-src/components/{Name}/
-├── root/
-│   ├── {Name}Root.tsx
-│   ├── {Name}Root.test.tsx
-│   └── {Name}RootContext.ts
-├── item/
-│   └── {Name}Item.tsx
-├── trigger/
-│   └── {Name}Trigger.tsx
-├── {Name}.module.scss        # Shared styles
-├── {Name}.stories.tsx
-├── {Name}.test-stories.tsx
-├── index.ts                  # Namespace export
-└── index.parts.ts            # Aliased part exports
-```
-
-**index.ts pattern:**
-```tsx
-export * as ComponentName from './index.parts';
-
-export type * from './root/ComponentNameRoot';
-export type * from './item/ComponentNameItem';
-// ... other parts
-```
-
-**index.parts.ts pattern:**
-```tsx
-export { ComponentNameRoot as Root } from './root/ComponentNameRoot';
-export { ComponentNameItem as Item } from './item/ComponentNameItem';
-// ... other parts
-```
-
-**Usage:**
-```tsx
-import { ComponentName } from '@/components/ComponentName';
-
-<ComponentName.Root>
-  <ComponentName.Item />
-</ComponentName.Root>
-```
-
-## Base UI Component Patterns (Reference)
-
-These patterns are extracted from Base UI source code for contribution-quality builds:
-
-### Namespace Types Pattern
-
-```tsx
-export interface ComponentNameProps extends BaseProps {
-  // props
-}
-
-export interface ComponentNameState {
-  // state for className callback and data attributes
-}
-
-export namespace ComponentName {
-  export type Props = ComponentNameProps;
-  export type State = ComponentNameState;
-}
-```
-
-### useRenderElement Pattern
-
-Base UI uses `useRenderElement` for consistent rendering with state-aware props:
-
-```tsx
-const element = useRenderElement('div', componentProps, {
-  state,
-  ref: forwardedRef,
-  props: [
-    { role: 'group', 'aria-label': label },
-    elementProps,
-  ],
-});
-
-return element;
-```
-
-**Why:** Enables `render` prop, state-based className, automatic data attributes.
-
-### Context with Error Boundary
-
-```tsx
-export const ComponentContext = React.createContext<ComponentContext | undefined>(undefined);
-
-export function useComponentContext() {
-  const context = React.useContext(ComponentContext);
-  if (context === undefined) {
-    throw new Error(
-      'Base UI: ComponentContext is missing. Component parts must be placed within <Component.Root>.'
-    );
-  }
-  return context;
-}
-```
-
-### Data Attributes Enum
-
-```tsx
-// ComponentDataAttributes.ts
-export enum ComponentDataAttributes {
-  /**
-   * Present when the component is disabled.
-   */
-  disabled = 'data-disabled',
-  /**
-   * Indicates the orientation.
-   */
-  orientation = 'data-orientation',
-}
-```
+- [ ] WAI-ARIA pattern followed
+- [ ] forwardRef with named function
+- [ ] Props spread last
+- [ ] data-* attributes for state
+- [ ] Context throws helpful error
+- [ ] displayName in dev only
+- [ ] Playwright tests pass
