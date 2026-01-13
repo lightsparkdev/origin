@@ -61,19 +61,19 @@
 }
 
 .critical {
-  background-color: var(--surface-critical);
+  background-color: var(--surface-red);
   border: var(--stroke-sm) solid var(--border-critical);
   padding: var(--spacing-sm) var(--spacing-3xl) var(--spacing-sm) var(--spacing-md);
 
   .iconWrapper {
-    color: var(--icon-critical);
+    color: var(--text-red);
   }
 
   .title {
-    color: var(--text-critical);
+    color: var(--text-red);
   }
 
   .description {
-    color: var(--text-critical);
+    color: var(--text-red);
   }
 }
