@@ -4,7 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import styles from './Badge.module.scss';
 
-export type BadgeVariant = 'gray' | 'purple' | 'blue' | 'pink' | 'green' | 'yellow' | 'red';
+export type BadgeVariant = 'gray' | 'purple' | 'blue' | 'sky' | 'pink' | 'green' | 'yellow' | 'red';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** The label text */

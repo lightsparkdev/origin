@@ -46,6 +46,16 @@
   }
 }
 
+.sky {
+  background-color: var(--surface-sky);
+  color: var(--text-sky);
+
+  &.vibrant {
+    background-color: var(--surface-sky-strong);
+    color: var(--text-surface);
+  }
+}
+
 .pink {
   background-color: var(--surface-pink);
   color: var(--text-pink);

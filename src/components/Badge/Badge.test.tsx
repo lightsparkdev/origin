@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import {
   DefaultBadge,
   PurpleBadge,
+  SkyBadge,
   VibrantBadge,
   AllVariantsBadge,
   VibrantVariantsBadge,
@@ -32,11 +33,19 @@ test.describe('Badge', () => {
       await expect(badge).toContainText('Purple');
     });
 
+    test('renders sky variant', async ({ mount, page }) => {
+      await mount(<SkyBadge />);
+      const badge = page.locator('span').first();
+      await expect(badge).toBeVisible();
+      await expect(badge).toContainText('Sky');
+    });
+
     test('renders all color variants', async ({ mount, page }) => {
       await mount(<AllVariantsBadge />);
       await expect(page.getByText('Gray')).toBeVisible();
       await expect(page.getByText('Purple')).toBeVisible();
       await expect(page.getByText('Blue')).toBeVisible();
+      await expect(page.getByText('Sky')).toBeVisible();
       await expect(page.getByText('Pink')).toBeVisible();
       await expect(page.getByText('Green')).toBeVisible();
       await expect(page.getByText('Yellow')).toBeVisible();
@@ -57,6 +66,7 @@ test.describe('Badge', () => {
       await expect(page.getByText('Gray')).toBeVisible();
       await expect(page.getByText('Purple')).toBeVisible();
       await expect(page.getByText('Blue')).toBeVisible();
+      await expect(page.getByText('Sky')).toBeVisible();
       await expect(page.getByText('Pink')).toBeVisible();
       await expect(page.getByText('Green')).toBeVisible();
       await expect(page.getByText('Yellow')).toBeVisible();

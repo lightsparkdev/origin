@@ -256,6 +256,7 @@ export default function Home() {
           <Badge variant="gray">Label</Badge>
           <Badge variant="purple">Label</Badge>
           <Badge variant="blue">Label</Badge>
+          <Badge variant="sky">Label</Badge>
           <Badge variant="pink">Label</Badge>
           <Badge variant="green">Label</Badge>
           <Badge variant="yellow">Label</Badge>
@@ -266,6 +267,7 @@ export default function Home() {
           <Badge variant="gray" vibrant>Label</Badge>
           <Badge variant="purple" vibrant>Label</Badge>
           <Badge variant="blue" vibrant>Label</Badge>
+          <Badge variant="sky" vibrant>Label</Badge>
           <Badge variant="pink" vibrant>Label</Badge>
           <Badge variant="green" vibrant>Label</Badge>
           <Badge variant="yellow" vibrant>Label</Badge>

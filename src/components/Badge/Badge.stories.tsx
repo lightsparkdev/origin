@@ -11,7 +11,7 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['gray', 'purple', 'blue', 'pink', 'green', 'yellow', 'red'],
+      options: ['gray', 'purple', 'blue', 'sky', 'pink', 'green', 'yellow', 'red'],
     },
     vibrant: { control: 'boolean' },
   },
@@ -38,6 +38,13 @@ export const Blue: Story = {
   args: {
     children: 'Label',
     variant: 'blue',
+  },
+};
+
+export const Sky: Story = {
+  args: {
+    children: 'Label',
+    variant: 'sky',
   },
 };
 
@@ -88,6 +95,7 @@ export const AllVariants: Story = {
         <Badge variant="gray">Label</Badge>
         <Badge variant="purple">Label</Badge>
         <Badge variant="blue">Label</Badge>
+        <Badge variant="sky">Label</Badge>
         <Badge variant="pink">Label</Badge>
         <Badge variant="green">Label</Badge>
         <Badge variant="yellow">Label</Badge>
@@ -98,6 +106,7 @@ export const AllVariants: Story = {
         <Badge variant="gray" vibrant>Label</Badge>
         <Badge variant="purple" vibrant>Label</Badge>
         <Badge variant="blue" vibrant>Label</Badge>
+        <Badge variant="sky" vibrant>Label</Badge>
         <Badge variant="pink" vibrant>Label</Badge>
         <Badge variant="green" vibrant>Label</Badge>
         <Badge variant="yellow" vibrant>Label</Badge>
