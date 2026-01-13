@@ -124,49 +124,154 @@ Before building, document:
 
 ---
 
-## TDD: Tests First (Interactive Components)
+## Testing Strategy by Decision Path
 
-For interactive components, write tests before implementation:
+Testing approach depends on whether you're wrapping Base UI or building custom.
+
+### Path A/B: Base UI Wrapper
+
+**Tool:** Playwright CT only
 
 ```
-1. Define behavior contract via tests
-2. Build component to pass tests
-3. Refactor
+┌─────────────────────────────────────────────────────────────┐
+│  WRAPPER TESTING (Path A/B)                                 │
+├─────────────────────────────────────────────────────────────┤
+│  npm run test (Playwright CT)                               │
+│  ├── Props forward correctly                                │
+│  ├── Styles apply from design tokens                        │
+│  ├── Accessibility tree is correct                          │
+│  └── Can write alongside implementation                     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Minimum test coverage before building:**
+### Path C: Custom Build
+
+**Tools:** Vitest (unit) + Playwright CT (integration)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  CUSTOM COMPONENT TESTING (Path C)                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  PHASE 1: UNIT TESTS (TDD - write FIRST)                    │
+│  npm run test:unit                                          │
+│  ├── Conformance tests (prop/className/style forwarding)   │
+│  ├── Structure tests (correct elements rendered)            │
+│  ├── Logic tests (state, callbacks, context)                │
+│  └── Commit test contract BEFORE implementation             │
+│                                                             │
+│  PHASE 2: IMPLEMENTATION                                    │
+│  ├── Make unit tests pass one by one                        │
+│  └── Refactor                                               │
+│                                                             │
+│  PHASE 3: INTEGRATION TESTS                                 │
+│  npm run test (Playwright CT)                               │
+│  ├── Real accessibility (screen reader, focus)              │
+│  ├── Real keyboard navigation                               │
+│  └── Complex interactions                                   │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### TDD Process for Custom Components
+
+```
+1. Write unit test contract (all tests RED)
+2. Commit: "test: add ComponentName behavior contract"
+3. Implement to pass first test
+4. Run tests, see GREEN
+5. Refactor
+6. Repeat for next test
+7. Commit: "feat: implement ComponentName"
+8. Add Playwright CT tests
+9. Verify all pass
+```
+
+### Unit Test Example (Vitest)
+
+File: `ComponentName.unit.test.tsx`
 
 ```tsx
-// Example: Switch component test contract
-test.describe('Switch', () => {
-  // State
-  test('renders unchecked by default');
-  test('renders checked when defaultChecked');
-  test('toggles on click');
-  test('respects controlled checked prop');
-  test('calls onCheckedChange with (value, { event })');
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { ComponentName } from './';
+
+describe('ComponentName conformance', () => {
+  describe('prop forwarding', () => {
+    it('forwards data-* attributes to the DOM', () => {
+      render(<ComponentName data-testid="root" data-custom="value" />);
+      const element = screen.getByTestId('root');
+      expect(element).toHaveAttribute('data-custom', 'value');
+    });
+
+    it('forwards lang attribute to the DOM', () => {
+      render(<ComponentName data-testid="root" lang="fr" />);
+      const element = screen.getByTestId('root');
+      expect(element).toHaveAttribute('lang', 'fr');
+    });
+  });
+
+  describe('className', () => {
+    it('applies custom className', () => {
+      render(<ComponentName data-testid="root" className="custom" />);
+      const element = screen.getByTestId('root');
+      expect(element).toHaveClass('custom');
+    });
+  });
+
+  describe('style', () => {
+    it('applies inline styles', () => {
+      render(<ComponentName data-testid="root" style={{ color: 'rgb(0, 128, 0)' }} />);
+      const element = screen.getByTestId('root');
+      expect(element).toHaveStyle({ color: 'rgb(0, 128, 0)' });
+    });
+  });
+});
+
+describe('ComponentName structure', () => {
+  it('renders correct element with role', () => {
+    render(<ComponentName />);
+    const element = screen.getByRole('button'); // or appropriate role
+    expect(element).toBeInTheDocument();
+  });
+});
+
+describe('ComponentName behavior', () => {
+  // State tests
+  it('renders unchecked by default');
+  it('toggles on click');
+  it('respects controlled prop');
+  it('calls onChange with (value, details)');
   
-  // Disabled
-  test('does not toggle when disabled');
-  test('has data-disabled attribute when disabled');
-  
-  // Keyboard
-  test('toggles on Space key');
-  test('toggles on Enter key');
-  test('is focusable');
-  test('is not focusable when disabled');
-  
-  // Accessibility
-  test('has role="switch"');
-  test('has aria-checked matching state');
+  // Disabled tests
+  it('does not toggle when disabled');
+  it('has data-disabled attribute');
   
   // Edge cases
-  test('handles rapid clicking');
-  test('consumer can cancel state change');
+  it('handles rapid clicking');
+  it('consumer can cancel state change');
 });
 ```
 
-Write these tests first. They define the component contract.
+### Available Test Commands
+
+| Command | What it runs | Speed |
+|---------|--------------|-------|
+| `npm run test:unit` | Vitest (JSDOM) | ~5ms/test |
+| `npm run test:unit:watch` | Vitest watch mode | Interactive |
+| `npm run test` | Playwright CT | ~200ms/test |
+| `npm run test:all` | Unit + Playwright | Full suite |
+
+### When to Use Each
+
+| Test Type | Tool | Use For |
+|-----------|------|---------|
+| Conformance | Vitest | Prop/className/style forwarding |
+| Structure | Vitest | Correct elements, ARIA attributes |
+| Logic | Vitest | State, callbacks, context |
+| Accessibility | Playwright | Real a11y tree, screen readers |
+| Keyboard | Playwright | Real keyboard events, focus |
+| Visual | Playwright | Computed styles, hover states |
 
 ## Utilities
 

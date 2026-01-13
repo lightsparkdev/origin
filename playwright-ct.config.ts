@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   testDir: './src/components',
   testMatch: '**/*.test.tsx',
+  testIgnore: ['**/*.unit.test.tsx'],
   snapshotDir: './__snapshots__',
   timeout: 10000,
   fullyParallel: true,
