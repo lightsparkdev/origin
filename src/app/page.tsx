@@ -4,10 +4,11 @@ import { Accordion } from '@/components/Accordion';
 import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/ActionBar';
 import { Alert } from '@/components/Alert';
 import { AlertDialog } from '@/components/AlertDialog';
+import { Badge } from '@/components/Badge';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
-import { Badge } from '@/components/Badge';
 import { CentralIcon } from '@/components/Icon';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
@@ -245,6 +246,64 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>No dismiss</span>
           <Chip>label</Chip>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Breadcrumb Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Default</span>
+          <Breadcrumb.Root>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Shoes</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>With Collapsed Items</span>
+          <Breadcrumb.Root>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Ellipsis />
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/products/shoes/running">Running</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Trail Runners</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Custom Separator</span>
+          <Breadcrumb.Root>
+            <Breadcrumb.List separator="/">
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Shoes</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
         </div>
       </div>
       
