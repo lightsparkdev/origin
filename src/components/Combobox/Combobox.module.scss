@@ -2,32 +2,48 @@
 @use '../../tokens/text-styles' as *;
 @use '../../tokens/mixins' as *;
 
-.trigger {
-  display: inline-flex;
+// Input wrapper - contains input + action buttons
+.inputWrapper {
+  position: relative;
+  display: flex;
   align-items: center;
-  gap: var(--spacing-2xs);
   width: 100%;
-  min-width: 200px;
+
+  // When clear button is visible, add extra padding to input
+  &:has(.clear:not([hidden])) .input {
+    padding-right: calc(var(--spacing-xs) + 40px); // Space for clear + trigger
+  }
+}
+
+// The text input
+.input {
+  box-sizing: border-box;
+  width: 100%;
   height: 40px;
-  padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-xs) calc(var(--spacing-xs) + 24px) var(--spacing-xs) var(--spacing-sm);
+  margin: 0;
   background: var(--surface-primary);
   border: var(--stroke-sm) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
-  cursor: pointer;
+  @include body;
+  color: var(--text-primary);
+  outline: none;
   transition: border-color 150ms ease;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
 
   &:hover {
     border-color: var(--border-secondary);
   }
 
-  &:focus-within {
-    border-color: var(--input-focus);
-    outline: none;
+  &:focus {
+    border-color: var(--border-primary);
   }
 
-  &[data-disabled] {
+  &:disabled {
     background: var(--surface-disabled);
-    border-color: var(--border-disabled);
     cursor: not-allowed;
     opacity: 0.5;
   }
@@ -37,66 +53,43 @@
   }
 }
 
-.input {
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  outline: none;
-  @include body;
-  color: var(--text-primary);
-
-  &::placeholder {
-    color: var(--text-tertiary);
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-}
-
-.icon {
+// Container for Clear and Trigger buttons (absolutely positioned)
+.actionButtons {
+  box-sizing: border-box;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  color: var(--icon-secondary);
-  transition: transform 150ms ease;
-
-  [data-open] & {
-    transform: rotate(180deg);
-  }
-
-  // Hide chevron when clear button is visible (sibling)
-  .clear:not([hidden]) ~ & {
-    display: none;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
+  bottom: 0;
+  height: 40px;
+  right: var(--spacing-xs);
+  padding: 0;
 }
 
+// Shared styles for Clear and Trigger buttons
+.trigger,
 .clear {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  width: 24px;
+  height: 40px;
   padding: 0;
   background: transparent;
   border: none;
-  color: var(--icon-primary);
+  border-radius: var(--corner-radius-xs);
+  color: var(--icon-secondary);
   cursor: pointer;
   transition: color 150ms ease;
 
   &:hover {
-    color: var(--icon-secondary);
+    color: var(--icon-primary);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--input-focus);
-    outline-offset: 2px;
-    border-radius: var(--corner-radius-xs);
+    outline: 2px solid var(--border-primary);
+    outline-offset: -2px;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -104,14 +97,34 @@
   }
 }
 
-.positioner {
-  z-index: var(--z-popover);
+// Trigger icon rotation when open
+.trigger {
+  [data-open] & {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
 }
 
+// Icon sizing
+.triggerIcon,
+.clearIcon {
+  width: 20px;
+  height: 20px;
+}
+
+// Positioner - just needs outline removed, Base UI handles positioning
+.positioner {
+  outline: 0;
+}
+
+// Popup container
 .popup {
-  min-width: var(--anchor-width);
-  max-height: 300px;
-  overflow: auto;
+  box-sizing: border-box;
+  width: var(--anchor-width);
+  max-height: min(300px, var(--available-height));
+  max-width: var(--available-width);
+  overflow: hidden;
   background: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
@@ -134,36 +147,53 @@
   }
 }
 
+// Scrollable list
 .list {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4xs);
-  padding: var(--spacing-3xs) var(--spacing-3xs) var(--spacing-2xs);
+  padding-block: var(--spacing-xs);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: var(--spacing-xs);
+  outline: 0;
+  max-height: min(300px, var(--available-height));
+
+  &[data-empty] {
+    padding: 0;
+  }
 }
 
+// List item
 .item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  box-sizing: border-box;
+  display: grid;
   gap: var(--spacing-xs);
-  height: 36px;
-  padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-xs);
+  align-items: center;
+  grid-template-columns: 0.75rem 1fr;
+  padding-block: var(--spacing-xs);
+  padding-left: var(--spacing-sm);
+  padding-right: var(--spacing-md);
   cursor: pointer;
+  outline: 0;
+  user-select: none;
   @include body;
   color: var(--text-primary);
-  @include surface-with-hover(transparent);
 
   &[data-highlighted] {
-    background: var(--surface-secondary);
-  }
+    position: relative;
+    z-index: 0;
+    color: var(--text-inverse);
 
-  &:active:not([data-disabled]) {
-    background: var(--surface-tertiary);
-  }
-
-  &[data-selected] {
-    background: var(--surface-tertiary);
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: -1;
+      inset-block: 0;
+      inset-inline: var(--spacing-xs);
+      border-radius: var(--corner-radius-xs);
+      background: var(--surface-inverse);
+    }
   }
 
   &[data-disabled] {
@@ -172,62 +202,50 @@
   }
 }
 
-.itemLabel {
-  flex: 1;
-  min-width: 0;
+// Item text
+.itemText {
+  grid-column-start: 2;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+// Item indicator (checkmark container)
 .itemIndicator {
+  grid-column-start: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 }
 
-.indicator {
-  width: 8px;
-  height: 8px;
-  background: var(--surface-brand);
-  border-radius: 50%;
+// Checkmark icon
+.itemIndicatorIcon {
+  display: block;
+  width: 12px;
+  height: 12px;
 }
 
+// Group container
 .group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3xs);
 }
 
-.groupSeparator {
-  height: 4px;
-  padding-top: var(--spacing-3xs);
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-bottom: var(--stroke-xs) solid var(--border-tertiary);
-  }
-}
-
+// Group label
 .groupLabel {
   padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-3xs);
   @include label-sm;
   color: var(--text-secondary);
 }
 
-.empty {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  text-align: center;
+// Empty state - only show when not empty
+.empty:not(:empty) {
+  padding: var(--spacing-sm);
   @include body;
-  color: var(--text-tertiary);
+  color: var(--text-secondary);
 }
 
+// Value display
 .value {
   @include body;
   color: var(--text-primary);

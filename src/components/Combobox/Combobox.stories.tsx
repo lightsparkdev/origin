@@ -9,26 +9,44 @@ const meta: Meta = {
 
 export default meta;
 
-const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
+const fruits = [
+  'Apple',
+  'Banana',
+  'Cherry',
+  'Date',
+  'Elderberry',
+  'Fig',
+  'Grape',
+  'Honeydew',
+  'Kiwi',
+  'Lemon',
+];
 
+/**
+ * Default Combobox with filtering.
+ * Pass `items` to Root and use a render function in List for automatic filtering.
+ */
 export const Default: StoryObj = {
   render: () => (
-    <Combobox.Root>
-      <Combobox.Trigger>
+    <Combobox.Root items={fruits}>
+      <Combobox.InputWrapper>
         <Combobox.Input placeholder="Select a fruit..." />
-        <Combobox.Icon />
-      </Combobox.Trigger>
+        <Combobox.ActionButtons>
+          <Combobox.Trigger aria-label="Open popup" />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
       <Combobox.Portal>
-        <Combobox.Positioner>
+        <Combobox.Positioner sideOffset={4}>
           <Combobox.Popup>
-            <Combobox.List>
-              {fruits.map((fruit) => (
-                <Combobox.Item key={fruit} value={fruit}>
-                  {fruit}
-                </Combobox.Item>
-              ))}
-            </Combobox.List>
             <Combobox.Empty />
+            <Combobox.List>
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
+                </Combobox.Item>
+              )}
+            </Combobox.List>
           </Combobox.Popup>
         </Combobox.Positioner>
       </Combobox.Portal>
@@ -36,25 +54,32 @@ export const Default: StoryObj = {
   ),
 };
 
+/**
+ * Combobox with Clear button.
+ * Clear and Trigger are siblings inside ActionButtons.
+ */
 export const WithClear: StoryObj = {
   render: () => (
-    <Combobox.Root defaultValue="Apple">
-      <Combobox.Trigger>
+    <Combobox.Root items={fruits} defaultValue="Apple">
+      <Combobox.InputWrapper>
         <Combobox.Input placeholder="Select a fruit..." />
-        <Combobox.Clear />
-        <Combobox.Icon />
-      </Combobox.Trigger>
+        <Combobox.ActionButtons>
+          <Combobox.Clear aria-label="Clear selection" />
+          <Combobox.Trigger aria-label="Open popup" />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
       <Combobox.Portal>
-        <Combobox.Positioner>
+        <Combobox.Positioner sideOffset={4}>
           <Combobox.Popup>
-            <Combobox.List>
-              {fruits.map((fruit) => (
-                <Combobox.Item key={fruit} value={fruit}>
-                  {fruit}
-                </Combobox.Item>
-              ))}
-            </Combobox.List>
             <Combobox.Empty />
+            <Combobox.List>
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
+                </Combobox.Item>
+              )}
+            </Combobox.List>
           </Combobox.Popup>
         </Combobox.Positioner>
       </Combobox.Portal>
@@ -62,56 +87,80 @@ export const WithClear: StoryObj = {
   ),
 };
 
+/**
+ * Multi-select Combobox.
+ * Allows selecting multiple items.
+ */
 export const Multiple: StoryObj = {
   render: () => (
-    <Combobox.Root multiple>
-      <Combobox.Trigger>
+    <Combobox.Root items={fruits} multiple>
+      <Combobox.InputWrapper>
         <Combobox.Input placeholder="Select fruits..." />
-        <Combobox.Icon />
-      </Combobox.Trigger>
+        <Combobox.ActionButtons>
+          <Combobox.Trigger aria-label="Open popup" />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
       <Combobox.Portal>
-        <Combobox.Positioner>
+        <Combobox.Positioner sideOffset={4}>
           <Combobox.Popup>
-            <Combobox.List>
-              {fruits.map((fruit) => (
-                <Combobox.Item key={fruit} value={fruit}>
-                  {fruit}
-                </Combobox.Item>
-              ))}
-            </Combobox.List>
             <Combobox.Empty />
+            <Combobox.List>
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
+                </Combobox.Item>
+              )}
+            </Combobox.List>
           </Combobox.Popup>
         </Combobox.Positioner>
       </Combobox.Portal>
     </Combobox.Root>
   ),
+};
+
+/**
+ * Combobox with grouped items.
+ * Use Group and GroupLabel to organize options.
+ */
+const groupedFruits = {
+  common: ['Apple', 'Banana', 'Orange'],
+  exotic: ['Dragon Fruit', 'Mangosteen', 'Rambutan'],
 };
 
 export const WithGroups: StoryObj = {
   render: () => (
-    <Combobox.Root>
-      <Combobox.Trigger>
+    <Combobox.Root items={[...groupedFruits.common, ...groupedFruits.exotic]}>
+      <Combobox.InputWrapper>
         <Combobox.Input placeholder="Select a fruit..." />
-        <Combobox.Icon />
-      </Combobox.Trigger>
+        <Combobox.ActionButtons>
+          <Combobox.Trigger aria-label="Open popup" />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
       <Combobox.Portal>
-        <Combobox.Positioner>
+        <Combobox.Positioner sideOffset={4}>
           <Combobox.Popup>
+            <Combobox.Empty />
             <Combobox.List>
-              <Combobox.Group>
+              <Combobox.Group items={groupedFruits.common}>
                 <Combobox.GroupLabel>Common</Combobox.GroupLabel>
-                <Combobox.Item value="Apple">Apple</Combobox.Item>
-                <Combobox.Item value="Banana">Banana</Combobox.Item>
-                <Combobox.Item value="Orange">Orange</Combobox.Item>
+                {(item: string) => (
+                  <Combobox.Item key={item} value={item}>
+                    <Combobox.ItemIndicator />
+                    <Combobox.ItemText>{item}</Combobox.ItemText>
+                  </Combobox.Item>
+                )}
               </Combobox.Group>
-              <Combobox.Group>
+              <Combobox.Group items={groupedFruits.exotic}>
                 <Combobox.GroupLabel>Exotic</Combobox.GroupLabel>
-                <Combobox.Item value="Dragon Fruit">Dragon Fruit</Combobox.Item>
-                <Combobox.Item value="Mangosteen">Mangosteen</Combobox.Item>
-                <Combobox.Item value="Rambutan">Rambutan</Combobox.Item>
+                {(item: string) => (
+                  <Combobox.Item key={item} value={item}>
+                    <Combobox.ItemIndicator />
+                    <Combobox.ItemText>{item}</Combobox.ItemText>
+                  </Combobox.Item>
+                )}
               </Combobox.Group>
             </Combobox.List>
-            <Combobox.Empty />
           </Combobox.Popup>
         </Combobox.Positioner>
       </Combobox.Portal>
@@ -119,22 +168,28 @@ export const WithGroups: StoryObj = {
   ),
 };
 
+/**
+ * Disabled Combobox.
+ */
 export const Disabled: StoryObj = {
   render: () => (
-    <Combobox.Root disabled>
-      <Combobox.Trigger>
+    <Combobox.Root items={fruits} disabled>
+      <Combobox.InputWrapper>
         <Combobox.Input placeholder="Disabled combobox..." />
-        <Combobox.Icon />
-      </Combobox.Trigger>
+        <Combobox.ActionButtons>
+          <Combobox.Trigger aria-label="Open popup" />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
       <Combobox.Portal>
-        <Combobox.Positioner>
+        <Combobox.Positioner sideOffset={4}>
           <Combobox.Popup>
             <Combobox.List>
-              {fruits.map((fruit) => (
-                <Combobox.Item key={fruit} value={fruit}>
-                  {fruit}
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
                 </Combobox.Item>
-              ))}
+              )}
             </Combobox.List>
           </Combobox.Popup>
         </Combobox.Positioner>
@@ -143,31 +198,36 @@ export const Disabled: StoryObj = {
   ),
 };
 
+/**
+ * Controlled Combobox.
+ * Manage value state externally.
+ */
 export const Controlled: StoryObj = {
   render: function Render() {
     const [value, setValue] = useState<string | null>(null);
 
     return (
       <div>
-        <div style={{ marginBottom: '1rem' }}>
-          Selected: {value ?? 'none'}
-        </div>
-        <Combobox.Root value={value} onValueChange={setValue}>
-          <Combobox.Trigger>
+        <div style={{ marginBottom: '1rem' }}>Selected: {value ?? 'none'}</div>
+        <Combobox.Root items={fruits} value={value} onValueChange={setValue}>
+          <Combobox.InputWrapper>
             <Combobox.Input placeholder="Select a fruit..." />
-            <Combobox.Icon />
-          </Combobox.Trigger>
+            <Combobox.ActionButtons>
+              <Combobox.Trigger aria-label="Open popup" />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
           <Combobox.Portal>
-            <Combobox.Positioner>
+            <Combobox.Positioner sideOffset={4}>
               <Combobox.Popup>
-                <Combobox.List>
-                  {fruits.map((fruit) => (
-                    <Combobox.Item key={fruit} value={fruit}>
-                      {fruit}
-                    </Combobox.Item>
-                  ))}
-                </Combobox.List>
                 <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item key={item} value={item}>
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
               </Combobox.Popup>
             </Combobox.Positioner>
           </Combobox.Portal>

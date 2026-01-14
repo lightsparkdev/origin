@@ -3,23 +3,31 @@ import { Combobox } from './index';
 
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
+const groupedFruits = {
+  common: ['Apple', 'Banana'],
+  exotic: ['Dragon Fruit', 'Mangosteen'],
+};
+
 export const TestCombobox = () => (
-  <Combobox.Root>
-    <Combobox.Trigger>
+  <Combobox.Root items={fruits}>
+    <Combobox.InputWrapper>
       <Combobox.Input placeholder="Select a fruit..." />
-      <Combobox.Icon />
-    </Combobox.Trigger>
+      <Combobox.ActionButtons>
+        <Combobox.Trigger aria-label="Open popup" />
+      </Combobox.ActionButtons>
+    </Combobox.InputWrapper>
     <Combobox.Portal>
-      <Combobox.Positioner>
+      <Combobox.Positioner sideOffset={4}>
         <Combobox.Popup>
-          <Combobox.List>
-            {fruits.map((fruit) => (
-              <Combobox.Item key={fruit} value={fruit}>
-                {fruit}
-              </Combobox.Item>
-            ))}
-          </Combobox.List>
           <Combobox.Empty />
+          <Combobox.List>
+            {(item: string) => (
+              <Combobox.Item key={item} value={item}>
+                <Combobox.ItemIndicator />
+                <Combobox.ItemText>{item}</Combobox.ItemText>
+              </Combobox.Item>
+            )}
+          </Combobox.List>
         </Combobox.Popup>
       </Combobox.Positioner>
     </Combobox.Portal>
@@ -27,22 +35,25 @@ export const TestCombobox = () => (
 );
 
 export const TestComboboxMultiple = () => (
-  <Combobox.Root multiple>
-    <Combobox.Trigger>
+  <Combobox.Root items={fruits} multiple>
+    <Combobox.InputWrapper>
       <Combobox.Input placeholder="Select fruits..." />
-      <Combobox.Icon />
-    </Combobox.Trigger>
+      <Combobox.ActionButtons>
+        <Combobox.Trigger aria-label="Open popup" />
+      </Combobox.ActionButtons>
+    </Combobox.InputWrapper>
     <Combobox.Portal>
-      <Combobox.Positioner>
+      <Combobox.Positioner sideOffset={4}>
         <Combobox.Popup>
-          <Combobox.List>
-            {fruits.map((fruit) => (
-              <Combobox.Item key={fruit} value={fruit}>
-                {fruit}
-              </Combobox.Item>
-            ))}
-          </Combobox.List>
           <Combobox.Empty />
+          <Combobox.List>
+            {(item: string) => (
+              <Combobox.Item key={item} value={item}>
+                <Combobox.ItemIndicator />
+                <Combobox.ItemText>{item}</Combobox.ItemText>
+              </Combobox.Item>
+            )}
+          </Combobox.List>
         </Combobox.Popup>
       </Combobox.Positioner>
     </Combobox.Portal>
@@ -50,20 +61,23 @@ export const TestComboboxMultiple = () => (
 );
 
 export const TestComboboxDisabled = () => (
-  <Combobox.Root disabled>
-    <Combobox.Trigger>
+  <Combobox.Root items={fruits} disabled>
+    <Combobox.InputWrapper>
       <Combobox.Input placeholder="Disabled..." />
-      <Combobox.Icon />
-    </Combobox.Trigger>
+      <Combobox.ActionButtons>
+        <Combobox.Trigger aria-label="Open popup" />
+      </Combobox.ActionButtons>
+    </Combobox.InputWrapper>
     <Combobox.Portal>
-      <Combobox.Positioner>
+      <Combobox.Positioner sideOffset={4}>
         <Combobox.Popup>
           <Combobox.List>
-            {fruits.map((fruit) => (
-              <Combobox.Item key={fruit} value={fruit}>
-                {fruit}
+            {(item: string) => (
+              <Combobox.Item key={item} value={item}>
+                <Combobox.ItemIndicator />
+                <Combobox.ItemText>{item}</Combobox.ItemText>
               </Combobox.Item>
-            ))}
+            )}
           </Combobox.List>
         </Combobox.Popup>
       </Combobox.Positioner>
@@ -72,20 +86,23 @@ export const TestComboboxDisabled = () => (
 );
 
 export const TestComboboxDefaultValue = () => (
-  <Combobox.Root defaultValue="Cherry">
-    <Combobox.Trigger>
+  <Combobox.Root items={fruits} defaultValue="Cherry">
+    <Combobox.InputWrapper>
       <Combobox.Input placeholder="Select a fruit..." />
-      <Combobox.Icon />
-    </Combobox.Trigger>
+      <Combobox.ActionButtons>
+        <Combobox.Trigger aria-label="Open popup" />
+      </Combobox.ActionButtons>
+    </Combobox.InputWrapper>
     <Combobox.Portal>
-      <Combobox.Positioner>
+      <Combobox.Positioner sideOffset={4}>
         <Combobox.Popup>
           <Combobox.List>
-            {fruits.map((fruit) => (
-              <Combobox.Item key={fruit} value={fruit}>
-                {fruit}
+            {(item: string) => (
+              <Combobox.Item key={item} value={item}>
+                <Combobox.ItemIndicator />
+                <Combobox.ItemText>{item}</Combobox.ItemText>
               </Combobox.Item>
-            ))}
+            )}
           </Combobox.List>
         </Combobox.Popup>
       </Combobox.Positioner>
@@ -101,25 +118,29 @@ export const TestComboboxControlled = ({
   const [value, setValue] = useState<string | null>(null);
   return (
     <Combobox.Root
+      items={fruits}
       value={value}
       onValueChange={(v) => {
         setValue(v);
         onChange?.(v);
       }}
     >
-      <Combobox.Trigger>
+      <Combobox.InputWrapper>
         <Combobox.Input placeholder="Select a fruit..." />
-        <Combobox.Icon />
-      </Combobox.Trigger>
+        <Combobox.ActionButtons>
+          <Combobox.Trigger aria-label="Open popup" />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
       <Combobox.Portal>
-        <Combobox.Positioner>
+        <Combobox.Positioner sideOffset={4}>
           <Combobox.Popup>
             <Combobox.List>
-              {fruits.map((fruit) => (
-                <Combobox.Item key={fruit} value={fruit}>
-                  {fruit}
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
                 </Combobox.Item>
-              ))}
+              )}
             </Combobox.List>
           </Combobox.Popup>
         </Combobox.Positioner>
@@ -129,27 +150,37 @@ export const TestComboboxControlled = ({
 };
 
 export const TestComboboxWithGroups = () => (
-  <Combobox.Root>
-    <Combobox.Trigger>
+  <Combobox.Root items={[...groupedFruits.common, ...groupedFruits.exotic]}>
+    <Combobox.InputWrapper>
       <Combobox.Input placeholder="Select a fruit..." />
-      <Combobox.Icon />
-    </Combobox.Trigger>
+      <Combobox.ActionButtons>
+        <Combobox.Trigger aria-label="Open popup" />
+      </Combobox.ActionButtons>
+    </Combobox.InputWrapper>
     <Combobox.Portal>
-      <Combobox.Positioner>
+      <Combobox.Positioner sideOffset={4}>
         <Combobox.Popup>
+          <Combobox.Empty />
           <Combobox.List>
-            <Combobox.Group>
+            <Combobox.Group items={groupedFruits.common}>
               <Combobox.GroupLabel>Common</Combobox.GroupLabel>
-              <Combobox.Item value="Apple">Apple</Combobox.Item>
-              <Combobox.Item value="Banana">Banana</Combobox.Item>
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
+                </Combobox.Item>
+              )}
             </Combobox.Group>
-            <Combobox.Group>
+            <Combobox.Group items={groupedFruits.exotic}>
               <Combobox.GroupLabel>Exotic</Combobox.GroupLabel>
-              <Combobox.Item value="Dragon Fruit">Dragon Fruit</Combobox.Item>
-              <Combobox.Item value="Mangosteen">Mangosteen</Combobox.Item>
+              {(item: string) => (
+                <Combobox.Item key={item} value={item}>
+                  <Combobox.ItemIndicator />
+                  <Combobox.ItemText>{item}</Combobox.ItemText>
+                </Combobox.Item>
+              )}
             </Combobox.Group>
           </Combobox.List>
-          <Combobox.Empty />
         </Combobox.Popup>
       </Combobox.Positioner>
     </Combobox.Portal>
@@ -157,21 +188,25 @@ export const TestComboboxWithGroups = () => (
 );
 
 export const TestComboboxWithClear = () => (
-  <Combobox.Root defaultValue="Apple">
-    <Combobox.Trigger>
+  <Combobox.Root items={fruits} defaultValue="Apple">
+    <Combobox.InputWrapper>
       <Combobox.Input placeholder="Select a fruit..." />
-      <Combobox.Clear />
-      <Combobox.Icon />
-    </Combobox.Trigger>
+      <Combobox.ActionButtons>
+        <Combobox.Clear aria-label="Clear selection" />
+        <Combobox.Trigger aria-label="Open popup" />
+      </Combobox.ActionButtons>
+    </Combobox.InputWrapper>
     <Combobox.Portal>
-      <Combobox.Positioner>
+      <Combobox.Positioner sideOffset={4}>
         <Combobox.Popup>
+          <Combobox.Empty />
           <Combobox.List>
-            {fruits.map((fruit) => (
-              <Combobox.Item key={fruit} value={fruit}>
-                {fruit}
+            {(item: string) => (
+              <Combobox.Item key={item} value={item}>
+                <Combobox.ItemIndicator />
+                <Combobox.ItemText>{item}</Combobox.ItemText>
               </Combobox.Item>
-            ))}
+            )}
           </Combobox.List>
         </Combobox.Popup>
       </Combobox.Positioner>

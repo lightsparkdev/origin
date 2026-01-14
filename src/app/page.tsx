@@ -16,6 +16,142 @@ import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
 import { Tooltip } from '@/components/Tooltip';
 
+// Data for combobox examples
+const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
+const groupedFruits = {
+  common: ['Apple', 'Banana', 'Orange'],
+  exotic: ['Dragon Fruit', 'Mangosteen', 'Rambutan'],
+};
+
+function ComboboxExamples() {
+  // Use the useFilter hook for filtering support
+  const filter = Combobox.useFilter();
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '256px' }}>
+      {/* Single Select with filtering */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Single Select
+        </span>
+        <Combobox.Root items={fruits} filter={filter.contains}>
+          <Combobox.InputWrapper>
+            <Combobox.Input placeholder="Select a fruit..." />
+            <Combobox.ActionButtons>
+              <Combobox.Trigger />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item key={item} value={item}>
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+      </div>
+
+      {/* With Clear Button */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Clear Button
+        </span>
+        <Combobox.Root items={fruits} defaultValue="Apple" filter={filter.contains}>
+          <Combobox.InputWrapper>
+            <Combobox.Input placeholder="Select a fruit..." />
+            <Combobox.ActionButtons>
+              <Combobox.Clear aria-label="Clear selection" />
+              <Combobox.Trigger aria-label="Open popup" />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item key={item} value={item}>
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+      </div>
+
+      {/* Multi Select */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Multi Select
+        </span>
+        <Combobox.Root items={fruits} multiple filter={filter.contains}>
+          <Combobox.InputWrapper>
+            <Combobox.Input placeholder="Select fruits..." />
+            <Combobox.ActionButtons>
+              <Combobox.Trigger />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item key={item} value={item}>
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+      </div>
+
+      {/* Disabled */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Disabled
+        </span>
+        <Combobox.Root items={fruits} disabled filter={filter.contains}>
+          <Combobox.InputWrapper>
+            <Combobox.Input placeholder="Disabled combobox..." />
+            <Combobox.ActionButtons>
+              <Combobox.Trigger />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item key={item} value={item}>
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
@@ -252,125 +388,7 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Combobox Component</h2>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Single Select</span>
-          <Combobox.Root>
-            <Combobox.Trigger>
-              <Combobox.Input placeholder="Select a fruit..." />
-              <Combobox.Icon />
-            </Combobox.Trigger>
-            <Combobox.Portal>
-              <Combobox.Positioner>
-                <Combobox.Popup>
-                  <Combobox.List>
-                    <Combobox.Item value="Apple">Apple</Combobox.Item>
-                    <Combobox.Item value="Banana">Banana</Combobox.Item>
-                    <Combobox.Item value="Cherry">Cherry</Combobox.Item>
-                    <Combobox.Item value="Date">Date</Combobox.Item>
-                  </Combobox.List>
-                  <Combobox.Empty />
-                </Combobox.Popup>
-              </Combobox.Positioner>
-            </Combobox.Portal>
-          </Combobox.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>With Clear Button (replaces chevron when value is set)</span>
-          <Combobox.Root defaultValue="Apple">
-            <Combobox.Trigger>
-              <Combobox.Input placeholder="Select a fruit..." />
-              <Combobox.Clear />
-              <Combobox.Icon />
-            </Combobox.Trigger>
-            <Combobox.Portal>
-              <Combobox.Positioner>
-                <Combobox.Popup>
-                  <Combobox.List>
-                    <Combobox.Item value="Apple">Apple</Combobox.Item>
-                    <Combobox.Item value="Banana">Banana</Combobox.Item>
-                    <Combobox.Item value="Cherry">Cherry</Combobox.Item>
-                    <Combobox.Item value="Date">Date</Combobox.Item>
-                  </Combobox.List>
-                  <Combobox.Empty />
-                </Combobox.Popup>
-              </Combobox.Positioner>
-            </Combobox.Portal>
-          </Combobox.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>With Groups</span>
-          <Combobox.Root>
-            <Combobox.Trigger>
-              <Combobox.Input placeholder="Select a fruit..." />
-              <Combobox.Icon />
-            </Combobox.Trigger>
-            <Combobox.Portal>
-              <Combobox.Positioner>
-                <Combobox.Popup>
-                  <Combobox.List>
-                    <Combobox.Group>
-                      <Combobox.GroupLabel>Common</Combobox.GroupLabel>
-                      <Combobox.Item value="Apple">Apple</Combobox.Item>
-                      <Combobox.Item value="Banana">Banana</Combobox.Item>
-                    </Combobox.Group>
-                    <Combobox.Group>
-                      <Combobox.GroupLabel>Exotic</Combobox.GroupLabel>
-                      <Combobox.Item value="Dragon Fruit">Dragon Fruit</Combobox.Item>
-                      <Combobox.Item value="Mangosteen">Mangosteen</Combobox.Item>
-                    </Combobox.Group>
-                  </Combobox.List>
-                  <Combobox.Empty />
-                </Combobox.Popup>
-              </Combobox.Positioner>
-            </Combobox.Portal>
-          </Combobox.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Multi Select</span>
-          <Combobox.Root multiple>
-            <Combobox.Trigger>
-              <Combobox.Input placeholder="Select fruits..." />
-              <Combobox.Icon />
-            </Combobox.Trigger>
-            <Combobox.Portal>
-              <Combobox.Positioner>
-                <Combobox.Popup>
-                  <Combobox.List>
-                    <Combobox.Item value="Apple">Apple</Combobox.Item>
-                    <Combobox.Item value="Banana">Banana</Combobox.Item>
-                    <Combobox.Item value="Cherry">Cherry</Combobox.Item>
-                    <Combobox.Item value="Date">Date</Combobox.Item>
-                  </Combobox.List>
-                  <Combobox.Empty />
-                </Combobox.Popup>
-              </Combobox.Positioner>
-            </Combobox.Portal>
-          </Combobox.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Disabled</span>
-          <Combobox.Root disabled>
-            <Combobox.Trigger>
-              <Combobox.Input placeholder="Disabled combobox..." />
-              <Combobox.Icon />
-            </Combobox.Trigger>
-            <Combobox.Portal>
-              <Combobox.Positioner>
-                <Combobox.Popup>
-                  <Combobox.List>
-                    <Combobox.Item value="Apple">Apple</Combobox.Item>
-                  </Combobox.List>
-                </Combobox.Popup>
-              </Combobox.Positioner>
-            </Combobox.Portal>
-          </Combobox.Root>
-        </div>
-      </div>
+      <ComboboxExamples />
       
       <h2 style={{ marginBottom: '1rem' }}>Breadcrumb Component</h2>
       
