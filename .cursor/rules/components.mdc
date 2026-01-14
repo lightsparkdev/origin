@@ -13,15 +13,21 @@ alwaysApply: false
 1. **Does Base UI have it?** → Wrap it (Path A/B)
 2. **No Base UI equivalent?** → Build custom (Path C)
 
-**Base UI Research**: Start at https://base-ui.com/llms.txt — full component list and docs.
+## Base UI Research
+
+1. **Discovery**: `https://base-ui.com/llms.txt` — what components exist
+2. **Full docs**: `https://base-ui.com/react/components/{name}.md` — examples, API, props
+3. **Find matching examples**: If Base UI has an example for your use case (e.g., multi-select, async search), reference that example's structure first
+4. **Avoid browsing the website** — browser snapshots don't show code; use `.md` URLs directly
 
 ## Before Writing Code
 
 1. Deep Figma analysis — follow `figma-analysis.mdc`
-2. Check Base UI for existing component or composable primitives
-3. **For compound components**: Understand how child parts interact (see below)
-4. For custom: check WAI-ARIA APG for accessibility requirements
-5. **Write tests first** — define expected behavior before implementation
+2. Check Base UI docs (`.md` URL) for existing component or composable primitives
+3. **Find a matching example** — if one exists, use it as your structural reference
+4. **For compound components**: Understand how child parts interact (see below)
+5. For custom: check WAI-ARIA APG for accessibility requirements
+6. **Write tests first** — define expected behavior before implementation
 
 ## Compound Components (Path A/B)
 
