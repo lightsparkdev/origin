@@ -15,6 +15,7 @@
   box-sizing: border-box;
   width: 100%;
   height: 36px; // Figma: 36px
+  // Figma: pl=12px, pr=8px + buttons (20px chevron, or 20+2+20=42px with clear)
   padding: var(--spacing-xs) calc(var(--spacing-xs) + 20px) var(--spacing-xs) var(--spacing-sm);
   margin: 0;
   background: var(--surface-primary);
@@ -26,6 +27,11 @@
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
+
+  // When clear button is visible, increase right padding
+  .inputWrapper:has(.clear:not([hidden])) & {
+    padding-right: calc(var(--spacing-xs) + 42px); // 8px + 20px clear + 2px gap + 20px chevron
+  }
 
   &::placeholder {
     color: var(--text-secondary);
@@ -57,26 +63,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--spacing-4xs); // Figma: 2px gap between buttons
   bottom: 0;
   height: 36px; // Match input height
   right: var(--spacing-xs);
   padding: 0;
 }
 
-// Shared styles for Clear and Trigger buttons
-.trigger,
-.clear {
+// Trigger button (chevron)
+.trigger {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px; // Figma: 1.5rem = 24px
-  height: 36px; // Figma: 2.5rem but we use 36px to match input
+  flex-shrink: 0;
+  width: 20px; // Figma: icon frame 20px
+  height: 20px; // Figma: icon frame 20px
   padding: 0;
   background: transparent;
   border: none;
   border-radius: var(--corner-radius-xs);
-  color: var(--icon-secondary);
+  color: var(--icon-secondary); // Figma: #7c7c7c
   cursor: pointer;
   transition: color 150ms ease;
 
@@ -89,15 +96,45 @@
     outline-offset: -2px;
   }
 
+  // Chevron rotates when open
+  [data-open] & svg {
+    transform: rotate(180deg);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
-// Icon sizing - Figma shows 16.667px for clear, 20px for trigger
-.trigger svg {
-  width: 20px;
-  height: 20px;
+// Clear button
+.clear {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px; // Figma: icon frame 20px
+  height: 20px; // Figma: icon frame 20px
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: var(--corner-radius-xs);
+  color: var(--text-primary); // Figma: #1a1a1a (filled icon)
+  cursor: pointer;
+  transition: opacity 150ms ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: -2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
 
 .clear svg {
