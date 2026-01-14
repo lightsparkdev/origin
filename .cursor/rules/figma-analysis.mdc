@@ -54,7 +54,20 @@ Run `get_design_context` on each variant node, not just the parent:
 - Disabled state
 - Hover/active states (if designed)
 
-## 5. Document before coding
+## 5. Identify component composition
+
+For compound components (combobox, select, dialog, etc.), identify:
+
+- **Which design system components appear inside?** (e.g., Chip inside Combobox)
+- **How do they connect?** (e.g., Chip displays selected values)
+- **Are they the same component or a variant?** (e.g., Combobox chip may be smaller than standalone Chip)
+
+If a component uses another design system component:
+1. Note which component it uses
+2. Note any size/variant differences
+3. Plan to use the existing component via `render` prop or composition
+
+## 6. Document before coding
 
 Before writing any code, output a summary:
 
@@ -70,6 +83,7 @@ Before writing any code, output a summary:
   - Typography: {mixin name}
 
 **Sub-components**: {list any nested components}
+**Composed components**: {list design system components used inside}
 **States**: {list interactive states}
 ```
 

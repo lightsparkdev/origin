@@ -19,8 +19,23 @@ alwaysApply: false
 
 1. Deep Figma analysis — follow `figma-analysis.mdc`
 2. Check Base UI for existing component or composable primitives
-3. For custom: check WAI-ARIA APG for accessibility requirements
-4. **Write tests first** — define expected behavior before implementation
+3. **For compound components**: Understand how child parts interact (see below)
+4. For custom: check WAI-ARIA APG for accessibility requirements
+5. **Write tests first** — define expected behavior before implementation
+
+## Compound Components (Path A/B)
+
+When wrapping Base UI compound components (Combobox, Select, Dialog, Menu, etc.):
+
+1. **Read the Base UI docs** for each sub-part you'll expose
+2. **Understand data flow**: Which part provides data? Which renders it?
+   - Example: `Combobox.Value` provides selected values, `Combobox.Chips` is just a container
+3. **Check render function patterns**: Does the part accept `children` as a function?
+   - Example: `Combobox.List` → `{(item) => <Item />}` ✓
+   - Example: `Combobox.Chips` → does NOT accept render function ✗
+4. **Document in JSDoc**: Show correct usage, not assumed patterns
+
+**Red flag**: Documenting a render function pattern without verifying the Base UI API supports it
 
 ## Rules
 
