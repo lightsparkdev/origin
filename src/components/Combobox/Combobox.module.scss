@@ -3,60 +3,68 @@
 @use '../../tokens/mixins' as *;
 
 // Input wrapper - contains chips + input + action buttons
+// Border is on wrapper so chips appear inside the bordered area (Figma spec)
 .inputWrapper {
+  box-sizing: border-box;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--spacing-2xs); // Figma: 6px gap between chips and input
+  gap: var(--spacing-3xs); // Figma: 4px gap between chips
   width: 100%;
   min-height: 36px; // Figma: 36px minimum
-  // Padding changes based on content, handled in .input
-}
-
-// The text input
-.input {
-  box-sizing: border-box;
-  width: 100%;
-  height: 36px; // Figma: 36px
-  // Figma: pl=12px, pr=8px + buttons (20px chevron, or 20+2+20=42px with clear)
-  padding: var(--spacing-xs) calc(var(--spacing-xs) + 20px) var(--spacing-xs) var(--spacing-sm);
-  margin: 0;
+  padding: var(--spacing-3xs) calc(var(--spacing-xs) + 20px) var(--spacing-3xs) var(--spacing-xs);
   background: var(--surface-primary);
   border: var(--stroke-sm) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
-  @include body;
-  color: var(--text-primary);
-  outline: none;
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
 
   // When clear button is visible, increase right padding
-  .inputWrapper:has(.clear:not([hidden])) & {
+  &:has(.clear:not([hidden])) {
     padding-right: calc(var(--spacing-xs) + 42px); // 8px + 20px clear + 2px gap + 20px chevron
   }
 
-  &::placeholder {
-    color: var(--text-secondary);
-  }
-
-  &:hover:not(:focus):not(:disabled) {
+  &:hover:not(:focus-within):not(:has(.input:disabled)) {
     border-color: var(--border-secondary);
   }
 
-  &:focus {
+  &:focus-within {
     border-color: var(--border-primary);
     box-shadow: 0 0 0 3px var(--input-focus); // Figma: input/focus
   }
 
-  &:disabled {
+  &:has(.input:disabled) {
     opacity: var(--opacity-50);
     cursor: not-allowed;
   }
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
+  }
+}
+
+// The text input - borderless, grows to fill available space
+.input {
+  box-sizing: border-box;
+  flex: 1 1 0; // Start at 0 width and grow
+  min-width: 50px; // Minimum typing area when chips present
+  height: 28px; // Smaller since wrapper has padding
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  @include body;
+  color: var(--text-primary);
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 }
 
@@ -68,8 +76,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-4xs); // Figma: 2px gap between buttons
-  bottom: 0;
-  height: 36px; // Match input height
+  top: 50%;
+  transform: translateY(-50%);
   right: var(--spacing-xs);
   padding: 0;
 }
@@ -294,6 +302,7 @@
 }
 
 // Value display
+// Value for single select - displays selected text
 .value {
   @include body;
   color: var(--text-primary);
@@ -302,16 +311,21 @@
   white-space: nowrap;
 }
 
+// Value when containing children (multi-select with chips)
+// Use display:contents so chips become direct flex items
+.valueWithChildren {
+  display: contents;
+}
+
 // ============================================================================
 // Chips for multi-select (displayed in input area)
 // ============================================================================
 
 // Chips container - Figma: gap 4px between chips
+// Chips container - use display:contents so chips become direct flex items of inputWrapper
+// This allows chips and input to share the same flex row
 .chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacing-3xs); // Figma: 4px
+  display: contents;
 }
 
 // Individual chip - Figma: 24px height, matches design system Chip SM
