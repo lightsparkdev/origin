@@ -8,6 +8,9 @@ import { Chip as DesignSystemChip } from '@/components/Chip';
 import clsx from 'clsx';
 import styles from './Combobox.module.scss';
 
+// Context to share InputWrapper ref with Positioner for proper anchor width
+const AnchorContext = React.createContext<React.RefObject<HTMLDivElement | null> | null>(null);
+
 export interface RootProps<Value, Multiple extends boolean | undefined = false>
   extends BaseCombobox.Root.Props<Value, Multiple> {
   autoHighlight?: boolean;
@@ -24,9 +27,17 @@ export interface RootProps<Value, Multiple extends boolean | undefined = false>
  */
 export function Root<Value, Multiple extends boolean | undefined = false>({
   autoHighlight = true,
+  children,
   ...props
 }: RootProps<Value, Multiple>) {
-  return <BaseCombobox.Root autoHighlight={autoHighlight} {...props} />;
+  const anchorRef = React.useRef<HTMLDivElement | null>(null);
+  return (
+    <AnchorContext.Provider value={anchorRef}>
+      <BaseCombobox.Root autoHighlight={autoHighlight} {...props}>
+        {children}
+      </BaseCombobox.Root>
+    </AnchorContext.Provider>
+  );
 }
 
 export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -35,6 +46,7 @@ export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> 
  * Combobox.InputWrapper - Container for Input + ActionButtons.
  *
  * Uses position: relative to contain the absolutely positioned ActionButtons.
+ * Also serves as the anchor element for Positioner (popup width matches this).
  *
  * ```tsx
  * <Combobox.InputWrapper>
@@ -47,9 +59,28 @@ export interface InputWrapperProps extends React.HTMLAttributes<HTMLDivElement> 
  * ```
  */
 export const InputWrapper = React.forwardRef<HTMLDivElement, InputWrapperProps>(
-  function InputWrapper({ className, ...props }, ref) {
+  function InputWrapper({ className, ...props }, forwardedRef) {
+    const anchorRef = React.useContext(AnchorContext);
+
+    // Combine forwarded ref with anchor ref
+    const combinedRef = React.useCallback(
+      (node: HTMLDivElement | null) => {
+        // Update anchor context ref
+        if (anchorRef) {
+          anchorRef.current = node;
+        }
+        // Update forwarded ref
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
+        }
+      },
+      [anchorRef, forwardedRef]
+    );
+
     return (
-      <div ref={ref} className={clsx(styles.inputWrapper, className)} {...props} />
+      <div ref={combinedRef} className={clsx(styles.inputWrapper, className)} {...props} />
     );
   }
 );
@@ -145,14 +176,19 @@ export interface PositionerProps extends BaseCombobox.Positioner.Props {}
  * Combobox.Positioner - Handles popup positioning.
  *
  * Base UI handles all positioning via CSS variables.
+ * Anchors to InputWrapper (via context) so popup width matches the full trigger area.
  */
 export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
-  function Positioner({ className, sideOffset = 4, ...props }, ref) {
+  function Positioner({ className, sideOffset = 4, anchor, ...props }, ref) {
+    const anchorRef = React.useContext(AnchorContext);
+
     return (
       <BaseCombobox.Positioner
         ref={ref}
         className={clsx(styles.positioner, className)}
         sideOffset={sideOffset}
+        // Use InputWrapper as anchor for proper width, unless explicitly overridden
+        anchor={anchor ?? anchorRef}
         {...props}
       />
     );
