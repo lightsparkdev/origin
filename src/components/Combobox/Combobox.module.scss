@@ -177,14 +177,16 @@
 }
 
 // Scrollable list
+// Figma: pt=4px, pb=6px, px=4px, gap=2px
 .list {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding-block: var(--spacing-xs);
+  gap: var(--spacing-4xs); // Figma: 2px gap between items
+  padding: var(--spacing-3xs) var(--spacing-3xs) var(--spacing-2xs); // Figma: 4px 4px 6px
   overflow-y: auto;
   overscroll-behavior: contain;
-  scroll-padding-block: var(--spacing-xs);
+  scroll-padding-block: var(--spacing-3xs);
   outline: 0;
   max-height: min(300px, var(--available-height));
 
@@ -298,18 +300,27 @@
 .group {
   display: flex;
   flex-direction: column;
+
+  // Separator before group (except first group)
+  &:not(:first-child)::before {
+    content: '';
+    display: block;
+    height: 0;
+    margin: var(--spacing-3xs) var(--spacing-3xs) 0;
+    border-top: var(--stroke-xs) solid var(--border-tertiary);
+  }
 }
 
-// Group label
+// Group label - Figma: 8px top, 12px horizontal, 0 bottom
 .groupLabel {
-  padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-3xs);
+  padding: var(--spacing-xs) var(--spacing-sm) 0;
   @include label-sm;
   color: var(--text-secondary);
 }
 
-// Empty state - only show when not empty
+// Empty state - Figma: 8px vertical, 12px horizontal
 .empty:not(:empty) {
-  padding: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
   @include body;
   color: var(--text-secondary);
 }
