@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
 import { CentralIcon } from '@/components/Icon';
+import { CheckboxIndicator } from '@/components/Checkbox';
+import { Chip as DesignSystemChip } from '@/components/Chip';
 import clsx from 'clsx';
 import styles from './Combobox.module.scss';
 
@@ -261,7 +263,7 @@ export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLDivElement> 
  * </Combobox.Item>
  * ```
  */
-export const ItemCheckbox = React.forwardRef<HTMLDivElement, ItemCheckboxProps>(
+export const ItemCheckbox = React.forwardRef<HTMLSpanElement, ItemCheckboxProps>(
   function ItemCheckbox({ className, children, ...props }, ref) {
     return (
       <BaseCombobox.ItemIndicator
@@ -269,27 +271,22 @@ export const ItemCheckbox = React.forwardRef<HTMLDivElement, ItemCheckboxProps>(
         className={clsx(styles.itemCheckbox, className)}
         keepMounted
         {...props}
-      >
-        {children ?? <CheckIcon />}
-      </BaseCombobox.ItemIndicator>
+        render={(renderProps, state) => {
+          // If children provided, use them (slot pattern)
+          if (children) {
+            return <span {...renderProps}>{children}</span>;
+          }
+          // Otherwise use CheckboxIndicator from design system
+          return (
+            <span {...renderProps}>
+              <CheckboxIndicator checked={state.selected} />
+            </span>
+          );
+        }}
+      />
     );
   }
 );
-
-// Checkmark icon for ItemCheckbox
-function CheckIcon() {
-  return (
-    <svg
-      className={styles.itemCheckboxIcon}
-      fill="currentcolor"
-      width="11"
-      height="11"
-      viewBox="0 0 10 10"
-    >
-      <path d="M9.1603 1.12218C9.50684 1.34873 9.60427 1.81354 9.37792 2.16038L5.13603 8.66012C5.01614 8.8438 4.82192 8.96576 4.60451 8.99384C4.3871 9.02194 4.1683 8.95335 4.00574 8.80615L1.24664 6.30769C0.939709 6.02975 0.916013 5.55541 1.19372 5.24822C1.47142 4.94102 1.94536 4.91731 2.2523 5.19524L4.36085 7.10461L8.12299 1.33999C8.34934 0.993152 8.81376 0.895638 9.1603 1.12218Z" />
-    </svg>
-  );
-}
 
 export interface GroupProps extends BaseCombobox.Group.Props {}
 
@@ -346,6 +343,109 @@ export function Value({ className, ...props }: ValueProps) {
     </span>
   );
 }
+
+// ============================================================================
+// Chips components for multi-select
+// ============================================================================
+
+export interface ChipsProps extends BaseCombobox.Chips.Props {}
+
+/**
+ * Combobox.Chips - Container for selected value chips in multi-select.
+ *
+ * Place inside InputWrapper, before the Input element.
+ *
+ * @example
+ * ```tsx
+ * <Combobox.InputWrapper>
+ *   <Combobox.Chips>
+ *     {(value) => (
+ *       <Combobox.Chip key={value}>
+ *         <Combobox.ChipText>{value}</Combobox.ChipText>
+ *         <Combobox.ChipRemove />
+ *       </Combobox.Chip>
+ *     )}
+ *   </Combobox.Chips>
+ *   <Combobox.Input placeholder="Select items..." />
+ *   <Combobox.ActionButtons>
+ *     <Combobox.Clear />
+ *     <Combobox.Trigger />
+ *   </Combobox.ActionButtons>
+ * </Combobox.InputWrapper>
+ * ```
+ */
+export const Chips = React.forwardRef<HTMLDivElement, ChipsProps>(
+  function Chips({ className, ...props }, ref) {
+    return (
+      <BaseCombobox.Chips
+        ref={ref}
+        className={clsx(styles.chips, className)}
+        {...props}
+      />
+    );
+  }
+);
+
+export interface ChipProps extends BaseCombobox.Chip.Props {}
+
+/**
+ * Combobox.Chip - Individual chip representing a selected value.
+ *
+ * Uses the design system's Chip styling (24px height, sm size).
+ *
+ * @example
+ * ```tsx
+ * <Combobox.Chip>
+ *   <Combobox.ChipText>{value}</Combobox.ChipText>
+ *   <Combobox.ChipRemove />
+ * </Combobox.Chip>
+ * ```
+ */
+export const Chip = React.forwardRef<HTMLDivElement, ChipProps>(
+  function Chip({ className, ...props }, ref) {
+    return (
+      <BaseCombobox.Chip
+        ref={ref}
+        className={clsx(styles.chip, className)}
+        {...props}
+      />
+    );
+  }
+);
+
+export interface ChipTextProps extends React.HTMLAttributes<HTMLSpanElement> {}
+
+/**
+ * Combobox.ChipText - Text content of a chip.
+ */
+export const ChipText = React.forwardRef<HTMLSpanElement, ChipTextProps>(
+  function ChipText({ className, ...props }, ref) {
+    return (
+      <span ref={ref} className={clsx(styles.chipText, className)} {...props} />
+    );
+  }
+);
+
+export interface ChipRemoveProps extends BaseCombobox.ChipRemove.Props {}
+
+/**
+ * Combobox.ChipRemove - Button to remove a chip.
+ *
+ * Uses the design system's × icon and styling.
+ */
+export const ChipRemove = React.forwardRef<HTMLButtonElement, ChipRemoveProps>(
+  function ChipRemove({ className, children, ...props }, ref) {
+    return (
+      <BaseCombobox.ChipRemove
+        ref={ref}
+        className={clsx(styles.chipRemove, className)}
+        {...props}
+      >
+        {children ?? <CentralIcon name="IconCrossSmall" size={10} />}
+      </BaseCombobox.ChipRemove>
+    );
+  }
+);
 
 /**
  * Combobox.useFilter - Hook that provides filter functions for combobox items.

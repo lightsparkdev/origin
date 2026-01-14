@@ -115,8 +115,16 @@
     }
   }
 
+  // When used inside Checkbox.Item
   .item[data-checked] &,
   .item[data-indeterminate] & {
+    background-color: var(--surface-inverted);
+    border-color: transparent;
+  }
+
+  // When used standalone (Checkbox.Indicator)
+  &[data-checked],
+  &[data-indeterminate] {
     background-color: var(--surface-inverted);
     border-color: transparent;
   }
@@ -151,14 +159,28 @@
 }
 
 .checkIcon {
+  // When used inside Checkbox.Item
   .item[data-checked]:not([data-indeterminate]) & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // When used standalone with data-visible
+  &[data-visible] {
     opacity: 1;
     transform: scale(1);
   }
 }
 
 .indeterminateIcon {
+  // When used inside Checkbox.Item
   .item[data-indeterminate] & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // When used standalone with data-visible
+  &[data-visible] {
     opacity: 1;
     transform: scale(1);
   }

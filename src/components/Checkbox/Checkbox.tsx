@@ -188,6 +188,61 @@ export const CheckboxError = React.forwardRef<
   return <Field.Error ref={ref} className={clsx(styles.errorText, className)} {...other} />;
 });
 
+/**
+ * Standalone visual checkbox indicator.
+ * 
+ * Use this when you need just the checkbox visual (16px box with checkmark)
+ * without the full Checkbox.Item structure or group context.
+ * 
+ * @example
+ * ```tsx
+ * // In a Combobox multi-select item:
+ * <Combobox.ItemCheckbox>
+ *   <Checkbox.Indicator checked={selected} />
+ * </Combobox.ItemCheckbox>
+ * ```
+ */
+export interface CheckboxIndicatorProps {
+  checked?: boolean;
+  indeterminate?: boolean;
+  disabled?: boolean;
+  checkedIcon?: React.ReactNode;
+  indeterminateIcon?: React.ReactNode;
+  className?: string;
+}
+
+export const CheckboxIndicator = React.forwardRef<HTMLSpanElement, CheckboxIndicatorProps>(
+  function CheckboxIndicator(props, ref) {
+    const {
+      checked = false,
+      indeterminate = false,
+      disabled = false,
+      checkedIcon = defaultCheckedIcon,
+      indeterminateIcon = defaultIndeterminateIcon,
+      className,
+    } = props;
+
+    return (
+      <span
+        ref={ref}
+        className={clsx(styles.checkbox, className)}
+        data-checked={checked || undefined}
+        data-indeterminate={indeterminate || undefined}
+        data-disabled={disabled || undefined}
+      >
+        <span className={styles.indicator}>
+          <span className={styles.checkIcon} data-visible={checked && !indeterminate || undefined}>
+            {checkedIcon}
+          </span>
+          <span className={styles.indeterminateIcon} data-visible={indeterminate || undefined}>
+            {indeterminateIcon}
+          </span>
+        </span>
+      </span>
+    );
+  }
+);
+
 if (process.env.NODE_ENV !== 'production') {
   CheckboxGroup.displayName = 'CheckboxGroup';
   CheckboxItem.displayName = 'CheckboxItem';
@@ -195,6 +250,7 @@ if (process.env.NODE_ENV !== 'production') {
   CheckboxLegend.displayName = 'CheckboxLegend';
   CheckboxDescription.displayName = 'CheckboxDescription';
   CheckboxError.displayName = 'CheckboxError';
+  CheckboxIndicator.displayName = 'CheckboxIndicator';
 }
 
 export const Checkbox = {
@@ -204,6 +260,7 @@ export const Checkbox = {
   Legend: CheckboxLegend,
   Description: CheckboxDescription,
   Error: CheckboxError,
+  Indicator: CheckboxIndicator,
 };
 
 export default Checkbox;

@@ -2,12 +2,16 @@
 @use '../../tokens/text-styles' as *;
 @use '../../tokens/mixins' as *;
 
-// Input wrapper - contains input + action buttons
+// Input wrapper - contains chips + input + action buttons
 .inputWrapper {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: var(--spacing-2xs); // Figma: 6px gap between chips and input
   width: 100%;
+  min-height: 36px; // Figma: 36px minimum
+  // Padding changes based on content, handled in .input
 }
 
 // The text input
@@ -252,48 +256,12 @@
   background: var(--icon-primary);
 }
 
-// Item checkbox (multi-select) - 16px checkbox on the right
+// Item checkbox container (multi-select) - uses Checkbox.Indicator
 .itemCheckbox {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  width: 16px; // Figma: 16px
-  height: 16px;
-  border-radius: var(--corner-radius-xs); // 4px
-  background: var(--surface-primary);
-  border: var(--stroke-sm) solid var(--border-secondary);
-  transition: background 150ms ease, border-color 150ms ease;
-
-  // Hide checkmark by default (keepMounted keeps it in DOM)
-  svg {
-    opacity: 0;
-    transition: opacity 100ms ease;
-  }
-
-  // Checked state - show checkmark and dark background
-  &[data-selected] {
-    background: var(--surface-inverted);
-    border-color: var(--surface-inverted);
-
-    svg {
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-    svg {
-      transition: none;
-    }
-  }
-}
-
-// Checkbox checkmark icon
-.itemCheckboxIcon {
-  width: 10.667px; // Figma: 10.667px
-  height: 10.667px;
-  color: var(--text-inverse);
 }
 
 // Group container
@@ -332,4 +300,88 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+// ============================================================================
+// Chips for multi-select (displayed in input area)
+// ============================================================================
+
+// Chips container - Figma: gap 4px between chips
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3xs); // Figma: 4px
+}
+
+// Individual chip - Figma: 24px height, matches design system Chip SM
+.chip {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  height: 24px; // Figma: 24px (SM size)
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-xs); // Figma: 4px
+  background-color: var(--surface-secondary);
+  outline: none;
+
+  // Focus state for keyboard navigation
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: -2px;
+  }
+
+  &[data-disabled] {
+    opacity: var(--opacity-50);
+    pointer-events: none;
+  }
+}
+
+// Chip text/label - Figma: 8px horizontal padding
+.chipText {
+  @include body-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-xs); // Figma: 8px
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Chip remove button - Figma: 4px horizontal padding, border-left
+.chipRemove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 100%;
+  padding: 0 var(--spacing-3xs); // Figma: 4px
+  border: none;
+  border-left: var(--stroke-xs) solid var(--border-tertiary);
+  background: transparent;
+  color: var(--text-secondary); // Figma: #7c7c7c
+  cursor: pointer;
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover:not(:disabled) {
+    color: var(--text-primary);
+    background-color: var(--surface-tertiary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: -2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }

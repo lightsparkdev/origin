@@ -1,2 +1,2 @@
-export { Checkbox, CheckboxGroup, CheckboxItem, CheckboxField, CheckboxLegend, CheckboxDescription, CheckboxError } from './Checkbox';
-export type { CheckboxGroupProps, CheckboxItemProps } from './Checkbox';
+export { Checkbox, CheckboxGroup, CheckboxItem, CheckboxField, CheckboxLegend, CheckboxDescription, CheckboxError, CheckboxIndicator } from './Checkbox';
+export type { CheckboxGroupProps, CheckboxItemProps, CheckboxIndicatorProps } from './Checkbox';
