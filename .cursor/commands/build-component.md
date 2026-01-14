@@ -4,13 +4,14 @@
 
 1. Parse Figma URL → extract `fileKey`, `nodeId`
 
-2. **Fetch CSS** (try in order):
-   - `mcp_Figma_get_design_context(nodeId, fileKey)` — preferred
-   - If timeout: `npm run figma:node "<figma-url>"` — reliable fallback
+2. **Deep Figma analysis** — follow `figma-analysis.mdc`:
+   - Screenshot → identify all states and variants
+   - Metadata → understand layer hierarchy and auto-layout
+   - Variable defs → identify which values are tokenized vs raw
+   - Design context → extract CSS for EACH variant, not just parent
+   - Output summary before proceeding
 
-3. Use `mcp_Figma_get_screenshot` for visual verification (always works)
-
-4. **Check Base UI** — follow decision tree:
+3. **Check Base UI** (start at https://base-ui.com/llms.txt) — follow decision tree:
 
    **A. Exact match exists?**
    - Yes → Use Base UI primitive, follow `components.mdc`
@@ -34,7 +35,7 @@
    - If **Interactive**: Research first (WAI-ARIA APG, Radix, React Aria), then follow `custom-components.mdc`
    - If **Skip**: End process
 
-5. **Identify behavioral options** — if using Base UI, list props that change behavior:
+4. **Define the API** — if using Base UI, list props that change behavior:
    > "Base UI offers these options for {Component}:
    > - `multiple`: Allow multiple items open (default: single)
    > - `disabled`: Disable interaction
@@ -43,25 +44,16 @@
    
    Wait for answer before proceeding.
 
-6. **Create files:**
+5. **Write tests first** (TDD):
+   
+   Create test files before implementation:
    ```
    src/components/{Name}/
-   ├── {Name}.tsx           # Simple components
-   ├── parts.tsx            # Compound components
-   ├── {Name}.module.scss
-   ├── {Name}.test.tsx
-   ├── {Name}.test-stories.tsx
-   ├── {Name}.stories.tsx
-   └── index.ts
+   ├── {Name}.test-stories.tsx   # Test fixtures (variants, states)
+   ├── {Name}.test.tsx           # Playwright CT tests
    ```
-
-7. Use tokens where they exist; raw values where they don't (don't invent tokens)
-
-8. Add `@media (prefers-reduced-motion: reduce)` for animations
-
-9. **Create tests:**
    
-   For Base UI components:
+   For Base UI wrappers:
    - Per behavioral prop: test both states
    - Controlled/uncontrolled: test both modes
    - Keyboard: Space, Enter, Arrows (as applicable)
@@ -72,13 +64,30 @@
    - Disabled state
    - Any dismiss/action callbacks
 
+6. **Create component** — make tests pass:
+   ```
+   src/components/{Name}/
+   ├── {Name}.tsx or parts.tsx   # Implementation
+   ├── {Name}.module.scss        # Styles
+   └── index.ts                  # Exports
+   ```
+
+7. Mirror Figma exactly — if Figma uses a token, use it; if raw value, use that
+
+8. Add `@media (prefers-reduced-motion: reduce)` for animations
+
+9. **Run tests** — verify all pass before continuing:
+   ```
+   npm test -- --grep "{Name}"
+   ```
+
 10. Create Storybook story with controlled example
 
 11. **Update consumers** — add to `page.tsx` for demo
 
-12. **Run verification:**
+12. **Final verification:**
     - `npm run build` — catch export/import errors
-    - `npm test` — run Playwright tests
+    - `npm test` — full test suite
 
 ## Decision Tree
 
@@ -86,63 +95,37 @@
 Figma URL
     │
     ▼
-Fetch CSS + Screenshot
+Deep Figma Analysis (figma-analysis.mdc)
     │
     ▼
-A. Base UI has exact match?
-├── Yes → Use Base UI primitive
-│         Follow components.mdc
-│
-└── No ──▶ B. Can compose from Base UI primitives?
-           ├── Yes → Compose from primitives
-           │         (Input + Button, Dialog + Menu, etc.)
-           │         Follow components.mdc
-           │
-           └── No ──▶ C. Build custom
-                      │
-                      Is it interactive?
-                      ├── No → Display-only (simple)
-                      │        Follow custom-components.mdc
-                      │
-                      └── Yes → Research first:
-                                • WAI-ARIA APG
-                                • Radix/React Aria
-                                • Screen reader test
-                                Then follow custom-components.mdc
+Base UI Check (llms.txt)
+    │
+    ▼
+A/B/C Path Decision
+    │
+    ▼
+Define API (props, variants)
+    │
+    ▼
+Write Tests First ← TDD
+    │
+    ▼
+Implement Component (make tests pass)
+    │
+    ▼
+Apply Figma Styling
+    │
+    ▼
+Verify Tests Pass
+    │
+    ▼
+Storybook + Demo
 ```
 
-## Composition Examples
+## Reference
 
-| Component | Composition |
-|-----------|-------------|
-| SearchInput | `Input` + `Button` |
-| Combobox | `Input` + `Popover` + `Menu` |
-| Modal Stepper | `Dialog` + step state |
-| Dropdown Button | `Button` + `Menu` |
-| Date Picker | `Input` + `Popover` + calendar grid |
-| Chip (dismissible) | `<span>` + `Button` (dismiss) |
-
-## Figma Tooling
-
-| Tool | Use | Fallback |
-|------|-----|----------|
-| `get_design_context` | CSS extraction | `npm run figma:node` |
-| `get_screenshot` | Visual QA | — |
-| `get_metadata` | Node structure | — |
-
-## Rules Reference
-
-| Scenario | Rule File |
-|----------|-----------|
-| Base UI exists | `components.mdc` |
-| Composed from Base UI | `components.mdc` |
-| No Base UI | `custom-components.mdc` |
-| Animations | `motion.mdc` |
-
-## Code Style
-
-- Add Figma URL as first line of SCSS: `// Figma: https://figma.com/design/...`
-- No decorative comment dividers
-- No verbose headers or token lists
-- No emojis in code or console output
-- Code is self-documenting
+See `docs/component-reference.md` for:
+- Composition examples
+- Figma tooling details
+- Rules reference
+- Code style

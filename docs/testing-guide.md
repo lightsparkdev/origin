@@ -1,5 +1,15 @@
 # Testing Guide
 
+## TDD Workflow
+
+Tests are written **before** implementation:
+
+1. **Define API** — props, variants, states from Figma analysis
+2. **Write test-stories.tsx** — test fixtures for each variant/state
+3. **Write test.tsx** — Playwright CT tests for expected behavior
+4. **Implement component** — make tests pass
+5. **Run tests** — verify before continuing
+
 ## Overview
 
 Origin v2 uses a two-layer testing system:

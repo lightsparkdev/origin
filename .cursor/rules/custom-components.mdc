@@ -12,10 +12,10 @@ Use when Base UI doesn't have the component.
 
 ## Before Building
 
-1. Check Base UI repo: `curl -s "https://api.github.com/repos/mui/base-ui/contents/packages/react/src" | grep -i "name"`
-2. Check for feature request: `curl -s "https://api.github.com/search/issues?q=repo:mui/base-ui+name"`
+1. Deep Figma analysis — follow `figma-analysis.mdc`
+2. Check Base UI docs: https://base-ui.com/llms.txt (confirm no match)
 3. Study WAI-ARIA APG for the pattern
-4. Look at a similar Base UI component for patterns
+4. **Write tests first** — define expected behavior before implementation
 
 ## Component Structure
 
@@ -82,9 +82,9 @@ function useComponentContext() {
 }
 ```
 
-## Testing
+## Testing (TDD)
 
-Playwright CT is sufficient for most custom components.
+Write tests before implementation. Playwright CT is sufficient for most custom components.
 
 Add unit tests (Vitest) only when there's complex logic:
 - State machines
@@ -93,10 +93,12 @@ Add unit tests (Vitest) only when there's complex logic:
 
 ## Checklist
 
+- [ ] Figma analysis complete
 - [ ] WAI-ARIA pattern followed
+- [ ] Tests written first
+- [ ] Implementation makes tests pass
 - [ ] forwardRef with named function
 - [ ] Props spread last
 - [ ] data-* attributes for state
 - [ ] Context throws helpful error
 - [ ] displayName in dev only
-- [ ] Playwright tests pass

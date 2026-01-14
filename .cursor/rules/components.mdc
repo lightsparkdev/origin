@@ -13,11 +13,14 @@ alwaysApply: false
 1. **Does Base UI have it?** → Wrap it (Path A/B)
 2. **No Base UI equivalent?** → Build custom (Path C)
 
+**Base UI Research**: Start at https://base-ui.com/llms.txt — full component list and docs.
+
 ## Before Writing Code
 
-1. Fetch Figma CSS via MCP `get_design_context` (fallback: `npm run figma:node`)
+1. Deep Figma analysis — follow `figma-analysis.mdc`
 2. Check Base UI for existing component or composable primitives
 3. For custom: check WAI-ARIA APG for accessibility requirements
+4. **Write tests first** — define expected behavior before implementation
 
 ## Rules
 
@@ -28,7 +31,9 @@ alwaysApply: false
 - Use slots (`React.ReactNode` props) for nested elements
 - Props spread last (consumer wins)
 
-## Testing
+## Testing (TDD)
+
+Write tests before implementation:
 
 | Path | Tests |
 |------|-------|
@@ -37,22 +42,24 @@ alwaysApply: false
 
 Run: `npm run test`
 
-## File Structure
+## File Structure (creation order)
 
 ```
 src/components/{Name}/
-├── {Name}.tsx or parts.tsx
-├── {Name}.module.scss
-├── {Name}.test.tsx
-├── {Name}.stories.tsx
-└── index.ts
+├── {Name}.test-stories.tsx  # 1. Test fixtures first
+├── {Name}.test.tsx          # 2. Tests second
+├── {Name}.tsx or parts.tsx  # 3. Implementation (make tests pass)
+├── {Name}.module.scss       # 4. Styles
+├── {Name}.stories.tsx       # 5. Storybook
+└── index.ts                 # 6. Exports
 ```
 
 ## Checklist
 
-- [ ] Figma CSS fetched
-- [ ] All values tokenized
+- [ ] Figma analysis complete
+- [ ] Tests written first
+- [ ] Implementation makes tests pass
+- [ ] Figma values mirrored exactly
 - [ ] forwardRef + clsx
 - [ ] Reduced motion: `@media (prefers-reduced-motion: reduce)`
-- [ ] Tests pass
 - [ ] Storybook story added
