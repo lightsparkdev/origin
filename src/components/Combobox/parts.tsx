@@ -114,6 +114,7 @@ export interface ClearProps extends BaseCombobox.Clear.Props {}
  * Combobox.Clear - Button to clear the selection.
  *
  * Renders as a small icon button with the X icon.
+ * Uses Base UI's default behavior - only visible when there's a value to clear.
  */
 export const Clear = React.forwardRef<HTMLButtonElement, ClearProps>(
   function Clear({ className, children, ...props }, ref) {

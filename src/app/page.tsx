@@ -59,7 +59,7 @@ function ComboboxExamples() {
         </Combobox.Root>
       </div>
 
-      {/* With Clear Button */}
+      {/* With Clear Button (shows next to chevron when value exists) */}
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           With Clear Button

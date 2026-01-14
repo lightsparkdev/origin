@@ -8,11 +8,6 @@
   display: flex;
   align-items: center;
   width: 100%;
-
-  // When clear button is visible, hide the trigger (clear replaces chevron)
-  &:has(.clear:not([hidden])) .trigger {
-    display: none;
-  }
 }
 
 // The text input
