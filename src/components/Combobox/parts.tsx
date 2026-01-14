@@ -219,6 +219,12 @@ export const ItemText = React.forwardRef<HTMLDivElement, ItemTextProps>(
 
 export interface ItemIndicatorProps extends BaseCombobox.ItemIndicator.Props {}
 
+/**
+ * Combobox.ItemIndicator - Shows selection state for single-select.
+ *
+ * Renders a 6px dot when the item is selected.
+ * For multi-select, use ItemCheckbox instead.
+ */
 export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProps>(
   function ItemIndicator({ className, children, ...props }, ref) {
     return (
@@ -227,20 +233,57 @@ export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProp
         className={clsx(styles.itemIndicator, className)}
         {...props}
       >
+        {children ?? <span className={styles.itemIndicatorDot} />}
+      </BaseCombobox.ItemIndicator>
+    );
+  }
+);
+
+export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Whether the checkbox is checked.
+   * If not provided, inherits from parent Item's selected state.
+   */
+  checked?: boolean;
+}
+
+/**
+ * Combobox.ItemCheckbox - Checkbox indicator for multi-select.
+ *
+ * Use this instead of ItemIndicator for multi-select comboboxes.
+ * Can be customized by passing children (slot pattern).
+ *
+ * @example
+ * ```tsx
+ * <Combobox.Item value="apple">
+ *   <Combobox.ItemText>Apple</Combobox.ItemText>
+ *   <Combobox.ItemCheckbox />
+ * </Combobox.Item>
+ * ```
+ */
+export const ItemCheckbox = React.forwardRef<HTMLDivElement, ItemCheckboxProps>(
+  function ItemCheckbox({ className, children, ...props }, ref) {
+    return (
+      <BaseCombobox.ItemIndicator
+        ref={ref}
+        className={clsx(styles.itemCheckbox, className)}
+        keepMounted
+        {...props}
+      >
         {children ?? <CheckIcon />}
       </BaseCombobox.ItemIndicator>
     );
   }
 );
 
-// Default check icon for ItemIndicator
+// Checkmark icon for ItemCheckbox
 function CheckIcon() {
   return (
     <svg
-      className={styles.itemIndicatorIcon}
+      className={styles.itemCheckboxIcon}
       fill="currentcolor"
-      width="12"
-      height="12"
+      width="11"
+      height="11"
       viewBox="0 0 10 10"
     >
       <path d="M9.1603 1.12218C9.50684 1.34873 9.60427 1.81354 9.37792 2.16038L5.13603 8.66012C5.01614 8.8438 4.82192 8.96576 4.60451 8.99384C4.3871 9.02194 4.1683 8.95335 4.00574 8.80615L1.24664 6.30769C0.939709 6.02975 0.916013 5.55541 1.19372 5.24822C1.47142 4.94102 1.94536 4.91731 2.2523 5.19524L4.36085 7.10461L8.12299 1.33999C8.34934 0.993152 8.81376 0.895638 9.1603 1.12218Z" />

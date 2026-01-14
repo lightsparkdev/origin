@@ -48,8 +48,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemIndicator />
                       <Combobox.ItemText>{item}</Combobox.ItemText>
+                      <Combobox.ItemIndicator />
                     </Combobox.Item>
                   )}
                 </Combobox.List>
@@ -79,8 +79,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemIndicator />
                       <Combobox.ItemText>{item}</Combobox.ItemText>
+                      <Combobox.ItemIndicator />
                     </Combobox.Item>
                   )}
                 </Combobox.List>
@@ -90,7 +90,7 @@ function ComboboxExamples() {
         </Combobox.Root>
       </div>
 
-      {/* Multi Select */}
+      {/* Multi Select - uses ItemCheckbox instead of ItemIndicator */}
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           Multi Select
@@ -109,8 +109,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemIndicator />
                       <Combobox.ItemText>{item}</Combobox.ItemText>
+                      <Combobox.ItemCheckbox />
                     </Combobox.Item>
                   )}
                 </Combobox.List>
@@ -138,8 +138,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemIndicator />
                       <Combobox.ItemText>{item}</Combobox.ItemText>
+                      <Combobox.ItemIndicator />
                     </Combobox.Item>
                   )}
                 </Combobox.List>

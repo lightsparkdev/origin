@@ -16,6 +16,7 @@ export type {
   ItemProps as ComboboxItemProps,
   ItemTextProps as ComboboxItemTextProps,
   ItemIndicatorProps as ComboboxItemIndicatorProps,
+  ItemCheckboxProps as ComboboxItemCheckboxProps,
   GroupProps as ComboboxGroupProps,
   GroupLabelProps as ComboboxGroupLabelProps,
   EmptyProps as ComboboxEmptyProps,

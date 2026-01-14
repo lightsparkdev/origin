@@ -193,65 +193,105 @@
   }
 }
 
-// List item
+// List item - Figma: 36px height, 8px gap, 8px padding
 .item {
   box-sizing: border-box;
-  display: grid;
-  gap: var(--spacing-xs);
+  display: flex;
+  gap: var(--spacing-xs); // Figma: 8px
   align-items: center;
-  grid-template-columns: 0.75rem 1fr;
-  padding-block: var(--spacing-xs);
-  padding-left: var(--spacing-sm);
-  padding-right: var(--spacing-md);
+  height: 36px; // Figma: 36px
+  padding: var(--spacing-xs); // Figma: 8px all sides
+  border-radius: var(--corner-radius-xs); // Figma: 4px
   cursor: pointer;
   outline: 0;
   user-select: none;
   @include body;
   color: var(--text-primary);
 
+  // Hover state - Figma: surface/hover background
   &[data-highlighted] {
-    position: relative;
-    z-index: 0;
-    color: var(--text-inverse);
+    background: var(--surface-hover);
+  }
 
-    &::before {
-      content: '';
-      position: absolute;
-      z-index: -1;
-      inset-block: 0;
-      inset-inline: var(--spacing-xs);
-      border-radius: var(--corner-radius-xs);
-      background: var(--surface-inverse);
-    }
+  // Selected state - no background change, just shows indicator
+  &[data-selected] {
+    // Indicator visibility handled by ItemIndicator
   }
 
   &[data-disabled] {
-    color: var(--text-disabled);
+    opacity: var(--opacity-50);
     cursor: not-allowed;
   }
 }
 
-// Item text
+// Item text - fills available space
 .itemText {
-  grid-column-start: 2;
+  flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-// Item indicator (checkmark container)
+// Item indicator (single-select) - 6px dot on the right
 .itemIndicator {
-  grid-column-start: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  width: 16px; // Frame size
+  height: 16px;
 }
 
-// Checkmark icon
-.itemIndicatorIcon {
-  display: block;
-  width: 12px;
-  height: 12px;
+// Selected indicator dot - Figma: 6px circle
+.itemIndicatorDot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--corner-radius-2xs); // 2px
+  background: var(--icon-primary);
+}
+
+// Item checkbox (multi-select) - 16px checkbox on the right
+.itemCheckbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px; // Figma: 16px
+  height: 16px;
+  border-radius: var(--corner-radius-xs); // 4px
+  background: var(--surface-primary);
+  border: var(--stroke-sm) solid var(--border-secondary);
+  transition: background 150ms ease, border-color 150ms ease;
+
+  // Hide checkmark by default (keepMounted keeps it in DOM)
+  svg {
+    opacity: 0;
+    transition: opacity 100ms ease;
+  }
+
+  // Checked state - show checkmark and dark background
+  &[data-selected] {
+    background: var(--surface-inverted);
+    border-color: var(--surface-inverted);
+
+    svg {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    svg {
+      transition: none;
+    }
+  }
+}
+
+// Checkbox checkmark icon
+.itemCheckboxIcon {
+  width: 10.667px; // Figma: 10.667px
+  height: 10.667px;
+  color: var(--text-inverse);
 }
 
 // Group container
