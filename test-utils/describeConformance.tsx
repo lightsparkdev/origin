@@ -141,7 +141,8 @@ export const conformanceAssertions = {
    * Assert that custom props are forwarded to the underlying element
    */
   async propForwarding(
-    locator: ReturnType<typeof expect.Poll>['not'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    locator: any,
     expectedProps: Record<string, string>
   ) {
     for (const [attr, value] of Object.entries(expectedProps)) {
@@ -153,7 +154,8 @@ export const conformanceAssertions = {
    * Assert that className is applied
    */
   async classNameApplied(
-    locator: ReturnType<typeof expect.Poll>['not'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    locator: any,
     className: string
   ) {
     await expect(locator).toHaveClass(new RegExp(className));
@@ -163,7 +165,8 @@ export const conformanceAssertions = {
    * Assert that style is applied
    */
   async styleApplied(
-    locator: ReturnType<typeof expect.Poll>['not'],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    locator: any,
     styleProperty: string,
     expectedValue: string
   ) {
