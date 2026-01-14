@@ -367,23 +367,27 @@ export interface ChipsProps extends BaseCombobox.Chips.Props {}
  * Combobox.Chips - Container for selected value chips in multi-select.
  *
  * Place inside InputWrapper, before the Input element.
+ * Use with Combobox.Value to access selected values.
+ *
+ * Note: Chips is a container only — it does NOT accept a render function.
+ * Use Combobox.Value inside to iterate over selected values.
  *
  * @example
  * ```tsx
  * <Combobox.InputWrapper>
  *   <Combobox.Chips>
- *     {(value) => (
- *       <Combobox.Chip key={value}>
- *         <Combobox.ChipText>{value}</Combobox.ChipText>
- *         <Combobox.ChipRemove />
- *       </Combobox.Chip>
- *     )}
+ *     <Combobox.Value>
+ *       {(values) =>
+ *         values?.map((value) => (
+ *           <Combobox.Chip key={value}>
+ *             <Combobox.ChipText>{value}</Combobox.ChipText>
+ *             <Combobox.ChipRemove />
+ *           </Combobox.Chip>
+ *         ))
+ *       }
+ *     </Combobox.Value>
  *   </Combobox.Chips>
  *   <Combobox.Input placeholder="Select items..." />
- *   <Combobox.ActionButtons>
- *     <Combobox.Clear />
- *     <Combobox.Trigger />
- *   </Combobox.ActionButtons>
  * </Combobox.InputWrapper>
  * ```
  */
