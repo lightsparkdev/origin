@@ -97,6 +97,18 @@ function ComboboxExamples() {
         </span>
         <Combobox.Root items={fruits} multiple filter={filter.contains}>
           <Combobox.InputWrapper>
+            <Combobox.Chips>
+              <Combobox.Value>
+                {(values: string[]) =>
+                  values?.map((value) => (
+                    <Combobox.Chip key={value}>
+                      <Combobox.ChipText>{value}</Combobox.ChipText>
+                      <Combobox.ChipRemove />
+                    </Combobox.Chip>
+                  ))
+                }
+              </Combobox.Value>
+            </Combobox.Chips>
             <Combobox.Input placeholder="Select fruits..." />
             <Combobox.ActionButtons>
               <Combobox.Trigger />

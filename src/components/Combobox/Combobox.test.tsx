@@ -8,7 +8,6 @@ import {
   TestComboboxWithGroups,
   TestComboboxWithClear,
   ConformanceInputWrapper,
-  ConformanceValue,
   ConformanceActionButtons,
 } from './Combobox.test-stories';
 
@@ -226,17 +225,8 @@ test.describe('Combobox', () => {
     // ItemText tests skipped - requires popup to be visible in DOM
     // The component itself follows slot pattern, but testing requires complex setup
 
-    test.describe('Value', () => {
-      test('forwards props', async ({ mount, page }) => {
-        await mount(<ConformanceValue data-custom="custom-value" />);
-        await expect(page.getByTestId('test-root')).toHaveAttribute('data-custom', 'custom-value');
-      });
-
-      test('merges className', async ({ mount, page }) => {
-        await mount(<ConformanceValue className="custom-class" />);
-        await expect(page.getByTestId('test-root')).toHaveClass(/custom-class/);
-      });
-    });
+    // Value tests skipped - Value is a context provider for accessing selected values,
+    // not a DOM wrapper. It doesn't render props to a DOM element.
 
     // ChipText tests skipped - requires multi-select chips to render
     // The component itself follows slot pattern, but testing requires complex setup

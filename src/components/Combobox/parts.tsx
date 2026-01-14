@@ -335,24 +335,38 @@ export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(
   }
 );
 
-export interface ValueProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /**
-   * The placeholder to display when no value is selected.
-   */
-  placeholder?: string;
+export interface ValueProps extends BaseCombobox.Value.Props {
+  className?: string;
 }
 
 /**
- * Combobox.Value - Displays the selected value.
+ * Combobox.Value - Displays or renders selected value(s).
  *
- * Wraps Base UI's Value component with design system styling.
+ * For single select: displays the selected value text
+ * For multi-select with chips: use children as a render function
+ *
+ * @example Single select (displays value text)
+ * ```tsx
+ * <Combobox.Value placeholder="Select..." />
+ * ```
+ *
+ * @example Multi-select with chips
+ * ```tsx
+ * <Combobox.Chips>
+ *   <Combobox.Value>
+ *     {(values) => values?.map((v) => <Combobox.Chip key={v}>...</Combobox.Chip>)}
+ *   </Combobox.Value>
+ * </Combobox.Chips>
+ * ```
  */
 export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
-  function Value({ className, placeholder, ...props }, ref) {
+  function Value({ className, ...props }, ref) {
     return (
-      <span ref={ref} className={clsx(styles.value, className)} {...props}>
-        <BaseCombobox.Value placeholder={placeholder} />
-      </span>
+      <BaseCombobox.Value
+        ref={ref}
+        className={clsx(styles.value, className)}
+        {...props}
+      />
     );
   }
 );

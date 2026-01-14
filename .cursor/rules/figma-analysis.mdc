@@ -95,6 +95,7 @@ If the component has:
 - **Nested components** → Get screenshot + metadata of each sub-component
 - **Multiple variants** → Get design context for each variant separately
 - **Interactive states** → Confirm all states are designed, ask if any are missing
+- **Design system components inside** → Analyze if they're the same or a size variant
 
 ## Red flags to catch
 
@@ -103,3 +104,5 @@ If the component has:
 - Inconsistent values between variants that aren't in the design
 - Missing states in design (disabled, focus) — ask before implementing
 - Sub-components with their own variant logic (need separate analysis)
+- Recreating a design system component instead of composing it
+- Not understanding how child parts interact in compound components
