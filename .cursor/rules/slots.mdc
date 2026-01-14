@@ -60,9 +60,41 @@ Only use `useRender` from Base UI when building custom compound components that 
 import { useRender } from '@base-ui-components/react/use-render';
 ```
 
+## Verification
+
+Use conformance tests to verify slot compatibility. Add to component tests:
+
+```tsx
+import { createConformanceTests } from '@/test-utils';
+
+const conformance = createConformanceTests({
+  Component: MyComponent,
+  requiredProps: { /* minimum props to render */ },
+  expectedTag: 'div',
+});
+
+test.describe('MyComponent conformance', () => {
+  test('forwards props', async ({ mount, page }) => {
+    await mount(<conformance.PropForwarding />);
+    await expect(page.getByTestId(conformance.testId)).toHaveAttribute('data-custom', 'custom-value');
+  });
+
+  test('forwards ref', async ({ mount, page }) => {
+    await mount(<conformance.RefForwarding />);
+    await expect(page.getByTestId(conformance.testId)).toBeVisible();
+  });
+
+  test('merges className', async ({ mount, page }) => {
+    await mount(<conformance.ClassNameString />);
+    await expect(page.getByTestId(conformance.testId)).toHaveClass(/custom-class-name/);
+  });
+});
+```
+
 ## Checklist
 
 - [ ] Uses `forwardRef`
 - [ ] Extends `React.ComponentPropsWithoutRef<'element'>`
 - [ ] Spreads `{...props}` on root element
 - [ ] Merges `className` with `clsx`
+- [ ] Conformance tests pass

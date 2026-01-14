@@ -6,7 +6,9 @@ Tests are written **before** implementation:
 
 1. **Define API** — props, variants, states from Figma analysis
 2. **Write test-stories.tsx** — test fixtures for each variant/state
-3. **Write test.tsx** — Playwright CT tests for expected behavior
+3. **Write test.tsx** — Playwright CT tests including:
+   - Behavior tests (interactions, states)
+   - Conformance tests (slot compatibility — see below)
 4. **Implement component** — make tests pass
 5. **Run tests** — verify before continuing
 
@@ -91,45 +93,59 @@ src/components/MyComponent/
 └── index.ts
 ```
 
-## Conformance Tests
+## Conformance Tests (Slot Compatibility)
 
-For custom components (Path C), test Base UI contracts:
+**All components** must pass conformance tests to ensure slot compatibility with Base UI's `render` prop. Use the utility:
 
 ```tsx
+import { createConformanceTests } from '@/test-utils';
+
+const conformance = createConformanceTests({
+  Component: MyComponent,
+  requiredProps: { children: 'Label' },
+  expectedTag: 'button',
+});
+
 test.describe('MyComponent conformance', () => {
-  test('forwards data-* attributes', async ({ mount, page }) => {
-    await mount(<MyComponent data-testid="root" data-custom="value" />);
-    const element = page.locator('[data-testid="root"]');
-    await expect(element).toHaveAttribute('data-custom', 'value');
+  test('forwards props', async ({ mount, page }) => {
+    await mount(<conformance.PropForwarding />);
+    await expect(page.getByTestId(conformance.testId)).toHaveAttribute('data-custom', 'custom-value');
   });
 
-  test('forwards className', async ({ mount, page }) => {
-    await mount(<MyComponent data-testid="root" className="custom" />);
-    const element = page.locator('[data-testid="root"]');
-    await expect(element).toHaveClass(/custom/);
+  test('forwards ref', async ({ mount, page }) => {
+    await mount(<conformance.RefForwarding />);
+    await expect(page.getByTestId(conformance.testId)).toBeVisible();
+  });
+
+  test('merges className', async ({ mount, page }) => {
+    await mount(<conformance.ClassNameString />);
+    await expect(page.getByTestId(conformance.testId)).toHaveClass(/custom-class-name/);
   });
 
   test('forwards style', async ({ mount, page }) => {
-    await mount(<MyComponent data-testid="root" style={{ color: 'green' }} />);
-    const element = page.locator('[data-testid="root"]');
-    await expect(element).toHaveCSS('color', 'rgb(0, 128, 0)');
+    await mount(<conformance.StyleForwarding />);
+    await expect(page.getByTestId(conformance.testId)).toHaveCSS('color', 'rgb(0, 128, 0)');
   });
 });
 ```
+
+See `slots.mdc` for the implementation pattern these tests verify.
 
 ## Decision Tree
 
 ```
 Building a component?
 │
+├── All components:
+│   └── Playwright CT + Conformance tests (slot compatibility)
+│
 ├── Is it a Base UI wrapper? (Path A/B)
-│   └── Playwright CT only
+│   └── Behavior tests for exposed props/states
 │
 └── Is it custom? (Path C)
-    ├── Does it have complex logic?
-    │   ├── Yes → Playwright CT + Vitest unit tests
-    │   └── No → Playwright CT only
-    └── Add conformance tests
+    └── Does it have complex logic?
+        ├── Yes → Add Vitest unit tests
+        └── No → Playwright CT only
 ```
 
 ## Tips
