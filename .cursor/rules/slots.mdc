@@ -1,0 +1,68 @@
+# Slot-Compatible Components
+
+All components must work as render targets for Base UI's `render` prop.
+
+## Requirements
+
+Every component must:
+
+1. **Use `forwardRef`** — refs must reach the DOM element
+2. **Extend HTML props** — use `React.ComponentPropsWithoutRef<'element'>`
+3. **Spread rest props** — `{...props}` on root element
+4. **Merge classNames** — combine internal + external with `clsx`
+
+## Pattern
+
+```tsx
+import * as React from 'react';
+import clsx from 'clsx';
+import styles from './Component.module.scss';
+
+export interface ComponentProps extends React.ComponentPropsWithoutRef<'div'> {
+  variant?: 'primary' | 'secondary';
+}
+
+export const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
+  function Component({ variant = 'primary', className, children, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={clsx(styles.root, styles[variant], className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+```
+
+## Base UI Wrappers
+
+Components wrapping Base UI primitives inherit `render` prop support automatically:
+
+```tsx
+export interface TriggerProps extends BaseComponent.Trigger.Props {}
+
+export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
+  function Trigger(props, ref) {
+    return <BaseComponent.Trigger ref={ref} {...props} />;
+  }
+);
+```
+
+## When to use `useRender`
+
+Only use `useRender` from Base UI when building custom compound components that need to provide their own `render` prop. Most design system components don't need this — they just need to BE render targets.
+
+```tsx
+// Only if your component needs to PROVIDE a render prop
+import { useRender } from '@base-ui-components/react/use-render';
+```
+
+## Checklist
+
+- [ ] Uses `forwardRef`
+- [ ] Extends `React.ComponentPropsWithoutRef<'element'>`
+- [ ] Spreads `{...props}` on root element
+- [ ] Merges `className` with `clsx`
