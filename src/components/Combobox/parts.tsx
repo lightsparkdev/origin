@@ -18,6 +18,9 @@ export interface RootProps<Value, Multiple extends boolean | undefined = false>
  *
  * Uses Base UI's built-in collator filter by default. Pass `filter={null}`
  * to disable filtering, or provide a custom filter function.
+ *
+ * Note: Root is a context provider, not a DOM element, so it doesn't support ref forwarding.
+ * This is expected behavior for compound component roots.
  */
 export function Root<Value, Multiple extends boolean | undefined = false>({
   autoHighlight = true,
@@ -332,17 +335,27 @@ export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(
   }
 );
 
-export interface ValueProps extends BaseCombobox.Value.Props {
-  className?: string;
+export interface ValueProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /**
+   * The placeholder to display when no value is selected.
+   */
+  placeholder?: string;
 }
 
-export function Value({ className, ...props }: ValueProps) {
-  return (
-    <span className={clsx(styles.value, className)}>
-      <BaseCombobox.Value {...props} />
-    </span>
-  );
-}
+/**
+ * Combobox.Value - Displays the selected value.
+ *
+ * Wraps Base UI's Value component with design system styling.
+ */
+export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
+  function Value({ className, placeholder, ...props }, ref) {
+    return (
+      <span ref={ref} className={clsx(styles.value, className)} {...props}>
+        <BaseCombobox.Value placeholder={placeholder} />
+      </span>
+    );
+  }
+);
 
 // ============================================================================
 // Chips components for multi-select

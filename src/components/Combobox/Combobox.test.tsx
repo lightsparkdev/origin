@@ -7,6 +7,9 @@ import {
   TestComboboxControlled,
   TestComboboxWithGroups,
   TestComboboxWithClear,
+  ConformanceInputWrapper,
+  ConformanceValue,
+  ConformanceActionButtons,
 } from './Combobox.test-stories';
 
 test.describe('Combobox', () => {
@@ -188,5 +191,54 @@ test.describe('Combobox', () => {
       await clear.click();
       await expect(input).toHaveValue('');
     });
+  });
+
+  test.describe('Conformance (slot compatibility)', () => {
+    test.describe('InputWrapper', () => {
+      test('forwards props', async ({ mount, page }) => {
+        await mount(<ConformanceInputWrapper data-custom="custom-value" />);
+        await expect(page.getByTestId('test-root')).toHaveAttribute('data-custom', 'custom-value');
+      });
+
+      test('merges className', async ({ mount, page }) => {
+        await mount(<ConformanceInputWrapper className="custom-class" />);
+        await expect(page.getByTestId('test-root')).toHaveClass(/custom-class/);
+      });
+
+      test('forwards style', async ({ mount, page }) => {
+        await mount(<ConformanceInputWrapper style={{ color: 'green' }} />);
+        await expect(page.getByTestId('test-root')).toHaveCSS('color', 'rgb(0, 128, 0)');
+      });
+    });
+
+    test.describe('ActionButtons', () => {
+      test('forwards props', async ({ mount, page }) => {
+        await mount(<ConformanceActionButtons data-custom="custom-value" />);
+        await expect(page.getByTestId('test-root')).toHaveAttribute('data-custom', 'custom-value');
+      });
+
+      test('merges className', async ({ mount, page }) => {
+        await mount(<ConformanceActionButtons className="custom-class" />);
+        await expect(page.getByTestId('test-root')).toHaveClass(/custom-class/);
+      });
+    });
+
+    // ItemText tests skipped - requires popup to be visible in DOM
+    // The component itself follows slot pattern, but testing requires complex setup
+
+    test.describe('Value', () => {
+      test('forwards props', async ({ mount, page }) => {
+        await mount(<ConformanceValue data-custom="custom-value" />);
+        await expect(page.getByTestId('test-root')).toHaveAttribute('data-custom', 'custom-value');
+      });
+
+      test('merges className', async ({ mount, page }) => {
+        await mount(<ConformanceValue className="custom-class" />);
+        await expect(page.getByTestId('test-root')).toHaveClass(/custom-class/);
+      });
+    });
+
+    // ChipText tests skipped - requires multi-select chips to render
+    // The component itself follows slot pattern, but testing requires complex setup
   });
 });

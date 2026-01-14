@@ -1,7 +1,93 @@
+import * as React from 'react';
 import { useState } from 'react';
 import { Combobox } from './index';
 
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
+
+// ============================================================================
+// Conformance test fixtures - test slot compatibility
+// ============================================================================
+
+/** InputWrapper conformance - forwards props, ref, className */
+export function ConformanceInputWrapper(props: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <Combobox.Root items={fruits}>
+      <Combobox.InputWrapper data-testid="test-root" {...props}>
+        <Combobox.Input placeholder="Test" />
+      </Combobox.InputWrapper>
+    </Combobox.Root>
+  );
+}
+
+/** ItemText conformance - forwards props, ref, className */
+export function ConformanceItemText(props: React.HTMLAttributes<HTMLDivElement>) {
+  // Using open={true} to ensure popup is visible for testing
+  return (
+    <Combobox.Root items={fruits} open>
+      <Combobox.InputWrapper>
+        <Combobox.Input placeholder="Test" />
+      </Combobox.InputWrapper>
+      <Combobox.Positioner>
+        <Combobox.Popup>
+          <Combobox.List>
+            {(item: string) => (
+              <Combobox.Item key={item} value={item}>
+                <Combobox.ItemText data-testid="test-root" {...props}>
+                  {item}
+                </Combobox.ItemText>
+              </Combobox.Item>
+            )}
+          </Combobox.List>
+        </Combobox.Popup>
+      </Combobox.Positioner>
+    </Combobox.Root>
+  );
+}
+
+/** Value conformance - forwards props, ref, className */
+export function ConformanceValue(props: React.HTMLAttributes<HTMLSpanElement>) {
+  return (
+    <Combobox.Root items={fruits} defaultValue="Apple">
+      <Combobox.Value data-testid="test-root" {...props} />
+    </Combobox.Root>
+  );
+}
+
+/** ChipText conformance - forwards props, ref, className */
+export function ConformanceChipText(props: React.HTMLAttributes<HTMLSpanElement>) {
+  // Using controlled value to ensure chips render
+  const [value] = useState<string[]>(['Apple']);
+  return (
+    <Combobox.Root items={fruits} multiple value={value}>
+      <Combobox.InputWrapper>
+        <Combobox.Chips>
+          {(chipValue: string) => (
+            <Combobox.Chip key={chipValue}>
+              <Combobox.ChipText data-testid="test-root" {...props}>
+                {chipValue}
+              </Combobox.ChipText>
+            </Combobox.Chip>
+          )}
+        </Combobox.Chips>
+        <Combobox.Input placeholder="Test" />
+      </Combobox.InputWrapper>
+    </Combobox.Root>
+  );
+}
+
+/** ActionButtons conformance - forwards props, ref, className */
+export function ConformanceActionButtons(props: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <Combobox.Root items={fruits}>
+      <Combobox.InputWrapper>
+        <Combobox.Input placeholder="Test" />
+        <Combobox.ActionButtons data-testid="test-root" {...props}>
+          <Combobox.Trigger />
+        </Combobox.ActionButtons>
+      </Combobox.InputWrapper>
+    </Combobox.Root>
+  );
+}
 
 const groupedFruits = {
   common: ['Apple', 'Banana'],
