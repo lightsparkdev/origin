@@ -11,10 +11,10 @@ import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Combobox } from '@/components/Combobox';
 import { CentralIcon } from '@/components/Icon';
+import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
-import { Input } from '@/components/Input';
 import { Tooltip } from '@/components/Tooltip';
 
 // Data for combobox examples
@@ -294,6 +294,91 @@ export default function Home() {
         </AlertDialog.Root>
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Badge Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span style={{ width: '80px', fontSize: '14px' }}>Subtle:</span>
+          <Badge variant="gray">Label</Badge>
+          <Badge variant="purple">Label</Badge>
+          <Badge variant="blue">Label</Badge>
+          <Badge variant="sky">Label</Badge>
+          <Badge variant="pink">Label</Badge>
+          <Badge variant="green">Label</Badge>
+          <Badge variant="yellow">Label</Badge>
+          <Badge variant="red">Label</Badge>
+        </div>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <span style={{ width: '80px', fontSize: '14px' }}>Vibrant:</span>
+          <Badge variant="gray" vibrant>Label</Badge>
+          <Badge variant="purple" vibrant>Label</Badge>
+          <Badge variant="blue" vibrant>Label</Badge>
+          <Badge variant="sky" vibrant>Label</Badge>
+          <Badge variant="pink" vibrant>Label</Badge>
+          <Badge variant="green" vibrant>Label</Badge>
+          <Badge variant="yellow" vibrant>Label</Badge>
+          <Badge variant="red" vibrant>Label</Badge>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Breadcrumb Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Default</span>
+          <Breadcrumb.Root>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Shoes</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>With Collapsed Items</span>
+          <Breadcrumb.Root>
+            <Breadcrumb.List>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Ellipsis />
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/products/shoes/running">Running</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Trail Runners</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Custom Separator</span>
+          <Breadcrumb.Root>
+            <Breadcrumb.List separator="/">
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
+              </Breadcrumb.Item>
+              <Breadcrumb.Item>
+                <Breadcrumb.Page>Shoes</Breadcrumb.Page>
+              </Breadcrumb.Item>
+            </Breadcrumb.List>
+          </Breadcrumb.Root>
+        </div>
+      </div>
+      
       <h2 style={{ marginBottom: '1rem' }}>Button Component</h2>
       
       {/* Variants */}
@@ -404,88 +489,28 @@ export default function Home() {
       
       <ComboboxExamples />
       
-      <h2 style={{ marginBottom: '1rem' }}>Breadcrumb Component</h2>
+      <h2 style={{ marginBottom: '1rem' }}>Input Component</h2>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px', maxWidth: '256px' }}>
         <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Default</span>
-          <Breadcrumb.Root>
-            <Breadcrumb.List>
-              <Breadcrumb.Item>
-                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Page>Shoes</Breadcrumb.Page>
-              </Breadcrumb.Item>
-            </Breadcrumb.List>
-          </Breadcrumb.Root>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Default</span>
+          <Input size="md" placeholder="Placeholder" />
         </div>
-        
         <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>With Collapsed Items</span>
-          <Breadcrumb.Root>
-            <Breadcrumb.List>
-              <Breadcrumb.Item>
-                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Ellipsis />
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Link href="/products/shoes/running">Running</Breadcrumb.Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Page>Trail Runners</Breadcrumb.Page>
-              </Breadcrumb.Item>
-            </Breadcrumb.List>
-          </Breadcrumb.Root>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>LG Default</span>
+          <Input size="lg" placeholder="Placeholder" />
         </div>
-        
         <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Custom Separator</span>
-          <Breadcrumb.Root>
-            <Breadcrumb.List separator="/">
-              <Breadcrumb.Item>
-                <Breadcrumb.Link href="/">Home</Breadcrumb.Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Link href="/products">Products</Breadcrumb.Link>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item>
-                <Breadcrumb.Page>Shoes</Breadcrumb.Page>
-              </Breadcrumb.Item>
-            </Breadcrumb.List>
-          </Breadcrumb.Root>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Filled</span>
+          <Input size="md" defaultValue="Content" />
         </div>
-      </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Badge Component</h2>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <span style={{ width: '80px', fontSize: '14px' }}>Subtle:</span>
-          <Badge variant="gray">Label</Badge>
-          <Badge variant="purple">Label</Badge>
-          <Badge variant="blue">Label</Badge>
-          <Badge variant="sky">Label</Badge>
-          <Badge variant="pink">Label</Badge>
-          <Badge variant="green">Label</Badge>
-          <Badge variant="yellow">Label</Badge>
-          <Badge variant="red">Label</Badge>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Disabled</span>
+          <Input size="md" placeholder="Placeholder" disabled />
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-          <span style={{ width: '80px', fontSize: '14px' }}>Vibrant:</span>
-          <Badge variant="gray" vibrant>Label</Badge>
-          <Badge variant="purple" vibrant>Label</Badge>
-          <Badge variant="blue" vibrant>Label</Badge>
-          <Badge variant="sky" vibrant>Label</Badge>
-          <Badge variant="pink" vibrant>Label</Badge>
-          <Badge variant="green" vibrant>Label</Badge>
-          <Badge variant="yellow" vibrant>Label</Badge>
-          <Badge variant="red" vibrant>Label</Badge>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Read Only</span>
+          <Input size="md" defaultValue="Read only content" readOnly />
         </div>
       </div>
       
@@ -570,31 +595,6 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>Read Only</span>
           <Switch size="md" readOnly defaultChecked />
-        </div>
-      </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Input Component</h2>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px', maxWidth: '256px' }}>
-        <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Default</span>
-          <Input size="md" placeholder="Placeholder" />
-        </div>
-        <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>LG Default</span>
-          <Input size="lg" placeholder="Placeholder" />
-        </div>
-        <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Filled</span>
-          <Input size="md" defaultValue="Content" />
-        </div>
-        <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Disabled</span>
-          <Input size="md" placeholder="Placeholder" disabled />
-        </div>
-        <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Read Only</span>
-          <Input size="md" defaultValue="Read only content" readOnly />
         </div>
       </div>
       
