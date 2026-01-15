@@ -305,6 +305,12 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+
+  // Reset margin-top from Checkbox.Indicator (designed for multi-line labels)
+  // Combobox items are single-line and vertically centered
+  > span {
+    margin-top: 0;
+  }
 }
 
 // Group container
