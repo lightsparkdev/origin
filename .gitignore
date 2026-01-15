@@ -28,8 +28,8 @@ npm-debug.log*
 .env.local
 .env.*.local
 
-# Licensed Fonts (not for public distribution)
-public/fonts/
+# Licensed Fonts - committed for private staging/dev repo
+# Note: Do not commit these if repo becomes public
 Suisse font/
 
 # TypeScript
