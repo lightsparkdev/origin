@@ -25,6 +25,8 @@
   // Multi-select with chips: Figma pl=6px (spacing/2xs)
   &:has(.chips) {
     padding-left: var(--spacing-2xs);
+    // No chevron in multi-select - reduce right padding
+    padding-right: var(--spacing-2xs);
   }
 
   // When clear button is visible, increase right padding

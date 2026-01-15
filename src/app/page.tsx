@@ -90,7 +90,7 @@ function ComboboxExamples() {
         </Combobox.Root>
       </div>
 
-      {/* Multi Select - follows Base UI pattern exactly */}
+      {/* Multi Select - no chevron per Figma spec and Base UI pattern */}
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           Multi Select
@@ -107,15 +107,13 @@ function ComboboxExamples() {
                         <Combobox.ChipRemove />
                       </Combobox.Chip>
                     ))}
-                    {/* Input is INSIDE Value render function - Base UI pattern */}
+                    {/* Input is INSIDE Value - clicking anywhere opens popup */}
                     <Combobox.Input placeholder={values?.length > 0 ? '' : 'Select fruits...'} />
                   </>
                 )}
               </Combobox.Value>
             </Combobox.Chips>
-            <Combobox.ActionButtons>
-              <Combobox.Trigger />
-            </Combobox.ActionButtons>
+            {/* No ActionButtons/Trigger for multi-select - per Figma spec */}
           </Combobox.InputWrapper>
           <Combobox.Portal>
             <Combobox.Positioner sideOffset={4}>
