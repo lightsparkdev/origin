@@ -10,6 +10,7 @@ import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Combobox } from '@/components/Combobox';
+import { Field } from '@/components/Field';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
@@ -488,6 +489,62 @@ export default function Home() {
       <h2 style={{ marginBottom: '1rem' }}>Combobox Component</h2>
       
       <ComboboxExamples />
+      
+      <h2 style={{ marginBottom: '1rem' }}>Field Component</h2>
+      
+      <div style={{ display: 'flex', gap: '2rem', marginBottom: '128px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '256px' }}>
+          <Field.Root>
+            <Field.Label>Default (LG)</Field.Label>
+            <Input size="lg" placeholder="Placeholder" />
+            <Field.Description>Help text goes here.</Field.Description>
+          </Field.Root>
+
+          <Field.Root>
+            <Field.Label>Filled (LG)</Field.Label>
+            <Input size="lg" defaultValue="Content" />
+            <Field.Description>Help text goes here.</Field.Description>
+          </Field.Root>
+
+          <Field.Root disabled>
+            <Field.Label>Disabled (LG)</Field.Label>
+            <Input size="lg" placeholder="Placeholder" />
+            <Field.Description>Help text goes here.</Field.Description>
+          </Field.Root>
+
+          <Field.Root invalid>
+            <Field.Label>Invalid (LG)</Field.Label>
+            <Input size="lg" placeholder="Placeholder" />
+            <Field.Error>Error text goes here.</Field.Error>
+          </Field.Root>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '256px' }}>
+          <Field.Root>
+            <Field.Label>Default (MD)</Field.Label>
+            <Input size="md" placeholder="Placeholder" />
+            <Field.Description>Help text goes here.</Field.Description>
+          </Field.Root>
+
+          <Field.Root>
+            <Field.Label>Filled (MD)</Field.Label>
+            <Input size="md" defaultValue="Content" />
+            <Field.Description>Help text goes here.</Field.Description>
+          </Field.Root>
+
+          <Field.Root disabled>
+            <Field.Label>Disabled (MD)</Field.Label>
+            <Input size="md" placeholder="Placeholder" />
+            <Field.Description>Help text goes here.</Field.Description>
+          </Field.Root>
+
+          <Field.Root invalid>
+            <Field.Label>Invalid (MD)</Field.Label>
+            <Input size="md" placeholder="Placeholder" />
+            <Field.Error>Error text goes here.</Field.Error>
+          </Field.Root>
+        </div>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Input Component</h2>
       

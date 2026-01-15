@@ -106,3 +106,10 @@ If the component has:
 - Sub-components with their own variant logic (need separate analysis)
 - Recreating a design system component instead of composing it
 - Not understanding how child parts interact in compound components
+
+## Figma vs Code translations
+
+Some Figma structures are UX accommodations for designers, not design requirements. Translate these appropriately:
+
+- **Wrapper frames around text** → Figma can't apply padding to text; in code, apply padding directly to the element
+- **Styled frames instead of component instances** (e.g., Input styling inlined in Field) → nested instance props are harder to access in Figma; in code, slot in the actual component (`<Input />`)
