@@ -48,8 +48,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemText>{item}</Combobox.ItemText>
                       <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
                     </Combobox.Item>
                   )}
                 </Combobox.List>
@@ -79,8 +79,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemText>{item}</Combobox.ItemText>
                       <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
                     </Combobox.Item>
                   )}
                 </Combobox.List>
@@ -121,8 +121,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemText>{item}</Combobox.ItemText>
                       <Combobox.ItemCheckbox />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
                     </Combobox.Item>
                   )}
                 </Combobox.List>
@@ -150,8 +150,8 @@ function ComboboxExamples() {
                 <Combobox.List>
                   {(item: string) => (
                     <Combobox.Item key={item} value={item}>
-                      <Combobox.ItemText>{item}</Combobox.ItemText>
                       <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
                     </Combobox.Item>
                   )}
                 </Combobox.List>

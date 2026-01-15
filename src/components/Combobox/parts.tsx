@@ -292,13 +292,13 @@ export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLSpanElement>
  * Combobox.ItemCheckbox - Checkbox indicator for multi-select.
  *
  * Use this instead of ItemIndicator for multi-select comboboxes.
- * Can be customized by passing children (slot pattern).
+ * Place BEFORE ItemText to match Figma spec.
  *
  * @example
  * ```tsx
  * <Combobox.Item value="apple">
- *   <Combobox.ItemText>Apple</Combobox.ItemText>
  *   <Combobox.ItemCheckbox />
+ *   <Combobox.ItemText>Apple</Combobox.ItemText>
  * </Combobox.Item>
  * ```
  */

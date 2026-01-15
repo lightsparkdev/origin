@@ -217,14 +217,17 @@
   }
 }
 
-// List item - Figma: 36px height, 8px gap, 8px padding
+// List item - Figma: 36px height
+// Single-select: pl=24px default, pl=4px when selected (indicator on left)
+// Multi-select: pl=10px (checkbox always on left) - auto-detected via :has(.itemCheckbox)
 .item {
   box-sizing: border-box;
   display: flex;
-  gap: var(--spacing-xs); // Figma: 8px
+  gap: var(--spacing-xs); // Figma: 8px default
   align-items: center;
   height: 36px; // Figma: 36px
-  padding: var(--spacing-xs); // Figma: 8px all sides
+  padding: var(--spacing-xs); // Figma: pr=8px, py=8px
+  padding-left: var(--spacing-xl); // Figma: 24px for single-select default
   border-radius: var(--corner-radius-xs); // Figma: 4px
   cursor: pointer;
   outline: 0;
@@ -237,14 +240,28 @@
     background: var(--surface-hover);
   }
 
-  // Selected state - no background change, just shows indicator
+  // Selected state (single-select) - Figma: pl=4px, gap=4px
   &[data-selected] {
-    // Indicator visibility handled by ItemIndicator
+    padding-left: var(--spacing-3xs); // Figma: 4px
+    gap: var(--spacing-3xs); // Figma: 4px
   }
 
   &[data-disabled] {
     opacity: var(--opacity-50);
     cursor: not-allowed;
+  }
+
+  // Multi-select variant - auto-detected when itemCheckbox is present
+  // Figma: pl=10px, gap=8px (constant regardless of selected state)
+  &:has(.itemCheckbox) {
+    padding-left: 10px; // Figma: 10px (between spacing/xs and spacing/sm)
+    gap: var(--spacing-xs); // Figma: 8px always
+
+    // Override selected state styles for multi-select
+    &[data-selected] {
+      padding-left: 10px;
+      gap: var(--spacing-xs);
+    }
   }
 }
 
