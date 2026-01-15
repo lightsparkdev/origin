@@ -396,7 +396,7 @@ export interface ValueProps extends BaseCombobox.Value.Props {
  * ```
  */
 export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
-  function Value({ className, children, ...props }, ref) {
+  function Value({ className, children, placeholder, ...props }, ref) {
     // When children are provided (multi-select render function), use display:contents
     // so chips become direct flex items of the parent InputWrapper
     const hasChildren = Boolean(children);
@@ -409,7 +409,9 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
         )}
         {...props}
       >
-        <BaseCombobox.Value>{children}</BaseCombobox.Value>
+        <BaseCombobox.Value placeholder={placeholder}>
+          {children}
+        </BaseCombobox.Value>
       </span>
     );
   }
