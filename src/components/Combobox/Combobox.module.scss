@@ -74,6 +74,7 @@
   border: none;
   @include body;
   color: var(--text-primary);
+  caret-color: var(--text-green); // Figma: green cursor
   outline: none;
 
   &::placeholder {
