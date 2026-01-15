@@ -22,6 +22,51 @@ alwaysApply: false
    - Understand Field integration for form controls
 3. **Then** apply project styling conventions (tokens, size variants)
 
+## Base UI Utilities
+
+Base UI provides utilities beyond components. Reference: `https://base-ui.com/react/utils/{name}`
+
+### mergeProps
+
+Use when building custom render prop patterns or combining internal + external props:
+
+```tsx
+import { mergeProps } from '@base-ui/react/merge-props';
+
+// Combines props intelligently:
+// - className: concatenated
+// - style: merged (rightmost wins)
+// - event handlers: all execute (rightmost first)
+// - other props: rightmost wins
+const finalProps = mergeProps(internalProps, externalProps);
+```
+
+**When to use:**
+- Custom components with render props
+- Intercepting Base UI event handlers (call `event.preventBaseUIHandler()` to stop internal logic)
+
+### CSP Provider
+
+Use when deploying to environments with strict Content Security Policy:
+
+```tsx
+import { CSPProvider } from '@base-ui/react/csp-provider';
+
+<CSPProvider nonce={serverGeneratedNonce}>
+  <App />
+</CSPProvider>
+```
+
+**When to use:**
+- Deployment requires CSP headers blocking inline scripts/styles
+- Components like `ScrollArea.Viewport`, `Select.Popup` render inline `<style>` tags
+
+**Alternative:** Use `disableStyleElements` prop and add the CSS manually:
+```css
+.base-ui-disable-scrollbar { scrollbar-width: none; }
+.base-ui-disable-scrollbar::-webkit-scrollbar { display: none; }
+```
+
 ## Wrapper Simplicity Principle
 
 Before adding ANY custom prop or data attribute:
