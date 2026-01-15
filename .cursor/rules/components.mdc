@@ -16,18 +16,35 @@ alwaysApply: false
 ## Base UI Research
 
 1. **Discovery**: `https://base-ui.com/llms.txt` — what components exist
-2. **Full docs**: `https://base-ui.com/react/components/{name}.md` — examples, API, props
-3. **Find matching examples**: If Base UI has an example for your use case (e.g., multi-select, async search), reference that example's structure first
-4. **Avoid browsing the website** — browser snapshots don't show code; use `.md` URLs directly
+2. **Read docs for your component**: `https://base-ui.com/react/components/{name}`
+   - The examples show the simplest wrapper — trust that Base UI authors have already optimized this
+   - Note all `data-` attributes provided (e.g., `data-disabled`, `data-invalid`, `data-focused`)
+   - Understand Field integration for form controls
+3. **Then** apply project styling conventions (tokens, size variants)
+
+## Wrapper Simplicity Principle
+
+Before adding ANY custom prop or data attribute:
+
+1. **Check if Base UI already provides it** — Most states are handled:
+   - `data-disabled`, `data-invalid`, `data-focused`, `data-filled`, `data-dirty`, `data-touched`
+   
+2. **Start minimal** — The first version should ONLY:
+   - Forward ref
+   - Merge className (with size variant if needed)
+   - Spread props
+   
+3. **Add custom props only when Base UI lacks the feature**
+
+**Red flag**: Adding a custom `data-` attribute or prop for something Base UI already handles
 
 ## Before Writing Code
 
 1. Deep Figma analysis — follow `figma-analysis.mdc`
-2. Check Base UI docs (`.md` URL) for existing component or composable primitives
-3. **Find a matching example** — if one exists, use it as your structural reference
-4. **For compound components**: Understand how child parts interact (see below)
-5. For custom: check WAI-ARIA APG for accessibility requirements
-6. **Write tests first** — define expected behavior before implementation
+2. Read Base UI docs for the component — examples are the canonical simplest wrapper
+3. **For compound components**: Understand how child parts interact (see below)
+4. For custom: check WAI-ARIA APG for accessibility requirements
+5. **Write tests first** — define expected behavior before implementation
 
 ## Compound Components (Path A/B)
 
@@ -88,6 +105,10 @@ Write tests before implementation:
 | A/B (wrapper) | Playwright CT only |
 | C (custom) | Playwright CT (unit tests only if complex logic) |
 
+**Test patterns:**
+- Use `page.getByPlaceholder()` or `page.getByRole()` — not `component.locator('element')`
+- Base UI provides data attributes — test for those, don't invent custom ones
+
 Run: `npm run test`
 
 ## File Structure (creation order)
@@ -118,11 +139,12 @@ Dev mode TypeScript is lenient. Production build catches:
 ## Checklist
 
 - [ ] Figma analysis complete
+- [ ] Base UI docs read — using their example as the simplest wrapper
 - [ ] Tests written first
 - [ ] Implementation makes tests pass
 - [ ] Figma values mirrored exactly
 - [ ] forwardRef + clsx
-- [ ] **Base UI types verified** (check `.d.ts` files)
+- [ ] **No custom data attributes for states Base UI handles**
 - [ ] **Production build passes** (`npm run build`)
 - [ ] Reduced motion: `@media (prefers-reduced-motion: reduce)`
 - [ ] Storybook story added

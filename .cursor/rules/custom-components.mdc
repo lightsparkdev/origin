@@ -86,6 +86,9 @@ function useComponentContext() {
 
 Write tests before implementation. Playwright CT is sufficient for most custom components.
 
+**Test patterns:**
+- Use `page.getByRole()` or `page.getByText()` — not `component.locator('element')`
+
 Add unit tests (Vitest) only when there's complex logic:
 - State machines
 - Date/time calculations

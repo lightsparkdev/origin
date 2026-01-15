@@ -1,9 +1,0 @@
----
-description: DEPRECATED - See components.mdc
-globs: []
-alwaysApply: false
----
-
-# Deprecated
-
-This rule has been merged into `components.mdc`.

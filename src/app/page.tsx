@@ -14,6 +14,7 @@ import { CentralIcon } from '@/components/Icon';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
+import { Input } from '@/components/Input';
 import { Tooltip } from '@/components/Tooltip';
 
 // Data for combobox examples
@@ -569,6 +570,31 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>Read Only</span>
           <Switch size="md" readOnly defaultChecked />
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Input Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px', maxWidth: '256px' }}>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Default</span>
+          <Input size="md" placeholder="Placeholder" />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>LG Default</span>
+          <Input size="lg" placeholder="Placeholder" />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Filled</span>
+          <Input size="md" defaultValue="Content" />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Disabled</span>
+          <Input size="md" placeholder="Placeholder" disabled />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Read Only</span>
+          <Input size="md" defaultValue="Read only content" readOnly />
         </div>
       </div>
       
