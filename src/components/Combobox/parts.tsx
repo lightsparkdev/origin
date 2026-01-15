@@ -280,7 +280,7 @@ export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProp
   }
 );
 
-export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLSpanElement> {
   /**
    * Whether the checkbox is checked.
    * If not provided, inherits from parent Item's selected state.
@@ -371,19 +371,27 @@ export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(
   }
 );
 
-export interface ValueProps extends BaseCombobox.Value.Props {
-  className?: string;
+export interface ValueProps
+  extends Omit<React.HTMLAttributes<HTMLSpanElement>, 'children'> {
+  /**
+   * Render function that receives selected value(s) and returns React nodes.
+   * For multi-select, receives an array of values.
+   */
+  children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
 }
 
 /**
  * Combobox.Value - Displays or renders selected value(s).
  *
- * For single select: displays the selected value text
+ * For single select: displays the selected value text automatically
  * For multi-select with chips: use children as a render function
+ *
+ * Note: BaseCombobox.Value doesn't render its own element, so this wrapper
+ * provides a span for styling and ref forwarding.
  *
  * @example Single select (displays value text)
  * ```tsx
- * <Combobox.Value placeholder="Select..." />
+ * <Combobox.Value />
  * ```
  *
  * @example Multi-select with chips
@@ -401,7 +409,7 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
     // so chips become direct flex items of the parent InputWrapper
     const hasChildren = Boolean(children);
     return (
-      <BaseCombobox.Value
+      <span
         ref={ref}
         className={clsx(
           hasChildren ? styles.valueWithChildren : styles.value,
@@ -409,8 +417,8 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
         )}
         {...props}
       >
-        {children}
-      </BaseCombobox.Value>
+        <BaseCombobox.Value>{children}</BaseCombobox.Value>
+      </span>
     );
   }
 );

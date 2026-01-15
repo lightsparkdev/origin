@@ -43,6 +43,11 @@
   ],
   "exclude": [
     "node_modules",
-    "tools"
+    "tools",
+    "**/*.stories.tsx",
+    "**/*.test-stories.tsx",
+    "**/*.test.tsx",
+    "test-utils",
+    "playwright"
   ]
 }
