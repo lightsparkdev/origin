@@ -61,13 +61,17 @@ export function ConformanceChipText(props: React.HTMLAttributes<HTMLSpanElement>
     <Combobox.Root items={fruits} multiple value={value}>
       <Combobox.InputWrapper>
         <Combobox.Chips>
-          {(chipValue: string) => (
-            <Combobox.Chip key={chipValue}>
-              <Combobox.ChipText data-testid="test-root" {...props}>
-                {chipValue}
-              </Combobox.ChipText>
-            </Combobox.Chip>
-          )}
+          <Combobox.Value>
+            {(values: string[]) =>
+              values?.map((chipValue) => (
+                <Combobox.Chip key={chipValue}>
+                  <Combobox.ChipText data-testid="test-root" {...props}>
+                    {chipValue}
+                  </Combobox.ChipText>
+                </Combobox.Chip>
+              ))
+            }
+          </Combobox.Value>
         </Combobox.Chips>
         <Combobox.Input placeholder="Test" />
       </Combobox.InputWrapper>
