@@ -10,7 +10,8 @@ Tests are written **before** implementation:
    - Behavior tests (interactions, states)
    - Conformance tests (slot compatibility — see below)
 4. **Implement component** — make tests pass
-5. **Run tests** — verify before continuing
+5. **Run tests** — `npm run test`
+6. **Run production build** — `npm run build` (catches strict TypeScript errors)
 
 ## Overview
 

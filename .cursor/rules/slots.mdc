@@ -131,4 +131,5 @@ test.describe('MyComponent conformance', () => {
 - [ ] Extends `React.ComponentPropsWithoutRef<'element'>`
 - [ ] Spreads `{...props}` on root element
 - [ ] Merges `className` with `clsx`
+- [ ] **Base UI wrapper**: Checked if context provider (wrap in element if so)
 - [ ] Conformance tests pass

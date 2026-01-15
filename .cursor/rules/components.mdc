@@ -43,6 +43,33 @@ When wrapping Base UI compound components (Combobox, Select, Dialog, Menu, etc.)
 
 **Red flag**: Documenting a render function pattern without verifying the Base UI API supports it
 
+## Base UI Wrapper Type Safety
+
+When wrapping Base UI components, **check the actual types** before defining your interface:
+
+```bash
+# Check the Base UI component's type definition
+cat node_modules/@base-ui/react/{component}/{part}/{Part}.d.ts
+```
+
+**Key questions:**
+1. **Does it render an element?** Check if it's `ForwardRefExoticComponent` and what element type
+2. **Can it forward refs?** Some Base UI parts are context providers (no ref support)
+3. **What element type?** Match your `HTMLAttributes<T>` to the actual rendered element
+
+**Common patterns:**
+```tsx
+// Renders <span>, forwards ref - ✓ wrap normally
+export const ComboboxItemIndicator: ForwardRefExoticComponent<... & RefAttributes<HTMLSpanElement>>
+
+// Context provider, no element - ✗ cannot forward ref/className
+export function ComboboxValue(props: ComboboxValueProps): ReactElement
+```
+
+**If Base UI component is a context provider:**
+- Wrap it in your own element (`<span>`) to enable ref/className
+- Only pass props it actually accepts
+
 ## Rules
 
 - Zero hardcoded values — use tokens from `_variables.scss`
@@ -74,33 +101,6 @@ src/components/{Name}/
 ├── {Name}.stories.tsx       # 5. Storybook
 └── index.ts                 # 6. Exports
 ```
-
-## Base UI Wrapper Type Safety
-
-When wrapping Base UI components, **check the actual types** before defining your interface:
-
-```bash
-# Check the Base UI component's type definition
-cat node_modules/@base-ui/react/{component}/{part}/{Part}.d.ts
-```
-
-**Key questions:**
-1. **Does it render an element?** Check if it's `ForwardRefExoticComponent` and what element type
-2. **Can it forward refs?** Some Base UI parts are context providers (no ref support)
-3. **What element type?** Match your `HTMLAttributes<T>` to the actual rendered element
-
-**Common patterns:**
-```tsx
-// Renders <span>, forwards ref - ✓ wrap normally
-export const ComboboxItemIndicator: ForwardRefExoticComponent<... & RefAttributes<HTMLSpanElement>>
-
-// Context provider, no element - ✗ cannot forward ref/className
-export function ComboboxValue(props: ComboboxValueProps): ReactElement
-```
-
-**If Base UI component is a context provider:**
-- Wrap it in your own element (`<span>`) to enable ref/className
-- Only pass props it actually accepts
 
 ## Pre-Commit Verification
 
