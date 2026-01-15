@@ -17,6 +17,7 @@ import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
+import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 
 // Data for combobox examples
@@ -25,6 +26,63 @@ const groupedFruits = {
   common: ['Apple', 'Banana', 'Orange'],
   exotic: ['Dragon Fruit', 'Mangosteen', 'Rambutan'],
 };
+
+// Toast demo components
+function ToastDemo() {
+  const toastManager = Toast.useToastManager();
+
+  const showToast = (variant: ToastVariant, title: string, description?: string) => {
+    toastManager.add({
+      title,
+      description,
+      data: { variant },
+    });
+  };
+
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+      <Button variant="outline" onClick={() => showToast('default', 'Default toast', 'This is a default toast message.')}>
+        Default
+      </Button>
+      <Button variant="outline" onClick={() => showToast('info', 'Info toast', 'This is an informational message.')}>
+        Info
+      </Button>
+      <Button variant="outline" onClick={() => showToast('success', 'Success!', 'Your action was completed successfully.')}>
+        Success
+      </Button>
+      <Button variant="outline" onClick={() => showToast('warning', 'Warning', 'Please review before continuing.')}>
+        Warning
+      </Button>
+      <Button variant="outline" onClick={() => showToast('invalid', 'Error', 'Something went wrong.')}>
+        Invalid
+      </Button>
+    </div>
+  );
+}
+
+function ToastRenderer() {
+  const toastManager = Toast.useToastManager();
+
+  return (
+    <>
+      {toastManager.toasts.map((toast) => {
+        const variant = (toast.data?.variant as ToastVariant) || 'default';
+        return (
+          <Toast.Root key={toast.id} toast={toast} variant={variant}>
+            {variant !== 'default' && <Toast.Icon variant={variant} />}
+            <Toast.Content>
+              <Toast.Title>{toast.title}</Toast.Title>
+              {toast.description && (
+                <Toast.Description>{toast.description}</Toast.Description>
+              )}
+            </Toast.Content>
+            <Toast.Close aria-label="Close toast" />
+          </Toast.Root>
+        );
+      })}
+    </>
+  );
+}
 
 function ComboboxExamples() {
   // Use the useFilter hook for filtering support
@@ -725,6 +783,19 @@ export default function Home() {
           </Tabs.Root>
         </div>
       </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Toast Component</h2>
+      
+      <Toast.Provider>
+        <ToastDemo />
+        <Toast.Portal>
+          <Toast.Viewport>
+            <ToastRenderer />
+          </Toast.Viewport>
+        </Toast.Portal>
+      </Toast.Provider>
+      
+      <div style={{ marginBottom: '128px' }} />
       
       <h2 style={{ marginBottom: '1rem' }}>Tooltip Component</h2>
       
