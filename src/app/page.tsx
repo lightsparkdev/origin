@@ -16,6 +16,7 @@ import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
+import { Tabs } from '@/components/Tabs';
 import { Tooltip } from '@/components/Tooltip';
 
 // Data for combobox examples
@@ -652,6 +653,76 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <span style={{ width: '100px', fontSize: '14px' }}>Read Only</span>
           <Switch size="md" readOnly defaultChecked />
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Tabs Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Default Variant
+          </span>
+          <Tabs.Root defaultValue="account" style={{ maxWidth: '400px' }}>
+            <Tabs.List>
+              <Tabs.Tab value="account">Account</Tabs.Tab>
+              <Tabs.Tab value="password">Password</Tabs.Tab>
+              <Tabs.Tab value="settings">Settings</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="account">
+              Manage your account settings and preferences.
+            </Tabs.Panel>
+            <Tabs.Panel value="password">
+              Change your password and security options.
+            </Tabs.Panel>
+            <Tabs.Panel value="settings">
+              Configure application settings.
+            </Tabs.Panel>
+          </Tabs.Root>
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Minimal Variant
+          </span>
+          <Tabs.Root defaultValue="overview" style={{ maxWidth: '400px' }}>
+            <Tabs.List variant="minimal">
+              <Tabs.Tab value="overview">Overview</Tabs.Tab>
+              <Tabs.Tab value="details">Details</Tabs.Tab>
+              <Tabs.Tab value="history">History</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="overview">
+              Overview content without container background.
+            </Tabs.Panel>
+            <Tabs.Panel value="details">
+              Details content.
+            </Tabs.Panel>
+            <Tabs.Panel value="history">
+              History content.
+            </Tabs.Panel>
+          </Tabs.Root>
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            With Disabled Tab
+          </span>
+          <Tabs.Root defaultValue="active" style={{ maxWidth: '400px' }}>
+            <Tabs.List>
+              <Tabs.Tab value="active">Active</Tabs.Tab>
+              <Tabs.Tab value="disabled" disabled>Disabled</Tabs.Tab>
+              <Tabs.Tab value="another">Another</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="active">
+              This tab is active.
+            </Tabs.Panel>
+            <Tabs.Panel value="disabled">
+              This panel cannot be accessed.
+            </Tabs.Panel>
+            <Tabs.Panel value="another">
+              Another tab content.
+            </Tabs.Panel>
+          </Tabs.Root>
         </div>
       </div>
       
