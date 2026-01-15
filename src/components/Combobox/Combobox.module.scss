@@ -43,8 +43,13 @@
   }
 
   &:focus-within {
-    border-color: var(--border-primary);
-    box-shadow: 0 0 0 3px var(--input-focus); // Figma: input/focus
+    @include input-focus;
+  }
+
+  // Critical/error state
+  &[data-invalid],
+  &.critical {
+    @include input-critical;
   }
 
   &:has(.input:disabled) {

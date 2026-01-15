@@ -59,3 +59,24 @@
     }
   }
 }
+
+// ============================================================================
+// Input Focus/State Mixins
+// Use these for consistent input styling across all form components
+// ============================================================================
+
+/// Input focus state - dark border + subtle shadow
+/// @example
+///   .input:focus-within { @include input-focus; }
+@mixin input-focus {
+  border-color: var(--border-primary);
+  box-shadow: var(--input-focus);
+}
+
+/// Input critical/error state - red border + pink shadow
+/// @example
+///   .input[data-invalid] { @include input-critical; }
+@mixin input-critical {
+  border-color: var(--border-critical);
+  box-shadow: var(--input-focus-critical);
+}
