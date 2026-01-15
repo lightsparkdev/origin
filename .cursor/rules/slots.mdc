@@ -51,6 +51,40 @@ export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
 );
 ```
 
+## Context Provider Components
+
+Some Base UI parts are **context providers** that don't render their own element:
+
+```bash
+# Check the type definition
+cat node_modules/@base-ui/react/combobox/value/ComboboxValue.d.ts
+
+# Context provider - no ForwardRefExoticComponent, no RefAttributes
+export declare function ComboboxValue(props: Props): ReactElement
+```
+
+These **cannot** forward refs or accept className. Wrap them in your own element:
+
+```tsx
+// ✗ WRONG - Value doesn't accept ref or className
+export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
+  function Value({ className, ...props }, ref) {
+    return <BaseCombobox.Value ref={ref} className={className} {...props} />;
+  }
+);
+
+// ✓ CORRECT - Wrap in span to provide ref/className support
+export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
+  function Value({ className, children, ...props }, ref) {
+    return (
+      <span ref={ref} className={className} {...props}>
+        <BaseCombobox.Value>{children}</BaseCombobox.Value>
+      </span>
+    );
+  }
+);
+```
+
 ## When to use `useRender`
 
 Only use `useRender` from Base UI when building custom compound components that need to provide their own `render` prop. Most design system components don't need this — they just need to BE render targets.

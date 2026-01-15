@@ -154,3 +154,18 @@ Building a component?
 2. **Use `getByRole`** for accessibility-first testing
 3. **Test behavior, not implementation** - test what users see/do
 4. **Skip unit tests** unless you have complex logic to isolate
+
+## Pre-Commit Verification
+
+**Always run production build before committing:**
+
+```bash
+npm run build
+```
+
+Dev mode TypeScript is lenient. Production builds are stricter and catch:
+- Props passed to components that don't accept them
+- Element type mismatches (`HTMLDivElement` vs `HTMLSpanElement`)
+- Import resolution issues
+
+This prevents deployment failures from TypeScript errors.
