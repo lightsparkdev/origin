@@ -33,8 +33,8 @@
     padding-left: var(--spacing-2xs);
   }
 
-  // When clear button is visible, increase right padding
-  &:has(.clear:not([hidden])) {
+  // When clear button is visible (focused + has value), increase right padding
+  &:focus-within:has(.clear:not([hidden])) {
     padding-right: calc(var(--spacing-xs) + 42px); // 8px + 20px clear + 2px gap + 20px chevron
   }
 
@@ -146,9 +146,10 @@
 }
 
 // Clear button
+// Per Figma: Only visible when (1) has value AND (2) input is focused
 .clear {
   box-sizing: border-box;
-  display: flex;
+  display: none; // Hidden by default
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -161,6 +162,11 @@
   color: var(--text-primary); // Figma: #1a1a1a (filled icon)
   cursor: pointer;
   transition: opacity 150ms ease;
+
+  // Only show when input is focused (and Base UI's [hidden] is not set)
+  .inputWrapper:focus-within &:not([hidden]) {
+    display: flex;
+  }
 
   &:hover {
     opacity: 0.7;
