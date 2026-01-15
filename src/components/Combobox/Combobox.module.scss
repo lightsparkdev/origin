@@ -190,7 +190,7 @@
 .popup {
   box-sizing: border-box;
   width: var(--anchor-width);
-  max-height: min(300px, var(--available-height));
+  max-height: min(23rem, var(--available-height)); // Base UI standard: 368px
   max-width: var(--available-width);
   overflow: hidden;
   background: var(--surface-primary);
@@ -227,7 +227,7 @@
   overscroll-behavior: contain;
   scroll-padding-block: var(--spacing-3xs);
   outline: 0;
-  max-height: min(300px, var(--available-height));
+  max-height: min(23rem, var(--available-height)); // Base UI standard: 368px
 
   &[data-empty] {
     padding: 0;
