@@ -22,11 +22,15 @@
     border-color 150ms ease,
     box-shadow 150ms ease;
 
-  // Multi-select with chips: Figma pl=6px (spacing/2xs)
+  // Multi-select: No chevron, so reduce right padding
   &:has(.chips) {
-    padding-left: var(--spacing-2xs);
-    // No chevron in multi-select - reduce right padding
     padding-right: var(--spacing-2xs);
+  }
+
+  // When actual chips are present: Figma pl=6px (spacing/2xs)
+  // Only reduce left padding when there are visible chip elements
+  &:has(.chip) {
+    padding-left: var(--spacing-2xs);
   }
 
   // When clear button is visible, increase right padding
