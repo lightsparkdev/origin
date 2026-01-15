@@ -401,7 +401,7 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
     // so chips become direct flex items of the parent InputWrapper
     const hasChildren = Boolean(children);
     return (
-      <BaseCombobox.Value
+      <span
         ref={ref}
         className={clsx(
           hasChildren ? styles.valueWithChildren : styles.value,
@@ -409,8 +409,8 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
         )}
         {...props}
       >
-        {children}
-      </BaseCombobox.Value>
+        <BaseCombobox.Value>{children}</BaseCombobox.Value>
+      </span>
     );
   }
 );
