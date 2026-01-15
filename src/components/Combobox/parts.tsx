@@ -280,7 +280,7 @@ export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProp
   }
 );
 
-export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLSpanElement> {
   /**
    * Whether the checkbox is checked.
    * If not provided, inherits from parent Item's selected state.
