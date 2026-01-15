@@ -108,13 +108,23 @@
     outline-offset: -2px;
   }
 
-  // Chevron rotates when open
-  [data-open] & svg {
+  // Chevron icon rotation
+  svg {
+    transition: transform 150ms ease;
+  }
+
+  // Chevron rotates 180deg when popup is open
+  // Base UI uses data-popup-open on trigger (not data-open)
+  &[data-popup-open] svg {
     transform: rotate(180deg);
   }
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
+
+    svg {
+      transition: none;
+    }
   }
 }
 
