@@ -97,6 +97,9 @@
 }
 
 .panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   padding: var(--spacing-4xl) 0;
   overflow: clip;
