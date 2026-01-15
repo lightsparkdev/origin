@@ -8,11 +8,11 @@
   box-sizing: border-box;
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; // Figma: chips stay inline, don't wrap
   align-items: center;
   gap: var(--spacing-3xs); // Figma: 4px gap between chips
   width: 100%;
-  min-height: 36px; // Figma: 36px minimum
+  height: 36px; // Figma: fixed 36px height (chips inline, not wrapping)
   // Figma: single-select pl=12px (spacing/sm), pr=8px + icon space
   padding: var(--spacing-3xs) calc(var(--spacing-xs) + 20px) var(--spacing-3xs) var(--spacing-sm);
   background: var(--surface-primary);
