@@ -252,23 +252,23 @@ export const TestComboboxWithGroups = () => (
         <Combobox.Popup>
           <Combobox.Empty />
           <Combobox.List>
-            <Combobox.Group items={groupedFruits.common}>
+            <Combobox.Group>
               <Combobox.GroupLabel>Common</Combobox.GroupLabel>
-              {(item: string) => (
+              {groupedFruits.common.map((item) => (
                 <Combobox.Item key={item} value={item}>
                   <Combobox.ItemIndicator />
                   <Combobox.ItemText>{item}</Combobox.ItemText>
                 </Combobox.Item>
-              )}
+              ))}
             </Combobox.Group>
-            <Combobox.Group items={groupedFruits.exotic}>
+            <Combobox.Group>
               <Combobox.GroupLabel>Exotic</Combobox.GroupLabel>
-              {(item: string) => (
+              {groupedFruits.exotic.map((item) => (
                 <Combobox.Item key={item} value={item}>
                   <Combobox.ItemIndicator />
                   <Combobox.ItemText>{item}</Combobox.ItemText>
                 </Combobox.Item>
-              )}
+              ))}
             </Combobox.Group>
           </Combobox.List>
         </Combobox.Popup>
