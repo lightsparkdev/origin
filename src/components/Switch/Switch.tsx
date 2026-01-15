@@ -5,54 +5,33 @@ import { Switch as BaseSwitch } from '@base-ui/react/switch';
 import clsx from 'clsx';
 import styles from './Switch.module.scss';
 
-export interface SwitchProps {
-  checked?: boolean;
-  defaultChecked?: boolean;
-  disabled?: boolean;
-  readOnly?: boolean;
-  required?: boolean;
+export interface SwitchProps extends Omit<BaseSwitch.Root.Props, 'className'> {
+  /**
+   * The size variant of the switch.
+   * @default 'md'
+   */
   size?: 'sm' | 'md';
-  name?: string;
-  onCheckedChange?: (checked: boolean) => void;
   className?: string;
-  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 export const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>(
-  function Switch(
-    {
-      checked,
-      defaultChecked = false,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      size = 'md',
-      name,
-      onCheckedChange,
-      className,
-      inputRef,
-      ...props
-    },
-    ref
-  ) {
+  function Switch(props, ref) {
+    const { size = 'md', className, ...other } = props;
+
     return (
       <BaseSwitch.Root
         ref={ref}
-        checked={checked}
-        defaultChecked={defaultChecked}
-        disabled={disabled}
-        readOnly={readOnly}
-        required={required}
-        name={name}
-        onCheckedChange={onCheckedChange}
-        inputRef={inputRef}
         className={clsx(styles.root, styles[size], className)}
-        {...props}
+        {...other}
       >
         <BaseSwitch.Thumb className={styles.thumb} />
       </BaseSwitch.Root>
     );
   }
 );
+
+if (process.env.NODE_ENV !== 'production') {
+  Switch.displayName = 'Switch';
+}
 
 export default Switch;
