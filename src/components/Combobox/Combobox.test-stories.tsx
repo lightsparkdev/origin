@@ -61,17 +61,13 @@ export function ConformanceChipText(props: React.HTMLAttributes<HTMLSpanElement>
     <Combobox.Root items={fruits} multiple value={value}>
       <Combobox.InputWrapper>
         <Combobox.Chips>
-          <Combobox.Value>
-            {(values: string[]) =>
-              values?.map((chipValue) => (
-                <Combobox.Chip key={chipValue}>
-                  <Combobox.ChipText data-testid="test-root" {...props}>
-                    {chipValue}
-                  </Combobox.ChipText>
-                </Combobox.Chip>
-              ))
-            }
-          </Combobox.Value>
+          {(chipValue: string) => (
+            <Combobox.Chip key={chipValue}>
+              <Combobox.ChipText data-testid="test-root" {...props}>
+                {chipValue}
+              </Combobox.ChipText>
+            </Combobox.Chip>
+          )}
         </Combobox.Chips>
         <Combobox.Input placeholder="Test" />
       </Combobox.InputWrapper>
@@ -252,23 +248,23 @@ export const TestComboboxWithGroups = () => (
         <Combobox.Popup>
           <Combobox.Empty />
           <Combobox.List>
-            <Combobox.Group>
+            <Combobox.Group items={groupedFruits.common}>
               <Combobox.GroupLabel>Common</Combobox.GroupLabel>
-              {groupedFruits.common.map((item) => (
+              {(item: string) => (
                 <Combobox.Item key={item} value={item}>
                   <Combobox.ItemIndicator />
                   <Combobox.ItemText>{item}</Combobox.ItemText>
                 </Combobox.Item>
-              ))}
+              )}
             </Combobox.Group>
-            <Combobox.Group>
+            <Combobox.Group items={groupedFruits.exotic}>
               <Combobox.GroupLabel>Exotic</Combobox.GroupLabel>
-              {groupedFruits.exotic.map((item) => (
+              {(item: string) => (
                 <Combobox.Item key={item} value={item}>
                   <Combobox.ItemIndicator />
                   <Combobox.ItemText>{item}</Combobox.ItemText>
                 </Combobox.Item>
-              ))}
+              )}
             </Combobox.Group>
           </Combobox.List>
         </Combobox.Popup>

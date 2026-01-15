@@ -142,23 +142,23 @@ export const WithGroups: StoryObj = {
           <Combobox.Popup>
             <Combobox.Empty />
             <Combobox.List>
-              <Combobox.Group>
+              <Combobox.Group items={groupedFruits.common}>
                 <Combobox.GroupLabel>Common</Combobox.GroupLabel>
-                {groupedFruits.common.map((item) => (
+                {(item: string) => (
                   <Combobox.Item key={item} value={item}>
                     <Combobox.ItemIndicator />
                     <Combobox.ItemText>{item}</Combobox.ItemText>
                   </Combobox.Item>
-                ))}
+                )}
               </Combobox.Group>
-              <Combobox.Group>
+              <Combobox.Group items={groupedFruits.exotic}>
                 <Combobox.GroupLabel>Exotic</Combobox.GroupLabel>
-                {groupedFruits.exotic.map((item) => (
+                {(item: string) => (
                   <Combobox.Item key={item} value={item}>
                     <Combobox.ItemIndicator />
                     <Combobox.ItemText>{item}</Combobox.ItemText>
                   </Combobox.Item>
-                ))}
+                )}
               </Combobox.Group>
             </Combobox.List>
           </Combobox.Popup>

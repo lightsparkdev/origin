@@ -280,7 +280,7 @@ export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProp
   }
 );
 
-export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLSpanElement> {
+export interface ItemCheckboxProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Whether the checkbox is checked.
    * If not provided, inherits from parent Item's selected state.
@@ -396,12 +396,12 @@ export interface ValueProps extends BaseCombobox.Value.Props {
  * ```
  */
 export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
-  function Value({ className, children, placeholder, ...props }, ref) {
+  function Value({ className, children, ...props }, ref) {
     // When children are provided (multi-select render function), use display:contents
     // so chips become direct flex items of the parent InputWrapper
     const hasChildren = Boolean(children);
     return (
-      <span
+      <BaseCombobox.Value
         ref={ref}
         className={clsx(
           hasChildren ? styles.valueWithChildren : styles.value,
@@ -409,10 +409,8 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
         )}
         {...props}
       >
-        <BaseCombobox.Value placeholder={placeholder}>
-          {children}
-        </BaseCombobox.Value>
-      </span>
+        {children}
+      </BaseCombobox.Value>
     );
   }
 );
