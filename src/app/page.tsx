@@ -90,7 +90,7 @@ function ComboboxExamples() {
         </Combobox.Root>
       </div>
 
-      {/* Multi Select - uses ItemCheckbox instead of ItemIndicator */}
+      {/* Multi Select - follows Base UI pattern exactly */}
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           Multi Select
@@ -99,17 +99,20 @@ function ComboboxExamples() {
           <Combobox.InputWrapper>
             <Combobox.Chips>
               <Combobox.Value>
-                {(values: string[]) =>
-                  values?.map((value) => (
-                    <Combobox.Chip key={value}>
-                      <Combobox.ChipText>{value}</Combobox.ChipText>
-                      <Combobox.ChipRemove />
-                    </Combobox.Chip>
-                  ))
-                }
+                {(values: string[]) => (
+                  <>
+                    {values?.map((value) => (
+                      <Combobox.Chip key={value}>
+                        <Combobox.ChipText>{value}</Combobox.ChipText>
+                        <Combobox.ChipRemove />
+                      </Combobox.Chip>
+                    ))}
+                    {/* Input is INSIDE Value render function - Base UI pattern */}
+                    <Combobox.Input placeholder={values?.length > 0 ? '' : 'Select fruits...'} />
+                  </>
+                )}
               </Combobox.Value>
             </Combobox.Chips>
-            <Combobox.Input placeholder="Select fruits..." />
             <Combobox.ActionButtons>
               <Combobox.Trigger />
             </Combobox.ActionButtons>
