@@ -82,6 +82,31 @@ function useComponentContext() {
 }
 ```
 
+## Base UI Utilities (Optional)
+
+Even without wrapping Base UI, you can use their utilities:
+
+### mergeProps
+
+Useful for custom components with render props or prop forwarding:
+
+```tsx
+import { mergeProps } from '@base-ui/react/merge-props';
+
+// In a custom component with render prop
+function CustomTrigger({ render, ...internalProps }) {
+  const element = render 
+    ? React.cloneElement(render, mergeProps(internalProps, render.props))
+    : <button {...internalProps} />;
+  return element;
+}
+```
+
+**Benefits over manual spreading:**
+- Event handlers chain (both execute) instead of override
+- className concatenates instead of replaces
+- style merges instead of replaces
+
 ## Testing (TDD)
 
 Write tests before implementation. Playwright CT is sufficient for most custom components.
