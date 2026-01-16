@@ -99,7 +99,7 @@ const PaginationPrevious = React.forwardRef<HTMLButtonElement, PaginationPreviou
         disabled={isDisabled}
         onClick={handleClick}
         className={clsx(styles.navButton, className)}
-        leadingIcon={<CentralIcon name="IconChevronLeftSmall" size={16} />}
+        leadingIcon={<CentralIcon name="IconChevronLeftSmall" size={12} />}
         {...elementProps}
       >
         {label}
@@ -140,7 +140,7 @@ const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNextProps>(
         disabled={isDisabled}
         onClick={handleClick}
         className={clsx(styles.navButton, className)}
-        trailingIcon={<CentralIcon name="IconChevronRightSmall" size={16} />}
+        trailingIcon={<CentralIcon name="IconChevronRightSmall" size={12} />}
         {...elementProps}
       >
         {label}
