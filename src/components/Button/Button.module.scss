@@ -17,7 +17,7 @@
     box-shadow: 0 0 0 3px var(--input-focus);
   }
 
-  &:disabled {
+  &[data-disabled] {
     cursor: not-allowed;
   }
 
@@ -55,13 +55,13 @@
   color: var(--text-surface);
 
   @media (hover: hover) {
-    &:hover:not(:disabled) {
+    &:hover:not([data-disabled]) {
       background-color: var(--surface-inverted);
       background-image: linear-gradient(var(--surface-inverted-hover), var(--surface-inverted-hover));
     }
   }
 
-  &:disabled {
+  &[data-disabled] {
     opacity: 0.15;
   }
 }
@@ -73,7 +73,7 @@
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08);
 
   @media (hover: hover) {
-    &:hover:not(:disabled) {
+    &:hover:not([data-disabled]) {
       background-color: var(--surface-hover);
     }
   }
@@ -82,7 +82,7 @@
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08), 0 0 0 3px var(--input-focus);
   }
 
-  &:disabled {
+  &[data-disabled] {
     opacity: 0.5;
   }
 }
@@ -92,12 +92,12 @@
   color: var(--text-primary);
 
   @media (hover: hover) {
-    &:hover:not(:disabled) {
+    &:hover:not([data-disabled]) {
       background-color: var(--surface-hover);
     }
   }
 
-  &:disabled {
+  &[data-disabled] {
     opacity: 0.5;
   }
 }
@@ -107,7 +107,7 @@
   color: var(--text-surface);
 
   @media (hover: hover) {
-    &:hover:not(:disabled) {
+    &:hover:not([data-disabled]) {
       background-color: var(--surface-red-strong);
       background-image: linear-gradient(var(--surface-inverted-hover), var(--surface-inverted-hover));
     }
@@ -117,7 +117,7 @@
     box-shadow: 0 0 0 3px var(--input-focus-critical);
   }
 
-  &:disabled {
+  &[data-disabled] {
     opacity: 0.5;
   }
 }

@@ -42,6 +42,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <BaseButton
         ref={ref}
         disabled={isDisabled}
+        focusableWhenDisabled={loading}
         className={clsx(
           styles.button,
           styles[variant],
