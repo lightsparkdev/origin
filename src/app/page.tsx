@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { Accordion } from '@/components/Accordion';
 import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/ActionBar';
 import { Alert } from '@/components/Alert';
@@ -14,6 +15,7 @@ import { Field } from '@/components/Field';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
+import { Pagination } from '@/components/Pagination';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
@@ -81,6 +83,48 @@ function ToastRenderer() {
         );
       })}
     </>
+  );
+}
+
+function PaginationDemo() {
+  const [page, setPage] = React.useState(1);
+  const [manyPage, setManyPage] = React.useState(50);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Few Pages
+        </span>
+        <Pagination.Root page={page} totalPages={5} onPageChange={setPage}>
+          <Pagination.Previous />
+          <Pagination.Items />
+          <Pagination.Next />
+        </Pagination.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Many Pages (with ellipsis)
+        </span>
+        <Pagination.Root page={manyPage} totalPages={100} onPageChange={setManyPage}>
+          <Pagination.Previous />
+          <Pagination.Items />
+          <Pagination.Next />
+        </Pagination.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Single Page (both disabled)
+        </span>
+        <Pagination.Root page={1} totalPages={1}>
+          <Pagination.Previous />
+          <Pagination.Items />
+          <Pagination.Next />
+        </Pagination.Root>
+      </div>
+    </div>
   );
 }
 
@@ -644,6 +688,12 @@ export default function Home() {
           <p style={{ fontSize: '12px', marginTop: '8px' }}>Large</p>
         </div>
       </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Pagination Component</h2>
+      
+      <PaginationDemo />
+      
+      <div style={{ marginBottom: '128px' }} />
       
       <h2 style={{ marginBottom: '1rem' }}>Radio Component</h2>
       
