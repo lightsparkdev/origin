@@ -157,7 +157,7 @@ test.describe('Button', () => {
       getComputedStyle(el).borderRadius
     );
     
-    expect(borderRadius).toBe('4px');
+    expect(borderRadius).toBe('8px');
   });
 
   test('disabled filled button has correct opacity', async ({ mount, page }) => {

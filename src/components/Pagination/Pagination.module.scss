@@ -1,0 +1,78 @@
+// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=5140-8291
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3xs);
+}
+
+.navButton {
+  // Inherits from Button ghost compact
+  // No additional styles needed
+}
+
+.items {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3xs);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  padding: 0 var(--spacing-xs);
+  border: none;
+  border-radius: var(--corner-radius-sm);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-leading-base);
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+
+  @media (hover: hover) {
+    &:hover:not([data-selected]):not(:disabled) {
+      background-color: var(--surface-hover);
+      color: var(--text-primary);
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    background-color: var(--surface-elevated);
+    border: var(--stroke-xs) solid var(--border-secondary);
+    box-shadow: 0 0 0 3px var(--input-focus);
+    color: var(--text-primary);
+  }
+
+  &[data-selected] {
+    background-color: var(--surface-elevated);
+    border: var(--stroke-xs) solid var(--border-tertiary);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+    cursor: default;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.ellipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-primary);
+}
