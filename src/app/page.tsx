@@ -273,10 +273,10 @@ export default function Home() {
         <ActionBar>
           <ActionBarLabel>4 transactions selected</ActionBarLabel>
           <ActionBarActions>
-            <Button variant="outline" size="md">
+            <Button variant="outline" size="default">
               Clear
             </Button>
-            <Button variant="filled" size="md" iconLeft={<CentralIcon name="IconArrowOutOfBox" size={16} />}>
+            <Button variant="filled" size="default" leadingIcon={<CentralIcon name="IconArrowOutOfBox" size={16} />}>
               Export
             </Button>
           </ActionBarActions>
@@ -285,10 +285,10 @@ export default function Home() {
         <ActionBar>
           <ActionBarLabel>3 users selected</ActionBarLabel>
           <ActionBarActions>
-            <Button variant="outline" size="md">
+            <Button variant="outline" size="default">
               Cancel
             </Button>
-            <Button variant="critical" size="md">
+            <Button variant="critical" size="default">
               Delete users
             </Button>
           </ActionBarActions>
@@ -451,18 +451,17 @@ export default function Home() {
       
       {/* Sizes */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
-        <Button size="sm">Small</Button>
-        <Button size="md">Medium</Button>
-        <Button size="lg">Large</Button>
+        <Button size="compact">Compact</Button>
+        <Button size="default">Default</Button>
       </div>
       
       {/* With Icons */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
-        <Button iconLeft={<CentralIcon name="IconArrowLeft" size={16} />}>Back</Button>
-        <Button iconRight={<CentralIcon name="IconArrowRight" size={16} />}>Next</Button>
+        <Button leadingIcon={<CentralIcon name="IconArrowLeft" size={16} />}>Back</Button>
+        <Button trailingIcon={<CentralIcon name="IconArrowRight" size={16} />}>Next</Button>
         <Button 
-          iconLeft={<CentralIcon name="IconArrowLeft" size={16} />}
-          iconRight={<CentralIcon name="IconArrowRight" size={16} />}
+          leadingIcon={<CentralIcon name="IconArrowLeft" size={16} />}
+          trailingIcon={<CentralIcon name="IconArrowRight" size={16} />}
         >
           Both
         </Button>
@@ -470,9 +469,8 @@ export default function Home() {
       
       {/* Icon Only */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
-        <Button size="sm" iconOnly iconLeft={<CentralIcon name="IconPlusSmall" size={16} />} />
-        <Button size="md" iconOnly iconLeft={<CentralIcon name="IconPlusSmall" size={20} />} />
-        <Button size="lg" iconOnly iconLeft={<CentralIcon name="IconPlusLarge" size={20} />} />
+        <Button size="compact" iconOnly leadingIcon={<CentralIcon name="IconPlusSmall" size={16} />} aria-label="Add" />
+        <Button size="default" iconOnly leadingIcon={<CentralIcon name="IconPlusSmall" size={16} />} aria-label="Add" />
       </div>
       
       {/* States */}

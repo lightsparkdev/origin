@@ -47,12 +47,13 @@
 }
 
 /// Surface with hover overlay (preserves base color)
+/// Works with both data-disabled attribute and native :disabled
 /// @param {String} $base - The base background color
 @mixin surface-with-hover($base) {
   background-color: $base;
 
   @media (hover: hover) {
-    &:hover:not([data-disabled]) {
+    &:hover:not([data-disabled]):not(:disabled) {
       background:
         linear-gradient(var(--surface-hover), var(--surface-hover)),
         $base;

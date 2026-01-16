@@ -9,10 +9,10 @@ export function DefaultActionBar() {
     <ActionBar data-testid="action-bar">
       <ActionBarLabel data-testid="action-bar-label">4 transactions selected</ActionBarLabel>
       <ActionBarActions>
-        <Button variant="outline" size="md">
+        <Button variant="outline" size="default">
           Clear
         </Button>
-        <Button variant="filled" size="md">
+        <Button variant="filled" size="default">
           Export
         </Button>
       </ActionBarActions>
@@ -29,10 +29,10 @@ export function ActionBarWithCallbacks() {
       <ActionBar data-testid="action-bar">
         <ActionBarLabel>4 transactions selected</ActionBarLabel>
         <ActionBarActions>
-          <Button variant="outline" size="md" onClick={() => setCleared(true)}>
+          <Button variant="outline" size="default" onClick={() => setCleared(true)}>
             Clear
           </Button>
-          <Button variant="filled" size="md" onClick={() => setExported(true)}>
+          <Button variant="filled" size="default" onClick={() => setExported(true)}>
             Export
           </Button>
         </ActionBarActions>
@@ -48,7 +48,7 @@ export function ActionBarSingleButton() {
     <ActionBar data-testid="action-bar">
       <ActionBarLabel>2 items selected</ActionBarLabel>
       <ActionBarActions>
-        <Button variant="filled" size="md">
+        <Button variant="filled" size="default">
           Delete
         </Button>
       </ActionBarActions>
@@ -61,7 +61,7 @@ export function ActionBarCustomClassName() {
     <ActionBar data-testid="action-bar" className="custom-class">
       <ActionBarLabel className="custom-label-class">Test label</ActionBarLabel>
       <ActionBarActions className="custom-actions-class">
-        <Button variant="filled" size="md">
+        <Button variant="filled" size="default">
           Action
         </Button>
       </ActionBarActions>

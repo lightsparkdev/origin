@@ -5,26 +5,20 @@
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: var(--corner-radius-sm);
+  border-radius: var(--corner-radius-xs);
   cursor: pointer;
   font-family: var(--font-family-sans);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-book);
   text-decoration: none;
-  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
-
-  // Progressive enhancement: iOS-style corner smoothing (60%)
-  @supports (corner-shape: superellipse) {
-    corner-shape: superellipse;
-  }
+  transition: background-color 150ms ease, box-shadow 150ms ease;
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
-    outline-offset: 2px;
+    outline: none;
+    box-shadow: 0 0 0 3px var(--input-focus);
   }
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.15;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -32,57 +26,27 @@
   }
 }
 
-.sm {
-  height: 30px;
-  padding: 0 var(--spacing-xs); // 8px
-  gap: var(--spacing-3xs); // 4px
+.compact {
+  height: 32px;
+  padding: 0 var(--spacing-xs);
   font-size: var(--font-size-xs);
-  line-height: var(--font-leading-xs);
+  line-height: var(--font-leading-2xs);
 
   &.iconOnly {
-    width: 30px;
+    width: 32px;
     padding: 0;
-
-    .iconLeft {
-      width: 16px;
-      height: 16px;
-    }
   }
 }
 
-.md {
+.default {
   height: 36px;
-  padding: 0 var(--spacing-sm); // 12px
-  gap: var(--spacing-3xs); // 4px
+  padding: 0 var(--spacing-xs);
   font-size: var(--font-size-base);
   line-height: var(--font-leading-base);
 
   &.iconOnly {
     width: 36px;
     padding: 0;
-
-    .iconLeft {
-      width: 20px;
-      height: 20px;
-    }
-  }
-}
-
-.lg {
-  height: 40px;
-  padding: 0 var(--spacing-sm); // 12px
-  gap: var(--spacing-2xs); // 6px
-  font-size: var(--font-size-base);
-  line-height: var(--font-leading-base);
-
-  &.iconOnly {
-    width: 40px;
-    padding: 0;
-
-    .iconLeft {
-      width: 20px;
-      height: 20px;
-    }
   }
 }
 
@@ -92,29 +56,34 @@
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      background-color: var(--color-gray-850);
+      background-color: var(--surface-inverted);
+      background-image: linear-gradient(var(--surface-inverted-hover), var(--surface-inverted-hover));
     }
   }
 
-  &:active:not(:disabled) {
-    background-color: var(--color-gray-800);
+  &:disabled {
+    opacity: 0.15;
   }
 }
 
 .outline {
-  background-color: var(--surface-primary);
+  background-color: var(--surface-elevated);
   color: var(--text-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08);
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      background-color: var(--surface-secondary);
+      background-color: var(--surface-hover);
     }
   }
 
-  &:active:not(:disabled) {
-    background-color: var(--surface-tertiary);
+  &:focus-visible {
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08), 0 0 0 3px var(--input-focus);
+  }
+
+  &:disabled {
+    opacity: 0.5;
   }
 }
 
@@ -124,12 +93,12 @@
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      background-color: var(--surface-secondary);
+      background-color: var(--surface-hover);
     }
   }
 
-  &:active:not(:disabled) {
-    background-color: var(--surface-tertiary);
+  &:disabled {
+    opacity: 0.5;
   }
 }
 
@@ -139,33 +108,54 @@
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      background-color: var(--color-red-800);
+      background-color: var(--surface-red-strong);
+      background-image: linear-gradient(var(--surface-inverted-hover), var(--surface-inverted-hover));
     }
   }
 
-  &:active:not(:disabled) {
-    background-color: var(--color-red-900);
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--input-focus-critical);
+  }
+
+  &:disabled {
+    opacity: 0.5;
   }
 }
 
 .loading {
+  position: relative;
   pointer-events: none;
 }
 
-.loader {
-  --text-primary: currentColor;
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.iconLeft,
-.iconRight {
+.contentHidden {
+  visibility: hidden;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leadingIcon,
+.trailingIcon {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
 }
 
 .label {
   flex-shrink: 0;
+  padding: 0 var(--spacing-3xs);
 }

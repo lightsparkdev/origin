@@ -21,10 +21,10 @@ export const Default: Story = {
       <>
         <ActionBarLabel>4 transactions selected</ActionBarLabel>
         <ActionBarActions>
-          <Button variant="outline" size="md">
+          <Button variant="outline" size="default">
             Clear
           </Button>
-          <Button variant="filled" size="md" iconLeft={<CentralIcon name="IconArrowOutOfBox" size={16} />}>
+          <Button variant="filled" size="default" leadingIcon={<CentralIcon name="IconArrowOutOfBox" size={16} />}>
             Export
           </Button>
         </ActionBarActions>
@@ -39,7 +39,7 @@ export const SingleAction: Story = {
       <>
         <ActionBarLabel>2 items selected</ActionBarLabel>
         <ActionBarActions>
-          <Button variant="filled" size="md">
+          <Button variant="filled" size="default">
             Delete
           </Button>
         </ActionBarActions>
@@ -54,13 +54,13 @@ export const MultipleActions: Story = {
       <>
         <ActionBarLabel>12 files selected</ActionBarLabel>
         <ActionBarActions>
-          <Button variant="ghost" size="md">
+          <Button variant="ghost" size="default">
             Cancel
           </Button>
-          <Button variant="outline" size="md">
+          <Button variant="outline" size="default">
             Move
           </Button>
-          <Button variant="filled" size="md">
+          <Button variant="filled" size="default">
             Download
           </Button>
         </ActionBarActions>
@@ -75,10 +75,10 @@ export const CriticalAction: Story = {
       <>
         <ActionBarLabel>3 users selected</ActionBarLabel>
         <ActionBarActions>
-          <Button variant="outline" size="md">
+          <Button variant="outline" size="default">
             Cancel
           </Button>
-          <Button variant="critical" size="md">
+          <Button variant="critical" size="default">
             Delete users
           </Button>
         </ActionBarActions>

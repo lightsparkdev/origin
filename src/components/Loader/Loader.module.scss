@@ -33,7 +33,8 @@
   width: var(--dot-size);
   height: var(--dot-size);
   // Square dots per Figma spec (no border-radius)
-  background-color: var(--text-primary, #1a1a1a);
+  // Uses currentColor to inherit from parent (e.g., button text color)
+  background-color: currentColor;
   animation: pulse 0.9s ease-in-out infinite;
 }
 

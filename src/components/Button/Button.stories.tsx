@@ -2,6 +2,24 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
+const ChevronLeft = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M10 12L6 8L10 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const PlusIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
 const meta: Meta<typeof Button> = {
   title: 'Components/Button',
   component: Button,
@@ -15,7 +33,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['default', 'compact'],
     },
     loading: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -57,9 +75,8 @@ export const Critical: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <Button size="sm">Small</Button>
-      <Button size="md">Medium</Button>
-      <Button size="lg">Large</Button>
+      <Button size="compact">Compact</Button>
+      <Button size="default">Default</Button>
     </div>
   ),
 };
@@ -78,49 +95,33 @@ export const Disabled: Story = {
   },
 };
 
-export const WithIcons: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <Button
-        iconLeft={
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="2" fill="none" />
-          </svg>
-        }
-      >
-        Back
-      </Button>
-      <Button
-        iconRight={
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="2" fill="none" />
-          </svg>
-        }
-      >
-        Next
-      </Button>
-    </div>
-  ),
+export const WithLeadingIcon: Story = {
+  args: {
+    leadingIcon: <ChevronLeft />,
+    children: 'Back',
+  },
+};
+
+export const WithTrailingIcon: Story = {
+  args: {
+    trailingIcon: <ChevronRight />,
+    children: 'Next',
+  },
+};
+
+export const WithBothIcons: Story = {
+  args: {
+    leadingIcon: <ChevronLeft />,
+    trailingIcon: <ChevronRight />,
+    children: 'Navigate',
+  },
 };
 
 export const IconOnly: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      <Button iconOnly size="sm" aria-label="Add">
-        <svg width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </Button>
-      <Button iconOnly size="md" aria-label="Add">
-        <svg width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </Button>
-      <Button iconOnly size="lg" aria-label="Add">
-        <svg width="16" height="16" viewBox="0 0 16 16">
-          <path d="M8 2v12M2 8h12" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </Button>
+      <Button iconOnly size="compact" aria-label="Add" leadingIcon={<PlusIcon />} />
+      <Button iconOnly size="default" aria-label="Add" leadingIcon={<PlusIcon />} />
     </div>
   ),
 };
@@ -150,3 +151,21 @@ export const AllVariants: Story = {
   ),
 };
 
+export const AllSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Button size="compact" variant="filled">Compact Filled</Button>
+        <Button size="compact" variant="outline">Compact Outline</Button>
+        <Button size="compact" variant="ghost">Compact Ghost</Button>
+        <Button size="compact" variant="critical">Compact Critical</Button>
+      </div>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Button size="default" variant="filled">Default Filled</Button>
+        <Button size="default" variant="outline">Default Outline</Button>
+        <Button size="default" variant="ghost">Default Ghost</Button>
+        <Button size="default" variant="critical">Default Critical</Button>
+      </div>
+    </div>
+  ),
+};

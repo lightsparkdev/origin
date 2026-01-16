@@ -6,9 +6,12 @@ import {
   GhostButton,
   CriticalButton,
   DisabledButton,
+  DisabledOutlineButton,
   LoadingButton,
   AllSizes,
   IconOnlyButton,
+  ButtonWithLeadingIcon,
+  ButtonWithTrailingIcon,
 } from './Button.test-stories';
 
 const axeConfig = {
@@ -85,12 +88,27 @@ test.describe('Button', () => {
     await expect(loader).toBeVisible();
   });
 
-  test('all sizes render correctly', async ({ mount, page }) => {
+  test('sizes render correctly', async ({ mount, page }) => {
     await mount(<AllSizes />);
     
-    await expect(page.getByRole('button', { name: 'Small' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Medium' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Large' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Compact' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Default' })).toBeVisible();
+  });
+
+  test('compact size has correct height', async ({ mount, page }) => {
+    await mount(<AllSizes />);
+    
+    const compactButton = page.getByRole('button', { name: 'Compact' });
+    const box = await compactButton.boundingBox();
+    expect(box?.height).toBe(32);
+  });
+
+  test('default size has correct height', async ({ mount, page }) => {
+    await mount(<AllSizes />);
+    
+    const defaultButton = page.getByRole('button', { name: 'Default' });
+    const box = await defaultButton.boundingBox();
+    expect(box?.height).toBe(36);
   });
 
   test('icon-only button has accessible name', async ({ mount, page }) => {
@@ -103,6 +121,22 @@ test.describe('Button', () => {
     expect(results.violations).toEqual([]);
   });
 
+  test('renders with leading icon', async ({ mount, page }) => {
+    await mount(<ButtonWithLeadingIcon />);
+    
+    const button = page.getByRole('button', { name: 'Back' });
+    await expect(button).toBeVisible();
+    await expect(button.locator('svg')).toBeVisible();
+  });
+
+  test('renders with trailing icon', async ({ mount, page }) => {
+    await mount(<ButtonWithTrailingIcon />);
+    
+    const button = page.getByRole('button', { name: 'Next' });
+    await expect(button).toBeVisible();
+    await expect(button.locator('svg')).toBeVisible();
+  });
+
   test('respects reduced motion preference', async ({ mount, page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await mount(<FilledButton />);
@@ -113,5 +147,40 @@ test.describe('Button', () => {
     );
     
     expect(transition).toMatch(/none|0s/);
+  });
+
+  test('has correct border radius', async ({ mount, page }) => {
+    await mount(<FilledButton />);
+    
+    const button = page.getByRole('button');
+    const borderRadius = await button.evaluate((el) => 
+      getComputedStyle(el).borderRadius
+    );
+    
+    expect(borderRadius).toBe('4px');
+  });
+
+  test('disabled filled button has correct opacity', async ({ mount, page }) => {
+    await mount(<DisabledButton />);
+    
+    const button = page.getByRole('button');
+    const opacity = await button.evaluate((el) => 
+      getComputedStyle(el).opacity
+    );
+    
+    // Filled variant uses 15% opacity when disabled
+    expect(parseFloat(opacity)).toBeCloseTo(0.15, 2);
+  });
+
+  test('disabled outline button has correct opacity', async ({ mount, page }) => {
+    await mount(<DisabledOutlineButton />);
+    
+    const button = page.getByRole('button');
+    const opacity = await button.evaluate((el) => 
+      getComputedStyle(el).opacity
+    );
+    
+    // Outline/Ghost/Critical variants use 50% opacity when disabled
+    expect(parseFloat(opacity)).toBeCloseTo(0.5, 1);
   });
 });

@@ -8,11 +8,11 @@ import styles from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'filled' | 'outline' | 'ghost' | 'critical';
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'default' | 'compact';
   loading?: boolean;
   loadingIndicator?: React.ReactNode;
-  iconLeft?: React.ReactNode;
-  iconRight?: React.ReactNode;
+  leadingIcon?: React.ReactNode;
+  trailingIcon?: React.ReactNode;
   iconOnly?: boolean;
   children?: React.ReactNode;
 }
@@ -23,12 +23,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
     {
       variant = 'filled',
-      size = 'md',
+      size = 'default',
       loading = false,
       loadingIndicator = defaultLoadingIndicator,
       disabled = false,
-      iconLeft,
-      iconRight,
+      leadingIcon,
+      trailingIcon,
       iconOnly = false,
       children,
       className,
@@ -52,15 +52,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        {loading ? (
-          <span className={styles.loader}>{loadingIndicator}</span>
-        ) : (
-          <>
-            {iconLeft && <span className={styles.iconLeft}>{iconLeft}</span>}
-            {!iconOnly && children && <span className={styles.label}>{children}</span>}
-            {iconRight && <span className={styles.iconRight}>{iconRight}</span>}
-          </>
-        )}
+        {/* Content wrapper - hidden but preserved during loading to maintain width */}
+        <span className={clsx(styles.content, loading && styles.contentHidden)}>
+          {leadingIcon && <span className={styles.leadingIcon}>{leadingIcon}</span>}
+          {!iconOnly && children && <span className={styles.label}>{children}</span>}
+          {trailingIcon && <span className={styles.trailingIcon}>{trailingIcon}</span>}
+        </span>
+        {/* Loader overlay - absolutely centered */}
+        {loading && <span className={styles.loader}>{loadingIndicator}</span>}
       </BaseButton>
     );
   }
