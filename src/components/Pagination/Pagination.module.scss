@@ -26,7 +26,7 @@
   padding: 0 var(--spacing-xs);
   border: none;
   border-radius: var(--corner-radius-sm);
-  background-color: transparent;
+  background-color: var(--surface-primary);
   color: var(--text-secondary);
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base);
@@ -37,7 +37,9 @@
 
   @media (hover: hover) {
     &:hover:not([data-selected]):not(:disabled) {
-      background-color: var(--surface-hover);
+      // Overlay surface-hover on top of surface-primary
+      background: linear-gradient(var(--surface-hover), var(--surface-hover)),
+        var(--surface-primary);
       color: var(--text-primary);
     }
   }
