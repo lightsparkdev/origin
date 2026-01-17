@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5867-147
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .input {
   @include body;
@@ -11,7 +12,7 @@
   box-sizing: border-box;
   padding-inline: var(--spacing-sm);
   background-color: var(--surface-primary);
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-sm) solid var(--border-secondary);
   border-radius: var(--corner-radius-md);
   color: var(--text-primary);
   outline: none;
@@ -24,8 +25,7 @@
   }
 
   &:focus {
-    border-color: var(--border-primary);
-    box-shadow: var(--input-focus);
+    @include input-focus;
   }
 
   &[data-disabled] {
@@ -34,12 +34,7 @@
   }
 
   &[data-invalid] {
-    border-color: var(--border-critical);
-
-    &:focus {
-      border-color: var(--border-critical);
-      box-shadow: var(--input-focus-critical);
-    }
+    @include input-critical;
   }
 
   @media (prefers-reduced-motion: reduce) {
