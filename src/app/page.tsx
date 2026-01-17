@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Combobox } from '@/components/Combobox';
 import { Field } from '@/components/Field';
+import { Form } from '@/components/Form';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
@@ -688,6 +689,23 @@ export default function Home() {
           <Input placeholder="Placeholder" />
           <Field.Error>Error text goes here.</Field.Error>
         </Field.Root>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Form Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', width: '256px' }}>
+        <Form onSubmit={(e) => { e.preventDefault(); alert('Form submitted!'); }}>
+          <Field.Root name="email">
+            <Field.Label>Email</Field.Label>
+            <Input type="email" placeholder="Enter your email" />
+            <Field.Description>We'll never share your email.</Field.Description>
+          </Field.Root>
+          <Field.Root name="password">
+            <Field.Label>Password</Field.Label>
+            <Input type="password" placeholder="Enter your password" />
+          </Field.Root>
+          <Button type="submit">Sign In</Button>
+        </Form>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Input Component</h2>
