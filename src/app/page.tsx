@@ -16,6 +16,7 @@ import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
 import { Pagination } from '@/components/Pagination';
+import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
@@ -730,6 +731,59 @@ export default function Home() {
       <PaginationDemo />
       
       <div style={{ marginBottom: '128px' }} />
+      
+      <h2 style={{ marginBottom: '1rem' }}>Progress Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Default (50%)
+          </span>
+          <Progress.Root value={50}>
+            <Progress.Label>Export data</Progress.Label>
+            <Progress.Value />
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Complete (100%)
+          </span>
+          <Progress.Root value={100}>
+            <Progress.Label>Upload complete</Progress.Label>
+            <Progress.Value />
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Indeterminate
+          </span>
+          <Progress.Root value={null}>
+            <Progress.Label>Loading...</Progress.Label>
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Track Only
+          </span>
+          <Progress.Root value={75}>
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Radio Component</h2>
       
