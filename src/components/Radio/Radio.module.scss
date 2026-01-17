@@ -101,8 +101,9 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  margin: var(--spacing-4xs) 0; // 2px top/bottom for alignment with multi-line labels
   border: var(--stroke-sm) solid var(--border-secondary);
   border-radius: var(--corner-radius-round);
   background-color: var(--surface-primary);

@@ -290,6 +290,31 @@
   white-space: nowrap;
 }
 
+// Item with icons - use uniform padding (no extra left padding for indicator)
+.itemWithIcons {
+  padding-left: var(--spacing-xs); // 8px uniform
+}
+
+// Leading icon slot (16×16px)
+.itemLeading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+// Trailing icon slot (16×16px)
+.itemTrailing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
 // Item indicator (single-select) - 6px dot on the right
 .itemIndicator {
   display: flex;

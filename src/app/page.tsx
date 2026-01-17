@@ -195,6 +195,74 @@ function ComboboxExamples() {
         </Combobox.Root>
       </div>
 
+      {/* With Trailing Icons */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Trailing Icons
+        </span>
+        <Combobox.Root items={fruits} filter={filter.contains}>
+          <Combobox.InputWrapper>
+            <Combobox.Input placeholder="Select a fruit..." />
+            <Combobox.ActionButtons>
+              <Combobox.Trigger />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item 
+                      key={item} 
+                      value={item}
+                      trailingIcon={<CentralIcon name="IconGlobe2" size={16} />}
+                    >
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+      </div>
+
+      {/* With Leading Icons (indicator on right) */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Leading Icons
+        </span>
+        <Combobox.Root items={fruits} filter={filter.contains}>
+          <Combobox.InputWrapper>
+            <Combobox.Input placeholder="Select a fruit..." />
+            <Combobox.ActionButtons>
+              <Combobox.Trigger />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item 
+                      key={item} 
+                      value={item}
+                      leadingIcon={<CentralIcon name="IconGlobe2" size={16} />}
+                    >
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                      <Combobox.ItemIndicator />
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+      </div>
+
       {/* Multi Select - no chevron per Figma spec and Base UI pattern */}
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>

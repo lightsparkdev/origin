@@ -223,7 +223,12 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
   }
 );
 
-export interface ItemProps extends BaseCombobox.Item.Props {}
+export interface ItemProps extends BaseCombobox.Item.Props {
+  /** Icon to display at the start of the item (16×16px slot) */
+  leadingIcon?: React.ReactNode;
+  /** Icon to display at the end of the item (16×16px slot) */
+  trailingIcon?: React.ReactNode;
+}
 
 /**
  * Combobox.Item - A selectable item in the list.
@@ -235,15 +240,28 @@ export interface ItemProps extends BaseCombobox.Item.Props {}
  *   <Combobox.ItemText>Apple</Combobox.ItemText>
  * </Combobox.Item>
  * ```
+ *
+ * With icons:
+ * ```tsx
+ * <Combobox.Item value="apple" trailingIcon={<CentralIcon name="IconGlobus" size={16} />}>
+ *   <Combobox.ItemIndicator />
+ *   <Combobox.ItemText>Apple</Combobox.ItemText>
+ * </Combobox.Item>
+ * ```
  */
 export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
-  function Item({ className, ...props }, ref) {
+  function Item({ className, leadingIcon, trailingIcon, children, ...props }, ref) {
+    const hasIcons = leadingIcon || trailingIcon;
     return (
       <BaseCombobox.Item
         ref={ref}
-        className={clsx(styles.item, className)}
+        className={clsx(styles.item, hasIcons && styles.itemWithIcons, className)}
         {...props}
-      />
+      >
+        {leadingIcon && <span className={styles.itemLeading}>{leadingIcon}</span>}
+        {children}
+        {trailingIcon && <span className={styles.itemTrailing}>{trailingIcon}</span>}
+      </BaseCombobox.Item>
     );
   }
 );

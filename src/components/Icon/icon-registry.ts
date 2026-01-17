@@ -65,6 +65,7 @@ import { IconFilter2 } from '@central-icons-react/round-outlined-radius-0-stroke
 import { IconFingerPrint1 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconFingerPrint1';
 import { IconForYou } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconForYou';
 import { IconFullScreen } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconFullScreen';
+import { IconGlobe2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconGlobe2';
 import { IconHeart2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconHeart2';
 import { IconHome } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconHome';
 import { IconImport2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconImport2';
@@ -193,6 +194,7 @@ export const ICON_REGISTRY = {
   IconFingerPrint1,
   IconForYou,
   IconFullScreen,
+  IconGlobe2,
   IconHeart2,
   IconHome,
   IconImport2,
