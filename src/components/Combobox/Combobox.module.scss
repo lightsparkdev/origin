@@ -10,11 +10,11 @@
   display: flex;
   flex-wrap: wrap; // Base UI pattern: chips wrap to new lines when needed
   align-items: center;
-  gap: var(--spacing-3xs); // Figma: 4px gap between chips
+  gap: var(--spacing-xs); // Figma: 8px gap
   width: 100%;
-  min-height: 36px; // Minimum height, expands when chips wrap
-  // Figma: single-select pl=12px (spacing/sm), pr=8px + icon space
-  padding: var(--spacing-3xs) calc(var(--spacing-xs) + 20px) var(--spacing-3xs) var(--spacing-sm);
+  height: 36px; // Figma: fixed 36px height
+  // Figma: single-select pl=12px (spacing/sm), pr=8px + icon space, py=0
+  padding: 0 calc(var(--spacing-xs) + 20px) 0 var(--spacing-sm);
   background: var(--surface-primary);
   border: var(--stroke-sm) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
@@ -67,7 +67,7 @@
   box-sizing: border-box;
   flex: 1 1 0; // Start at 0 width and grow
   min-width: 50px; // Minimum typing area when chips present
-  height: 28px; // Smaller since wrapper has padding
+  height: 100%; // Fill wrapper height (36px)
   padding: 0;
   margin: 0;
   background: transparent;
@@ -235,7 +235,7 @@
 }
 
 // List item - Figma: 36px height
-// Single-select: pl=24px default, pl=4px when selected (indicator on left)
+// Single-select: pl=30px default, pl=4px when selected (indicator on left)
 // Multi-select: pl=10px (checkbox always on left) - auto-detected via :has(.itemCheckbox)
 .item {
   box-sizing: border-box;
@@ -244,7 +244,7 @@
   align-items: center;
   height: 36px; // Figma: 36px
   padding: var(--spacing-xs); // Figma: pr=8px, py=8px
-  padding-left: var(--spacing-xl); // Figma: 24px for single-select default
+  padding-left: 30px; // Figma: 30px for single-select default
   border-radius: var(--corner-radius-xs); // Figma: 4px
   cursor: pointer;
   outline: 0;
@@ -257,10 +257,10 @@
     background: var(--surface-hover);
   }
 
-  // Selected state (single-select) - Figma: pl=4px, gap=4px
+  // Selected state (single-select) - Figma: pl=4px, gap=8px
   &[data-selected] {
     padding-left: var(--spacing-3xs); // Figma: 4px
-    gap: var(--spacing-3xs); // Figma: 4px
+    gap: var(--spacing-xs); // Figma: 8px (consistent)
   }
 
   &[data-disabled] {
@@ -300,11 +300,11 @@
   height: 16px;
 }
 
-// Selected indicator dot - Figma: 6px circle
+// Selected indicator dot - Figma: 8px circle
 .itemIndicatorDot {
-  width: 6px;
-  height: 6px;
-  border-radius: var(--corner-radius-2xs); // 2px
+  width: 8px;
+  height: 8px;
+  border-radius: var(--corner-radius-2xs); // ~2.67px
   background: var(--icon-primary);
 }
 
@@ -337,10 +337,10 @@
   }
 }
 
-// Group label - Figma: 8px top, 12px horizontal, 0 bottom
+// Group label - Figma: pt=8px, pb=4px, pl=32px, pr=64px
 .groupLabel {
-  padding: var(--spacing-xs) var(--spacing-sm) 0;
-  @include label-sm;
+  padding: var(--spacing-xs) var(--spacing-6xl) var(--spacing-3xs) var(--spacing-2xl);
+  @include label-xs;
   color: var(--text-secondary);
 }
 
