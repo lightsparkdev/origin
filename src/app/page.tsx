@@ -15,6 +15,7 @@ import { Field } from '@/components/Field';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
+import { Meter } from '@/components/Meter';
 import { Pagination } from '@/components/Pagination';
 import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
@@ -723,6 +724,60 @@ export default function Home() {
         <div style={{ textAlign: 'center' }}>
           <Loader size="lg" />
           <p style={{ fontSize: '12px', marginTop: '8px' }}>Large</p>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Storage (50%)
+          </span>
+          <Meter.Root value={50}>
+            <Meter.Label>Storage used</Meter.Label>
+            <Meter.Value />
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Low (25%)
+          </span>
+          <Meter.Root value={25}>
+            <Meter.Label>Battery level</Meter.Label>
+            <Meter.Value />
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            High (90%)
+          </span>
+          <Meter.Root value={90}>
+            <Meter.Label>Disk space</Meter.Label>
+            <Meter.Value />
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Track Only
+          </span>
+          <Meter.Root value={65}>
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
         </div>
       </div>
       
