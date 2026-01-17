@@ -4,10 +4,6 @@ import { Combobox } from './index';
 
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
-// ============================================================================
-// Conformance test fixtures - test slot compatibility
-// ============================================================================
-
 /** InputWrapper conformance - forwards props, ref, className */
 export function ConformanceInputWrapper(props: React.HTMLAttributes<HTMLDivElement>) {
   return (

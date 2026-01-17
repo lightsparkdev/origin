@@ -12,10 +12,6 @@ import { render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { Breadcrumb } from './';
 
-// ============================================================================
-// Conformance Tests (Base UI-style component contracts)
-// ============================================================================
-
 describe('Breadcrumb.Root conformance', () => {
   const renderWithProps = (props: Record<string, unknown> = {}) => (
     <Breadcrumb.Root data-testid="test-root" {...props}>
@@ -155,10 +151,6 @@ describe('Breadcrumb.Page conformance', () => {
   });
 });
 
-// ============================================================================
-// Structure Tests
-// ============================================================================
-
 describe('Breadcrumb structure', () => {
   it('renders nav element with aria-label', () => {
     render(
@@ -213,10 +205,6 @@ describe('Breadcrumb structure', () => {
   });
 });
 
-// ============================================================================
-// Context Tests
-// ============================================================================
-
 describe('Breadcrumb context', () => {
   it('provides separator context to children', () => {
     // The List component provides context with separator
@@ -239,10 +227,6 @@ describe('Breadcrumb context', () => {
     expect(separators.length).toBeGreaterThan(0);
   });
 });
-
-// ============================================================================
-// Custom Separator Tests
-// ============================================================================
 
 describe('Breadcrumb separator', () => {
   it('supports custom separator via List prop', () => {

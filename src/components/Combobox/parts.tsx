@@ -457,10 +457,6 @@ export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
   }
 );
 
-// ============================================================================
-// Chips components for multi-select
-// ============================================================================
-
 export interface ChipsProps extends BaseCombobox.Chips.Props {}
 
 /**

@@ -6,10 +6,6 @@ import { Button } from '@/components/Button';
 import { CentralIcon } from '@/components/Icon';
 import styles from './Pagination.module.scss';
 
-// ============================================================================
-// Context
-// ============================================================================
-
 interface PaginationContextValue {
   page: number;
   totalPages: number;
@@ -27,10 +23,6 @@ function usePaginationContext() {
   }
   return context;
 }
-
-// ============================================================================
-// Root
-// ============================================================================
 
 export interface PaginationRootProps extends React.ComponentPropsWithoutRef<'nav'> {
   /** Current page number (1-indexed) */
@@ -66,10 +58,6 @@ const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
     );
   }
 );
-
-// ============================================================================
-// Previous Button
-// ============================================================================
 
 export interface PaginationPreviousProps
   extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
@@ -108,10 +96,6 @@ const PaginationPrevious = React.forwardRef<HTMLButtonElement, PaginationPreviou
   }
 );
 
-// ============================================================================
-// Next Button
-// ============================================================================
-
 export interface PaginationNextProps
   extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
   /** Custom label (default: "Next") */
@@ -148,10 +132,6 @@ const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNextProps>(
     );
   }
 );
-
-// ============================================================================
-// Item (Page Number Button)
-// ============================================================================
 
 export interface PaginationItemProps
   extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
@@ -190,10 +170,6 @@ const PaginationItem = React.forwardRef<HTMLButtonElement, PaginationItemProps>(
   }
 );
 
-// ============================================================================
-// Ellipsis
-// ============================================================================
-
 export interface PaginationEllipsisProps
   extends React.ComponentPropsWithoutRef<'span'> {}
 
@@ -213,10 +189,6 @@ const PaginationEllipsis = React.forwardRef<HTMLSpanElement, PaginationEllipsisP
     );
   }
 );
-
-// ============================================================================
-// Items (Auto-generated page numbers with ellipsis)
-// ============================================================================
 
 export interface PaginationItemsProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Number of siblings to show around current page */
@@ -249,10 +221,6 @@ const PaginationItems = React.forwardRef<HTMLDivElement, PaginationItemsProps>(
   }
 );
 
-// ============================================================================
-// Utility: Generate pagination range
-// ============================================================================
-
 type PaginationRangeItem = number | 'ellipsis';
 
 function generatePaginationRange(
@@ -260,10 +228,8 @@ function generatePaginationRange(
   totalPages: number,
   siblingCount: number
 ): PaginationRangeItem[] {
-  // Total items = first + last + current + siblings + 2 ellipses
   const totalPageNumbers = siblingCount * 2 + 5;
 
-  // Case 1: Total pages fit without ellipsis
   if (totalPages <= totalPageNumbers) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
@@ -274,14 +240,12 @@ function generatePaginationRange(
   const showLeftEllipsis = leftSiblingIndex > 2;
   const showRightEllipsis = rightSiblingIndex < totalPages - 1;
 
-  // Case 2: No left ellipsis, show right ellipsis
   if (!showLeftEllipsis && showRightEllipsis) {
     const leftItemCount = 3 + 2 * siblingCount;
     const leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
     return [...leftRange, 'ellipsis', totalPages];
   }
 
-  // Case 3: Show left ellipsis, no right ellipsis
   if (showLeftEllipsis && !showRightEllipsis) {
     const rightItemCount = 3 + 2 * siblingCount;
     const rightRange = Array.from(
@@ -291,17 +255,12 @@ function generatePaginationRange(
     return [1, 'ellipsis', ...rightRange];
   }
 
-  // Case 4: Show both ellipses
   const middleRange = Array.from(
     { length: rightSiblingIndex - leftSiblingIndex + 1 },
     (_, i) => leftSiblingIndex + i
   );
   return [1, 'ellipsis', ...middleRange, 'ellipsis', totalPages];
 }
-
-// ============================================================================
-// Exports
-// ============================================================================
 
 export const Pagination = {
   Root: PaginationRoot,

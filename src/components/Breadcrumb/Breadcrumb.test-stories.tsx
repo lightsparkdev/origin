@@ -91,12 +91,6 @@ export function CollapsedBreadcrumb() {
   );
 }
 
-// ============================================================================
-// Conformance Test Fixtures
-// Tests for Base UI-style component contracts
-// ============================================================================
-
-// Prop forwarding: custom data attributes and lang
 export function PropForwardingBreadcrumb() {
   return (
     <Breadcrumb.Root data-testid="test-root" data-custom="custom-value" lang="fr">

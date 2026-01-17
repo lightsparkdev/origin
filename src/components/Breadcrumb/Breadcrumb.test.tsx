@@ -101,10 +101,6 @@ test.describe('Breadcrumb', () => {
   });
 });
 
-// ============================================================================
-// Conformance Tests (Base UI-style component contracts)
-// ============================================================================
-
 test.describe('Breadcrumb.Root conformance', () => {
   test('forwards custom data attributes', async ({ mount, page }) => {
     await mount(<PropForwardingBreadcrumb />);

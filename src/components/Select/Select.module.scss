@@ -2,20 +2,18 @@
 @use '../../tokens/text-styles' as *;
 @use '../../tokens/mixins' as *;
 
-// Trigger button - Figma: 256×36px, pl=12px, pr=8px, gap=8px
 .trigger {
   @include body;
-
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs); // Figma: 8px
-  width: 256px; // Figma: fixed width
-  height: 36px; // Figma: 36px
-  padding-inline-start: var(--spacing-sm); // Figma: 12px
-  padding-inline-end: var(--spacing-xs); // Figma: 8px
+  gap: var(--spacing-xs);
+  width: 256px;
+  height: 36px;
+  padding-inline-start: var(--spacing-sm);
+  padding-inline-end: var(--spacing-xs);
   background-color: var(--surface-primary);
   border: var(--stroke-sm) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm); // Figma: 6px
+  border-radius: var(--corner-radius-sm);
   color: var(--text-primary);
   cursor: pointer;
   outline: none;
@@ -32,7 +30,7 @@
   }
 
   &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100); // Figma: 50% opacity
+    opacity: calc(var(--opacity-50) / 100);
     cursor: not-allowed;
   }
 
@@ -45,7 +43,6 @@
   }
 }
 
-// Value text - fills available space
 .value {
   flex: 1;
   text-align: start;
@@ -53,13 +50,11 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  // Placeholder styling
   [data-placeholder] {
     color: var(--text-secondary);
   }
 }
 
-// Icon container (chevron) - Figma: 20×20px frame
 .icon {
   display: flex;
   align-items: center;
@@ -70,7 +65,6 @@
   color: var(--icon-secondary);
   transition: transform 150ms ease;
 
-  // Rotate when popup is open
   [data-popup-open] & {
     transform: rotate(180deg);
   }
@@ -80,23 +74,18 @@
   }
 }
 
-// Positioner - just removes outline
 .positioner {
   outline: 0;
 }
 
-// Popup container - Figma: shadow-lg, border 0.5px, radius 6px
-// Note: No internal padding - List component handles that
 .popup {
   background-color: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary); // Figma: 0.5px
-  border-radius: var(--corner-radius-sm); // Figma: 6px
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-sm);
   box-shadow: var(--shadow-lg);
   outline: 0;
   overflow: hidden;
   min-width: 256px;
-
-  // Animation
   transform-origin: var(--transform-origin);
   transition:
     opacity 150ms ease,
@@ -113,31 +102,27 @@
   }
 }
 
-// List container - Figma: gap=2px, padding=4px
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4xs); // Figma: 2px
-  padding: var(--spacing-3xs); // Figma: 4px
+  gap: var(--spacing-4xs);
+  padding: var(--spacing-3xs);
   outline: 0;
   overflow: clip;
 }
 
-// List item - Figma: 36px height, p=8px uniform, gap=6px
 .item {
   @include body;
-
   display: flex;
   align-items: center;
-  gap: var(--spacing-2xs); // Figma: 6px
-  height: 36px; // Figma: 36px
-  padding: var(--spacing-xs); // Figma: 8px uniform
-  border-radius: var(--corner-radius-xs); // Figma: 4px
+  gap: var(--spacing-2xs);
+  height: 36px;
+  padding: var(--spacing-xs);
+  border-radius: var(--corner-radius-xs);
   color: var(--text-primary);
   cursor: pointer;
   outline: none;
 
-  // Hover/highlighted state - Figma: surface/hover background
   &[data-highlighted] {
     background-color: var(--surface-hover);
   }
@@ -148,7 +133,6 @@
   }
 }
 
-// Item indicator container - Figma: 16×16px frame
 .itemIndicator {
   display: flex;
   align-items: center;
@@ -158,15 +142,13 @@
   height: 16px;
 }
 
-// Selected indicator dot - Figma: 8×8px, radius 2px
 .itemIndicatorDot {
   width: 8px;
   height: 8px;
   background-color: var(--icon-primary);
-  border-radius: var(--corner-radius-2xs); // Figma: ~2.67px
+  border-radius: var(--corner-radius-2xs);
 }
 
-// Item text - fills available space
 .itemText {
   flex: 1;
   overflow: hidden;
@@ -174,7 +156,6 @@
   white-space: nowrap;
 }
 
-// Trailing icon slot - Figma: 16×16px
 .itemTrailing {
   display: flex;
   align-items: center;
@@ -184,11 +165,10 @@
   height: 16px;
 }
 
-// Separator - Figma: 4px container with line extending beyond
 .separator {
   position: relative;
-  height: var(--spacing-3xs); // Figma: 4px container
-  margin-inline: calc(-1 * var(--spacing-3xs)); // Extend beyond list padding
+  height: var(--spacing-3xs);
+  margin-inline: calc(-1 * var(--spacing-3xs));
 
   &::after {
     content: '';
@@ -196,23 +176,20 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: var(--stroke-xs); // Figma: 0.5px line
+    height: var(--stroke-xs);
     background-color: var(--border-tertiary);
   }
 }
 
-// Group container
 .group {
   display: flex;
   flex-direction: column;
 }
 
-// Group label - Figma: pt=8px, pb=0, px=12px
 .groupLabel {
   @include label-xs;
-
-  padding-block-start: var(--spacing-xs); // Figma: 8px
+  padding-block-start: var(--spacing-xs);
   padding-block-end: 0;
-  padding-inline: var(--spacing-sm); // Figma: 12px
+  padding-inline: var(--spacing-sm);
   color: var(--text-secondary);
 }
