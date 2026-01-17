@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Combobox } from '@/components/Combobox';
 import { Field } from '@/components/Field';
+import { Fieldset } from '@/components/Fieldset';
 import { Form } from '@/components/Form';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
@@ -689,6 +690,24 @@ export default function Home() {
           <Input placeholder="Placeholder" />
           <Field.Error>Error text goes here.</Field.Error>
         </Field.Root>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Fieldset Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', width: '256px' }}>
+        <Fieldset.Root>
+          <Fieldset.Legend>Personal Information</Fieldset.Legend>
+          <Field.Root name="firstName">
+            <Field.Label>First Name</Field.Label>
+            <Input placeholder="Enter first name" />
+            <Field.Description>Your legal first name.</Field.Description>
+          </Field.Root>
+          <Field.Root name="lastName">
+            <Field.Label>Last Name</Field.Label>
+            <Input placeholder="Enter last name" />
+            <Field.Description>Your legal last name.</Field.Description>
+          </Field.Root>
+        </Fieldset.Root>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Form Component</h2>
