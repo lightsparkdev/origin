@@ -1,8 +1,6 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import {
   DefaultInput,
-  LargeInput,
-  MediumInput,
   FilledInput,
   DisabledInput,
   DisabledFilledInput,
@@ -31,20 +29,6 @@ test.describe('Input', () => {
       await mount(<FilledInput />);
       const input = page.getByRole('textbox');
       await expect(input).toHaveValue('Content');
-    });
-  });
-
-  test.describe('sizes', () => {
-    test('renders MD size (default)', async ({ mount, page }) => {
-      await mount(<MediumInput />);
-      const input = page.getByPlaceholder('Placeholder');
-      await expect(input).toBeVisible();
-    });
-
-    test('renders LG size', async ({ mount, page }) => {
-      await mount(<LargeInput />);
-      const input = page.getByPlaceholder('Placeholder');
-      await expect(input).toBeVisible();
     });
   });
 

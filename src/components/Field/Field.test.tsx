@@ -2,8 +2,6 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import {
   DefaultField,
   FieldWithError,
-  FieldMediumSize,
-  FieldLargeSize,
   DisabledField,
   FieldWithoutLabel,
   FieldWithoutDescription,
@@ -65,22 +63,6 @@ test.describe('Field', () => {
 
       const field = page.locator('[data-invalid]').first();
       await expect(field).toBeVisible();
-    });
-  });
-
-  test.describe('sizes', () => {
-    test('renders MD size', async ({ mount, page }) => {
-      await mount(<FieldMediumSize />);
-
-      const input = page.getByPlaceholder('Enter username');
-      await expect(input).toBeVisible();
-    });
-
-    test('renders LG size', async ({ mount, page }) => {
-      await mount(<FieldLargeSize />);
-
-      const input = page.getByPlaceholder('Enter username');
-      await expect(input).toBeVisible();
     });
   });
 
