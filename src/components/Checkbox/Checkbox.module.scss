@@ -103,7 +103,7 @@
   position: relative;
   width: 16px;
   height: 16px;
-  margin-top: var(--spacing-4xs);
+  margin: var(--spacing-4xs) 0;
   border: var(--stroke-sm) solid var(--border-secondary);
   border-radius: var(--corner-radius-xs);
   background-color: var(--surface-primary);
