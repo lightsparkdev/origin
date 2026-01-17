@@ -10,10 +10,6 @@ const meta: Meta<typeof Input> = {
   },
   tags: ['autodocs'],
   argTypes: {
-    size: {
-      control: 'select',
-      options: ['md', 'lg'],
-    },
     disabled: { control: 'boolean' },
     readOnly: { control: 'boolean' },
     placeholder: { control: 'text' },
@@ -26,21 +22,12 @@ type Story = StoryObj<typeof Input>;
 export const Default: Story = {
   args: {
     placeholder: 'Placeholder',
-    size: 'md',
-  },
-};
-
-export const Large: Story = {
-  args: {
-    placeholder: 'Placeholder',
-    size: 'lg',
   },
 };
 
 export const WithValue: Story = {
   args: {
     defaultValue: 'Content',
-    size: 'md',
   },
 };
 
@@ -48,7 +35,6 @@ export const Disabled: Story = {
   args: {
     placeholder: 'Placeholder',
     disabled: true,
-    size: 'md',
   },
 };
 
@@ -56,7 +42,6 @@ export const DisabledWithValue: Story = {
   args: {
     defaultValue: 'Content',
     disabled: true,
-    size: 'md',
   },
 };
 
@@ -64,7 +49,6 @@ export const ReadOnly: Story = {
   args: {
     defaultValue: 'Read only content',
     readOnly: true,
-    size: 'md',
   },
 };
 
@@ -91,33 +75,27 @@ export const AllVariants: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '256px' }}>
       <div>
         <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
-          MD Default
+          Default
         </span>
-        <Input size="md" placeholder="Placeholder" />
+        <Input placeholder="Placeholder" />
       </div>
       <div>
         <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
-          LG Default
+          Filled
         </span>
-        <Input size="lg" placeholder="Placeholder" />
+        <Input defaultValue="Content" />
       </div>
       <div>
         <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
-          MD Filled
+          Disabled
         </span>
-        <Input size="md" defaultValue="Content" />
+        <Input placeholder="Placeholder" disabled />
       </div>
       <div>
         <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
-          MD Disabled
+          Read Only
         </span>
-        <Input size="md" placeholder="Placeholder" disabled />
-      </div>
-      <div>
-        <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
-          MD Read Only
-        </span>
-        <Input size="md" defaultValue="Read only content" readOnly />
+        <Input defaultValue="Read only content" readOnly />
       </div>
     </div>
   ),

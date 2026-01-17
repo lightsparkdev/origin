@@ -7,14 +7,6 @@ export function DefaultInput() {
   return <Input placeholder="Placeholder" />;
 }
 
-export function LargeInput() {
-  return <Input size="lg" placeholder="Placeholder" />;
-}
-
-export function MediumInput() {
-  return <Input size="md" placeholder="Placeholder" />;
-}
-
 export function FilledInput() {
   return <Input defaultValue="Content" />;
 }

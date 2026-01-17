@@ -5,22 +5,16 @@ import { Input as BaseInput } from '@base-ui/react/input';
 import clsx from 'clsx';
 import styles from './Input.module.scss';
 
-export interface InputProps extends Omit<BaseInput.Props, 'size'> {
-  /**
-   * The size variant of the input.
-   * @default 'md'
-   */
-  size?: 'md' | 'lg';
-}
+export interface InputProps extends Omit<BaseInput.Props, 'size'> {}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   function Input(props, ref) {
-    const { size = 'md', className, ...other } = props;
+    const { className, ...other } = props;
 
     return (
       <BaseInput
         ref={ref}
-        className={clsx(styles.input, styles[size], className)}
+        className={clsx(styles.input, className)}
         {...other}
       />
     );

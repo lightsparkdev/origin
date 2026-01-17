@@ -31,18 +31,6 @@ export const Default: Story = {
   ),
 };
 
-export const Large: Story = {
-  render: () => (
-    <div style={{ width: '256px' }}>
-      <Field.Root>
-        <Field.Label>Email</Field.Label>
-        <Input placeholder="Enter your email" size="lg" />
-        <Field.Description>We'll never share your email.</Field.Description>
-      </Field.Root>
-    </div>
-  ),
-};
-
 export const WithError: Story = {
   render: () => (
     <div style={{ width: '256px' }}>
@@ -118,58 +106,30 @@ export const Controlled: Story = {
 
 export const AllStates: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: '32px' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '256px' }}>
-        <Field.Root>
-          <Field.Label>Default (LG)</Field.Label>
-          <Input size="lg" placeholder="Placeholder" />
-          <Field.Description>Help text goes here.</Field.Description>
-        </Field.Root>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '256px' }}>
+      <Field.Root>
+        <Field.Label>Default</Field.Label>
+        <Input placeholder="Placeholder" />
+        <Field.Description>Help text goes here.</Field.Description>
+      </Field.Root>
 
-        <Field.Root>
-          <Field.Label>Filled (LG)</Field.Label>
-          <Input size="lg" defaultValue="Content" />
-          <Field.Description>Help text goes here.</Field.Description>
-        </Field.Root>
+      <Field.Root>
+        <Field.Label>Filled</Field.Label>
+        <Input defaultValue="Content" />
+        <Field.Description>Help text goes here.</Field.Description>
+      </Field.Root>
 
-        <Field.Root disabled>
-          <Field.Label>Disabled (LG)</Field.Label>
-          <Input size="lg" placeholder="Placeholder" />
-          <Field.Description>Help text goes here.</Field.Description>
-        </Field.Root>
+      <Field.Root disabled>
+        <Field.Label>Disabled</Field.Label>
+        <Input placeholder="Placeholder" />
+        <Field.Description>Help text goes here.</Field.Description>
+      </Field.Root>
 
-        <Field.Root invalid>
-          <Field.Label>Invalid (LG)</Field.Label>
-          <Input size="lg" placeholder="Placeholder" />
-          <Field.Error>Error text goes here.</Field.Error>
-        </Field.Root>
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '256px' }}>
-        <Field.Root>
-          <Field.Label>Default (MD)</Field.Label>
-          <Input size="md" placeholder="Placeholder" />
-          <Field.Description>Help text goes here.</Field.Description>
-        </Field.Root>
-
-        <Field.Root>
-          <Field.Label>Filled (MD)</Field.Label>
-          <Input size="md" defaultValue="Content" />
-          <Field.Description>Help text goes here.</Field.Description>
-        </Field.Root>
-
-        <Field.Root disabled>
-          <Field.Label>Disabled (MD)</Field.Label>
-          <Input size="md" placeholder="Placeholder" />
-          <Field.Description>Help text goes here.</Field.Description>
-        </Field.Root>
-
-        <Field.Root invalid>
-          <Field.Label>Invalid (MD)</Field.Label>
-          <Input size="md" placeholder="Placeholder" />
-          <Field.Error>Error text goes here.</Field.Error>
-        </Field.Root>
-      </div>
+      <Field.Root invalid>
+        <Field.Label>Invalid</Field.Label>
+        <Input placeholder="Placeholder" />
+        <Field.Error>Error text goes here.</Field.Error>
+      </Field.Root>
     </div>
   ),
 };

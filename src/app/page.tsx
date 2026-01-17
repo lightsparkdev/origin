@@ -661,82 +661,50 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Field Component</h2>
       
-      <div style={{ display: 'flex', gap: '2rem', marginBottom: '128px' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '256px' }}>
-          <Field.Root>
-            <Field.Label>Default (LG)</Field.Label>
-            <Input size="lg" placeholder="Placeholder" />
-            <Field.Description>Help text goes here.</Field.Description>
-          </Field.Root>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px', width: '256px' }}>
+        <Field.Root>
+          <Field.Label>Default</Field.Label>
+          <Input placeholder="Placeholder" />
+          <Field.Description>Help text goes here.</Field.Description>
+        </Field.Root>
 
-          <Field.Root>
-            <Field.Label>Filled (LG)</Field.Label>
-            <Input size="lg" defaultValue="Content" />
-            <Field.Description>Help text goes here.</Field.Description>
-          </Field.Root>
+        <Field.Root>
+          <Field.Label>Filled</Field.Label>
+          <Input defaultValue="Content" />
+          <Field.Description>Help text goes here.</Field.Description>
+        </Field.Root>
 
-          <Field.Root disabled>
-            <Field.Label>Disabled (LG)</Field.Label>
-            <Input size="lg" placeholder="Placeholder" />
-            <Field.Description>Help text goes here.</Field.Description>
-          </Field.Root>
+        <Field.Root disabled>
+          <Field.Label>Disabled</Field.Label>
+          <Input placeholder="Placeholder" />
+          <Field.Description>Help text goes here.</Field.Description>
+        </Field.Root>
 
-          <Field.Root invalid>
-            <Field.Label>Invalid (LG)</Field.Label>
-            <Input size="lg" placeholder="Placeholder" />
-            <Field.Error>Error text goes here.</Field.Error>
-          </Field.Root>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '256px' }}>
-          <Field.Root>
-            <Field.Label>Default (MD)</Field.Label>
-            <Input size="md" placeholder="Placeholder" />
-            <Field.Description>Help text goes here.</Field.Description>
-          </Field.Root>
-
-          <Field.Root>
-            <Field.Label>Filled (MD)</Field.Label>
-            <Input size="md" defaultValue="Content" />
-            <Field.Description>Help text goes here.</Field.Description>
-          </Field.Root>
-
-          <Field.Root disabled>
-            <Field.Label>Disabled (MD)</Field.Label>
-            <Input size="md" placeholder="Placeholder" />
-            <Field.Description>Help text goes here.</Field.Description>
-          </Field.Root>
-
-          <Field.Root invalid>
-            <Field.Label>Invalid (MD)</Field.Label>
-            <Input size="md" placeholder="Placeholder" />
-            <Field.Error>Error text goes here.</Field.Error>
-          </Field.Root>
-        </div>
+        <Field.Root invalid>
+          <Field.Label>Invalid</Field.Label>
+          <Input placeholder="Placeholder" />
+          <Field.Error>Error text goes here.</Field.Error>
+        </Field.Root>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Input Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px', maxWidth: '256px' }}>
         <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Default</span>
-          <Input size="md" placeholder="Placeholder" />
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>Default</span>
+          <Input placeholder="Placeholder" />
         </div>
         <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>LG Default</span>
-          <Input size="lg" placeholder="Placeholder" />
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>Filled</span>
+          <Input defaultValue="Content" />
         </div>
         <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Filled</span>
-          <Input size="md" defaultValue="Content" />
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>Disabled</span>
+          <Input placeholder="Placeholder" disabled />
         </div>
         <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Disabled</span>
-          <Input size="md" placeholder="Placeholder" disabled />
-        </div>
-        <div>
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>MD Read Only</span>
-          <Input size="md" defaultValue="Read only content" readOnly />
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>Read Only</span>
+          <Input defaultValue="Read only content" readOnly />
         </div>
       </div>
       

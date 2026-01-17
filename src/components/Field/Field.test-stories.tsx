@@ -24,26 +24,6 @@ export function FieldWithError() {
   );
 }
 
-export function FieldMediumSize() {
-  return (
-    <Field.Root>
-      <Field.Label>Username</Field.Label>
-      <Input size="md" placeholder="Enter username" />
-      <Field.Description>Choose a unique username.</Field.Description>
-    </Field.Root>
-  );
-}
-
-export function FieldLargeSize() {
-  return (
-    <Field.Root>
-      <Field.Label>Username</Field.Label>
-      <Input size="lg" placeholder="Enter username" />
-      <Field.Description>Choose a unique username.</Field.Description>
-    </Field.Root>
-  );
-}
-
 export function DisabledField() {
   return (
     <Field.Root disabled>

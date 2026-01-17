@@ -16,7 +16,6 @@
   align-items: center;
   padding-inline: var(--spacing-3xs);
   color: var(--text-primary);
-  font-feature-settings: 'salt' 1;
 }
 
 .description {
@@ -26,7 +25,6 @@
   align-items: center;
   padding-inline: var(--spacing-3xs);
   color: var(--text-secondary);
-  font-feature-settings: 'salt' 1;
 }
 
 .error {
@@ -36,5 +34,4 @@
   align-items: center;
   padding-inline: var(--spacing-3xs);
   color: var(--text-red);
-  font-feature-settings: 'salt' 1;
 }
