@@ -12,9 +12,9 @@
   align-items: center;
   gap: var(--spacing-xs); // Figma: 8px gap
   width: 100%;
-  height: 36px; // Figma: fixed 36px height
-  // Figma: single-select pl=12px (spacing/sm), pr=8px + icon space, py=0
-  padding: 0 calc(var(--spacing-xs) + 20px) 0 var(--spacing-sm);
+  min-height: 36px; // Figma: 36px base height, grows with wrapped chips
+  // Figma: single-select pl=12px (spacing/sm), pr=8px + icon space, py=6px for chip centering
+  padding: var(--spacing-2xs) calc(var(--spacing-xs) + 20px) var(--spacing-2xs) var(--spacing-sm);
   background: var(--surface-primary);
   border: var(--stroke-sm) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
@@ -400,7 +400,11 @@
 // Chips container - use display:contents so chips become direct flex items of inputWrapper
 // This allows chips and input to share the same flex row
 .chips {
-  display: contents;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-4xs); // Figma: 2px gap between chips
 }
 
 // Individual chip - Figma: 24px height, matches design system Chip SM
