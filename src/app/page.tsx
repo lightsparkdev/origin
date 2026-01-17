@@ -19,6 +19,7 @@ import { Meter } from '@/components/Meter';
 import { Pagination } from '@/components/Pagination';
 import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
+import { Select } from '@/components/Select';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
 import { Toast, ToastVariant } from '@/components/Toast';
@@ -786,6 +787,181 @@ export default function Home() {
       <PaginationDemo />
       
       <div style={{ marginBottom: '128px' }} />
+      
+      <h2 style={{ marginBottom: '1rem' }}>Select Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '256px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Default
+          </span>
+          <Select.Root>
+            <Select.Trigger>
+              <Select.Value placeholder="Select a fruit" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="apple">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Apple</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="banana">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Banana</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="orange">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Orange</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            With Groups
+          </span>
+          <Select.Root>
+            <Select.Trigger>
+              <Select.Value placeholder="Select food" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="apple">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Apple</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="banana">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Banana</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                  <Select.Separator />
+                  <Select.Group>
+                    <Select.GroupLabel>Vegetables</Select.GroupLabel>
+                    <Select.List>
+                      <Select.Item value="carrot">
+                        <Select.ItemIndicator />
+                        <Select.ItemText>Carrot</Select.ItemText>
+                      </Select.Item>
+                      <Select.Item value="broccoli">
+                        <Select.ItemIndicator />
+                        <Select.ItemText>Broccoli</Select.ItemText>
+                      </Select.Item>
+                    </Select.List>
+                  </Select.Group>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            With Trailing Icons
+          </span>
+          <Select.Root>
+            <Select.Trigger>
+              <Select.Value placeholder="Select a country" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="us" trailingIcon={<CentralIcon name="IconGlobe2" size={16} />}>
+                      <Select.ItemIndicator />
+                      <Select.ItemText>United States</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="uk" trailingIcon={<CentralIcon name="IconGlobe2" size={16} />}>
+                      <Select.ItemIndicator />
+                      <Select.ItemText>United Kingdom</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="de" trailingIcon={<CentralIcon name="IconGlobe2" size={16} />}>
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Germany</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Disabled
+          </span>
+          <Select.Root disabled>
+            <Select.Trigger>
+              <Select.Value placeholder="Select a fruit" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="apple">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Apple</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Multi Select
+          </span>
+          <Select.Root multiple defaultValue={['apple', 'banana']}>
+            <Select.Trigger>
+              <Select.Value>
+                {(selected: string[]) => {
+                  if (selected.length === 0) {
+                    return <span data-placeholder="">Select fruits</span>;
+                  }
+                  const labels: Record<string, string> = { apple: 'Apple', banana: 'Banana', orange: 'Orange' };
+                  const first = labels[selected[0]];
+                  return selected.length === 1 ? first : `${first} +${selected.length - 1}`;
+                }}
+              </Select.Value>
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="apple">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Apple</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="banana">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Banana</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="orange">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Orange</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Progress Component</h2>
       

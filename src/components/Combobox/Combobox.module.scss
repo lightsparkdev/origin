@@ -186,7 +186,7 @@
   outline: 0;
 }
 
-// Popup container
+// Popup container - Figma: shadow-lg, border 0.5px, radius 6px
 .popup {
   box-sizing: border-box;
   width: var(--anchor-width);
@@ -197,6 +197,7 @@
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
   box-shadow: var(--shadow-lg);
+  outline: 0;
 
   // Entry animation
   transform-origin: var(--transform-origin);
@@ -215,14 +216,13 @@
   }
 }
 
-// Scrollable list
-// Figma: pt=4px, pb=6px, px=4px, gap=2px
+// Scrollable list - Figma: gap=2px, padding=4px
 .list {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4xs); // Figma: 2px gap between items
-  padding: var(--spacing-3xs) var(--spacing-3xs) var(--spacing-2xs); // Figma: 4px 4px 6px
+  padding: var(--spacing-3xs); // Figma: 4px uniform
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-padding-block: var(--spacing-3xs);
@@ -234,17 +234,14 @@
   }
 }
 
-// List item - Figma: 36px height
-// Single-select: pl=30px default, pl=4px when selected (indicator on left)
-// Multi-select: pl=10px (checkbox always on left) - auto-detected via :has(.itemCheckbox)
+// List item - Figma: 36px height, p=8px uniform, gap=6px
 .item {
   box-sizing: border-box;
   display: flex;
   gap: var(--spacing-2xs); // Figma: 6px
   align-items: center;
   height: 36px; // Figma: 36px
-  padding: var(--spacing-xs); // Figma: pr=8px, py=8px
-  padding-left: 30px; // Figma: 30px for single-select default
+  padding: var(--spacing-xs); // Figma: 8px uniform
   border-radius: var(--corner-radius-xs); // Figma: 4px
   cursor: pointer;
   outline: 0;
@@ -257,28 +254,9 @@
     background: var(--surface-hover);
   }
 
-  // Selected state (single-select) - Figma: pl=4px, gap=6px
-  &[data-selected] {
-    padding-left: var(--spacing-3xs); // Figma: 4px
-    gap: var(--spacing-2xs); // Figma: 6px
-  }
-
   &[data-disabled] {
-    opacity: var(--opacity-50);
+    opacity: calc(var(--opacity-50) / 100);
     cursor: not-allowed;
-  }
-
-  // Multi-select variant - auto-detected when itemCheckbox is present
-  // Figma: pl=10px, gap=6px (constant regardless of selected state)
-  &:has(.itemCheckbox) {
-    padding-left: 10px; // Figma: 10px (between spacing/xs and spacing/sm)
-    gap: var(--spacing-2xs); // Figma: 6px
-
-    // Override selected state styles for multi-select
-    &[data-selected] {
-      padding-left: 10px;
-      gap: var(--spacing-2xs);
-    }
   }
 }
 
@@ -347,24 +325,34 @@
   }
 }
 
+// Separator - Figma: 4px container with line extending beyond
+.separator {
+  position: relative;
+  height: var(--spacing-3xs); // Figma: 4px container
+  margin-inline: calc(-1 * var(--spacing-3xs)); // Extend beyond list padding
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--stroke-xs); // Figma: 0.5px line
+    background-color: var(--border-tertiary);
+  }
+}
+
 // Group container
 .group {
   display: flex;
   flex-direction: column;
-
-  // Separator before group (except first group)
-  &:not(:first-child)::before {
-    content: '';
-    display: block;
-    height: 0;
-    margin: var(--spacing-3xs) var(--spacing-3xs) 0;
-    border-top: var(--stroke-xs) solid var(--border-tertiary);
-  }
 }
 
-// Group label - Figma: pt=8px, pb=4px, pl=32px, pr=64px
+// Group label - Figma: pt=8px, pb=0, px=12px
 .groupLabel {
-  padding: var(--spacing-xs) var(--spacing-6xl) var(--spacing-3xs) var(--spacing-2xl);
+  padding-block-start: var(--spacing-xs); // Figma: 8px
+  padding-block-end: 0;
+  padding-inline: var(--spacing-sm); // Figma: 12px
   @include label-xs;
   color: var(--text-secondary);
 }

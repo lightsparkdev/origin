@@ -19,6 +19,7 @@ export type {
   ItemCheckboxProps as ComboboxItemCheckboxProps,
   GroupProps as ComboboxGroupProps,
   GroupLabelProps as ComboboxGroupLabelProps,
+  SeparatorProps as ComboboxSeparatorProps,
   EmptyProps as ComboboxEmptyProps,
   ValueProps as ComboboxValueProps,
 } from './parts';

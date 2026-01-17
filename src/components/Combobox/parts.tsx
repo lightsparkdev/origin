@@ -373,6 +373,22 @@ export const GroupLabel = React.forwardRef<HTMLDivElement, GroupLabelProps>(
   }
 );
 
+// Separator - visual divider between groups/sections
+export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
+  function Separator({ className, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        role="separator"
+        className={clsx(styles.separator, className)}
+        {...props}
+      />
+    );
+  }
+);
+
 export interface EmptyProps extends BaseCombobox.Empty.Props {}
 
 export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(
