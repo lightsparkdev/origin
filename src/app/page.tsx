@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Accordion } from '@/components/Accordion';
 import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/ActionBar';
+import { Autocomplete } from '@/components/Autocomplete';
 import { Alert } from '@/components/Alert';
 import { AlertDialog } from '@/components/AlertDialog';
 import { Badge } from '@/components/Badge';
@@ -89,6 +90,103 @@ function ToastRenderer() {
         );
       })}
     </>
+  );
+}
+
+// Data for autocomplete examples
+const autocompleteFruits = [
+  { value: 'apple', label: 'Apple' },
+  { value: 'banana', label: 'Banana' },
+  { value: 'cherry', label: 'Cherry' },
+  { value: 'date', label: 'Date' },
+  { value: 'elderberry', label: 'Elderberry' },
+  { value: 'fig', label: 'Fig' },
+  { value: 'grape', label: 'Grape' },
+];
+
+interface AutocompleteFruit {
+  value: string;
+  label: string;
+}
+
+function AutocompleteExamples() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '256px' }}>
+      {/* Basic */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Basic
+        </span>
+        <Autocomplete.Root items={autocompleteFruits}>
+          <Autocomplete.Input placeholder="Search fruits..." />
+          <Autocomplete.Portal>
+            <Autocomplete.Positioner>
+              <Autocomplete.Popup>
+                <Autocomplete.Empty>No results found.</Autocomplete.Empty>
+                <Autocomplete.List>
+                  {(item: AutocompleteFruit) => (
+                    <Autocomplete.Item key={item.value} value={item}>
+                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    </Autocomplete.Item>
+                  )}
+                </Autocomplete.List>
+              </Autocomplete.Popup>
+            </Autocomplete.Positioner>
+          </Autocomplete.Portal>
+        </Autocomplete.Root>
+      </div>
+
+      {/* With Leading Icons */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Leading Icons
+        </span>
+        <Autocomplete.Root items={autocompleteFruits}>
+          <Autocomplete.Input placeholder="Search fruits..." />
+          <Autocomplete.Portal>
+            <Autocomplete.Positioner>
+              <Autocomplete.Popup>
+                <Autocomplete.Empty>No results found.</Autocomplete.Empty>
+                <Autocomplete.List>
+                  {(item: AutocompleteFruit) => (
+                    <Autocomplete.Item
+                      key={item.value}
+                      value={item}
+                      leadingIcon={<CentralIcon name="IconGlobe2" size={16} />}
+                    >
+                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    </Autocomplete.Item>
+                  )}
+                </Autocomplete.List>
+              </Autocomplete.Popup>
+            </Autocomplete.Positioner>
+          </Autocomplete.Portal>
+        </Autocomplete.Root>
+      </div>
+
+      {/* Disabled */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Disabled
+        </span>
+        <Autocomplete.Root items={autocompleteFruits} disabled>
+          <Autocomplete.Input placeholder="Search fruits..." />
+          <Autocomplete.Portal>
+            <Autocomplete.Positioner>
+              <Autocomplete.Popup>
+                <Autocomplete.List>
+                  {(item: AutocompleteFruit) => (
+                    <Autocomplete.Item key={item.value} value={item}>
+                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    </Autocomplete.Item>
+                  )}
+                </Autocomplete.List>
+              </Autocomplete.Popup>
+            </Autocomplete.Positioner>
+          </Autocomplete.Portal>
+        </Autocomplete.Root>
+      </div>
+    </div>
   );
 }
 
@@ -384,6 +482,10 @@ export default function Home() {
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion.Root>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Autocomplete Component</h2>
+      
+      <AutocompleteExamples />
       
       <h2 style={{ marginBottom: '1rem' }}>Action Bar Component</h2>
       
