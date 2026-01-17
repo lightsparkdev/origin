@@ -26,6 +26,7 @@ import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
+import { Shortcut } from '@/components/Shortcut';
 
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
@@ -997,6 +998,37 @@ export default function Home() {
               </Select.Positioner>
             </Select.Portal>
           </Select.Root>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Shortcut Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Single Key</span>
+          <Shortcut keys={['⌘']} />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Two Keys</span>
+          <Shortcut keys={['⌘', 'K']} />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Three Keys</span>
+          <Shortcut keys={['⌘', '⇧', 'P']} />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <span style={{ width: '100px', fontSize: '14px' }}>Common</span>
+          <div style={{ display: 'flex', gap: '1.5rem' }}>
+            <span style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <Shortcut keys={['⌘', 'C']} /> Copy
+            </span>
+            <span style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <Shortcut keys={['⌘', 'V']} /> Paste
+            </span>
+            <span style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <Shortcut keys={['⌘', 'Z']} /> Undo
+            </span>
+          </div>
         </div>
       </div>
       
