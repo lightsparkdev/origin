@@ -127,7 +127,7 @@ function AutocompleteExamples() {
                 <Autocomplete.List>
                   {(item: AutocompleteFruit) => (
                     <Autocomplete.Item key={item.value} value={item}>
-                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                      {item.label}
                     </Autocomplete.Item>
                   )}
                 </Autocomplete.List>
@@ -155,7 +155,7 @@ function AutocompleteExamples() {
                       value={item}
                       leadingIcon={<CentralIcon name="IconGlobe2" size={16} />}
                     >
-                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                      {item.label}
                     </Autocomplete.Item>
                   )}
                 </Autocomplete.List>
@@ -178,7 +178,7 @@ function AutocompleteExamples() {
                 <Autocomplete.List>
                   {(item: AutocompleteFruit) => (
                     <Autocomplete.Item key={item.value} value={item}>
-                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                      {item.label}
                     </Autocomplete.Item>
                   )}
                 </Autocomplete.List>

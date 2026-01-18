@@ -9,7 +9,6 @@ export type {
   PopupProps as AutocompletePopupProps,
   ListProps as AutocompleteListProps,
   ItemProps as AutocompleteItemProps,
-  ItemTextProps as AutocompleteItemTextProps,
   GroupProps as AutocompleteGroupProps,
   GroupLabelProps as AutocompleteGroupLabelProps,
   SeparatorProps as AutocompleteSeparatorProps,

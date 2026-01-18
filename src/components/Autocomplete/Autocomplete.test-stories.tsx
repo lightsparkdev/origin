@@ -50,7 +50,7 @@ export function BasicAutocomplete() {
             <Autocomplete.List>
               {(item: Fruit) => (
                 <Autocomplete.Item key={item.value} value={item}>
-                  <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                  {item.label}
                 </Autocomplete.Item>
               )}
             </Autocomplete.List>
@@ -79,7 +79,7 @@ export function WithLeadingIcon() {
                   value={item}
                   leadingIcon={<CentralIcon name="IconGlobe2" size={16} />}
                 >
-                  <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                  {item.label}
                 </Autocomplete.Item>
               )}
             </Autocomplete.List>
@@ -108,7 +108,7 @@ export function WithDisabledItems() {
                   value={item}
                   disabled={item.value === 'cherry'}
                 >
-                  <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                  {item.label}
                 </Autocomplete.Item>
               )}
             </Autocomplete.List>
@@ -132,7 +132,7 @@ export function DisabledAutocomplete() {
             <Autocomplete.List>
               {(item: Fruit) => (
                 <Autocomplete.Item key={item.value} value={item}>
-                  <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                  {item.label}
                 </Autocomplete.Item>
               )}
             </Autocomplete.List>
@@ -161,7 +161,7 @@ export function GroupedAutocomplete() {
                   <Autocomplete.Collection>
                     {(item: Fruit) => (
                       <Autocomplete.Item key={item.value} value={item}>
-                        <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                        {item.label}
                       </Autocomplete.Item>
                     )}
                   </Autocomplete.Collection>
@@ -213,7 +213,7 @@ export function AsyncAutocomplete() {
             <Autocomplete.List>
               {(item: Fruit) => (
                 <Autocomplete.Item key={item.value} value={item}>
-                  <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                  {item.label}
                 </Autocomplete.Item>
               )}
             </Autocomplete.List>
@@ -241,7 +241,7 @@ export function ControlledAutocomplete() {
               <Autocomplete.List>
                 {(item: Fruit) => (
                   <Autocomplete.Item key={item.value} value={item}>
-                    <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    {item.label}
                   </Autocomplete.Item>
                 )}
               </Autocomplete.List>

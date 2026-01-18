@@ -23,8 +23,8 @@ import styles from './Autocomplete.module.scss';
  *         <Autocomplete.Empty>No results.</Autocomplete.Empty>
  *         <Autocomplete.List>
  *           {(item) => (
- *             <Autocomplete.Item value={item}>
- *               <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+ *             <Autocomplete.Item key={item.value} value={item}>
+ *               {item.label}
  *             </Autocomplete.Item>
  *           )}
  *         </Autocomplete.List>
@@ -105,8 +105,8 @@ export interface ListProps extends BaseAutocomplete.List.Props {}
  * ```tsx
  * <Autocomplete.List>
  *   {(item) => (
- *     <Autocomplete.Item value={item}>
- *       <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+ *     <Autocomplete.Item key={item.value} value={item}>
+ *       {item.label}
  *     </Autocomplete.Item>
  *   )}
  * </Autocomplete.List>
@@ -135,14 +135,14 @@ export interface ItemProps extends BaseAutocomplete.Item.Props {
  * @example
  * ```tsx
  * <Autocomplete.Item value={item}>
- *   <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+ *   {item.label}
  * </Autocomplete.Item>
  * ```
  *
  * With leading icon:
  * ```tsx
  * <Autocomplete.Item value={item} leadingIcon={<Icon name="globe" />}>
- *   <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+ *   {item.label}
  * </Autocomplete.Item>
  * ```
  */
@@ -157,19 +157,6 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
         {leadingIcon && <span className={styles.itemLeading}>{leadingIcon}</span>}
         {children}
       </BaseAutocomplete.Item>
-    );
-  }
-);
-
-export interface ItemTextProps extends React.HTMLAttributes<HTMLSpanElement> {}
-
-/**
- * Autocomplete.ItemText - Text content of an item.
- */
-export const ItemText = React.forwardRef<HTMLSpanElement, ItemTextProps>(
-  function ItemText({ className, ...props }, ref) {
-    return (
-      <span ref={ref} className={clsx(styles.itemText, className)} {...props} />
     );
   }
 );
@@ -219,7 +206,7 @@ export interface CollectionProps {
  */
 export const Collection = BaseAutocomplete.Collection;
 
-export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface SeparatorProps extends BaseAutocomplete.Separator.Props {}
 
 /**
  * Autocomplete.Separator - Visual divider between groups/sections.
@@ -227,9 +214,8 @@ export interface SeparatorProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
   function Separator({ className, ...props }, ref) {
     return (
-      <div
+      <BaseAutocomplete.Separator
         ref={ref}
-        role="separator"
         className={clsx(styles.separator, className)}
         {...props}
       />

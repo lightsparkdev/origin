@@ -102,6 +102,9 @@
   cursor: pointer;
   outline: 0;
   user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   @include body;
   color: var(--text-primary);
 
@@ -113,13 +116,6 @@
     opacity: calc(var(--opacity-50) / 100);
     cursor: not-allowed;
   }
-}
-
-.itemText {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .itemLeading {

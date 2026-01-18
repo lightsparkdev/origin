@@ -29,6 +29,7 @@
     "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.83",
     "ajv": "^8.17.1",
     "clsx": "^2.1.1",
+    "match-sorter": "^8.2.0",
     "motion": "^12.23.26",
     "next": "^16.1.1",
     "react": "^19.0.0",

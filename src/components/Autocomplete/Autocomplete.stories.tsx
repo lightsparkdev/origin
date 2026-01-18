@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
+import { matchSorter } from 'match-sorter';
 import * as Autocomplete from './parts';
 import { CentralIcon } from '@/components/Icon';
 
@@ -43,7 +44,7 @@ export const Basic: StoryObj = {
               <Autocomplete.List>
                 {(item: Fruit) => (
                   <Autocomplete.Item key={item.value} value={item}>
-                    <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    {item.label}
                   </Autocomplete.Item>
                 )}
               </Autocomplete.List>
@@ -74,7 +75,7 @@ export const WithLeadingIcons: StoryObj = {
                     value={item}
                     leadingIcon={<CentralIcon name="IconGlobe2" size={16} />}
                   >
-                    <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    {item.label}
                   </Autocomplete.Item>
                 )}
               </Autocomplete.List>
@@ -125,7 +126,7 @@ export const Grouped: StoryObj = {
                       <Autocomplete.Collection>
                         {(item: Fruit) => (
                           <Autocomplete.Item key={item.value} value={item}>
-                            <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                            {item.label}
                           </Autocomplete.Item>
                         )}
                       </Autocomplete.Collection>
@@ -181,7 +182,7 @@ export const AsyncLoading: StoryObj = {
                 <Autocomplete.List>
                   {(item: Fruit) => (
                     <Autocomplete.Item key={item.value} value={item}>
-                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                      {item.label}
                     </Autocomplete.Item>
                   )}
                 </Autocomplete.List>
@@ -208,7 +209,7 @@ export const Disabled: StoryObj = {
               <Autocomplete.List>
                 {(item: Fruit) => (
                   <Autocomplete.Item key={item.value} value={item}>
-                    <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    {item.label}
                   </Autocomplete.Item>
                 )}
               </Autocomplete.List>
@@ -239,7 +240,7 @@ export const DisabledItems: StoryObj = {
                     value={item}
                     disabled={item.value === 'cherry' || item.value === 'fig'}
                   >
-                    <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                    {item.label}
                   </Autocomplete.Item>
                 )}
               </Autocomplete.List>
@@ -269,7 +270,7 @@ export const Controlled: StoryObj = {
                 <Autocomplete.List>
                   {(item: Fruit) => (
                     <Autocomplete.Item key={item.value} value={item}>
-                      <Autocomplete.ItemText>{item.label}</Autocomplete.ItemText>
+                      {item.label}
                     </Autocomplete.Item>
                   )}
                 </Autocomplete.List>
@@ -283,4 +284,62 @@ export const Controlled: StoryObj = {
       </div>
     );
   },
+};
+
+interface DocItem {
+  title: string;
+  description: string;
+}
+
+const docItems: DocItem[] = [
+  { title: 'React Hooks Guide', description: 'Learn useState, useEffect, and custom hooks' },
+  { title: 'JavaScript Array Methods', description: 'Master map, filter, reduce, and forEach' },
+  { title: 'CSS Flexbox Layout', description: 'Complete guide to Flexbox for responsive design' },
+  { title: 'TypeScript Interfaces', description: 'Understanding interfaces and type definitions' },
+  { title: 'React Performance', description: 'Tips for optimizing React application performance' },
+  { title: 'Node.js Express Server', description: 'Building RESTful APIs with Express' },
+  { title: 'CSS Grid Layout', description: 'Advanced CSS Grid techniques for complex layouts' },
+  { title: 'React Testing Library', description: 'Testing React components effectively' },
+];
+
+function fuzzyFilter(item: DocItem, query: string): boolean {
+  if (!query) return true;
+  const results = matchSorter([item], query, {
+    keys: ['title', 'description'],
+  });
+  return results.length > 0;
+}
+
+/**
+ * Fuzzy matching finds relevant results even when the query doesn't exactly match.
+ */
+export const FuzzyMatching: StoryObj = {
+  render: () => (
+    <div style={{ width: 320 }}>
+      <Autocomplete.Root
+        items={docItems}
+        filter={fuzzyFilter}
+        itemToStringValue={(item: DocItem) => item.title}
+      >
+        <Autocomplete.Input placeholder="Search docs (try 'rct hks')..." />
+        <Autocomplete.Portal>
+          <Autocomplete.Positioner>
+            <Autocomplete.Popup>
+              <Autocomplete.Empty>No results found.</Autocomplete.Empty>
+              <Autocomplete.List>
+                {(item: DocItem) => (
+                  <Autocomplete.Item key={item.title} value={item}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                      <span style={{ fontWeight: 500 }}>{item.title}</span>
+                      <span style={{ fontSize: 12, opacity: 0.7 }}>{item.description}</span>
+                    </div>
+                  </Autocomplete.Item>
+                )}
+              </Autocomplete.List>
+            </Autocomplete.Popup>
+          </Autocomplete.Positioner>
+        </Autocomplete.Portal>
+      </Autocomplete.Root>
+    </div>
+  ),
 };
