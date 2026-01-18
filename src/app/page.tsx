@@ -111,28 +111,84 @@ interface AutocompleteFruit {
   label: string;
 }
 
-interface DocItem {
-  title: string;
-  description: string;
+interface FuzzyItem {
+  label: string;
 }
 
-const docItems: DocItem[] = [
-  { title: 'React Hooks Guide', description: 'Learn useState, useEffect, and custom hooks' },
-  { title: 'JavaScript Array Methods', description: 'Master map, filter, reduce, and forEach' },
-  { title: 'CSS Flexbox Layout', description: 'Complete guide to Flexbox for responsive design' },
-  { title: 'TypeScript Interfaces', description: 'Understanding interfaces and type definitions' },
-  { title: 'React Performance', description: 'Tips for optimizing React application performance' },
-  { title: 'Node.js Express Server', description: 'Building RESTful APIs with Express' },
-  { title: 'CSS Grid Layout', description: 'Advanced CSS Grid techniques for complex layouts' },
-  { title: 'React Testing Library', description: 'Testing React components effectively' },
+const fuzzyItems: FuzzyItem[] = [
+  { label: 'React' },
+  { label: 'JavaScript' },
+  { label: 'TypeScript' },
+  { label: 'Node.js' },
+  { label: 'CSS Grid' },
+  { label: 'Flexbox' },
+  { label: 'Redux' },
+  { label: 'GraphQL' },
 ];
 
-function fuzzyFilter(item: DocItem, query: string): boolean {
+function fuzzyFilter(item: FuzzyItem, query: string): boolean {
   if (!query) return true;
   const results = matchSorter([item], query, {
-    keys: ['title', 'description'],
+    keys: ['label'],
   });
   return results.length > 0;
+}
+
+function highlightMatch(text: string, query: string): React.ReactNode {
+  if (!query.trim()) {
+    return <span style={{ color: 'var(--text-primary)' }}>{text}</span>;
+  }
+
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(${escaped})`, 'gi');
+  const parts = text.split(regex);
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <span key={i} style={{ color: 'var(--text-primary)' }}>{part}</span>
+        ) : (
+          <span key={i} style={{ color: 'var(--text-secondary)' }}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
+function FuzzyMatchingDemo() {
+  const [value, setValue] = React.useState('');
+
+  return (
+    <div>
+      <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+        Fuzzy Matching (try &quot;rct&quot;)
+      </span>
+      <Autocomplete.Root
+        items={fuzzyItems}
+        filter={fuzzyFilter}
+        itemToStringValue={(item: FuzzyItem) => item.label}
+        value={value}
+        onValueChange={setValue}
+      >
+        <Autocomplete.Input placeholder="Search..." />
+        <Autocomplete.Portal>
+          <Autocomplete.Positioner>
+            <Autocomplete.Popup>
+              <Autocomplete.Empty>No results found.</Autocomplete.Empty>
+              <Autocomplete.List>
+                {(item: FuzzyItem) => (
+                  <Autocomplete.Item key={item.label} value={item}>
+                    {highlightMatch(item.label, value)}
+                  </Autocomplete.Item>
+                )}
+              </Autocomplete.List>
+            </Autocomplete.Popup>
+          </Autocomplete.Positioner>
+        </Autocomplete.Portal>
+      </Autocomplete.Root>
+    </div>
+  );
 }
 
 function AutocompleteExamples() {
@@ -214,35 +270,7 @@ function AutocompleteExamples() {
       </div>
 
       {/* Fuzzy Matching */}
-      <div>
-        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-          Fuzzy Matching (try &quot;rct hks&quot;)
-        </span>
-        <Autocomplete.Root
-          items={docItems}
-          filter={fuzzyFilter}
-          itemToStringValue={(item: DocItem) => item.title}
-        >
-          <Autocomplete.Input placeholder="Search docs..." />
-          <Autocomplete.Portal>
-            <Autocomplete.Positioner>
-              <Autocomplete.Popup>
-                <Autocomplete.Empty>No results found.</Autocomplete.Empty>
-                <Autocomplete.List>
-                  {(item: DocItem) => (
-                    <Autocomplete.Item key={item.title} value={item}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                        <span style={{ fontWeight: 500 }}>{item.title}</span>
-                        <span style={{ fontSize: 12, opacity: 0.7 }}>{item.description}</span>
-                      </div>
-                    </Autocomplete.Item>
-                  )}
-                </Autocomplete.List>
-              </Autocomplete.Popup>
-            </Autocomplete.Positioner>
-          </Autocomplete.Portal>
-        </Autocomplete.Root>
-      </div>
+      <FuzzyMatchingDemo />
     </div>
   );
 }
