@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { matchSorter } from 'match-sorter';
 import { Accordion } from '@/components/Accordion';
 import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/ActionBar';
 import { Autocomplete } from '@/components/Autocomplete';
@@ -110,6 +111,30 @@ interface AutocompleteFruit {
   label: string;
 }
 
+interface DocItem {
+  title: string;
+  description: string;
+}
+
+const docItems: DocItem[] = [
+  { title: 'React Hooks Guide', description: 'Learn useState, useEffect, and custom hooks' },
+  { title: 'JavaScript Array Methods', description: 'Master map, filter, reduce, and forEach' },
+  { title: 'CSS Flexbox Layout', description: 'Complete guide to Flexbox for responsive design' },
+  { title: 'TypeScript Interfaces', description: 'Understanding interfaces and type definitions' },
+  { title: 'React Performance', description: 'Tips for optimizing React application performance' },
+  { title: 'Node.js Express Server', description: 'Building RESTful APIs with Express' },
+  { title: 'CSS Grid Layout', description: 'Advanced CSS Grid techniques for complex layouts' },
+  { title: 'React Testing Library', description: 'Testing React components effectively' },
+];
+
+function fuzzyFilter(item: DocItem, query: string): boolean {
+  if (!query) return true;
+  const results = matchSorter([item], query, {
+    keys: ['title', 'description'],
+  });
+  return results.length > 0;
+}
+
 function AutocompleteExamples() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '256px' }}>
@@ -179,6 +204,37 @@ function AutocompleteExamples() {
                   {(item: AutocompleteFruit) => (
                     <Autocomplete.Item key={item.value} value={item}>
                       {item.label}
+                    </Autocomplete.Item>
+                  )}
+                </Autocomplete.List>
+              </Autocomplete.Popup>
+            </Autocomplete.Positioner>
+          </Autocomplete.Portal>
+        </Autocomplete.Root>
+      </div>
+
+      {/* Fuzzy Matching */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Fuzzy Matching (try &quot;rct hks&quot;)
+        </span>
+        <Autocomplete.Root
+          items={docItems}
+          filter={fuzzyFilter}
+          itemToStringValue={(item: DocItem) => item.title}
+        >
+          <Autocomplete.Input placeholder="Search docs..." />
+          <Autocomplete.Portal>
+            <Autocomplete.Positioner>
+              <Autocomplete.Popup>
+                <Autocomplete.Empty>No results found.</Autocomplete.Empty>
+                <Autocomplete.List>
+                  {(item: DocItem) => (
+                    <Autocomplete.Item key={item.title} value={item}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                        <span style={{ fontWeight: 500 }}>{item.title}</span>
+                        <span style={{ fontSize: 12, opacity: 0.7 }}>{item.description}</span>
+                      </div>
                     </Autocomplete.Item>
                   )}
                 </Autocomplete.List>
