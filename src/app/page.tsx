@@ -142,11 +142,12 @@ function highlightMatch(text: string, query: string): React.ReactNode {
   const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const regex = new RegExp(`(${escaped})`, 'gi');
   const parts = text.split(regex);
+  const lowerQuery = query.toLowerCase();
 
   return (
     <>
       {parts.map((part, i) =>
-        regex.test(part) ? (
+        part.toLowerCase() === lowerQuery ? (
           <span key={i} style={{ color: 'var(--text-primary)' }}>{part}</span>
         ) : (
           <span key={i} style={{ color: 'var(--text-secondary)' }}>{part}</span>
