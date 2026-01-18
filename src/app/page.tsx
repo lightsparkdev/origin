@@ -136,7 +136,7 @@ function fuzzyFilter(item: FuzzyItem, query: string): boolean {
 
 function highlightMatch(text: string, query: string): React.ReactNode {
   if (!query.trim()) {
-    return <span style={{ color: 'var(--text-primary)' }}>{text}</span>;
+    return text;
   }
 
   const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -145,7 +145,7 @@ function highlightMatch(text: string, query: string): React.ReactNode {
   const lowerQuery = query.toLowerCase();
 
   return (
-    <>
+    <span>
       {parts.map((part, i) =>
         part.toLowerCase() === lowerQuery ? (
           <span key={i} style={{ color: 'var(--text-primary)' }}>{part}</span>
@@ -153,7 +153,7 @@ function highlightMatch(text: string, query: string): React.ReactNode {
           <span key={i} style={{ color: 'var(--text-secondary)' }}>{part}</span>
         )
       )}
-    </>
+    </span>
   );
 }
 
