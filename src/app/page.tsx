@@ -23,6 +23,7 @@ import { Pagination } from '@/components/Pagination';
 import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
+import { Separator } from '@/components/Separator';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
 import { Toast, ToastVariant } from '@/components/Toast';
@@ -1100,6 +1101,49 @@ export default function Home() {
               </Select.Positioner>
             </Select.Portal>
           </Select.Root>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Separator Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '300px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Default (1px)
+          </span>
+          <Separator />
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Hairline (0.5px)
+          </span>
+          <Separator variant="hairline" />
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Vertical in Navigation
+          </span>
+          <nav style={{ display: 'flex', gap: '16px', alignItems: 'center', height: '32px' }}>
+            <a href="#" style={{ textDecoration: 'none', color: 'inherit' }}>Home</a>
+            <a href="#" style={{ textDecoration: 'none', color: 'inherit' }}>Pricing</a>
+            <a href="#" style={{ textDecoration: 'none', color: 'inherit' }}>Blog</a>
+            <Separator orientation="vertical" />
+            <a href="#" style={{ textDecoration: 'none', color: 'inherit' }}>Log in</a>
+            <a href="#" style={{ textDecoration: 'none', color: 'inherit' }}>Sign up</a>
+          </nav>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Vertical Hairline
+          </span>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', height: '32px' }}>
+            <span>Left</span>
+            <Separator orientation="vertical" variant="hairline" />
+            <span>Right</span>
+          </div>
         </div>
       </div>
       
