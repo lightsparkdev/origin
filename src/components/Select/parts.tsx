@@ -165,11 +165,16 @@ export interface ItemIndicatorProps extends Omit<BaseSelect.ItemIndicator.Props,
 }
 
 export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProps>(
-  function ItemIndicator({ className, children, ...props }, ref) {
+  function ItemIndicator({ className, children, keepMounted = true, style, ...props }, ref) {
     return (
       <BaseSelect.ItemIndicator
         ref={ref}
         className={clsx(styles.itemIndicator, className)}
+        keepMounted={keepMounted}
+        style={(state) => ({
+          visibility: state.selected ? 'visible' : 'hidden',
+          ...(typeof style === 'function' ? style(state) : style),
+        })}
         {...props}
       >
         {children ?? <span className={styles.itemIndicatorDot} />}

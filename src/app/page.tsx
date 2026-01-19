@@ -19,6 +19,7 @@ import { Form } from '@/components/Form';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
+import { Menu } from '@/components/Menu';
 import { Meter } from '@/components/Meter';
 import { Pagination } from '@/components/Pagination';
 import { Progress } from '@/components/Progress';
@@ -272,6 +273,191 @@ function AutocompleteExamples() {
 
       {/* Fuzzy Matching */}
       <FuzzyMatchingDemo />
+    </div>
+  );
+}
+
+function MenuExamples() {
+  const [showGrid, setShowGrid] = React.useState(true);
+  const [showRulers, setShowRulers] = React.useState(false);
+  const [sortBy, setSortBy] = React.useState('name');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+      {/* Basic */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Basic
+        </span>
+        <Menu.Root>
+          <Menu.Trigger>Open Menu</Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner>
+              <Menu.Popup>
+                <Menu.Item>New File</Menu.Item>
+                <Menu.Item>Open File</Menu.Item>
+                <Menu.Item>Save</Menu.Item>
+                <Menu.Separator />
+                <Menu.Item>Export</Menu.Item>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
+
+      {/* With Icons */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Icons
+        </span>
+        <Menu.Root>
+          <Menu.Trigger>Edit</Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner>
+              <Menu.Popup>
+                <Menu.Item>
+                  <CentralIcon name="IconPencil" size={16} />
+                  Edit
+                </Menu.Item>
+                <Menu.Item>
+                  <CentralIcon name="IconClipboard2" size={16} />
+                  Copy
+                </Menu.Item>
+                <Menu.Item>
+                  <CentralIcon name="IconTrashCanSimple" size={16} />
+                  Delete
+                </Menu.Item>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
+
+      {/* Checkbox Items */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Checkbox Items
+        </span>
+        <Menu.Root>
+          <Menu.Trigger>View Options</Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner>
+              <Menu.Popup>
+                <Menu.CheckboxItem checked={showGrid} onCheckedChange={setShowGrid}>
+                  <Menu.CheckboxItemIndicator>
+                    <CentralIcon name="IconCheckmark2Small" size={16} />
+                  </Menu.CheckboxItemIndicator>
+                  Show Grid
+                </Menu.CheckboxItem>
+                <Menu.CheckboxItem checked={showRulers} onCheckedChange={setShowRulers}>
+                  <Menu.CheckboxItemIndicator>
+                    <CentralIcon name="IconCheckmark2Small" size={16} />
+                  </Menu.CheckboxItemIndicator>
+                  Show Rulers
+                </Menu.CheckboxItem>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
+
+      {/* Radio Items */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Radio Items
+        </span>
+        <Menu.Root>
+          <Menu.Trigger>Sort By</Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner>
+              <Menu.Popup>
+                <Menu.RadioGroup value={sortBy} onValueChange={setSortBy}>
+                  <Menu.RadioItem value="name">
+                    <Menu.RadioItemIndicator>
+                      <CentralIcon name="IconCheckmark2Small" size={16} />
+                    </Menu.RadioItemIndicator>
+                    Name
+                  </Menu.RadioItem>
+                  <Menu.RadioItem value="date">
+                    <Menu.RadioItemIndicator>
+                      <CentralIcon name="IconCheckmark2Small" size={16} />
+                    </Menu.RadioItemIndicator>
+                    Date
+                  </Menu.RadioItem>
+                  <Menu.RadioItem value="size">
+                    <Menu.RadioItemIndicator>
+                      <CentralIcon name="IconCheckmark2Small" size={16} />
+                    </Menu.RadioItemIndicator>
+                    Size
+                  </Menu.RadioItem>
+                </Menu.RadioGroup>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
+
+      {/* With Groups */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Groups
+        </span>
+        <Menu.Root>
+          <Menu.Trigger>Preferences</Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner>
+              <Menu.Popup>
+                <Menu.Group>
+                  <Menu.GroupLabel>Account</Menu.GroupLabel>
+                  <Menu.Item>Profile</Menu.Item>
+                  <Menu.Item>Settings</Menu.Item>
+                </Menu.Group>
+                <Menu.Separator />
+                <Menu.Group>
+                  <Menu.GroupLabel>Help</Menu.GroupLabel>
+                  <Menu.Item>Documentation</Menu.Item>
+                  <Menu.Item>Support</Menu.Item>
+                </Menu.Group>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
+
+      {/* With Submenu */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Submenu
+        </span>
+        <Menu.Root>
+          <Menu.Trigger>File</Menu.Trigger>
+          <Menu.Portal>
+            <Menu.Positioner>
+              <Menu.Popup>
+                <Menu.Item>New</Menu.Item>
+                <Menu.Item>Open</Menu.Item>
+                <Menu.SubmenuRoot>
+                  <Menu.SubmenuTrigger>
+                    <span style={{ flex: 1 }}>Share</span>
+                    <CentralIcon name="IconChevronRightSmall" size={16} />
+                  </Menu.SubmenuTrigger>
+                  <Menu.Portal>
+                    <Menu.Positioner side="right" sideOffset={-4}>
+                      <Menu.Popup>
+                        <Menu.Item>Email</Menu.Item>
+                        <Menu.Item>Messages</Menu.Item>
+                        <Menu.Item>AirDrop</Menu.Item>
+                      </Menu.Popup>
+                    </Menu.Positioner>
+                  </Menu.Portal>
+                </Menu.SubmenuRoot>
+                <Menu.Separator />
+                <Menu.Item>Close</Menu.Item>
+              </Menu.Popup>
+            </Menu.Positioner>
+          </Menu.Portal>
+        </Menu.Root>
+      </div>
     </div>
   );
 }
@@ -1007,6 +1193,10 @@ export default function Home() {
           </Meter.Root>
         </div>
       </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Menu Component</h2>
+      
+      <MenuExamples />
       
       <h2 style={{ marginBottom: '1rem' }}>Pagination Component</h2>
       
