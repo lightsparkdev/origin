@@ -1,31 +1,32 @@
 'use client';
 
 import * as React from 'react';
-import { Menu as BaseMenu } from '@base-ui/react/menu';
+import { ContextMenu as BaseContextMenu } from '@base-ui/react/context-menu';
 import clsx from 'clsx';
-import styles from './Menu.module.scss';
+// Reuse Menu styles - visually identical
+import styles from '../Menu/Menu.module.scss';
 import { CentralIcon } from '@/components/Icon';
 
 // ============================================================================
 // Root
 // ============================================================================
 
-export interface RootProps extends BaseMenu.Root.Props {}
+export interface RootProps extends BaseContextMenu.Root.Props {}
 
 export function Root(props: RootProps) {
-  return <BaseMenu.Root {...props} />;
+  return <BaseContextMenu.Root {...props} />;
 }
 
 // ============================================================================
-// Trigger - Use with Button component via render prop
-// Example: <Menu.Trigger render={<Button variant="secondary" />}>Actions</Menu.Trigger>
+// Trigger - Wraps content that can be right-clicked
+// Example: <ContextMenu.Trigger><Card>Right-click me</Card></ContextMenu.Trigger>
 // ============================================================================
 
-export interface TriggerProps extends BaseMenu.Trigger.Props {}
+export interface TriggerProps extends BaseContextMenu.Trigger.Props {}
 
-export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
+export const Trigger = React.forwardRef<HTMLDivElement, TriggerProps>(
   function Trigger(props, ref) {
-    return <BaseMenu.Trigger ref={ref} {...props} />;
+    return <BaseContextMenu.Trigger ref={ref} {...props} />;
   }
 );
 
@@ -33,22 +34,22 @@ export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
 // Portal
 // ============================================================================
 
-export interface PortalProps extends BaseMenu.Portal.Props {}
+export interface PortalProps extends BaseContextMenu.Portal.Props {}
 
 export function Portal(props: PortalProps) {
-  return <BaseMenu.Portal {...props} />;
+  return <BaseContextMenu.Portal {...props} />;
 }
 
 // ============================================================================
 // Positioner
 // ============================================================================
 
-export interface PositionerProps extends BaseMenu.Positioner.Props {}
+export interface PositionerProps extends BaseContextMenu.Positioner.Props {}
 
 export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
   function Positioner({ className, sideOffset = 4, ...props }, ref) {
     return (
-      <BaseMenu.Positioner
+      <BaseContextMenu.Positioner
         ref={ref}
         className={clsx(styles.positioner, className)}
         sideOffset={sideOffset}
@@ -62,12 +63,12 @@ export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
 // Popup
 // ============================================================================
 
-export interface PopupProps extends BaseMenu.Popup.Props {}
+export interface PopupProps extends BaseContextMenu.Popup.Props {}
 
 export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
   function Popup({ className, ...props }, ref) {
     return (
-      <BaseMenu.Popup
+      <BaseContextMenu.Popup
         ref={ref}
         className={clsx(styles.popup, className)}
         {...props}
@@ -80,12 +81,12 @@ export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 // Item
 // ============================================================================
 
-export interface ItemProps extends BaseMenu.Item.Props {}
+export interface ItemProps extends BaseContextMenu.Item.Props {}
 
 export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
   function Item({ className, ...props }, ref) {
     return (
-      <BaseMenu.Item
+      <BaseContextMenu.Item
         ref={ref}
         className={clsx(styles.item, className)}
         {...props}
@@ -98,12 +99,12 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
 // CheckboxItem
 // ============================================================================
 
-export interface CheckboxItemProps extends BaseMenu.CheckboxItem.Props {}
+export interface CheckboxItemProps extends BaseContextMenu.CheckboxItem.Props {}
 
 export const CheckboxItem = React.forwardRef<HTMLDivElement, CheckboxItemProps>(
   function CheckboxItem({ className, ...props }, ref) {
     return (
-      <BaseMenu.CheckboxItem
+      <BaseContextMenu.CheckboxItem
         ref={ref}
         className={clsx(styles.checkboxItem, className)}
         {...props}
@@ -117,19 +118,19 @@ export const CheckboxItem = React.forwardRef<HTMLDivElement, CheckboxItemProps>(
 // Figma spec: 8x8px dot with --icon-primary background, --corner-radius-2xs
 // ============================================================================
 
-export interface CheckboxItemIndicatorProps extends BaseMenu.CheckboxItemIndicator.Props {}
+export interface CheckboxItemIndicatorProps extends BaseContextMenu.CheckboxItemIndicator.Props {}
 
 export const CheckboxItemIndicator = React.forwardRef<HTMLSpanElement, CheckboxItemIndicatorProps>(
   function CheckboxItemIndicator({ className, keepMounted = true, children, ...props }, ref) {
     return (
-      <BaseMenu.CheckboxItemIndicator
+      <BaseContextMenu.CheckboxItemIndicator
         ref={ref}
         className={clsx(styles.checkboxIndicator, className)}
         keepMounted={keepMounted}
         {...props}
       >
         {children ?? <span className={styles.checkboxIndicatorDot} />}
-      </BaseMenu.CheckboxItemIndicator>
+      </BaseContextMenu.CheckboxItemIndicator>
     );
   }
 );
@@ -138,12 +139,12 @@ export const CheckboxItemIndicator = React.forwardRef<HTMLSpanElement, CheckboxI
 // RadioGroup
 // ============================================================================
 
-export interface RadioGroupProps extends BaseMenu.RadioGroup.Props {}
+export interface RadioGroupProps extends BaseContextMenu.RadioGroup.Props {}
 
 export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
   function RadioGroup({ className, ...props }, ref) {
     return (
-      <BaseMenu.RadioGroup
+      <BaseContextMenu.RadioGroup
         ref={ref}
         className={clsx(styles.radioGroup, className)}
         {...props}
@@ -156,12 +157,12 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
 // RadioItem
 // ============================================================================
 
-export interface RadioItemProps extends BaseMenu.RadioItem.Props {}
+export interface RadioItemProps extends BaseContextMenu.RadioItem.Props {}
 
 export const RadioItem = React.forwardRef<HTMLDivElement, RadioItemProps>(
   function RadioItem({ className, ...props }, ref) {
     return (
-      <BaseMenu.RadioItem
+      <BaseContextMenu.RadioItem
         ref={ref}
         className={clsx(styles.radioItem, className)}
         {...props}
@@ -175,19 +176,19 @@ export const RadioItem = React.forwardRef<HTMLDivElement, RadioItemProps>(
 // Figma spec: IconCheckmark2Small with --icon-primary color
 // ============================================================================
 
-export interface RadioItemIndicatorProps extends BaseMenu.RadioItemIndicator.Props {}
+export interface RadioItemIndicatorProps extends BaseContextMenu.RadioItemIndicator.Props {}
 
 export const RadioItemIndicator = React.forwardRef<HTMLSpanElement, RadioItemIndicatorProps>(
   function RadioItemIndicator({ className, keepMounted = true, children, ...props }, ref) {
     return (
-      <BaseMenu.RadioItemIndicator
+      <BaseContextMenu.RadioItemIndicator
         ref={ref}
         className={clsx(styles.radioIndicator, className)}
         keepMounted={keepMounted}
         {...props}
       >
         {children ?? <CentralIcon name="IconCheckmark2Small" size={16} />}
-      </BaseMenu.RadioItemIndicator>
+      </BaseContextMenu.RadioItemIndicator>
     );
   }
 );
@@ -196,12 +197,12 @@ export const RadioItemIndicator = React.forwardRef<HTMLSpanElement, RadioItemInd
 // Separator
 // ============================================================================
 
-export interface SeparatorProps extends BaseMenu.Separator.Props {}
+export interface SeparatorProps extends BaseContextMenu.Separator.Props {}
 
 export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
   function Separator({ className, ...props }, ref) {
     return (
-      <BaseMenu.Separator
+      <BaseContextMenu.Separator
         ref={ref}
         className={clsx(styles.separator, className)}
         {...props}
@@ -214,12 +215,12 @@ export const Separator = React.forwardRef<HTMLDivElement, SeparatorProps>(
 // Group
 // ============================================================================
 
-export interface GroupProps extends BaseMenu.Group.Props {}
+export interface GroupProps extends BaseContextMenu.Group.Props {}
 
 export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
   function Group({ className, ...props }, ref) {
     return (
-      <BaseMenu.Group
+      <BaseContextMenu.Group
         ref={ref}
         className={clsx(styles.group, className)}
         {...props}
@@ -232,12 +233,12 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(
 // GroupLabel
 // ============================================================================
 
-export interface GroupLabelProps extends BaseMenu.GroupLabel.Props {}
+export interface GroupLabelProps extends BaseContextMenu.GroupLabel.Props {}
 
 export const GroupLabel = React.forwardRef<HTMLDivElement, GroupLabelProps>(
   function GroupLabel({ className, ...props }, ref) {
     return (
-      <BaseMenu.GroupLabel
+      <BaseContextMenu.GroupLabel
         ref={ref}
         className={clsx(styles.groupLabel, className)}
         {...props}
@@ -250,22 +251,22 @@ export const GroupLabel = React.forwardRef<HTMLDivElement, GroupLabelProps>(
 // SubmenuRoot
 // ============================================================================
 
-export interface SubmenuRootProps extends BaseMenu.SubmenuRoot.Props {}
+export interface SubmenuRootProps extends BaseContextMenu.SubmenuRoot.Props {}
 
 export function SubmenuRoot(props: SubmenuRootProps) {
-  return <BaseMenu.SubmenuRoot {...props} />;
+  return <BaseContextMenu.SubmenuRoot {...props} />;
 }
 
 // ============================================================================
 // SubmenuTrigger
 // ============================================================================
 
-export interface SubmenuTriggerProps extends BaseMenu.SubmenuTrigger.Props {}
+export interface SubmenuTriggerProps extends BaseContextMenu.SubmenuTrigger.Props {}
 
 export const SubmenuTrigger = React.forwardRef<HTMLDivElement, SubmenuTriggerProps>(
   function SubmenuTrigger({ className, ...props }, ref) {
     return (
-      <BaseMenu.SubmenuTrigger
+      <BaseContextMenu.SubmenuTrigger
         ref={ref}
         className={clsx(styles.submenuTrigger, className)}
         {...props}
@@ -278,12 +279,12 @@ export const SubmenuTrigger = React.forwardRef<HTMLDivElement, SubmenuTriggerPro
 // Arrow (optional)
 // ============================================================================
 
-export interface ArrowProps extends BaseMenu.Arrow.Props {}
+export interface ArrowProps extends BaseContextMenu.Arrow.Props {}
 
 export const Arrow = React.forwardRef<HTMLDivElement, ArrowProps>(
   function Arrow({ className, ...props }, ref) {
     return (
-      <BaseMenu.Arrow
+      <BaseContextMenu.Arrow
         ref={ref}
         className={clsx(styles.arrow, className)}
         {...props}
@@ -296,12 +297,12 @@ export const Arrow = React.forwardRef<HTMLDivElement, ArrowProps>(
 // Backdrop (optional)
 // ============================================================================
 
-export interface BackdropProps extends BaseMenu.Backdrop.Props {}
+export interface BackdropProps extends BaseContextMenu.Backdrop.Props {}
 
 export const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
   function Backdrop({ className, ...props }, ref) {
     return (
-      <BaseMenu.Backdrop
+      <BaseContextMenu.Backdrop
         ref={ref}
         className={clsx(styles.backdrop, className)}
         {...props}

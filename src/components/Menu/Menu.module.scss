@@ -102,6 +102,14 @@
   }
 }
 
+// Figma spec: 8x8px dot, --icon-primary, --corner-radius-2xs
+.checkboxIndicatorDot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--icon-primary);
+  border-radius: var(--corner-radius-2xs);
+}
+
 .radioGroup {
   display: flex;
   flex-direction: column;

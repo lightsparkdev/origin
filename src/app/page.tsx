@@ -20,6 +20,7 @@ import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
 import { Menu } from '@/components/Menu';
+import { ContextMenu } from '@/components/ContextMenu';
 import { Meter } from '@/components/Meter';
 import { Pagination } from '@/components/Pagination';
 import { Progress } from '@/components/Progress';
@@ -462,6 +463,144 @@ function MenuExamples() {
   );
 }
 
+function ContextMenuExamples() {
+  const [showGrid, setShowGrid] = React.useState(true);
+  const [sortBy, setSortBy] = React.useState('name');
+
+  const TriggerArea = ({ children }: { children?: React.ReactNode }) => (
+    <div
+      style={{
+        padding: '40px 60px',
+        border: '1px dashed var(--border-secondary)',
+        borderRadius: 'var(--corner-radius-sm)',
+        backgroundColor: 'var(--surface-secondary)',
+        color: 'var(--text-secondary)',
+        fontSize: '14px',
+        textAlign: 'center',
+      }}
+    >
+      {children || 'Right-click here'}
+    </div>
+  );
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginBottom: '128px' }}>
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Basic
+        </span>
+        <ContextMenu.Root>
+          <ContextMenu.Trigger>
+            <TriggerArea />
+          </ContextMenu.Trigger>
+          <ContextMenu.Portal>
+            <ContextMenu.Positioner>
+              <ContextMenu.Popup>
+                <ContextMenu.Item>Cut</ContextMenu.Item>
+                <ContextMenu.Item>Copy</ContextMenu.Item>
+                <ContextMenu.Item>Paste</ContextMenu.Item>
+                <ContextMenu.Separator />
+                <ContextMenu.Item>Delete</ContextMenu.Item>
+              </ContextMenu.Popup>
+            </ContextMenu.Positioner>
+          </ContextMenu.Portal>
+        </ContextMenu.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Checkbox Items
+        </span>
+        <ContextMenu.Root>
+          <ContextMenu.Trigger>
+            <TriggerArea>Right-click for view options</TriggerArea>
+          </ContextMenu.Trigger>
+          <ContextMenu.Portal>
+            <ContextMenu.Positioner>
+              <ContextMenu.Popup>
+                <ContextMenu.CheckboxItem checked={showGrid} onCheckedChange={setShowGrid}>
+                  <ContextMenu.CheckboxItemIndicator />
+                  Show Grid
+                </ContextMenu.CheckboxItem>
+              </ContextMenu.Popup>
+            </ContextMenu.Positioner>
+          </ContextMenu.Portal>
+        </ContextMenu.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Radio Items
+        </span>
+        <ContextMenu.Root>
+          <ContextMenu.Trigger>
+            <TriggerArea>Right-click to sort</TriggerArea>
+          </ContextMenu.Trigger>
+          <ContextMenu.Portal>
+            <ContextMenu.Positioner>
+              <ContextMenu.Popup>
+                <ContextMenu.Group>
+                  <ContextMenu.GroupLabel>Sort by</ContextMenu.GroupLabel>
+                  <ContextMenu.RadioGroup value={sortBy} onValueChange={setSortBy}>
+                    <ContextMenu.RadioItem value="name">
+                      <ContextMenu.RadioItemIndicator />
+                      Name
+                    </ContextMenu.RadioItem>
+                    <ContextMenu.RadioItem value="date">
+                      <ContextMenu.RadioItemIndicator />
+                      Date
+                    </ContextMenu.RadioItem>
+                    <ContextMenu.RadioItem value="size">
+                      <ContextMenu.RadioItemIndicator />
+                      Size
+                    </ContextMenu.RadioItem>
+                  </ContextMenu.RadioGroup>
+                </ContextMenu.Group>
+              </ContextMenu.Popup>
+            </ContextMenu.Positioner>
+          </ContextMenu.Portal>
+        </ContextMenu.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Submenu
+        </span>
+        <ContextMenu.Root>
+          <ContextMenu.Trigger>
+            <TriggerArea />
+          </ContextMenu.Trigger>
+          <ContextMenu.Portal>
+            <ContextMenu.Positioner>
+              <ContextMenu.Popup>
+                <ContextMenu.Item>New</ContextMenu.Item>
+                <ContextMenu.Item>Open</ContextMenu.Item>
+                <ContextMenu.SubmenuRoot>
+                  <ContextMenu.SubmenuTrigger>
+                    <span style={{ flex: 1 }}>Share</span>
+                    <CentralIcon name="IconChevronRightSmall" size={16} />
+                  </ContextMenu.SubmenuTrigger>
+                  <ContextMenu.Portal>
+                    <ContextMenu.Positioner side="right" sideOffset={-4} alignOffset={-4}>
+                      <ContextMenu.Popup>
+                        <ContextMenu.Item>Email</ContextMenu.Item>
+                        <ContextMenu.Item>Messages</ContextMenu.Item>
+                        <ContextMenu.Item>Copy Link</ContextMenu.Item>
+                      </ContextMenu.Popup>
+                    </ContextMenu.Positioner>
+                  </ContextMenu.Portal>
+                </ContextMenu.SubmenuRoot>
+                <ContextMenu.Separator />
+                <ContextMenu.Item>Delete</ContextMenu.Item>
+              </ContextMenu.Popup>
+            </ContextMenu.Positioner>
+          </ContextMenu.Portal>
+        </ContextMenu.Root>
+      </div>
+    </div>
+  );
+}
+
 function PaginationDemo() {
   const [page, setPage] = React.useState(1);
   const [manyPage, setManyPage] = React.useState(50);
@@ -755,10 +894,6 @@ export default function Home() {
         </Accordion.Item>
       </Accordion.Root>
       
-      <h2 style={{ marginBottom: '1rem' }}>Autocomplete Component</h2>
-      
-      <AutocompleteExamples />
-      
       <h2 style={{ marginBottom: '1rem' }}>Action Bar Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
@@ -845,6 +980,10 @@ export default function Home() {
           </AlertDialog.Portal>
         </AlertDialog.Root>
       </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Autocomplete Component</h2>
+      
+      <AutocompleteExamples />
       
       <h2 style={{ marginBottom: '1rem' }}>Badge Component</h2>
       
@@ -1039,6 +1178,10 @@ export default function Home() {
       
       <ComboboxExamples />
       
+      <h2 style={{ marginBottom: '1rem' }}>Context Menu Component</h2>
+      
+      <ContextMenuExamples />
+      
       <h2 style={{ marginBottom: '1rem' }}>Field Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px', width: '256px' }}>
@@ -1140,6 +1283,10 @@ export default function Home() {
         </div>
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Menu Component</h2>
+      
+      <MenuExamples />
+      
       <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
@@ -1194,15 +1341,98 @@ export default function Home() {
         </div>
       </div>
       
-      <h2 style={{ marginBottom: '1rem' }}>Menu Component</h2>
-      
-      <MenuExamples />
-      
       <h2 style={{ marginBottom: '1rem' }}>Pagination Component</h2>
       
       <PaginationDemo />
       
       <div style={{ marginBottom: '128px' }} />
+      
+      <h2 style={{ marginBottom: '1rem' }}>Progress Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Default (50%)
+          </span>
+          <Progress.Root value={50}>
+            <Progress.Label>Export data</Progress.Label>
+            <Progress.Value />
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Complete (100%)
+          </span>
+          <Progress.Root value={100}>
+            <Progress.Label>Upload complete</Progress.Label>
+            <Progress.Value />
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Indeterminate
+          </span>
+          <Progress.Root value={null}>
+            <Progress.Label>Loading...</Progress.Label>
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Track Only
+          </span>
+          <Progress.Root value={75}>
+            <Progress.Track>
+              <Progress.Indicator />
+            </Progress.Track>
+          </Progress.Root>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Radio Component</h2>
+      
+      <div style={{ display: 'flex', gap: '3rem', marginBottom: '128px' }}>
+        {/* Default variant */}
+        <Radio.Field>
+          <Radio.Legend>Legend</Radio.Legend>
+          <Radio.Group defaultValue="opt1">
+            <Radio.Item value="opt1" label="Label" description="Description goes here." />
+            <Radio.Item value="opt2" label="Label" description="Description goes here." />
+          </Radio.Group>
+          <Radio.Description>Help text goes here.</Radio.Description>
+        </Radio.Field>
+
+        {/* Card variant */}
+        <Radio.Field style={{ width: 280 }}>
+          <Radio.Legend>Legend</Radio.Legend>
+          <Radio.Group defaultValue="card1" variant="card">
+            <Radio.Item value="card1" label="Label" description="Description goes here." />
+            <Radio.Item value="card2" label="Label" description="Description goes here." />
+          </Radio.Group>
+          <Radio.Description>Help text goes here.</Radio.Description>
+        </Radio.Field>
+
+        {/* Critical state */}
+        <Radio.Field invalid style={{ width: 280 }}>
+          <Radio.Legend>Legend</Radio.Legend>
+          <Radio.Group variant="card">
+            <Radio.Item value="err1" label="Label" description="Description goes here." />
+            <Radio.Item value="err2" label="Label" description="Description goes here." />
+          </Radio.Group>
+          <Radio.Error match>Error text goes here.</Radio.Error>
+        </Radio.Field>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Select Component</h2>
       
@@ -1451,93 +1681,6 @@ export default function Home() {
             </span>
           </div>
         </div>
-      </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Progress Component</h2>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Default (50%)
-          </span>
-          <Progress.Root value={50}>
-            <Progress.Label>Export data</Progress.Label>
-            <Progress.Value />
-            <Progress.Track>
-              <Progress.Indicator />
-            </Progress.Track>
-          </Progress.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Complete (100%)
-          </span>
-          <Progress.Root value={100}>
-            <Progress.Label>Upload complete</Progress.Label>
-            <Progress.Value />
-            <Progress.Track>
-              <Progress.Indicator />
-            </Progress.Track>
-          </Progress.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Indeterminate
-          </span>
-          <Progress.Root value={null}>
-            <Progress.Label>Loading...</Progress.Label>
-            <Progress.Track>
-              <Progress.Indicator />
-            </Progress.Track>
-          </Progress.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Track Only
-          </span>
-          <Progress.Root value={75}>
-            <Progress.Track>
-              <Progress.Indicator />
-            </Progress.Track>
-          </Progress.Root>
-        </div>
-      </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Radio Component</h2>
-      
-      <div style={{ display: 'flex', gap: '3rem', marginBottom: '128px' }}>
-        {/* Default variant */}
-        <Radio.Field>
-          <Radio.Legend>Legend</Radio.Legend>
-          <Radio.Group defaultValue="opt1">
-            <Radio.Item value="opt1" label="Label" description="Description goes here." />
-            <Radio.Item value="opt2" label="Label" description="Description goes here." />
-          </Radio.Group>
-          <Radio.Description>Help text goes here.</Radio.Description>
-        </Radio.Field>
-
-        {/* Card variant */}
-        <Radio.Field style={{ width: 280 }}>
-          <Radio.Legend>Legend</Radio.Legend>
-          <Radio.Group defaultValue="card1" variant="card">
-            <Radio.Item value="card1" label="Label" description="Description goes here." />
-            <Radio.Item value="card2" label="Label" description="Description goes here." />
-          </Radio.Group>
-          <Radio.Description>Help text goes here.</Radio.Description>
-        </Radio.Field>
-
-        {/* Critical state */}
-        <Radio.Field invalid style={{ width: 280 }}>
-          <Radio.Legend>Legend</Radio.Legend>
-          <Radio.Group variant="card">
-            <Radio.Item value="err1" label="Label" description="Description goes here." />
-            <Radio.Item value="err2" label="Label" description="Description goes here." />
-          </Radio.Group>
-          <Radio.Error match>Error text goes here.</Radio.Error>
-        </Radio.Field>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Switch Component</h2>
