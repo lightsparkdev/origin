@@ -290,7 +290,7 @@ function MenuExamples() {
           Basic
         </span>
         <Menu.Root>
-          <Menu.Trigger>Open Menu</Menu.Trigger>
+          <Menu.Trigger render={<Button variant="outline" />}>Open Menu</Menu.Trigger>
           <Menu.Portal>
             <Menu.Positioner>
               <Menu.Popup>
@@ -311,7 +311,7 @@ function MenuExamples() {
           With Icons
         </span>
         <Menu.Root>
-          <Menu.Trigger>Edit</Menu.Trigger>
+          <Menu.Trigger render={<Button variant="outline" />}>Edit</Menu.Trigger>
           <Menu.Portal>
             <Menu.Positioner>
               <Menu.Popup>
@@ -339,7 +339,7 @@ function MenuExamples() {
           Checkbox Items
         </span>
         <Menu.Root>
-          <Menu.Trigger>View Options</Menu.Trigger>
+          <Menu.Trigger render={<Button variant="outline" />}>View Options</Menu.Trigger>
           <Menu.Portal>
             <Menu.Positioner>
               <Menu.Popup>
@@ -367,7 +367,7 @@ function MenuExamples() {
           Radio Items
         </span>
         <Menu.Root>
-          <Menu.Trigger>Sort By</Menu.Trigger>
+          <Menu.Trigger render={<Button variant="outline" />}>Sort By</Menu.Trigger>
           <Menu.Portal>
             <Menu.Positioner>
               <Menu.Popup>
@@ -403,7 +403,7 @@ function MenuExamples() {
           With Groups
         </span>
         <Menu.Root>
-          <Menu.Trigger>Preferences</Menu.Trigger>
+          <Menu.Trigger render={<Button variant="outline" />}>Preferences</Menu.Trigger>
           <Menu.Portal>
             <Menu.Positioner>
               <Menu.Popup>
@@ -430,7 +430,7 @@ function MenuExamples() {
           With Submenu
         </span>
         <Menu.Root>
-          <Menu.Trigger>File</Menu.Trigger>
+          <Menu.Trigger render={<Button variant="outline" />}>File</Menu.Trigger>
           <Menu.Portal>
             <Menu.Positioner>
               <Menu.Popup>

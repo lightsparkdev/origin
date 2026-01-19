@@ -16,20 +16,15 @@ export function Root(props: RootProps) {
 }
 
 // ============================================================================
-// Trigger
+// Trigger - Use with Button component via render prop
+// Example: <Menu.Trigger render={<Button variant="secondary" />}>Actions</Menu.Trigger>
 // ============================================================================
 
 export interface TriggerProps extends BaseMenu.Trigger.Props {}
 
 export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
-  function Trigger({ className, ...props }, ref) {
-    return (
-      <BaseMenu.Trigger
-        ref={ref}
-        className={clsx(styles.trigger, className)}
-        {...props}
-      />
-    );
+  function Trigger(props, ref) {
+    return <BaseMenu.Trigger ref={ref} {...props} />;
   }
 );
 

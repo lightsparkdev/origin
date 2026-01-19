@@ -2,13 +2,14 @@
 
 import * as React from 'react';
 import { Menu } from './';
+import { Button } from '@/components/Button';
 import { CentralIcon } from '@/components/Icon';
 
 // Basic menu with items
 export function BasicMenu() {
   return (
     <Menu.Root>
-      <Menu.Trigger>Open Menu</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Open Menu</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -26,7 +27,7 @@ export function BasicMenu() {
 export function MenuWithIcons() {
   return (
     <Menu.Root>
-      <Menu.Trigger>Actions</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Actions</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -56,7 +57,7 @@ export function MenuWithCheckboxItems() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger>View</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>View</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -87,7 +88,7 @@ export function MenuWithRadioItems() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger>Sort</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Sort</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -116,7 +117,7 @@ export function MenuWithRadioItems() {
 export function MenuWithSeparator() {
   return (
     <Menu.Root>
-      <Menu.Trigger>File</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>File</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -136,7 +137,7 @@ export function MenuWithSeparator() {
 export function MenuWithGroups() {
   return (
     <Menu.Root>
-      <Menu.Trigger>Options</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Options</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -163,7 +164,7 @@ export function MenuWithGroups() {
 export function MenuWithDisabledItems() {
   return (
     <Menu.Root>
-      <Menu.Trigger>Edit</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Edit</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -182,7 +183,7 @@ export function MenuWithDisabledItems() {
 export function MenuWithSubmenu() {
   return (
     <Menu.Root>
-      <Menu.Trigger>File</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>File</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -224,7 +225,7 @@ export function ControlledMenu() {
         {open ? 'Close' : 'Open'} Menu
       </button>
       <Menu.Root open={open} onOpenChange={setOpen}>
-        <Menu.Trigger>Controlled Menu</Menu.Trigger>
+        <Menu.Trigger render={<Button variant="outline" />}>Controlled Menu</Menu.Trigger>
         <Menu.Portal>
           <Menu.Positioner>
             <Menu.Popup>

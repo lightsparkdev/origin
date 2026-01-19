@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
 import { Menu } from './';
+import { Button } from '@/components/Button';
 import { CentralIcon } from '@/components/Icon';
 
 const meta: Meta = {
@@ -17,7 +18,7 @@ type Story = StoryObj;
 export const Default: Story = {
   render: () => (
     <Menu.Root>
-      <Menu.Trigger>Open Menu</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Open Menu</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -37,7 +38,7 @@ export const Default: Story = {
 export const WithIcons: Story = {
   render: () => (
     <Menu.Root>
-      <Menu.Trigger>Edit</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Edit</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -72,7 +73,7 @@ function CheckboxDemo() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger>View Options</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>View Options</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -104,7 +105,7 @@ function RadioDemo() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger>Theme</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Theme</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -136,7 +137,7 @@ export const WithRadioItems: Story = {
 export const WithGroups: Story = {
   render: () => (
     <Menu.Root>
-      <Menu.Trigger>Preferences</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Preferences</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -162,7 +163,7 @@ export const WithGroups: Story = {
 export const WithDisabledItems: Story = {
   render: () => (
     <Menu.Root>
-      <Menu.Trigger>Actions</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>Actions</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -181,7 +182,7 @@ export const WithDisabledItems: Story = {
 export const WithSubmenu: Story = {
   render: () => (
     <Menu.Root>
-      <Menu.Trigger>File</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>File</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>
@@ -234,7 +235,7 @@ function MixedDemo() {
 
   return (
     <Menu.Root>
-      <Menu.Trigger>View</Menu.Trigger>
+      <Menu.Trigger render={<Button variant="outline" />}>View</Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner>
           <Menu.Popup>

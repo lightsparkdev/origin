@@ -2,45 +2,8 @@
 @use '../../tokens/text-styles' as *;
 @use '../../tokens/mixins' as *;
 
-.trigger {
-  @include body;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-xs);
-  height: 36px;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: var(--surface-primary);
-  border: var(--stroke-sm) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
-  color: var(--text-primary);
-  cursor: pointer;
-  outline: none;
-  transition:
-    border-color 150ms ease,
-    box-shadow 150ms ease;
-
-  &:hover {
-    background-color: var(--surface-hover);
-  }
-
-  &:focus-visible {
-    @include input-focus;
-  }
-
-  &[data-popup-open] {
-    @include input-focus;
-  }
-
-  &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100);
-    cursor: not-allowed;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
+// Note: Menu.Trigger has no default styles - use render prop with Button component
+// Example: <Menu.Trigger render={<Button variant="secondary" />}>Actions</Menu.Trigger>
 
 .positioner {
   outline: 0;
