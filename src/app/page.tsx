@@ -29,6 +29,16 @@ import { Select } from '@/components/Select';
 import { Separator } from '@/components/Separator';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
+import { Table } from '@/components/Table';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender,
+  createColumnHelper,
+  SortingState,
+  RowSelectionState,
+} from '@tanstack/react-table';
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 import { Shortcut } from '@/components/Shortcut';
@@ -849,6 +859,174 @@ function ComboboxExamples() {
           </Combobox.Portal>
         </Combobox.Root>
       </div>
+    </div>
+  );
+}
+
+// Table example data
+interface TablePerson {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  status: 'active' | 'inactive';
+}
+
+const tableData: TablePerson[] = [
+  { id: '1', name: 'Alice Johnson', email: 'alice@example.com', role: 'Engineer', status: 'active' },
+  { id: '2', name: 'Bob Smith', email: 'bob@example.com', role: 'Designer', status: 'active' },
+  { id: '3', name: 'Carol White', email: 'carol@example.com', role: 'Manager', status: 'inactive' },
+  { id: '4', name: 'David Brown', email: 'david@example.com', role: 'Engineer', status: 'active' },
+  { id: '5', name: 'Eve Davis', email: 'eve@example.com', role: 'Designer', status: 'active' },
+];
+
+const tableColumnHelper = createColumnHelper<TablePerson>();
+
+function TableExamples() {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+
+  const columns = [
+    tableColumnHelper.display({
+      id: 'select',
+      header: ({ table }) => (
+        <Table.CheckboxWrapper>
+          <label style={{ display: 'flex', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onChange={table.getToggleAllRowsSelectedHandler()}
+              aria-label="Select all"
+              style={{ 
+                position: 'absolute',
+                width: 1,
+                height: 1,
+                padding: 0,
+                margin: -1,
+                overflow: 'hidden',
+                clip: 'rect(0, 0, 0, 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+            />
+            <Checkbox.Indicator
+              checked={table.getIsAllRowsSelected()}
+              indeterminate={table.getIsSomeRowsSelected()}
+            />
+          </label>
+        </Table.CheckboxWrapper>
+      ),
+      cell: ({ row }) => (
+        <Table.CheckboxWrapper>
+          <label style={{ display: 'flex', cursor: 'pointer' }}>
+            <input
+              type="checkbox"
+              checked={row.getIsSelected()}
+              disabled={!row.getCanSelect()}
+              onChange={row.getToggleSelectedHandler()}
+              aria-label="Select row"
+              style={{ 
+                position: 'absolute',
+                width: 1,
+                height: 1,
+                padding: 0,
+                margin: -1,
+                overflow: 'hidden',
+                clip: 'rect(0, 0, 0, 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+            />
+            <Checkbox.Indicator checked={row.getIsSelected()} />
+          </label>
+        </Table.CheckboxWrapper>
+      ),
+      meta: { variant: 'checkbox' as const },
+    }),
+    tableColumnHelper.accessor('name', {
+      header: 'Name',
+      cell: (info) => (
+        <Table.CellContent
+          label={info.getValue()}
+          description={info.row.original.email}
+        />
+      ),
+      enableSorting: true,
+    }),
+    tableColumnHelper.accessor('role', {
+      header: 'Role',
+      cell: (info) => info.getValue(),
+      enableSorting: true,
+    }),
+    tableColumnHelper.accessor('status', {
+      header: 'Status',
+      cell: (info) => (
+        <Badge variant={info.getValue() === 'active' ? 'green' : 'gray'}>
+          {info.getValue()}
+        </Badge>
+      ),
+      enableSorting: false,
+      meta: { align: 'right' as const },
+    }),
+  ];
+
+  const table = useReactTable({
+    data: tableData,
+    columns,
+    state: { sorting, rowSelection },
+    onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getRowId: (row) => row.id,
+    enableRowSelection: true,
+  });
+
+  const hasSelection = Object.keys(rowSelection).length > 0;
+
+  return (
+    <div style={{ marginBottom: '128px' }}>
+      <Table.Root hasSelection={hasSelection}>
+        <Table.Header>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Table.HeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Table.HeaderCell
+                  key={header.id}
+                  variant={(header.column.columnDef.meta as { variant?: 'checkbox' })?.variant}
+                  sortable={header.column.getCanSort()}
+                  sortDirection={header.column.getIsSorted() || undefined}
+                  onSort={header.column.getToggleSortingHandler()}
+                  align={(header.column.columnDef.meta as { align?: 'left' | 'right' })?.align}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.HeaderCell>
+              ))}
+            </Table.HeaderRow>
+          ))}
+        </Table.Header>
+        <Table.Body>
+          {table.getRowModel().rows.map((row, index) => (
+            <Table.Row
+              key={row.id}
+              selected={row.getIsSelected()}
+              last={index === table.getRowModel().rows.length - 1}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <Table.Cell
+                  key={cell.id}
+                  variant={(cell.column.columnDef.meta as { variant?: 'checkbox' })?.variant}
+                  align={(cell.column.columnDef.meta as { align?: 'left' | 'right' })?.align}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
     </div>
   );
 }
@@ -1785,6 +1963,10 @@ export default function Home() {
           </Tabs.Root>
         </div>
       </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Table Component</h2>
+      
+      <TableExamples />
       
       <h2 style={{ marginBottom: '1rem' }}>Toast Component</h2>
       
