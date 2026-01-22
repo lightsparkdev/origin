@@ -71,6 +71,57 @@ All ~100 icons from the Figma design system are available.
 | `npm run tokens:build` | Build tokens from Figma exports |
 | `npm run lint` | Run ESLint |
 
+## Using as a Local Package
+
+Origin can be consumed as a local package in other projects (e.g., Grid) without publishing to npm.
+
+### In the consuming project
+
+1. **Add to `package.json`:**
+   ```json
+   {
+     "dependencies": {
+       "@grid/origin": "file:../origin-v2",
+       "sass": "^1.80.0"
+     }
+   }
+   ```
+
+2. **Add to `next.config.js`** (for Next.js apps):
+   ```js
+   const nextConfig = {
+     transpilePackages: ['@grid/origin'],
+   };
+   ```
+
+3. **Install and use:**
+   ```bash
+   npm install
+   ```
+
+   ```tsx
+   import { Button, Input, Form, Field } from '@grid/origin';
+
+   export default function LoginPage() {
+     return (
+       <Form>
+         <Field label="Email">
+           <Input type="email" placeholder="you@example.com" />
+         </Field>
+         <Button variant="filled">Continue</Button>
+       </Form>
+     );
+   }
+   ```
+
+### What's exported
+
+- **Compound components**: `Accordion`, `AlertDialog`, `Combobox`, `Menu`, `Select`, `Tabs`, `Toast`, `Tooltip`, etc.
+- **Simple components**: `Button`, `Input`, `Badge`, `Alert`, `Chip`, `Loader`, `Switch`, etc.
+- **Icons**: `CentralIcon`
+
+See `src/index.ts` for the full export list.
+
 ## Documentation
 
 - `.cursor/rules` — Auto-injected context for AI assistants
