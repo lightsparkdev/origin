@@ -1,9 +1,14 @@
 {
-  "name": "origin-v2",
+  "name": "@grid/origin",
   "version": "0.1.0",
   "private": true,
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens/*": "./src/tokens/*"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -35,6 +40,10 @@
     "next": "^16.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
