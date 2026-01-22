@@ -73,28 +73,23 @@ All ~100 icons from the Figma design system are available.
 
 ## Using as a Package
 
-```bash
-# In consuming project (e.g., Grid)
-npm install sass
-```
-
 ```json
-// package.json
 { "dependencies": { "@grid/origin": "file:../origin-v2" } }
 ```
 
 ```js
-// next.config.js (Next.js only)
+// next.config.js
 module.exports = { transpilePackages: ['@grid/origin'] };
 ```
 
 ```tsx
-import { Button, Input, Field, Form } from '@grid/origin';
+import { Button, Input, Field } from '@grid/origin';
 ```
 
-See `src/index.ts` for full export list.
+For token and font setup, see [ODS Consumer Setup Guide](docs/ods-consumer-setup.md).
 
 ## Documentation
 
-- `.cursor/rules` — Auto-injected context for AI assistants
+- `docs/ods-consumer-setup.md` — Token/font integration for consuming apps
 - `CONTEXT.md` — Full project context and history
+- `.cursor/rules/` — Auto-injected context for AI assistants
