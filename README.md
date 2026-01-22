@@ -71,56 +71,28 @@ All ~100 icons from the Figma design system are available.
 | `npm run tokens:build` | Build tokens from Figma exports |
 | `npm run lint` | Run ESLint |
 
-## Using as a Local Package
+## Using as a Package
 
-Origin can be consumed as a local package in other projects (e.g., Grid) without publishing to npm.
+```bash
+# In consuming project (e.g., Grid)
+npm install sass
+```
 
-### In the consuming project
+```json
+// package.json
+{ "dependencies": { "@grid/origin": "file:../origin-v2" } }
+```
 
-1. **Add to `package.json`:**
-   ```json
-   {
-     "dependencies": {
-       "@grid/origin": "file:../origin-v2",
-       "sass": "^1.80.0"
-     }
-   }
-   ```
+```js
+// next.config.js (Next.js only)
+module.exports = { transpilePackages: ['@grid/origin'] };
+```
 
-2. **Add to `next.config.js`** (for Next.js apps):
-   ```js
-   const nextConfig = {
-     transpilePackages: ['@grid/origin'],
-   };
-   ```
+```tsx
+import { Button, Input, Field, Form } from '@grid/origin';
+```
 
-3. **Install and use:**
-   ```bash
-   npm install
-   ```
-
-   ```tsx
-   import { Button, Input, Form, Field } from '@grid/origin';
-
-   export default function LoginPage() {
-     return (
-       <Form>
-         <Field label="Email">
-           <Input type="email" placeholder="you@example.com" />
-         </Field>
-         <Button variant="filled">Continue</Button>
-       </Form>
-     );
-   }
-   ```
-
-### What's exported
-
-- **Compound components**: `Accordion`, `AlertDialog`, `Combobox`, `Menu`, `Select`, `Tabs`, `Toast`, `Tooltip`, etc.
-- **Simple components**: `Button`, `Input`, `Badge`, `Alert`, `Chip`, `Loader`, `Switch`, etc.
-- **Icons**: `CentralIcon`
-
-See `src/index.ts` for the full export list.
+See `src/index.ts` for full export list.
 
 ## Documentation
 
