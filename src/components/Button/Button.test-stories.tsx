@@ -34,6 +34,14 @@ export function CriticalButton() {
   return <Button variant="critical">Delete</Button>;
 }
 
+export function LinkButton() {
+  return <Button variant="link">Learn more</Button>;
+}
+
+export function DisabledLinkButton() {
+  return <Button variant="link" disabled>Learn more</Button>;
+}
+
 export function DisabledButton() {
   return <Button disabled>Disabled</Button>;
 }

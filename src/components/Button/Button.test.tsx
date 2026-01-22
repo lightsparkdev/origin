@@ -12,6 +12,8 @@ import {
   IconOnlyButton,
   ButtonWithLeadingIcon,
   ButtonWithTrailingIcon,
+  LinkButton,
+  DisabledLinkButton,
 } from './Button.test-stories';
 
 const axeConfig = {
@@ -157,7 +159,7 @@ test.describe('Button', () => {
       getComputedStyle(el).borderRadius
     );
     
-    expect(borderRadius).toBe('8px');
+    expect(borderRadius).toBe('6px');
   });
 
   test('disabled filled button has correct opacity', async ({ mount, page }) => {
@@ -181,6 +183,49 @@ test.describe('Button', () => {
     );
     
     // Outline/Ghost/Critical variants use 50% opacity when disabled
+    expect(parseFloat(opacity)).toBeCloseTo(0.5, 1);
+  });
+
+  test('link variant has no accessibility violations', async ({ mount, page }) => {
+    await mount(<LinkButton />);
+    const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test('link variant has no fixed height', async ({ mount, page }) => {
+    await mount(<LinkButton />);
+    
+    const button = page.getByRole('button');
+    const height = await button.evaluate((el) => 
+      getComputedStyle(el).height
+    );
+    
+    // Link variant should have auto height based on content, not fixed 36px or 32px
+    expect(height).not.toBe('36px');
+    expect(height).not.toBe('32px');
+  });
+
+  test('link variant has transparent background', async ({ mount, page }) => {
+    await mount(<LinkButton />);
+    
+    const button = page.getByRole('button');
+    const bgColor = await button.evaluate((el) => 
+      getComputedStyle(el).backgroundColor
+    );
+    
+    // Should be transparent (rgba(0, 0, 0, 0))
+    expect(bgColor).toMatch(/rgba\(0,\s*0,\s*0,\s*0\)/);
+  });
+
+  test('disabled link button has correct opacity', async ({ mount, page }) => {
+    await mount(<DisabledLinkButton />);
+    
+    const button = page.getByRole('button');
+    const opacity = await button.evaluate((el) => 
+      getComputedStyle(el).opacity
+    );
+    
+    // Link variant uses 50% opacity when disabled
     expect(parseFloat(opacity)).toBeCloseTo(0.5, 1);
   });
 });

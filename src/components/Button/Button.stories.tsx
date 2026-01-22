@@ -29,7 +29,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['filled', 'outline', 'ghost', 'critical'],
+      options: ['filled', 'outline', 'ghost', 'critical', 'link'],
     },
     size: {
       control: 'select',
@@ -69,6 +69,13 @@ export const Critical: Story = {
   args: {
     variant: 'critical',
     children: 'Delete',
+  },
+};
+
+export const Link: Story = {
+  args: {
+    variant: 'link',
+    children: 'Learn more',
   },
 };
 
@@ -134,12 +141,14 @@ export const AllVariants: Story = {
         <Button variant="outline">Outline</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="critical">Critical</Button>
+        <Button variant="link">Link</Button>
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button variant="filled" disabled>Filled</Button>
         <Button variant="outline" disabled>Outline</Button>
         <Button variant="ghost" disabled>Ghost</Button>
         <Button variant="critical" disabled>Critical</Button>
+        <Button variant="link" disabled>Link</Button>
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button variant="filled" loading>Filled</Button>
@@ -159,12 +168,14 @@ export const AllSizes: Story = {
         <Button size="compact" variant="outline">Compact Outline</Button>
         <Button size="compact" variant="ghost">Compact Ghost</Button>
         <Button size="compact" variant="critical">Compact Critical</Button>
+        <Button size="compact" variant="link">Compact Link</Button>
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button size="default" variant="filled">Default Filled</Button>
         <Button size="default" variant="outline">Default Outline</Button>
         <Button size="default" variant="ghost">Default Ghost</Button>
         <Button size="default" variant="critical">Default Critical</Button>
+        <Button size="default" variant="link">Default Link</Button>
       </div>
     </div>
   ),

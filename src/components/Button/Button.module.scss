@@ -122,6 +122,43 @@
   }
 }
 
+.link {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  height: auto;
+  color: var(--text-primary);
+  text-decoration: none;
+
+  @media (hover: hover) {
+    &:hover:not([data-disabled]) {
+      text-decoration: underline;
+    }
+  }
+
+  &:focus-visible {
+    text-decoration: underline;
+    box-shadow: none;
+    outline: none;
+  }
+
+  &[data-disabled] {
+    opacity: 0.5;
+  }
+
+  // Override size-specific heights for link variant
+  &.default {
+    height: auto;
+    padding: 0;
+  }
+
+  &.compact {
+    height: auto;
+    padding: 0;
+  }
+}
+
 .loading {
   position: relative;
   pointer-events: none;

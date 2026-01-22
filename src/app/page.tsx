@@ -1256,6 +1256,7 @@ export default function Home() {
         <Button variant="outline">Outline</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="critical">Critical</Button>
+        <Button variant="link">Link</Button>
       </div>
       
       {/* Sizes */}
@@ -1283,10 +1284,18 @@ export default function Home() {
       </div>
       
       {/* States */}
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '128px' }}>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
         <Button>Default</Button>
         <Button loading>Loading</Button>
         <Button disabled>Disabled</Button>
+      </div>
+      
+      {/* Link Variant */}
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '128px' }}>
+        <span style={{ fontSize: '14px', color: '#7c7c7c' }}>Link:</span>
+        <Button variant="link">Learn more</Button>
+        <Button variant="link" size="compact">Compact link</Button>
+        <Button variant="link" disabled>Disabled link</Button>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Checkbox Component</h2>
