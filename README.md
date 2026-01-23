@@ -86,10 +86,10 @@ module.exports = { transpilePackages: ['@grid/origin'] };
 import { Button, Input, Field } from '@grid/origin';
 ```
 
-For token and font setup, see [ODS Consumer Setup Guide](docs/ods-consumer-setup.md).
+For token and font setup, see [Using Origin in Your App](docs/using-origin-in-your-app.md).
 
 ## Documentation
 
-- `docs/ods-consumer-setup.md` — Token/font integration for consuming apps
+- `docs/using-origin-in-your-app.md` — Token/font setup for consuming apps
 - `CONTEXT.md` — Full project context and history
 - `.cursor/rules/` — Auto-injected context for AI assistants
