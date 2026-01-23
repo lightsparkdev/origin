@@ -72,7 +72,7 @@
    └── index.ts                  # Exports
    ```
 
-7. Mirror Figma exactly — if Figma uses a token, use it; if raw value, use that
+7. Mirror Figma exactly — if Figma uses a token, use it; if raw value, use that. **Check `figma-exceptions.mdc` for intentional deviations.**
 
 8. Add `@media (prefers-reduced-motion: reduce)` for animations
 
@@ -113,7 +113,7 @@ Write Tests First ← TDD
 Implement Component (make tests pass)
     │
     ▼
-Apply Figma Styling
+Apply Figma Styling (check figma-exceptions.mdc)
     │
     ▼
 Verify Tests Pass
