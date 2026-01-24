@@ -17,6 +17,10 @@
   font-feature-settings: inherit;
 }
 
+input, textarea, select, button {
+  background: transparent;
+}
+
 :root {
   font-feature-settings: "salt" 1, "kern" 1;
 }
