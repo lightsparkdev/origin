@@ -14,6 +14,7 @@ export { Fieldset } from './components/Fieldset';
 export { Menu } from './components/Menu';
 export { Meter } from './components/Meter';
 export { Pagination } from './components/Pagination';
+export { PhoneInput } from './components/PhoneInput';
 export { Progress } from './components/Progress';
 export { Radio } from './components/Radio';
 export { Select } from './components/Select';

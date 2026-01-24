@@ -23,6 +23,7 @@ import { Menu } from '@/components/Menu';
 import { ContextMenu } from '@/components/ContextMenu';
 import { Meter } from '@/components/Meter';
 import { Pagination } from '@/components/Pagination';
+import { PhoneInput } from '@/components/PhoneInput';
 import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
@@ -648,6 +649,178 @@ function PaginationDemo() {
           <Pagination.Items />
           <Pagination.Next />
         </Pagination.Root>
+      </div>
+    </div>
+  );
+}
+
+// Phone Input demo data
+const phoneCountries = [
+  { code: 'US', name: 'United States', dialCode: '+1' },
+  { code: 'GB', name: 'United Kingdom', dialCode: '+44' },
+  { code: 'DE', name: 'Germany', dialCode: '+49' },
+  { code: 'FR', name: 'France', dialCode: '+33' },
+  { code: 'JP', name: 'Japan', dialCode: '+81' },
+  { code: 'AU', name: 'Australia', dialCode: '+61' },
+  { code: 'CA', name: 'Canada', dialCode: '+1' },
+  { code: 'IN', name: 'India', dialCode: '+91' },
+];
+
+type PhoneCountry = typeof phoneCountries[number];
+
+// Circle-flags CDN URL helper
+function getFlagUrl(code: string) {
+  return `https://hatscripts.github.io/circle-flags/flags/${code.toLowerCase()}.svg`;
+}
+
+function PhoneInputDemo() {
+  const [country, setCountry] = React.useState<PhoneCountry>(phoneCountries[0]);
+  const [phone, setPhone] = React.useState('');
+  const [invalidCountry, setInvalidCountry] = React.useState<PhoneCountry>(phoneCountries[0]);
+  const [invalidPhone, setInvalidPhone] = React.useState('');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '300px' }}>
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Default
+        </span>
+        <PhoneInput.Root>
+          <PhoneInput.CountrySelect value={country} onValueChange={setCountry}>
+            <PhoneInput.CountryTrigger aria-label="Select country">
+              <PhoneInput.CountryValue>
+                {(c: PhoneCountry) => (
+                  <>
+                    <PhoneInput.CountryValueFlag>
+                      <img src={getFlagUrl(c.code)} alt="" />
+                    </PhoneInput.CountryValueFlag>
+                    <span>{c.dialCode}</span>
+                  </>
+                )}
+              </PhoneInput.CountryValue>
+              <PhoneInput.CountryIcon />
+            </PhoneInput.CountryTrigger>
+            <PhoneInput.CountryPortal>
+              <PhoneInput.CountryPositioner>
+                <PhoneInput.CountryPopup>
+                  <PhoneInput.CountryList>
+                    {phoneCountries.map((c) => (
+                      <PhoneInput.CountryItem key={c.code} value={c}>
+                        <PhoneInput.CountryItemFlag>
+                          <img src={getFlagUrl(c.code)} alt="" />
+                        </PhoneInput.CountryItemFlag>
+                        <PhoneInput.CountryItemText>
+                          {c.name} ({c.dialCode})
+                        </PhoneInput.CountryItemText>
+                        <PhoneInput.CountryItemIndicator />
+                      </PhoneInput.CountryItem>
+                    ))}
+                  </PhoneInput.CountryList>
+                </PhoneInput.CountryPopup>
+              </PhoneInput.CountryPositioner>
+            </PhoneInput.CountryPortal>
+          </PhoneInput.CountrySelect>
+          <PhoneInput.Input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Enter phone"
+          />
+        </PhoneInput.Root>
+        {phone && (
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginTop: '4px', display: 'block' }}>
+            Full: {country.dialCode} {phone}
+          </span>
+        )}
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Invalid
+        </span>
+        <PhoneInput.Root invalid>
+          <PhoneInput.CountrySelect value={invalidCountry} onValueChange={setInvalidCountry}>
+            <PhoneInput.CountryTrigger aria-label="Select country">
+              <PhoneInput.CountryValue>
+                {(c: PhoneCountry) => (
+                  <>
+                    <PhoneInput.CountryValueFlag>
+                      <img src={getFlagUrl(c.code)} alt="" />
+                    </PhoneInput.CountryValueFlag>
+                    <span>{c.dialCode}</span>
+                  </>
+                )}
+              </PhoneInput.CountryValue>
+              <PhoneInput.CountryIcon />
+            </PhoneInput.CountryTrigger>
+            <PhoneInput.CountryPortal>
+              <PhoneInput.CountryPositioner>
+                <PhoneInput.CountryPopup>
+                  <PhoneInput.CountryList>
+                    {phoneCountries.map((c) => (
+                      <PhoneInput.CountryItem key={c.code} value={c}>
+                        <PhoneInput.CountryItemFlag>
+                          <img src={getFlagUrl(c.code)} alt="" />
+                        </PhoneInput.CountryItemFlag>
+                        <PhoneInput.CountryItemText>
+                          {c.name} ({c.dialCode})
+                        </PhoneInput.CountryItemText>
+                        <PhoneInput.CountryItemIndicator />
+                      </PhoneInput.CountryItem>
+                    ))}
+                  </PhoneInput.CountryList>
+                </PhoneInput.CountryPopup>
+              </PhoneInput.CountryPositioner>
+            </PhoneInput.CountryPortal>
+          </PhoneInput.CountrySelect>
+          <PhoneInput.Input
+            value={invalidPhone}
+            onChange={(e) => setInvalidPhone(e.target.value)}
+            placeholder="Enter phone"
+          />
+        </PhoneInput.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Disabled
+        </span>
+        <PhoneInput.Root disabled>
+          <PhoneInput.CountrySelect value={phoneCountries[0]}>
+            <PhoneInput.CountryTrigger aria-label="Select country">
+              <PhoneInput.CountryValue>
+                {(c: PhoneCountry) => (
+                  <>
+                    <PhoneInput.CountryValueFlag>
+                      <img src={getFlagUrl(c.code)} alt="" />
+                    </PhoneInput.CountryValueFlag>
+                    <span>{c.dialCode}</span>
+                  </>
+                )}
+              </PhoneInput.CountryValue>
+              <PhoneInput.CountryIcon />
+            </PhoneInput.CountryTrigger>
+            <PhoneInput.CountryPortal>
+              <PhoneInput.CountryPositioner>
+                <PhoneInput.CountryPopup>
+                  <PhoneInput.CountryList>
+                    {phoneCountries.map((c) => (
+                      <PhoneInput.CountryItem key={c.code} value={c}>
+                        <PhoneInput.CountryItemFlag>
+                          <img src={getFlagUrl(c.code)} alt="" />
+                        </PhoneInput.CountryItemFlag>
+                        <PhoneInput.CountryItemText>
+                          {c.name} ({c.dialCode})
+                        </PhoneInput.CountryItemText>
+                        <PhoneInput.CountryItemIndicator />
+                      </PhoneInput.CountryItem>
+                    ))}
+                  </PhoneInput.CountryList>
+                </PhoneInput.CountryPopup>
+              </PhoneInput.CountryPositioner>
+            </PhoneInput.CountryPortal>
+          </PhoneInput.CountrySelect>
+          <PhoneInput.Input placeholder="Enter phone" />
+        </PhoneInput.Root>
       </div>
     </div>
   );
@@ -1531,6 +1704,12 @@ export default function Home() {
       <h2 style={{ marginBottom: '1rem' }}>Pagination Component</h2>
       
       <PaginationDemo />
+      
+      <div style={{ marginBottom: '128px' }} />
+      
+      <h2 style={{ marginBottom: '1rem' }}>Phone Input Component</h2>
+      
+      <PhoneInputDemo />
       
       <div style={{ marginBottom: '128px' }} />
       

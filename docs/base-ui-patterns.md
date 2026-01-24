@@ -132,6 +132,24 @@ setValue(nextValue);
 />
 ```
 
+## Positioning Gotchas
+
+### Select.Positioner: `alignItemWithTrigger`
+
+`Select.Positioner` defaults to `alignItemWithTrigger={true}`, which **ignores** `side`/`align` props. For normal dropdown behavior:
+
+```tsx
+<Select.Positioner alignItemWithTrigger={false} side="bottom" align="start" />
+```
+
+### Custom Anchor (popup wider than trigger)
+
+See `Combobox` or `PhoneInput` for the `AnchorContext` pattern - Root provides a ref via context, Positioner uses `anchor={anchorRef}`.
+
+### Positioner CSS Variables
+
+`--anchor-width`, `--anchor-height`, `--available-width`, `--available-height` are set automatically.
+
 ## Links
 
 - [Base UI GitHub](https://github.com/mui/base-ui)
