@@ -132,6 +132,24 @@ setValue(nextValue);
 />
 ```
 
+## Field Integration
+
+### Using BaseInput for automatic Field context
+
+When building compound components with inputs, use `BaseInput` instead of plain `<input>` to get automatic Field integration:
+
+```tsx
+import { Input as BaseInput } from '@base-ui/react/input';
+
+// This automatically connects to Field.Root context:
+// - aria-labelledby from Field.Label
+// - aria-describedby from Field.Description/Error
+// - data-invalid, data-dirty, data-touched states
+<BaseInput type="tel" className={styles.input} />
+```
+
+See `PhoneInput` for an example of a compound component with Field support.
+
 ## Positioning Gotchas
 
 ### Select.Positioner: `alignItemWithTrigger`
