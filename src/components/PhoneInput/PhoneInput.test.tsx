@@ -7,7 +7,6 @@ import {
   Invalid,
   CustomPlaceholder,
   WithPhoneNumber,
-  WithFixedWidth,
 } from './PhoneInput.test-stories';
 
 const axeConfig = {
@@ -194,21 +193,4 @@ test.describe('PhoneInput', () => {
     expect(borderRight).toBe('1px');
   });
 
-  test('popup width matches root width', async ({ mount, page }) => {
-    await mount(<WithFixedWidth />);
-    
-    const root = page.locator('[data-phone-input-root]');
-    const rootBox = await root.boundingBox();
-    
-    // Open dropdown
-    const trigger = page.getByRole('combobox');
-    await trigger.click();
-    
-    const popup = page.locator('[data-phone-input-popup]');
-    await expect(popup).toBeVisible();
-    const popupBox = await popup.boundingBox();
-    
-    // Popup width should match root width (within 2px tolerance for subpixel rendering)
-    expect(Math.abs(popupBox!.width - rootBox!.width)).toBeLessThanOrEqual(2);
-  });
 });

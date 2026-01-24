@@ -3,6 +3,7 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PhoneInput } from './';
+import { Field } from '@/components/Field';
 
 // Example country data
 const exampleCountries = [
@@ -185,4 +186,78 @@ function ControlledExample() {
 
 export const Controlled: StoryObj = {
   render: () => <ControlledExample />,
+};
+
+// Field integration example
+function WithFieldExample() {
+  const [selectedCountry, setSelectedCountry] = React.useState<Country>(exampleCountries[0]);
+  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [invalid, setInvalid] = React.useState(false);
+
+  const handleBlur = () => {
+    // Simple validation: phone number should be at least 7 digits
+    const digitsOnly = phoneNumber.replace(/\D/g, '');
+    setInvalid(phoneNumber.length > 0 && digitsOnly.length < 7);
+  };
+
+  return (
+    <div style={{ width: 300 }}>
+      <Field.Root invalid={invalid}>
+        <Field.Label>Phone number</Field.Label>
+        <PhoneInput.Root invalid={invalid}>
+          <PhoneInput.CountrySelect
+            value={selectedCountry}
+            onValueChange={setSelectedCountry}
+          >
+            <PhoneInput.CountryTrigger aria-label="Select country">
+              <PhoneInput.CountryValue>
+                {(country: Country) => (
+                  <>
+                    <PhoneInput.CountryValueFlag>
+                      <img src={getFlagUrl(country.code)} alt="" />
+                    </PhoneInput.CountryValueFlag>
+                    <span>{country.dialCode}</span>
+                  </>
+                )}
+              </PhoneInput.CountryValue>
+              <PhoneInput.CountryIcon />
+            </PhoneInput.CountryTrigger>
+
+            <PhoneInput.CountryPortal>
+              <PhoneInput.CountryPositioner>
+                <PhoneInput.CountryPopup>
+                  <PhoneInput.CountryList>
+                    {exampleCountries.map((country) => (
+                      <PhoneInput.CountryItem key={country.code} value={country}>
+                        <PhoneInput.CountryItemFlag>
+                          <img src={getFlagUrl(country.code)} alt="" />
+                        </PhoneInput.CountryItemFlag>
+                        <PhoneInput.CountryItemText>
+                          {country.name} ({country.dialCode})
+                        </PhoneInput.CountryItemText>
+                        <PhoneInput.CountryItemIndicator />
+                      </PhoneInput.CountryItem>
+                    ))}
+                  </PhoneInput.CountryList>
+                </PhoneInput.CountryPopup>
+              </PhoneInput.CountryPositioner>
+            </PhoneInput.CountryPortal>
+          </PhoneInput.CountrySelect>
+
+          <PhoneInput.Input
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            onBlur={handleBlur}
+            placeholder="Enter phone"
+          />
+        </PhoneInput.Root>
+        <Field.Description>Include area code</Field.Description>
+        <Field.Error>Please enter a valid phone number</Field.Error>
+      </Field.Root>
+    </div>
+  );
+}
+
+export const WithField: StoryObj = {
+  render: () => <WithFieldExample />,
 };

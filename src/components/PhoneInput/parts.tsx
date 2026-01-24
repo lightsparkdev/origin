@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Select as BaseSelect, SelectRootProps } from '@base-ui/react/select';
+import { Input as BaseInput } from '@base-ui/react/input';
 import { CentralIcon } from '@/components/Icon';
 import clsx from 'clsx';
 import styles from './PhoneInput.module.scss';
@@ -285,8 +286,8 @@ export const CountryItemIndicator = React.forwardRef<HTMLSpanElement, CountryIte
   }
 );
 
-// Input - the phone number input
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+// Input - the phone number input (uses BaseInput for Field integration)
+export interface InputProps extends Omit<BaseInput.Props, 'type'> {}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   function Input({ className, disabled: inputDisabled, ...props }, ref) {
@@ -294,7 +295,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const isDisabled = inputDisabled ?? rootDisabled;
 
     return (
-      <input
+      <BaseInput
         ref={ref}
         type="tel"
         inputMode="tel"

@@ -56,7 +56,7 @@
 .value {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3xs);
+  gap: var(--spacing-2xs);
   @include body;
   color: var(--text-primary);
   white-space: nowrap;
@@ -165,7 +165,7 @@
 .item {
   box-sizing: border-box;
   display: flex;
-  gap: var(--spacing-2xs);
+  gap: var(--spacing-xs);
   align-items: center;
   height: 36px;
   padding: var(--spacing-xs);

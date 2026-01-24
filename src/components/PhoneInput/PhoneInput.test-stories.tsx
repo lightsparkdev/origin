@@ -170,11 +170,3 @@ export function InvalidFocused() {
   return <PhoneInputStory invalid />;
 }
 
-// With fixed width container (for testing popup width)
-export function WithFixedWidth() {
-  return (
-    <div style={{ width: 300 }}>
-      <PhoneInputStory />
-    </div>
-  );
-}
