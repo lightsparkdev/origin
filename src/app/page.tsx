@@ -686,7 +686,7 @@ function PhoneInputDemo() {
           Default
         </span>
         <PhoneInput.Root>
-          <PhoneInput.CountrySelect value={country} onValueChange={setCountry}>
+          <PhoneInput.CountrySelect value={country} onValueChange={(v) => v && setCountry(v)}>
             <PhoneInput.CountryTrigger aria-label="Select country">
               <PhoneInput.CountryValue>
                 {(c: PhoneCountry) => (
@@ -738,7 +738,7 @@ function PhoneInputDemo() {
           Invalid
         </span>
         <PhoneInput.Root invalid>
-          <PhoneInput.CountrySelect value={invalidCountry} onValueChange={setInvalidCountry}>
+          <PhoneInput.CountrySelect value={invalidCountry} onValueChange={(v) => v && setInvalidCountry(v)}>
             <PhoneInput.CountryTrigger aria-label="Select country">
               <PhoneInput.CountryValue>
                 {(c: PhoneCountry) => (
