@@ -8,10 +8,12 @@ Before "fixing" a Figma/code mismatch, check if it's listed here. If listed, the
 
 ## Exceptions
 
-### Input: Transparent background
+### Form inputs: Transparent background
+
+**Applies to**: Input, Autocomplete, Combobox, Select
 
 | Figma | Code |
 |-------|------|
-| `--surface-secondary` fill | No background (transparent) |
+| `--surface-primary` fill | No background (transparent) |
 
-**Reason**: Inputs must blend with any surface color. Figma requires a fill for focus ring effects to render — this is a tooling limitation, not a design decision.
+**Reason**: Form inputs must blend with any surface color. Figma requires a fill for focus ring effects to render — this is a tooling limitation, not a design decision.
