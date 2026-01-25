@@ -42,22 +42,14 @@
   }
 }
 
-// Ghost variant - minimal styling for navigation/toolbars
-// Completely overrides base .trigger states for ghost behavior
 .triggerGhost {
-  // Layout overrides
   width: auto;
   gap: var(--spacing-3xs);
   padding: var(--spacing-4xs);
-
-  // Remove all borders and backgrounds
   border: none;
   background: transparent;
-
-  // Value text is primary (placeholder handled by .value [data-placeholder])
   color: var(--text-primary);
 
-  // Override base .trigger focus/open states - ghost has NO container focus ring
   &:focus,
   &[data-popup-open] {
     border: none;
@@ -65,14 +57,12 @@
     box-shadow: none;
   }
 
-  // Disabled: opacity + secondary text
   &[data-disabled] {
     opacity: calc(var(--opacity-50) / 100);
     color: var(--text-secondary);
     cursor: not-allowed;
   }
 
-  // Invalid: no container styling (button handles visual feedback)
   &[data-invalid] {
     border: none;
     background: transparent;
@@ -111,7 +101,6 @@
   }
 }
 
-// Ghost icon - wrapper for the icon button container
 .ghostIcon {
   display: flex;
   align-items: center;
@@ -119,7 +108,6 @@
   flex-shrink: 0;
 }
 
-// Ghost icon button - the visual container with hover/focus states
 .ghostIconButton {
   display: flex;
   align-items: center;
@@ -129,27 +117,22 @@
   color: var(--icon-primary);
   transition: background-color 150ms ease;
 
-  // Hover state
   .triggerGhost:hover & {
     background-color: var(--surface-hover);
   }
 
-  // Focus state (keyboard focus)
   .triggerGhost:focus & {
     background-color: var(--surface-secondary);
   }
 
-  // Selected/open state - transparent per Figma spec
   .triggerGhost[data-popup-open] & {
     background-color: transparent;
   }
 
-  // Disabled state
   .triggerGhost[data-disabled] & {
     background-color: transparent;
   }
 
-  // Invalid state - border only, no background
   .triggerGhost[data-invalid] & {
     border: var(--stroke-sm) solid var(--border-critical);
   }
