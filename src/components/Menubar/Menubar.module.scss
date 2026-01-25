@@ -3,6 +3,8 @@
 
 .root {
   display: flex;
+  gap: var(--spacing-none);
+  padding: var(--spacing-none);
   border-radius: var(--corner-radius-sm);
   overflow: clip;
 }
