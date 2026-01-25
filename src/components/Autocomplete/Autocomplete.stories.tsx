@@ -372,10 +372,6 @@ export const FuzzyMatching: StoryObj = {
   render: () => <FuzzyMatchingDemo />,
 };
 
-/**
- * Autocomplete with Field integration.
- * Demonstrates label, description, and error messaging.
- */
 export const WithField: StoryObj = {
   render: function WithField() {
     const [value, setValue] = React.useState('');
