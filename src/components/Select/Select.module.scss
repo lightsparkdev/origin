@@ -149,9 +149,8 @@
     background-color: transparent;
   }
 
-  // Invalid state - border + background per Figma spec
+  // Invalid state - border only, no background
   .triggerGhost[data-invalid] & {
-    background-color: var(--surface-primary);
     border: var(--stroke-sm) solid var(--border-critical);
   }
 
