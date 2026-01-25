@@ -30,9 +30,6 @@ const meta: Meta = {
 
 export default meta;
 
-/**
- * Basic autocomplete with search suggestions.
- */
 export const Basic: StoryObj = {
   render: () => (
     <div style={{ width: 300 }}>
@@ -57,9 +54,6 @@ export const Basic: StoryObj = {
   ),
 };
 
-/**
- * Items with leading icons.
- */
 export const WithLeadingIcons: StoryObj = {
   render: () => (
     <div style={{ width: 300 }}>
@@ -88,9 +82,6 @@ export const WithLeadingIcons: StoryObj = {
   ),
 };
 
-/**
- * Grouped suggestions with labels.
- */
 export const Grouped: StoryObj = {
   render: () => {
     const groupedItems = [
@@ -143,9 +134,6 @@ export const Grouped: StoryObj = {
   },
 };
 
-/**
- * Async loading with status indicator.
- */
 export const AsyncLoading: StoryObj = {
   render: function AsyncAutocomplete() {
     const [items, setItems] = React.useState<Fruit[]>([]);
@@ -196,9 +184,6 @@ export const AsyncLoading: StoryObj = {
   },
 };
 
-/**
- * Disabled autocomplete.
- */
 export const Disabled: StoryObj = {
   render: () => (
     <div style={{ width: 300 }}>
@@ -222,9 +207,6 @@ export const Disabled: StoryObj = {
   ),
 };
 
-/**
- * With disabled items.
- */
 export const DisabledItems: StoryObj = {
   render: () => (
     <div style={{ width: 300 }}>
@@ -253,9 +235,6 @@ export const DisabledItems: StoryObj = {
   ),
 };
 
-/**
- * Controlled autocomplete with external state.
- */
 export const Controlled: StoryObj = {
   render: function ControlledAutocomplete() {
     const [value, setValue] = React.useState('');
@@ -365,9 +344,6 @@ function FuzzyMatchingDemo() {
   );
 }
 
-/**
- * Fuzzy matching highlights matching text in text-primary, remainder in text-secondary.
- */
 export const FuzzyMatching: StoryObj = {
   render: () => <FuzzyMatchingDemo />,
 };

@@ -23,10 +23,6 @@ const fruits = [
   'Lemon',
 ];
 
-/**
- * Default Combobox with filtering.
- * Pass `items` to Root and use a render function in List for automatic filtering.
- */
 export const Default: StoryObj = {
   render: () => (
     <Combobox.Root items={fruits}>
@@ -55,10 +51,6 @@ export const Default: StoryObj = {
   ),
 };
 
-/**
- * Combobox with Clear button.
- * Clear and Trigger are siblings inside ActionButtons.
- */
 export const WithClear: StoryObj = {
   render: () => (
     <Combobox.Root items={fruits} defaultValue="Apple">
@@ -88,10 +80,6 @@ export const WithClear: StoryObj = {
   ),
 };
 
-/**
- * Multi-select Combobox.
- * Allows selecting multiple items.
- */
 export const Multiple: StoryObj = {
   render: () => (
     <Combobox.Root items={fruits} multiple>
@@ -120,10 +108,6 @@ export const Multiple: StoryObj = {
   ),
 };
 
-/**
- * Combobox with grouped items.
- * Use Group and GroupLabel to organize options.
- */
 const groupedFruits = {
   common: ['Apple', 'Banana', 'Orange'],
   exotic: ['Dragon Fruit', 'Mangosteen', 'Rambutan'],
@@ -169,9 +153,6 @@ export const WithGroups: StoryObj = {
   ),
 };
 
-/**
- * Disabled Combobox.
- */
 export const Disabled: StoryObj = {
   render: () => (
     <Combobox.Root items={fruits} disabled>
@@ -199,10 +180,6 @@ export const Disabled: StoryObj = {
   ),
 };
 
-/**
- * Controlled Combobox.
- * Manage value state externally.
- */
 export const Controlled: StoryObj = {
   render: function Render() {
     const [value, setValue] = useState<string | null>(null);

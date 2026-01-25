@@ -67,7 +67,6 @@ export const Critical: StoryObj = {
   ),
 };
 
-/** Controlled example showing open/onOpenChange usage */
 export const Controlled: StoryObj = {
   render: function ControlledExample() {
     const [open, setOpen] = React.useState(false);
