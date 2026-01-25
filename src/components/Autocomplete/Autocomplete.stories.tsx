@@ -3,6 +3,7 @@ import * as React from 'react';
 import { matchSorter } from 'match-sorter';
 import * as Autocomplete from './parts';
 import { CentralIcon } from '@/components/Icon';
+import { Field } from '@/components/Field';
 
 interface Fruit {
   value: string;
@@ -369,4 +370,46 @@ function FuzzyMatchingDemo() {
  */
 export const FuzzyMatching: StoryObj = {
   render: () => <FuzzyMatchingDemo />,
+};
+
+/**
+ * Autocomplete with Field integration.
+ * Demonstrates label, description, and error messaging.
+ */
+export const WithField: StoryObj = {
+  render: function WithField() {
+    const [value, setValue] = React.useState('');
+    const [touched, setTouched] = React.useState(false);
+    const invalid = touched && value.length > 0 && value.length < 3;
+
+    return (
+      <div style={{ width: 300 }}>
+        <Field.Root invalid={invalid}>
+          <Field.Label>Search</Field.Label>
+          <Autocomplete.Root items={fruits} value={value} onValueChange={setValue}>
+            <Autocomplete.Input
+              placeholder="Search fruits..."
+              onBlur={() => setTouched(true)}
+            />
+            <Autocomplete.Portal>
+              <Autocomplete.Positioner>
+                <Autocomplete.Popup>
+                  <Autocomplete.Empty>No results found.</Autocomplete.Empty>
+                  <Autocomplete.List>
+                    {(item: Fruit) => (
+                      <Autocomplete.Item key={item.value} value={item}>
+                        {item.label}
+                      </Autocomplete.Item>
+                    )}
+                  </Autocomplete.List>
+                </Autocomplete.Popup>
+              </Autocomplete.Positioner>
+            </Autocomplete.Portal>
+          </Autocomplete.Root>
+          <Field.Description>Type to search</Field.Description>
+          <Field.Error>Enter at least 3 characters</Field.Error>
+        </Field.Root>
+      </div>
+    );
+  },
 };

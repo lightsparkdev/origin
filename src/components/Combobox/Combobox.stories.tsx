@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Combobox } from './index';
+import { Field } from '@/components/Field';
 
 const meta: Meta = {
   title: 'Components/Combobox',
@@ -233,6 +234,52 @@ export const Controlled: StoryObj = {
           </Combobox.Portal>
         </Combobox.Root>
       </div>
+    );
+  },
+};
+
+/**
+ * Combobox with Field integration.
+ * Demonstrates label, description, and error messaging.
+ */
+export const WithField: StoryObj = {
+  render: function WithField() {
+    const [value, setValue] = useState<string | null>(null);
+    const [touched, setTouched] = useState(false);
+    const invalid = touched && !value;
+
+    return (
+      <Field.Root invalid={invalid}>
+        <Field.Label>Favorite fruit</Field.Label>
+        <Combobox.Root items={fruits} value={value} onValueChange={setValue}>
+          <Combobox.InputWrapper>
+            <Combobox.Input
+              placeholder="Select a fruit..."
+              onBlur={() => setTouched(true)}
+            />
+            <Combobox.ActionButtons>
+              <Combobox.Trigger aria-label="Open popup" />
+            </Combobox.ActionButtons>
+          </Combobox.InputWrapper>
+          <Combobox.Portal>
+            <Combobox.Positioner sideOffset={4}>
+              <Combobox.Popup>
+                <Combobox.Empty />
+                <Combobox.List>
+                  {(item: string) => (
+                    <Combobox.Item key={item} value={item}>
+                      <Combobox.ItemIndicator />
+                      <Combobox.ItemText>{item}</Combobox.ItemText>
+                    </Combobox.Item>
+                  )}
+                </Combobox.List>
+              </Combobox.Popup>
+            </Combobox.Positioner>
+          </Combobox.Portal>
+        </Combobox.Root>
+        <Field.Description>Choose your favorite</Field.Description>
+        <Field.Error>Please select a fruit</Field.Error>
+      </Field.Root>
     );
   },
 };
