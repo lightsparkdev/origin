@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Switch } from './Switch';
+import { Field } from '@/components/Field';
 
 const meta: Meta<typeof Switch> = {
   title: 'Components/Switch',
@@ -118,4 +119,20 @@ export const AllVariants: Story = {
       </div>
     </div>
   ),
+};
+
+export const WithField: Story = {
+  render: function WithField() {
+    const [checked, setChecked] = useState(false);
+
+    return (
+      <Field.Root>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <Switch checked={checked} onCheckedChange={setChecked} />
+          <Field.Label style={{ margin: 0 }}>Enable notifications</Field.Label>
+        </div>
+        <Field.Description>Receive updates about your account</Field.Description>
+      </Field.Root>
+    );
+  },
 };

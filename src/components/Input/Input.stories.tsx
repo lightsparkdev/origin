@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Input } from './Input';
+import { Field } from '@/components/Field';
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -99,4 +100,29 @@ export const AllVariants: Story = {
       </div>
     </div>
   ),
+};
+
+export const WithField: Story = {
+  render: function WithField() {
+    const [value, setValue] = useState('');
+    const [touched, setTouched] = useState(false);
+    const invalid = touched && value.length === 0;
+
+    return (
+      <div style={{ width: '256px' }}>
+        <Field.Root invalid={invalid}>
+          <Field.Label>Email</Field.Label>
+          <Input
+            type="email"
+            placeholder="you@example.com"
+            value={value}
+            onValueChange={setValue}
+            onBlur={() => setTouched(true)}
+          />
+          <Field.Description>We'll never share your email</Field.Description>
+          <Field.Error>Email is required</Field.Error>
+        </Field.Root>
+      </div>
+    );
+  },
 };
