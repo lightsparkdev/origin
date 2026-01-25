@@ -167,25 +167,46 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
   }
 );
 
-// Item - supports optional trailing icon slot
+// Item - supports optional leading/trailing icon slots
 export interface ItemProps extends BaseSelect.Item.Props {
+  /** Optional leading icon (renders before children, e.g. flags) */
+  leadingIcon?: React.ReactNode;
   /** Optional trailing icon (renders after ItemText) */
   trailingIcon?: React.ReactNode;
 }
 
 export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
-  function Item({ className, trailingIcon, children, ...props }, ref) {
+  function Item({ className, leadingIcon, trailingIcon, children, ...props }, ref) {
     return (
       <BaseSelect.Item
         ref={ref}
         className={clsx(styles.item, className)}
         {...props}
       >
+        {leadingIcon}
         {children}
         {trailingIcon && (
           <span className={styles.itemTrailing}>{trailingIcon}</span>
         )}
       </BaseSelect.Item>
+    );
+  }
+);
+
+// ItemFlag - flag container for country selectors (matches PhoneInput pattern)
+export interface ItemFlagProps extends React.HTMLAttributes<HTMLSpanElement> {
+  /** Flag image src */
+  src: string;
+  /** Alt text for the flag */
+  alt?: string;
+}
+
+export const ItemFlag = React.forwardRef<HTMLSpanElement, ItemFlagProps>(
+  function ItemFlag({ className, src, alt = '', ...props }, ref) {
+    return (
+      <span ref={ref} className={clsx(styles.itemFlag, className)} {...props}>
+        <img src={src} alt={alt} />
+      </span>
     );
   }
 );

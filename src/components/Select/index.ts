@@ -13,6 +13,7 @@ export type {
   PopupProps as SelectPopupProps,
   ListProps as SelectListProps,
   ItemProps as SelectItemProps,
+  ItemFlagProps as SelectItemFlagProps,
   ItemIndicatorProps as SelectItemIndicatorProps,
   ItemTextProps as SelectItemTextProps,
   SeparatorProps as SelectSeparatorProps,

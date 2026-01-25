@@ -351,3 +351,49 @@ export const GhostDisabled: StoryObj = {
     </Select.Root>
   ),
 };
+
+const countries = [
+  { value: 'us', label: 'United States', flag: 'https://flagcdn.com/w40/us.png' },
+  { value: 'gb', label: 'United Kingdom', flag: 'https://flagcdn.com/w40/gb.png' },
+  { value: 'de', label: 'Germany', flag: 'https://flagcdn.com/w40/de.png' },
+  { value: 'fr', label: 'France', flag: 'https://flagcdn.com/w40/fr.png' },
+  { value: 'jp', label: 'Japan', flag: 'https://flagcdn.com/w40/jp.png' },
+];
+
+export const WithFlags: StoryObj = {
+  render: function WithFlags() {
+    const [value, setValue] = React.useState<string | null>('us');
+
+    return (
+      <Select.Root value={value} onValueChange={setValue}>
+        <Select.Trigger>
+          <Select.Value placeholder="Select a country">
+            {(selected) => {
+              const country = countries.find(c => c.value === selected);
+              return country ? country.label : selected;
+            }}
+          </Select.Value>
+          <Select.Icon />
+        </Select.Trigger>
+        <Select.Portal>
+          <Select.Positioner>
+            <Select.Popup>
+              <Select.List>
+                {countries.map((country) => (
+                  <Select.Item
+                    key={country.value}
+                    value={country.value}
+                    leadingIcon={<Select.ItemFlag src={country.flag} alt={country.label} />}
+                  >
+                    <Select.ItemText>{country.label}</Select.ItemText>
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.List>
+            </Select.Popup>
+          </Select.Positioner>
+        </Select.Portal>
+      </Select.Root>
+    );
+  },
+};
