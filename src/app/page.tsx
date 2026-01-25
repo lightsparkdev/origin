@@ -477,7 +477,7 @@ function MenuExamples() {
 
 function MenubarDemo() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           Basic
