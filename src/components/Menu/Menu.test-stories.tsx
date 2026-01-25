@@ -6,7 +6,6 @@ import { Button } from '@/components/Button';
 import { CentralIcon } from '@/components/Icon';
 import { Shortcut } from '@/components/Shortcut';
 
-// Basic menu with items
 export function BasicMenu() {
   return (
     <Menu.Root>
@@ -24,7 +23,6 @@ export function BasicMenu() {
   );
 }
 
-// Menu with icons
 export function MenuWithIcons() {
   return (
     <Menu.Root>
@@ -51,7 +49,6 @@ export function MenuWithIcons() {
   );
 }
 
-// Menu with keyboard shortcuts
 export function MenuWithShortcuts() {
   return (
     <Menu.Root>
@@ -87,7 +84,6 @@ export function MenuWithShortcuts() {
   );
 }
 
-// Menu with checkbox items
 export function MenuWithCheckboxItems() {
   const [showMinimap, setShowMinimap] = React.useState(true);
   const [showBreadcrumbs, setShowBreadcrumbs] = React.useState(false);
@@ -119,7 +115,6 @@ export function MenuWithCheckboxItems() {
   );
 }
 
-// Menu with radio items
 export function MenuWithRadioItems() {
   const [sortBy, setSortBy] = React.useState('name');
 
@@ -150,7 +145,6 @@ export function MenuWithRadioItems() {
   );
 }
 
-// Menu with separator
 export function MenuWithSeparator() {
   return (
     <Menu.Root>
@@ -170,7 +164,6 @@ export function MenuWithSeparator() {
   );
 }
 
-// Menu with groups and labels
 export function MenuWithGroups() {
   return (
     <Menu.Root>
@@ -197,7 +190,6 @@ export function MenuWithGroups() {
   );
 }
 
-// Menu with disabled items
 export function MenuWithDisabledItems() {
   return (
     <Menu.Root>
@@ -216,7 +208,6 @@ export function MenuWithDisabledItems() {
   );
 }
 
-// Menu with submenu
 export function MenuWithSubmenu() {
   return (
     <Menu.Root>
@@ -252,7 +243,6 @@ export function MenuWithSubmenu() {
   );
 }
 
-// Controlled menu
 export function ControlledMenu() {
   const [open, setOpen] = React.useState(false);
 
