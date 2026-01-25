@@ -53,21 +53,14 @@
 
   &:hover,
   &:focus,
-  &[data-popup-open] {
+  &[data-popup-open],
+  &[data-invalid] {
     color: var(--text-primary);
-    border: none;
-    box-shadow: none;
-    background: transparent;
   }
 
   &[data-disabled] {
     opacity: calc(var(--opacity-50) / 100);
     cursor: not-allowed;
-  }
-
-  // Ghost doesn't use invalid state in nav context
-  &[data-invalid] {
-    box-shadow: none;
   }
 }
 
@@ -120,20 +113,30 @@
   color: var(--icon-primary);
   transition: background-color 150ms ease;
 
-  // Hover state - when trigger is hovered
+  // Hover state
   .triggerGhost:hover & {
     background-color: var(--surface-hover);
   }
 
-  // Focus/open state - just background, no border/ring (simplified)
-  .triggerGhost:focus &,
-  .triggerGhost[data-popup-open] & {
+  // Focus state (keyboard focus)
+  .triggerGhost:focus & {
     background-color: var(--surface-secondary);
+  }
+
+  // Selected/open state - transparent per Figma spec
+  .triggerGhost[data-popup-open] & {
+    background-color: transparent;
   }
 
   // Disabled state
   .triggerGhost[data-disabled] & {
     background-color: transparent;
+  }
+
+  // Invalid state - border + background per Figma spec
+  .triggerGhost[data-invalid] & {
+    background-color: var(--surface-primary);
+    border: var(--stroke-sm) solid var(--border-critical);
   }
 
   @media (prefers-reduced-motion: reduce) {
