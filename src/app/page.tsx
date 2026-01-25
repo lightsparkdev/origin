@@ -486,7 +486,7 @@ function MenubarDemo() {
           <Menu.Root>
             <Menubar.Trigger>File</Menubar.Trigger>
             <Menu.Portal>
-              <Menu.Positioner sideOffset={4}>
+              <Menu.Positioner sideOffset={2}>
                 <Menu.Popup>
                   <Menu.Item>New</Menu.Item>
                   <Menu.Item>Open</Menu.Item>
@@ -501,7 +501,7 @@ function MenubarDemo() {
           <Menu.Root>
             <Menubar.Trigger>Edit</Menubar.Trigger>
             <Menu.Portal>
-              <Menu.Positioner sideOffset={4}>
+              <Menu.Positioner sideOffset={2}>
                 <Menu.Popup>
                   <Menu.Item>Undo</Menu.Item>
                   <Menu.Item>Redo</Menu.Item>
@@ -517,7 +517,7 @@ function MenubarDemo() {
           <Menu.Root>
             <Menubar.Trigger>View</Menubar.Trigger>
             <Menu.Portal>
-              <Menu.Positioner sideOffset={4}>
+              <Menu.Positioner sideOffset={2}>
                 <Menu.Popup>
                   <Menu.Item>Zoom In</Menu.Item>
                   <Menu.Item>Zoom Out</Menu.Item>
@@ -531,7 +531,7 @@ function MenubarDemo() {
           <Menu.Root>
             <Menubar.Trigger>Help</Menubar.Trigger>
             <Menu.Portal>
-              <Menu.Positioner sideOffset={4}>
+              <Menu.Positioner sideOffset={2}>
                 <Menu.Popup>
                   <Menu.Item>Documentation</Menu.Item>
                   <Menu.Item>About</Menu.Item>
@@ -550,7 +550,7 @@ function MenubarDemo() {
           <Menu.Root>
             <Menubar.Trigger>File</Menubar.Trigger>
             <Menu.Portal>
-              <Menu.Positioner sideOffset={4}>
+              <Menu.Positioner sideOffset={2}>
                 <Menu.Popup>
                   <Menu.Item>New</Menu.Item>
                 </Menu.Popup>
@@ -561,7 +561,7 @@ function MenubarDemo() {
           <Menu.Root>
             <Menubar.Trigger>Edit</Menubar.Trigger>
             <Menu.Portal>
-              <Menu.Positioner sideOffset={4}>
+              <Menu.Positioner sideOffset={2}>
                 <Menu.Popup>
                   <Menu.Item>Cut</Menu.Item>
                 </Menu.Popup>

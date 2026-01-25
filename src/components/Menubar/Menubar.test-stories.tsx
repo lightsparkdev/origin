@@ -12,7 +12,7 @@ export function BasicMenubar() {
       <Menu.Root>
         <Menubar.Trigger>File</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>New</Menu.Item>
               <Menu.Item>Open</Menu.Item>
@@ -25,7 +25,7 @@ export function BasicMenubar() {
       <Menu.Root>
         <Menubar.Trigger>Edit</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>Cut</Menu.Item>
               <Menu.Item>Copy</Menu.Item>
@@ -38,7 +38,7 @@ export function BasicMenubar() {
       <Menu.Root>
         <Menubar.Trigger>View</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>Zoom In</Menu.Item>
               <Menu.Item>Zoom Out</Menu.Item>
@@ -56,7 +56,7 @@ export function MenubarWithShortcuts() {
       <Menu.Root>
         <Menubar.Trigger>File</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item style={{ justifyContent: 'space-between' }}>
                 <span>New</span>
@@ -84,7 +84,7 @@ export function MenubarWithSubmenu() {
       <Menu.Root>
         <Menubar.Trigger>File</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>New</Menu.Item>
               <Menu.Item>Open</Menu.Item>
@@ -117,7 +117,7 @@ export function MenubarDisabled() {
       <Menu.Root>
         <Menubar.Trigger>File</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>New</Menu.Item>
             </Menu.Popup>
@@ -128,7 +128,7 @@ export function MenubarDisabled() {
       <Menu.Root>
         <Menubar.Trigger>Edit</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>Cut</Menu.Item>
             </Menu.Popup>
@@ -145,7 +145,7 @@ export function MenubarKeyboardNavigation() {
       <Menu.Root>
         <Menubar.Trigger>First</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>Item A</Menu.Item>
               <Menu.Item>Item B</Menu.Item>
@@ -157,7 +157,7 @@ export function MenubarKeyboardNavigation() {
       <Menu.Root>
         <Menubar.Trigger>Second</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>Item C</Menu.Item>
               <Menu.Item>Item D</Menu.Item>
@@ -169,7 +169,7 @@ export function MenubarKeyboardNavigation() {
       <Menu.Root>
         <Menubar.Trigger>Third</Menubar.Trigger>
         <Menu.Portal>
-          <Menu.Positioner sideOffset={4}>
+          <Menu.Positioner sideOffset={2}>
             <Menu.Popup>
               <Menu.Item>Item E</Menu.Item>
               <Menu.Item>Item F</Menu.Item>
