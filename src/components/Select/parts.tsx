@@ -17,14 +17,22 @@ export function Root<Value = string, Multiple extends boolean | undefined = fals
 }
 
 // Trigger
-export interface TriggerProps extends BaseSelect.Trigger.Props {}
+export interface TriggerProps extends BaseSelect.Trigger.Props {
+  /** Visual variant - "default" for form fields, "ghost" for navigation/toolbars */
+  variant?: 'default' | 'ghost';
+}
 
 export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
-  function Trigger({ className, ...props }, ref) {
+  function Trigger({ className, variant = 'default', ...props }, ref) {
     return (
       <BaseSelect.Trigger
         ref={ref}
-        className={clsx(styles.trigger, className)}
+        className={clsx(
+          styles.trigger,
+          variant === 'ghost' && styles.triggerGhost,
+          className
+        )}
+        data-variant={variant}
         {...props}
       />
     );
@@ -77,6 +85,27 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
   }
 );
 
+// GhostIcon - icon for ghost variant with its own hover/focus container
+export interface GhostIconProps extends Omit<BaseSelect.Icon.Props, 'children'> {
+  children?: React.ReactNode;
+}
+
+export const GhostIcon = React.forwardRef<HTMLSpanElement, GhostIconProps>(
+  function GhostIcon({ className, children, ...props }, ref) {
+    return (
+      <BaseSelect.Icon
+        ref={ref}
+        className={clsx(styles.ghostIcon, className)}
+        {...props}
+      >
+        <span className={styles.ghostIconButton}>
+          {children ?? <CentralIcon name="IconChevronGrabberVertical" size={16} />}
+        </span>
+      </BaseSelect.Icon>
+    );
+  }
+);
+
 // Portal
 export interface PortalProps extends BaseSelect.Portal.Props {}
 
@@ -84,13 +113,14 @@ export function Portal(props: PortalProps) {
   return <BaseSelect.Portal {...props} />;
 }
 
-// Positioner - defaults to dropdown style (below trigger) like Combobox
+// Positioner - defaults to dropdown style (below trigger, left-aligned) like Combobox
 export interface PositionerProps extends BaseSelect.Positioner.Props {}
 
 export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
   function Positioner({ 
     className, 
     sideOffset = 4,
+    align = 'start',
     alignItemWithTrigger = false,
     ...props 
   }, ref) {
@@ -99,6 +129,7 @@ export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
         ref={ref}
         className={clsx(styles.positioner, className)}
         sideOffset={sideOffset}
+        align={align}
         alignItemWithTrigger={alignItemWithTrigger}
         {...props}
       />

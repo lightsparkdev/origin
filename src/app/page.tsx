@@ -1973,6 +1973,75 @@ export default function Home() {
             </Select.Portal>
           </Select.Root>
         </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Ghost Variant (for navbars/toolbars)
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>Environment:</span>
+            <Select.Root defaultValue="production">
+              <Select.Trigger variant="ghost">
+                <Select.Value>
+                  {(value: string) => {
+                    const labels: Record<string, string> = { production: 'Production', sandbox: 'Sandbox', staging: 'Staging' };
+                    return labels[value] || value;
+                  }}
+                </Select.Value>
+                <Select.GhostIcon />
+              </Select.Trigger>
+              <Select.Portal>
+                <Select.Positioner>
+                  <Select.Popup>
+                    <Select.List>
+                      <Select.Item value="production">
+                        <Select.ItemIndicator />
+                        <Select.ItemText>Production</Select.ItemText>
+                      </Select.Item>
+                      <Select.Item value="sandbox">
+                        <Select.ItemIndicator />
+                        <Select.ItemText>Sandbox</Select.ItemText>
+                      </Select.Item>
+                      <Select.Item value="staging">
+                        <Select.ItemIndicator />
+                        <Select.ItemText>Staging</Select.ItemText>
+                      </Select.Item>
+                    </Select.List>
+                  </Select.Popup>
+                </Select.Positioner>
+              </Select.Portal>
+            </Select.Root>
+          </div>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Ghost Disabled
+          </span>
+          <Select.Root disabled defaultValue="production">
+            <Select.Trigger variant="ghost">
+              <Select.Value>
+                {(value: string) => {
+                  const labels: Record<string, string> = { production: 'Production', sandbox: 'Sandbox', staging: 'Staging' };
+                  return labels[value] || value;
+                }}
+              </Select.Value>
+              <Select.GhostIcon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="production">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Production</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Separator Component</h2>

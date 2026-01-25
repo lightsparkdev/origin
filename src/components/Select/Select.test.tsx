@@ -8,6 +8,10 @@ import {
   DisabledItem,
   MultiSelectDefault,
   MultiSelectControlled,
+  GhostSelect,
+  GhostSelectPlaceholder,
+  GhostSelectDisabled,
+  GhostSelectControlled,
 } from './Select.test-stories';
 
 test.describe('Select', () => {
@@ -157,5 +161,76 @@ test.describe('Select', () => {
     // Deselect Apple
     await page.getByRole('option', { name: 'Apple' }).click();
     await expect(selectedCount).toHaveText('1');
+  });
+});
+
+test.describe('Select Ghost Variant', () => {
+  test('renders ghost trigger with value', async ({ mount, page }) => {
+    await mount(<GhostSelect />);
+
+    const trigger = page.getByRole('combobox');
+    await expect(trigger).toBeVisible();
+    await expect(trigger).toHaveAttribute('data-variant', 'ghost');
+    // Value displays the raw value (lowercase) not the label
+    await expect(trigger).toContainText('production');
+  });
+
+  test('renders ghost trigger with placeholder', async ({ mount, page }) => {
+    await mount(<GhostSelectPlaceholder />);
+
+    const trigger = page.getByRole('combobox');
+    await expect(trigger).toBeVisible();
+    await expect(trigger).toContainText('Select environment');
+  });
+
+  test('ghost trigger opens popup on click', async ({ mount, page }) => {
+    await mount(<GhostSelect />);
+
+    const trigger = page.getByRole('combobox');
+    await trigger.click();
+
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).toBeVisible();
+  });
+
+  test('ghost trigger selects an option', async ({ mount, page }) => {
+    await mount(<GhostSelectControlled />);
+
+    const trigger = page.getByRole('combobox');
+    const selectedEnv = page.getByTestId('selected-env');
+    
+    await expect(selectedEnv).toHaveText('production');
+
+    await trigger.click();
+    await page.getByRole('option', { name: 'Sandbox' }).click();
+
+    await expect(selectedEnv).toHaveText('sandbox');
+  });
+
+  test('disabled ghost trigger cannot be opened', async ({ mount, page }) => {
+    await mount(<GhostSelectDisabled />);
+
+    const trigger = page.getByRole('combobox');
+    await expect(trigger).toHaveAttribute('data-disabled');
+    
+    await trigger.click({ force: true });
+    
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).not.toBeVisible();
+  });
+
+  test('ghost trigger keyboard navigation', async ({ mount, page }) => {
+    await mount(<GhostSelect />);
+
+    const trigger = page.getByRole('combobox');
+    await trigger.focus();
+    await trigger.press('Enter');
+
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).toBeVisible();
+    
+    // Escape closes
+    await page.keyboard.press('Escape');
+    await expect(listbox).not.toBeVisible();
   });
 });

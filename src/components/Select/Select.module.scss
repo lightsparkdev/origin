@@ -42,6 +42,35 @@
   }
 }
 
+// Ghost variant - minimal styling for navigation/toolbars
+.triggerGhost {
+  width: auto;
+  gap: var(--spacing-3xs);
+  padding: var(--spacing-4xs);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+
+  &:hover,
+  &:focus,
+  &[data-popup-open] {
+    color: var(--text-primary);
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  &[data-disabled] {
+    opacity: calc(var(--opacity-50) / 100);
+    cursor: not-allowed;
+  }
+
+  // Ghost doesn't use invalid state in nav context
+  &[data-invalid] {
+    box-shadow: none;
+  }
+}
+
 .value {
   flex: 1;
   text-align: start;
@@ -66,6 +95,45 @@
 
   [data-popup-open] & {
     transform: rotate(180deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Ghost icon - wrapper for the icon button container
+.ghostIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// Ghost icon button - the visual container with hover/focus states
+.ghostIconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs) var(--spacing-2xs);
+  border-radius: var(--corner-radius-xs);
+  color: var(--icon-primary);
+  transition: background-color 150ms ease;
+
+  // Hover state - when trigger is hovered
+  .triggerGhost:hover & {
+    background-color: var(--surface-hover);
+  }
+
+  // Focus/open state - just background, no border/ring (simplified)
+  .triggerGhost:focus &,
+  .triggerGhost[data-popup-open] & {
+    background-color: var(--surface-secondary);
+  }
+
+  // Disabled state
+  .triggerGhost[data-disabled] & {
+    background-color: transparent;
   }
 
   @media (prefers-reduced-motion: reduce) {

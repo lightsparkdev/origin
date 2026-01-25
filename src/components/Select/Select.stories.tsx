@@ -259,3 +259,95 @@ export const WithFieldValidation: StoryObj = {
     );
   },
 };
+
+const environments = [
+  { value: 'production', label: 'Production' },
+  { value: 'sandbox', label: 'Sandbox' },
+  { value: 'staging', label: 'Staging' },
+];
+
+export const Ghost: StoryObj = {
+  render: function Ghost() {
+    const [value, setValue] = React.useState<string | null>('production');
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ color: 'var(--text-secondary)' }}>Environment:</span>
+        <Select.Root value={value} onValueChange={setValue}>
+          <Select.Trigger variant="ghost">
+            <Select.Value placeholder="Select environment">
+              {(selected) => environments.find(e => e.value === selected)?.label ?? selected}
+            </Select.Value>
+            <Select.GhostIcon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner>
+              <Select.Popup>
+                <Select.List>
+                  {environments.map((env) => (
+                    <Select.Item key={env.value} value={env.value}>
+                      <Select.ItemIndicator />
+                      <Select.ItemText>{env.label}</Select.ItemText>
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </div>
+    );
+  },
+};
+
+export const GhostWithPlaceholder: StoryObj = {
+  render: () => (
+    <Select.Root>
+      <Select.Trigger variant="ghost">
+        <Select.Value placeholder="Select environment" />
+        <Select.GhostIcon />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner>
+          <Select.Popup>
+            <Select.List>
+              {environments.map((env) => (
+                <Select.Item key={env.value} value={env.value}>
+                  <Select.ItemIndicator />
+                  <Select.ItemText>{env.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  ),
+};
+
+export const GhostDisabled: StoryObj = {
+  render: () => (
+    <Select.Root disabled defaultValue="production">
+      <Select.Trigger variant="ghost">
+        <Select.Value>
+          {(selected) => environments.find(e => e.value === selected)?.label ?? selected}
+        </Select.Value>
+        <Select.GhostIcon />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner>
+          <Select.Popup>
+            <Select.List>
+              {environments.map((env) => (
+                <Select.Item key={env.value} value={env.value}>
+                  <Select.ItemIndicator />
+                  <Select.ItemText>{env.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  ),
+};

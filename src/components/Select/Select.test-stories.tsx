@@ -9,6 +9,12 @@ const fruits = [
   { value: 'orange', label: 'Orange' },
 ];
 
+const environments = [
+  { value: 'production', label: 'Production' },
+  { value: 'sandbox', label: 'Sandbox' },
+  { value: 'staging', label: 'Staging' },
+];
+
 export function DefaultSelect() {
   return (
     <Select.Root>
@@ -254,6 +260,112 @@ export function MultiSelectControlled() {
         </Select.Portal>
       </Select.Root>
       <span data-testid="selected-count">{value.length}</span>
+    </div>
+  );
+}
+
+// Ghost variant test fixtures
+export function GhostSelect() {
+  return (
+    <Select.Root defaultValue="production">
+      <Select.Trigger variant="ghost">
+        <Select.Value placeholder="Select environment" />
+        <Select.GhostIcon />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner>
+          <Select.Popup>
+            <Select.List>
+              {environments.map((env) => (
+                <Select.Item key={env.value} value={env.value}>
+                  <Select.ItemIndicator />
+                  <Select.ItemText>{env.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
+export function GhostSelectPlaceholder() {
+  return (
+    <Select.Root>
+      <Select.Trigger variant="ghost">
+        <Select.Value placeholder="Select environment" />
+        <Select.GhostIcon />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner>
+          <Select.Popup>
+            <Select.List>
+              {environments.map((env) => (
+                <Select.Item key={env.value} value={env.value}>
+                  <Select.ItemIndicator />
+                  <Select.ItemText>{env.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
+export function GhostSelectDisabled() {
+  return (
+    <Select.Root disabled defaultValue="production">
+      <Select.Trigger variant="ghost">
+        <Select.Value placeholder="Select environment" />
+        <Select.GhostIcon />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner>
+          <Select.Popup>
+            <Select.List>
+              {environments.map((env) => (
+                <Select.Item key={env.value} value={env.value}>
+                  <Select.ItemIndicator />
+                  <Select.ItemText>{env.label}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
+export function GhostSelectControlled() {
+  const [value, setValue] = React.useState<string | null>('production');
+
+  return (
+    <div>
+      <Select.Root value={value} onValueChange={setValue}>
+        <Select.Trigger variant="ghost">
+          <Select.Value placeholder="Select environment" />
+          <Select.GhostIcon />
+        </Select.Trigger>
+        <Select.Portal>
+          <Select.Positioner>
+            <Select.Popup>
+              <Select.List>
+                {environments.map((env) => (
+                  <Select.Item key={env.value} value={env.value}>
+                    <Select.ItemIndicator />
+                    <Select.ItemText>{env.label}</Select.ItemText>
+                  </Select.Item>
+                ))}
+              </Select.List>
+            </Select.Popup>
+          </Select.Positioner>
+        </Select.Portal>
+      </Select.Root>
+      <span data-testid="selected-env">{value ?? 'none'}</span>
     </div>
   );
 }
