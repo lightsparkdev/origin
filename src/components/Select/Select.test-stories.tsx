@@ -264,7 +264,7 @@ export function MultiSelectControlled() {
   );
 }
 
-// Ghost variant test fixtures
+// Ghost variant test fixtures (indicator on right - no leading item)
 export function GhostSelect() {
   return (
     <Select.Root defaultValue="production">
@@ -278,8 +278,8 @@ export function GhostSelect() {
             <Select.List>
               {environments.map((env) => (
                 <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemIndicator />
                   <Select.ItemText>{env.label}</Select.ItemText>
+                  <Select.ItemIndicator />
                 </Select.Item>
               ))}
             </Select.List>
@@ -303,8 +303,8 @@ export function GhostSelectPlaceholder() {
             <Select.List>
               {environments.map((env) => (
                 <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemIndicator />
                   <Select.ItemText>{env.label}</Select.ItemText>
+                  <Select.ItemIndicator />
                 </Select.Item>
               ))}
             </Select.List>
@@ -328,8 +328,8 @@ export function GhostSelectDisabled() {
             <Select.List>
               {environments.map((env) => (
                 <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemIndicator />
                   <Select.ItemText>{env.label}</Select.ItemText>
+                  <Select.ItemIndicator />
                 </Select.Item>
               ))}
             </Select.List>
@@ -356,8 +356,8 @@ export function GhostSelectControlled() {
               <Select.List>
                 {environments.map((env) => (
                   <Select.Item key={env.value} value={env.value}>
-                    <Select.ItemIndicator />
                     <Select.ItemText>{env.label}</Select.ItemText>
+                    <Select.ItemIndicator />
                   </Select.Item>
                 ))}
               </Select.List>

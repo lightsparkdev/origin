@@ -286,8 +286,8 @@ export const Ghost: StoryObj = {
                 <Select.List>
                   {environments.map((env) => (
                     <Select.Item key={env.value} value={env.value}>
-                      <Select.ItemIndicator />
                       <Select.ItemText>{env.label}</Select.ItemText>
+                      <Select.ItemIndicator />
                     </Select.Item>
                   ))}
                 </Select.List>
@@ -313,8 +313,8 @@ export const GhostWithPlaceholder: StoryObj = {
             <Select.List>
               {environments.map((env) => (
                 <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemIndicator />
                   <Select.ItemText>{env.label}</Select.ItemText>
+                  <Select.ItemIndicator />
                 </Select.Item>
               ))}
             </Select.List>
@@ -340,8 +340,8 @@ export const GhostDisabled: StoryObj = {
             <Select.List>
               {environments.map((env) => (
                 <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemIndicator />
                   <Select.ItemText>{env.label}</Select.ItemText>
+                  <Select.ItemIndicator />
                 </Select.Item>
               ))}
             </Select.List>

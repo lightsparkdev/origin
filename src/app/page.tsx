@@ -1995,16 +1995,16 @@ export default function Home() {
                   <Select.Popup>
                     <Select.List>
                       <Select.Item value="production">
-                        <Select.ItemIndicator />
                         <Select.ItemText>Production</Select.ItemText>
+                        <Select.ItemIndicator />
                       </Select.Item>
                       <Select.Item value="sandbox">
-                        <Select.ItemIndicator />
                         <Select.ItemText>Sandbox</Select.ItemText>
+                        <Select.ItemIndicator />
                       </Select.Item>
                       <Select.Item value="staging">
-                        <Select.ItemIndicator />
                         <Select.ItemText>Staging</Select.ItemText>
+                        <Select.ItemIndicator />
                       </Select.Item>
                     </Select.List>
                   </Select.Popup>
@@ -2033,8 +2033,8 @@ export default function Home() {
                 <Select.Popup>
                   <Select.List>
                     <Select.Item value="production">
-                      <Select.ItemIndicator />
                       <Select.ItemText>Production</Select.ItemText>
+                      <Select.ItemIndicator />
                     </Select.Item>
                   </Select.List>
                 </Select.Popup>
