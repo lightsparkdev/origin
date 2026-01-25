@@ -20,6 +20,7 @@ import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Loader } from '@/components/Loader';
 import { Menu } from '@/components/Menu';
+import { Menubar } from '@/components/Menubar';
 import { ContextMenu } from '@/components/ContextMenu';
 import { Meter } from '@/components/Meter';
 import { Pagination } from '@/components/Pagination';
@@ -469,6 +470,105 @@ function MenuExamples() {
             </Menu.Positioner>
           </Menu.Portal>
         </Menu.Root>
+      </div>
+    </div>
+  );
+}
+
+function MenubarDemo() {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Basic
+        </span>
+        <Menubar.Root>
+          <Menu.Root>
+            <Menubar.Trigger>File</Menubar.Trigger>
+            <Menu.Portal>
+              <Menu.Positioner sideOffset={6}>
+                <Menu.Popup>
+                  <Menu.Item>New</Menu.Item>
+                  <Menu.Item>Open</Menu.Item>
+                  <Menu.Item>Save</Menu.Item>
+                  <Menu.Separator />
+                  <Menu.Item>Export</Menu.Item>
+                </Menu.Popup>
+              </Menu.Positioner>
+            </Menu.Portal>
+          </Menu.Root>
+
+          <Menu.Root>
+            <Menubar.Trigger>Edit</Menubar.Trigger>
+            <Menu.Portal>
+              <Menu.Positioner sideOffset={6}>
+                <Menu.Popup>
+                  <Menu.Item>Undo</Menu.Item>
+                  <Menu.Item>Redo</Menu.Item>
+                  <Menu.Separator />
+                  <Menu.Item>Cut</Menu.Item>
+                  <Menu.Item>Copy</Menu.Item>
+                  <Menu.Item>Paste</Menu.Item>
+                </Menu.Popup>
+              </Menu.Positioner>
+            </Menu.Portal>
+          </Menu.Root>
+
+          <Menu.Root>
+            <Menubar.Trigger>View</Menubar.Trigger>
+            <Menu.Portal>
+              <Menu.Positioner sideOffset={6}>
+                <Menu.Popup>
+                  <Menu.Item>Zoom In</Menu.Item>
+                  <Menu.Item>Zoom Out</Menu.Item>
+                  <Menu.Separator />
+                  <Menu.Item>Full Screen</Menu.Item>
+                </Menu.Popup>
+              </Menu.Positioner>
+            </Menu.Portal>
+          </Menu.Root>
+
+          <Menu.Root>
+            <Menubar.Trigger>Help</Menubar.Trigger>
+            <Menu.Portal>
+              <Menu.Positioner sideOffset={6}>
+                <Menu.Popup>
+                  <Menu.Item>Documentation</Menu.Item>
+                  <Menu.Item>About</Menu.Item>
+                </Menu.Popup>
+              </Menu.Positioner>
+            </Menu.Portal>
+          </Menu.Root>
+        </Menubar.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Disabled
+        </span>
+        <Menubar.Root disabled>
+          <Menu.Root>
+            <Menubar.Trigger>File</Menubar.Trigger>
+            <Menu.Portal>
+              <Menu.Positioner sideOffset={6}>
+                <Menu.Popup>
+                  <Menu.Item>New</Menu.Item>
+                </Menu.Popup>
+              </Menu.Positioner>
+            </Menu.Portal>
+          </Menu.Root>
+
+          <Menu.Root>
+            <Menubar.Trigger>Edit</Menubar.Trigger>
+            <Menu.Portal>
+              <Menu.Positioner sideOffset={6}>
+                <Menu.Popup>
+                  <Menu.Item>Cut</Menu.Item>
+                </Menu.Popup>
+              </Menu.Positioner>
+            </Menu.Portal>
+          </Menu.Root>
+        </Menubar.Root>
       </div>
     </div>
   );
@@ -1646,6 +1746,10 @@ export default function Home() {
       <h2 style={{ marginBottom: '1rem' }}>Menu Component</h2>
       
       <MenuExamples />
+
+      <h2 style={{ marginBottom: '1rem' }}>Menubar Component</h2>
+
+      <MenubarDemo />
       
       <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>
       

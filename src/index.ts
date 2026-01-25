@@ -12,6 +12,7 @@ export { ContextMenu } from './components/ContextMenu';
 export { Field } from './components/Field';
 export { Fieldset } from './components/Fieldset';
 export { Menu } from './components/Menu';
+export { Menubar } from './components/Menubar';
 export { Meter } from './components/Meter';
 export { Pagination } from './components/Pagination';
 export { PhoneInput } from './components/PhoneInput';
