@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Menu } from './';
 import { Button } from '@/components/Button';
 import { CentralIcon } from '@/components/Icon';
+import { Shortcut } from '@/components/Shortcut';
 
 // Basic menu with items
 export function BasicMenu() {
@@ -42,6 +43,42 @@ export function MenuWithIcons() {
             <Menu.Item>
               <CentralIcon name="IconClipboard" size={16} />
               Paste
+            </Menu.Item>
+          </Menu.Popup>
+        </Menu.Positioner>
+      </Menu.Portal>
+    </Menu.Root>
+  );
+}
+
+// Menu with keyboard shortcuts
+export function MenuWithShortcuts() {
+  return (
+    <Menu.Root>
+      <Menu.Trigger render={<Button variant="outline" />}>Edit</Menu.Trigger>
+      <Menu.Portal>
+        <Menu.Positioner>
+          <Menu.Popup>
+            <Menu.Item style={{ justifyContent: 'space-between' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CentralIcon name="IconCut" size={16} />
+                Cut
+              </span>
+              <Shortcut keys={['⌘', 'X']} />
+            </Menu.Item>
+            <Menu.Item style={{ justifyContent: 'space-between' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CentralIcon name="IconCopy" size={16} />
+                Copy
+              </span>
+              <Shortcut keys={['⌘', 'C']} />
+            </Menu.Item>
+            <Menu.Item style={{ justifyContent: 'space-between' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <CentralIcon name="IconClipboard" size={16} />
+                Paste
+              </span>
+              <Shortcut keys={['⌘', 'V']} />
             </Menu.Item>
           </Menu.Popup>
         </Menu.Positioner>
