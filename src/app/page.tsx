@@ -826,11 +826,6 @@ function PhoneInputDemo() {
             placeholder="Enter phone"
           />
         </PhoneInput.Root>
-        {phone && (
-          <span style={{ fontSize: '12px', color: '#7c7c7c', marginTop: '4px', display: 'block' }}>
-            Full: {country.dialCode} {phone}
-          </span>
-        )}
       </div>
 
       <div>
