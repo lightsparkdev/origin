@@ -81,11 +81,32 @@
    npm test -- src/components/{Name}/{Name}.test.tsx
    ```
 
-10. Create Storybook story with controlled example
+10. **Fresh eyes review** — launch a subagent with NO prior context:
+    
+    Pass only the component files to the subagent (Task tool, `explore` type, `fast` model):
+    ```
+    src/components/{Name}/{Name}.tsx
+    src/components/{Name}/{Name}.module.scss
+    ```
+    
+    Subagent prompt:
+    > "Review this component for simplicity. You have no context about the requirements.
+    > 
+    > Check for:
+    > 1. Unnecessary props or logic
+    > 2. Overly complex state handling
+    > 3. Styles that could be simpler
+    > 4. Anything confusing without context (bad naming, unclear purpose)
+    > 
+    > Be specific. If something looks fine, say so."
+    
+    Address feedback if valid, or note why it's intentional.
 
-11. **Update consumers** — add to `page.tsx` for demo
+11. Create Storybook story with controlled example
 
-12. **Final verification:**
+12. **Update consumers** — add to `page.tsx` for demo
+
+13. **Final verification:**
     - `npm run build` — catch export/import errors
     - `npm test` — full test suite
 
@@ -117,6 +138,9 @@ Apply Figma Styling (check figma-exceptions.mdc)
     │
     ▼
 Verify Tests Pass
+    │
+    ▼
+Fresh Eyes Review ← subagent (no context)
     │
     ▼
 Storybook + Demo
