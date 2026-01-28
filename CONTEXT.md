@@ -268,7 +268,6 @@ The `tools/` directory is excluded from the main tsconfig since it has Figma-spe
 
 - **Figma Design System**: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system
 - **Base UI Docs**: https://base-ui.com/react/components
-- **Origin v1 Repo**: `/Users/ajaymantri/Documents/Development/origin` (for reference)
 
 ---
 
