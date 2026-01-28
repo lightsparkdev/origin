@@ -59,6 +59,9 @@ export type { CentralIconName, CentralIconProps } from './components/Icon';
 
 export { Input, type InputProps } from './components/Input';
 
+export { Logo } from './components/Logo';
+export type { LogoProps } from './components/Logo';
+
 export { Loader } from './components/Loader';
 export type { LoaderProps } from './components/Loader';
 

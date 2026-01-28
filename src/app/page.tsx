@@ -45,6 +45,7 @@ import {
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 import { Shortcut } from '@/components/Shortcut';
+import { Logo } from '@/components/Logo';
 
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
@@ -1303,8 +1304,38 @@ function TableExamples() {
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
+      <Logo height={24} aria-label="Lightspark" style={{ marginBottom: '2rem' }} />
       <h1>Origin</h1>
-      <p style={{ marginBottom: '128px' }}>Design system rebuild — Base UI + Figma-first approach.</p>
+      <p style={{ marginBottom: '2rem' }}>Design system rebuild — Base UI + Figma-first approach.</p>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Logo Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logo Regular</span>
+          <Logo variant="logo" weight="regular" height={40} aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logo Light</span>
+          <Logo variant="logo" weight="light" height={40} aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logomark Regular</span>
+          <Logo variant="logomark" weight="regular" height={40} aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logomark Light</span>
+          <Logo variant="logomark" weight="light" height={40} aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Wordmark</span>
+          <Logo variant="wordmark" height={40} aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Custom Height (24px)</span>
+          <Logo height={24} aria-label="Lightspark" />
+        </div>
+      </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
