@@ -10,7 +10,7 @@
   box-sizing: border-box;
 
   &[data-disabled] {
-    opacity: var(--opacity-50);
+    opacity: calc(var(--opacity-50) / 100);
     pointer-events: none;
   }
 }
