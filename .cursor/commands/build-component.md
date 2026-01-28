@@ -78,7 +78,7 @@
 
 9. **Run tests** — verify all pass before continuing:
    ```
-   npm test -- --grep "{Name}"
+   npm test -- src/components/{Name}/{Name}.test.tsx
    ```
 
 10. Create Storybook story with controlled example

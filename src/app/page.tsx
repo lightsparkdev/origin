@@ -18,6 +18,7 @@ import { Fieldset } from '@/components/Fieldset';
 import { Form } from '@/components/Form';
 import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
+import { Item } from '@/components/Item';
 import { Loader } from '@/components/Loader';
 import { Menu } from '@/components/Menu';
 import { Menubar } from '@/components/Menubar';
@@ -1719,6 +1720,36 @@ export default function Home() {
           <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>Read Only</span>
           <Input defaultValue="Read only content" readOnly />
         </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Item Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginBottom: '128px', maxWidth: '400px' }}>
+        <Item
+          title="Account settings"
+          description="Manage your account"
+          leading={<CentralIcon name="IconSettingsGear1" size={24} />}
+          trailing={<CentralIcon name="IconChevronRightSmall" size={20} />}
+          onClick={() => console.log('clicked')}
+        />
+        <Item
+          title="Notifications"
+          description="Configure alerts"
+          leading={<CentralIcon name="IconBell" size={24} />}
+          trailing={<Switch size="sm" />}
+          clickable={false}
+        />
+        <Item
+          title="Selected option"
+          selected
+          trailing={<CentralIcon name="IconCheckmark2Small" size={24} />}
+          onClick={() => console.log('clicked')}
+        />
+        <Item
+          title="Disabled item"
+          description="This item is disabled"
+          disabled
+        />
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Loader Component</h2>
