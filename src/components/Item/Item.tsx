@@ -69,10 +69,12 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
 
     const content = (
       <>
-        {leading && <div className={styles.leading}>{leading}</div>}
-        <div className={styles.content}>
-          <span className={styles.title}>{title}</span>
-          {description && <span className={styles.description}>{description}</span>}
+        <div className={styles.container}>
+          {leading && <div className={styles.leading}>{leading}</div>}
+          <div className={styles.content}>
+            <span className={styles.title}>{title}</span>
+            {description && <span className={styles.description}>{description}</span>}
+          </div>
         </div>
         {trailing && <div className={styles.trailing}>{trailing}</div>}
       </>

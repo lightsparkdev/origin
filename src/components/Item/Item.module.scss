@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
-  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-lg);
   border-radius: var(--corner-radius-xs);
   width: 100%;
   box-sizing: border-box;
@@ -31,6 +31,14 @@
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
 }
 
 .leading {
