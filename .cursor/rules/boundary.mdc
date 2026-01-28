@@ -1,0 +1,39 @@
+---
+description: Origin is the design system - keep it product-agnostic
+alwaysApply: true
+---
+
+# Origin Boundary
+
+Origin is the design system. Products like Grid consume it.
+
+## This Repo
+
+- Generic, reusable components only
+- Design tokens and typography
+- No product-specific logic or branding
+
+## Grid Reference
+
+Grid (`/Users/ajaymantri/dev/grid`) is a product built on Origin.
+
+- **Read-only** — never modify Grid files from this workspace
+- Use as reference for how Origin components are consumed in practice
+- Learn from real usage patterns when designing component APIs
+
+## Decision Guide
+
+| If you're adding... | It belongs in... |
+|---------------------|------------------|
+| Reusable UI pattern | Origin |
+| Product-specific layout | Grid (or other product) |
+| Generic interaction (button, input) | Origin |
+| Business logic | Grid (or other product) |
+| Design tokens | Origin |
+| App-specific tokens | Grid (or other product) |
+
+## Do Not
+
+- Add product names, logos, or branding to Origin
+- Create components that only make sense for one product
+- Modify Grid files from this workspace
