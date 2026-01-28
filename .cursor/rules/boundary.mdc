@@ -9,9 +9,11 @@ Origin is the design system. Products like Grid consume it.
 
 ## This Repo
 
-- Generic, reusable components only
+**This is the workspace you build in.** All components and tokens are created here.
+
+- Generic, reusable components
 - Design tokens and typography
-- No product-specific logic or branding
+- Before adding logic to a component, pause and ask: should this logic live in the primitive or in the product? Check with the user before proceeding.
 
 ## Grid Reference
 
@@ -31,9 +33,3 @@ Grid (`/Users/ajaymantri/dev/grid`) is a product built on Origin.
 | Business logic | Grid (or other product) |
 | Design tokens | Origin |
 | App-specific tokens | Grid (or other product) |
-
-## Do Not
-
-- Add product names, logos, or branding to Origin
-- Create components that only make sense for one product
-- Modify Grid files from this workspace
