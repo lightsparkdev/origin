@@ -1,0 +1,47 @@
+---
+description: Build component from Figma with parallel research
+globs: []
+alwaysApply: false
+---
+
+# Build Component from Figma
+
+## Step 1: Parse Figma URL
+
+Extract `fileKey` and `nodeId`.
+
+## Step 2: Parallel Research
+
+Launch **3 subagents simultaneously** (Task tool, `explore` type, `fast` model):
+
+| Agent | Task | Thoroughness |
+|-------|------|--------------|
+| Figma | Metadata, variable defs, CSS per variant | very thorough |
+| Base UI | Fetch llms.txt, find matches/compositions | medium |
+| Codebase | Find similar components, patterns to follow | quick |
+
+**Figma agent prompt:**
+> Analyze Figma component at fileKey={fileKey}, nodeId={nodeId}. Use MCP tools: metadata, variable defs, design context CSS for each variant/state. Output: variants, sizes, tokens, sub-components, states, key CSS.
+
+**Base UI agent prompt:**
+> Research Base UI for {component}. Fetch https://base-ui.com/llms.txt, check compositions. Output: exact match, composition option, recommendation (A/B/C).
+
+**Codebase agent prompt:**
+> Find patterns in src/components/ for implementing {component}. Output: similar components, file structure, token patterns.
+
+## Step 3: Synthesize & Decide
+
+Combine agent outputs → choose Path A/B/C.
+
+## Step 4: Implement
+
+Follow existing rules based on path:
+- **Path A/B** (Base UI): `components.mdc`
+- **Path C** (Custom): `custom-components.mdc`
+- **Figma details**: `figma-analysis.mdc`
+
+## Flow
+
+```
+Figma URL → 3 parallel agents → Synthesize → A/B/C → Implement per existing rules
+```

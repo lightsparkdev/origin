@@ -10,18 +10,7 @@ alwaysApply: false
 
 Before implementing any component from Figma, complete ALL of these steps. Do not skip any.
 
-## 1. Get the full picture
-
-```
-mcp_Figma_get_screenshot(nodeId, fileKey)
-```
-
-Study the screenshot. Identify:
-- All visible states (default, hover, active, disabled, focus)
-- All variants (sizes, colors, types)
-- Nested sub-components
-
-## 2. Understand the structure
+## 1. Understand the structure
 
 ```
 mcp_Figma_get_metadata(nodeId, fileKey)
@@ -33,7 +22,7 @@ From the XML output, extract:
 - Sub-component instance names
 - Auto-layout direction and spacing
 
-## 3. Get tokens
+## 2. Get tokens
 
 ```
 mcp_Figma_get_variable_defs(nodeId, fileKey)
@@ -45,7 +34,7 @@ mcp_Figma_get_variable_defs(nodeId, fileKey)
 
 Do not invent tokens. Do not force token usage where the design uses a custom value.
 
-## 4. Extract CSS for EACH variant
+## 3. Extract CSS for EACH variant
 
 Run `get_design_context` on each variant node, not just the parent:
 - Default state
@@ -54,7 +43,7 @@ Run `get_design_context` on each variant node, not just the parent:
 - Disabled state
 - Hover/active states (if designed)
 
-## 5. Identify component composition
+## 4. Identify component composition
 
 For compound components (combobox, select, dialog, etc.), identify:
 
@@ -67,7 +56,7 @@ If a component uses another design system component:
 2. Note any size/variant differences
 3. Plan to use the existing component via `render` prop or composition
 
-## 6. Document before coding
+## 5. Document before coding
 
 Before writing any code, output a summary:
 
@@ -92,7 +81,7 @@ Only proceed to implementation after this summary is complete.
 ## When to go deeper
 
 If the component has:
-- **Nested components** → Get screenshot + metadata of each sub-component
+- **Nested components** → Get metadata of each sub-component
 - **Multiple variants** → Get design context for each variant separately
 - **Interactive states** → Confirm all states are designed, ask if any are missing
 - **Design system components inside** → Analyze if they're the same or a size variant
