@@ -1302,7 +1302,7 @@ function TableExamples() {
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
-      <h1>Origin v2</h1>
+      <h1>Origin</h1>
       <p style={{ marginBottom: '128px' }}>Design system rebuild — Base UI + Figma-first approach.</p>
       
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>

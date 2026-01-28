@@ -1,9 +1,9 @@
 ---
-description: Origin v2 design system conventions and workflow
+description: Origin design system conventions and workflow
 alwaysApply: true
 ---
 
-# Origin v2 Design System
+# Origin Design System
 
 > Quick reference for AI agents working on this project.
 
@@ -18,7 +18,7 @@ npm run tokens:build              # Build color/spacing tokens
 
 ## Project Overview
 
-**Origin v2** is a design system using:
+**Origin** is a design system using:
 - **Base UI** for component behavior/accessibility
 - **Figma API** for styles (text, effects) and CSS extraction
 - **Central Icons** for iconography

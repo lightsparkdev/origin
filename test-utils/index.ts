@@ -1,5 +1,5 @@
 /**
- * Test utilities for Origin v2 components
+ * Test utilities for Origin components
  *
  * Includes conformance tests adapted from Base UI patterns.
  * @see https://github.com/mui/base-ui/tree/master/packages/react/test

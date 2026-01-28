@@ -1,4 +1,4 @@
-# Origin Design System v2
+# Origin Design System
 
 A design system built on **Base UI** with direct **Figma-to-code** styling.
 
@@ -74,7 +74,7 @@ All ~100 icons from the Figma design system are available.
 ## Using as a Package
 
 ```json
-{ "dependencies": { "@grid/origin": "file:../origin-v2" } }
+{ "dependencies": { "@grid/origin": "file:../origin" } }
 ```
 
 ```js

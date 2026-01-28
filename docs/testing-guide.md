@@ -15,7 +15,7 @@ Tests are written **before** implementation:
 
 ## Overview
 
-Origin v2 uses a two-layer testing system:
+Origin uses a two-layer testing system:
 
 | Layer | Tool | Speed | Use For |
 |-------|------|-------|---------|

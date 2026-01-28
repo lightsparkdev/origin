@@ -1,4 +1,4 @@
-# Origin v2 - Project Context
+# Origin - Project Context
 
 > **Purpose**: This document provides full context for AI assistants to continue work on this project.
 
@@ -6,7 +6,7 @@
 
 ## Vision & Approach
 
-Origin v2 is a **complete rewrite** of the Origin Design System, shifting from a complex spec-generation pipeline to a **simpler, designer-first workflow**.
+Origin is a **complete rewrite** of the Origin Design System, shifting from a complex spec-generation pipeline to a **simpler, designer-first workflow**.
 
 ### Core Philosophy
 
@@ -15,14 +15,14 @@ Origin v2 is a **complete rewrite** of the Origin Design System, shifting from a
 3. **Minimal Transformation** — Reduce pipeline complexity to minimize drift between design and code
 4. **Designer-First** — The workflow is optimized for a designer who codes, not an engineer who designs
 
-### The Old Problem (origin v1)
+### The Old Problem (v1)
 
 - Complex MCP spec-generation pipeline with many transformation steps
 - Design drift accumulated at each transformation layer
 - Heavy engineering overhead for maintaining generators
 - Memory/context issues across sessions
 
-### The New Solution (origin v2)
+### The New Solution (v2)
 
 ```
 Figma Design → Figma Lint Plugin → Base UI Component + Figma CSS → Done
@@ -100,7 +100,7 @@ import { CentralIcon } from '@/components/Icon';
 ## Project Structure
 
 ```
-origin-v2/
+origin/
 ├── src/
 │   ├── app/                    # Next.js app
 │   │   ├── globals.scss        # Global styles + icon stroke CSS
@@ -144,7 +144,7 @@ We style Base UI components with Figma-extracted CSS.
 
 ### 2. Complete Icon Registry (No Sync)
 
-Unlike v1's spec-driven sync approach, v2 includes ALL icons upfront:
+Unlike the old spec-driven sync approach, Origin includes ALL icons upfront:
 - Simpler (no sync script)
 - All icons available immediately
 - Tree-shaking still removes unused icons from bundle

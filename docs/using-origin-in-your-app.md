@@ -2,8 +2,8 @@
 
 ## Setup
 
-1. **Copy tokens** from `origin-v2/src/tokens/` to `your-app/src/tokens/`
-2. **Copy fonts** from `origin-v2/public/fonts/` to `your-app/public/fonts/`
+1. **Copy tokens** from `origin/src/tokens/` to `your-app/src/tokens/`
+2. **Copy fonts** from `origin/public/fonts/` to `your-app/public/fonts/`
 3. **Configure `globals.scss`:**
 
 ```scss
