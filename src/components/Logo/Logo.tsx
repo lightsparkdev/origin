@@ -9,13 +9,18 @@ import styles from './Logo.module.scss';
 type Variant = 'logo' | 'logomark' | 'wordmark';
 type Weight = 'regular' | 'light';
 
-export interface LogoProps extends Omit<React.SVGProps<SVGSVGElement>, 'children'> {
+export interface LogoProps extends Omit<React.SVGProps<SVGSVGElement>, 'children' | 'color'> {
   /** Logo variant */
   variant?: Variant;
   /** Stroke weight. Note: wordmark only has regular weight; light is ignored. */
   weight?: Weight;
   /** Height in pixels (width scales proportionally) */
   height?: number;
+  /** 
+   * Logo color. Accepts any CSS color value or token.
+   * @default 'var(--surface-inverted)'
+   */
+  color?: string;
   /** Required for accessibility. Describes the logo for screen readers. */
   'aria-label': string;
 }
@@ -33,7 +38,9 @@ export const Logo = React.forwardRef<SVGSVGElement, LogoProps>(
       variant = 'logo',
       weight = 'regular',
       height = 80,
+      color,
       className,
+      style,
       ...svgProps
     } = props;
 
@@ -49,6 +56,7 @@ export const Logo = React.forwardRef<SVGSVGElement, LogoProps>(
         ref={forwardedRef}
         role="img"
         className={clsx(styles.root, className)}
+        style={{ color, ...style }}
         width={width}
         height={height}
         viewBox={svgContent.viewBox}
