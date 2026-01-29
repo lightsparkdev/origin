@@ -1,0 +1,68 @@
+@use '@grid/origin/tokens' as *;
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  max-width: var(--max-width-lg);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.terms {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.termsError {
+  @include body-sm;
+  color: var(--text-critical);
+  margin-left: var(--spacing-lg);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-tertiary);
+
+  @media (max-width: 640px) {
+    flex-direction: column-reverse;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.successMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-4xl);
+  text-align: center;
+
+  h2 {
+    @include headline;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  p {
+    @include body;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+}
