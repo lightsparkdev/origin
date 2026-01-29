@@ -180,12 +180,13 @@ export interface PositionerProps extends BaseNavigationMenu.Positioner.Props {
 
 export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
   function Positioner(props, forwardedRef) {
-    const { className, ...positionerProps } = props;
+    const { className, collisionAvoidance = { side: 'none' }, ...positionerProps } = props;
     return (
       <BaseNavigationMenu.Positioner
         ref={forwardedRef}
         className={clsx(styles.positioner, className)}
         sideOffset={10}
+        collisionAvoidance={collisionAvoidance}
         {...positionerProps}
       />
     );
