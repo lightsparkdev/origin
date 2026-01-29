@@ -62,35 +62,6 @@ export function WithDropdown() {
   );
 }
 
-// Navigation menu with submenu
-export function WithSubmenu() {
-  return (
-    <NavigationMenu.Root>
-      <NavigationMenu.List>
-        <NavigationMenu.Item>
-          <NavigationMenu.Trigger>
-            Products
-            <NavigationMenu.Icon>
-              <CentralIcon name="IconChevronDownSmall" size={16} />
-            </NavigationMenu.Icon>
-          </NavigationMenu.Trigger>
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner>
-              <NavigationMenu.Popup>
-                <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
-                <NavigationMenu.SubmenuTrigger>
-                  More Options
-                  <CentralIcon name="IconChevronRightSmall" size={16} />
-                </NavigationMenu.SubmenuTrigger>
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
-        </NavigationMenu.Item>
-      </NavigationMenu.List>
-    </NavigationMenu.Root>
-  );
-}
-
 // Active link state
 export function ActiveLink() {
   return (

@@ -229,45 +229,6 @@
   color: var(--icon-secondary);
 }
 
-// Submenu Trigger
-.submenuTrigger {
-  @include body;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-xs);
-  height: 36px;
-  padding-block: var(--spacing-xs);
-  padding-inline-start: var(--spacing-xs);
-  padding-inline-end: var(--spacing-3xs);
-  border-radius: var(--corner-radius-xs);
-  color: var(--text-primary);
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-
-  &:hover,
-  &[data-highlighted] {
-    background-color: var(--surface-hover);
-  }
-
-  &[data-popup-open] {
-    background-color: var(--surface-hover);
-  }
-
-  &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100);
-    cursor: not-allowed;
-  }
-
-  // Chevron icon should be secondary color
-  > svg:last-child,
-  > [data-icon]:last-child {
-    color: var(--icon-secondary);
-    flex-shrink: 0;
-  }
-}
-
 .group {
   display: flex;
   flex-direction: column;
