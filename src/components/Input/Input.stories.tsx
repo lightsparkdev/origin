@@ -53,6 +53,12 @@ export const ReadOnly: Story = {
   },
 };
 
+export const Invalid: Story = {
+  render: () => (
+    <Input defaultValue="Invalid content" data-invalid />
+  ),
+};
+
 export const Controlled: Story = {
   render: function ControlledInput() {
     const [value, setValue] = useState('');
@@ -97,6 +103,12 @@ export const AllVariants: Story = {
           Read Only
         </span>
         <Input defaultValue="Read only content" readOnly />
+      </div>
+      <div>
+        <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+          Invalid
+        </span>
+        <Input defaultValue="Invalid content" data-invalid />
       </div>
     </div>
   ),
