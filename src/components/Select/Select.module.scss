@@ -7,7 +7,6 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  width: 256px;
   height: 36px;
   padding-inline-start: var(--spacing-sm);
   padding-inline-end: var(--spacing-xs);
@@ -153,7 +152,7 @@
   box-shadow: var(--shadow-lg);
   outline: 0;
   overflow: hidden;
-  min-width: 256px;
+  min-width: var(--anchor-width);
   transform-origin: var(--transform-origin);
   transition:
     opacity 150ms ease,
