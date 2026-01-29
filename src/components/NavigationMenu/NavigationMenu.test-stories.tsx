@@ -35,29 +35,33 @@ export function WithDropdown() {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner>
-              <NavigationMenu.Popup>
-                <NavigationMenu.PopupItem>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Dashboard
-                </NavigationMenu.PopupItem>
-                <NavigationMenu.PopupItem>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Analytics
-                </NavigationMenu.PopupItem>
-                <NavigationMenu.PopupItem>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Reports
-                </NavigationMenu.PopupItem>
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Dashboard
+            </NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Analytics
+            </NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Reports
+            </NavigationMenu.PopupItem>
+          </NavigationMenu.Content>
         </NavigationMenu.Item>
         <NavigationMenu.Item>
           <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu.List>
+
+      <NavigationMenu.Portal>
+        <NavigationMenu.Positioner>
+          <NavigationMenu.Popup>
+            <NavigationMenu.Viewport />
+          </NavigationMenu.Popup>
+        </NavigationMenu.Positioner>
+      </NavigationMenu.Portal>
     </NavigationMenu.Root>
   );
 }
@@ -141,25 +145,29 @@ export function WithGroupLabels() {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner>
-              <NavigationMenu.Popup>
-                <NavigationMenu.Group>
-                  <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
-                  <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
-                  <NavigationMenu.PopupItem>Reports</NavigationMenu.PopupItem>
-                </NavigationMenu.Group>
-                <NavigationMenu.Separator />
-                <NavigationMenu.Group>
-                  <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
-                  <NavigationMenu.PopupItem>Preferences</NavigationMenu.PopupItem>
-                  <NavigationMenu.PopupItem>Account</NavigationMenu.PopupItem>
-                </NavigationMenu.Group>
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.Group>
+              <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
+              <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>Reports</NavigationMenu.PopupItem>
+            </NavigationMenu.Group>
+            <NavigationMenu.Separator />
+            <NavigationMenu.Group>
+              <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
+              <NavigationMenu.PopupItem>Preferences</NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>Account</NavigationMenu.PopupItem>
+            </NavigationMenu.Group>
+          </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
+
+      <NavigationMenu.Portal>
+        <NavigationMenu.Positioner>
+          <NavigationMenu.Popup>
+            <NavigationMenu.Viewport />
+          </NavigationMenu.Popup>
+        </NavigationMenu.Positioner>
+      </NavigationMenu.Portal>
     </NavigationMenu.Root>
   );
 }

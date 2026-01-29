@@ -1821,24 +1821,20 @@ export default function Home() {
                   <CentralIcon name="IconChevronDownSmall" size={16} />
                 </NavigationMenu.Icon>
               </NavigationMenu.Trigger>
-              <NavigationMenu.Portal>
-                <NavigationMenu.Positioner>
-                  <NavigationMenu.Popup>
-                    <NavigationMenu.PopupItem>
-                      <CentralIcon name="IconGlobe2" size={16} />
-                      Dashboard
-                    </NavigationMenu.PopupItem>
-                    <NavigationMenu.PopupItem>
-                      <CentralIcon name="IconGlobe2" size={16} />
-                      Analytics
-                    </NavigationMenu.PopupItem>
-                    <NavigationMenu.PopupItem>
-                      <CentralIcon name="IconGlobe2" size={16} />
-                      Reports
-                    </NavigationMenu.PopupItem>
-                  </NavigationMenu.Popup>
-                </NavigationMenu.Positioner>
-              </NavigationMenu.Portal>
+              <NavigationMenu.Content>
+                <NavigationMenu.PopupItem>
+                  <CentralIcon name="IconGlobe2" size={16} />
+                  Dashboard
+                </NavigationMenu.PopupItem>
+                <NavigationMenu.PopupItem>
+                  <CentralIcon name="IconGlobe2" size={16} />
+                  Analytics
+                </NavigationMenu.PopupItem>
+                <NavigationMenu.PopupItem>
+                  <CentralIcon name="IconGlobe2" size={16} />
+                  Reports
+                </NavigationMenu.PopupItem>
+              </NavigationMenu.Content>
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger>
@@ -1847,20 +1843,24 @@ export default function Home() {
                   <CentralIcon name="IconChevronDownSmall" size={16} />
                 </NavigationMenu.Icon>
               </NavigationMenu.Trigger>
-              <NavigationMenu.Portal>
-                <NavigationMenu.Positioner>
-                  <NavigationMenu.Popup>
-                    <NavigationMenu.PopupItem>Documentation</NavigationMenu.PopupItem>
-                    <NavigationMenu.PopupItem>API Reference</NavigationMenu.PopupItem>
-                    <NavigationMenu.PopupItem>Blog</NavigationMenu.PopupItem>
-                  </NavigationMenu.Popup>
-                </NavigationMenu.Positioner>
-              </NavigationMenu.Portal>
+              <NavigationMenu.Content>
+                <NavigationMenu.PopupItem>Documentation</NavigationMenu.PopupItem>
+                <NavigationMenu.PopupItem>API Reference</NavigationMenu.PopupItem>
+                <NavigationMenu.PopupItem>Blog</NavigationMenu.PopupItem>
+              </NavigationMenu.Content>
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Link href="#">Pricing</NavigationMenu.Link>
             </NavigationMenu.Item>
           </NavigationMenu.List>
+
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
         </NavigationMenu.Root>
       </div>
       

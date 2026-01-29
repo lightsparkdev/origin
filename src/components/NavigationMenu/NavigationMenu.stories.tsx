@@ -44,24 +44,20 @@ export const WithDropdown: StoryObj = {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner>
-              <NavigationMenu.Popup>
-                <NavigationMenu.PopupItem>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Dashboard
-                </NavigationMenu.PopupItem>
-                <NavigationMenu.PopupItem>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Analytics
-                </NavigationMenu.PopupItem>
-                <NavigationMenu.PopupItem>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Reports
-                </NavigationMenu.PopupItem>
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Dashboard
+            </NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Analytics
+            </NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Reports
+            </NavigationMenu.PopupItem>
+          </NavigationMenu.Content>
         </NavigationMenu.Item>
         <NavigationMenu.Item>
           <NavigationMenu.Trigger>
@@ -70,20 +66,24 @@ export const WithDropdown: StoryObj = {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner>
-              <NavigationMenu.Popup>
-                <NavigationMenu.PopupItem>Documentation</NavigationMenu.PopupItem>
-                <NavigationMenu.PopupItem>API Reference</NavigationMenu.PopupItem>
-                <NavigationMenu.PopupItem>Blog</NavigationMenu.PopupItem>
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.PopupItem>Documentation</NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>API Reference</NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>Blog</NavigationMenu.PopupItem>
+          </NavigationMenu.Content>
         </NavigationMenu.Item>
         <NavigationMenu.Item>
           <NavigationMenu.Link href="#">Pricing</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu.List>
+
+      <NavigationMenu.Portal>
+        <NavigationMenu.Positioner>
+          <NavigationMenu.Popup>
+            <NavigationMenu.Viewport />
+          </NavigationMenu.Popup>
+        </NavigationMenu.Positioner>
+      </NavigationMenu.Portal>
     </NavigationMenu.Root>
   ),
 };
@@ -100,37 +100,41 @@ export const WithGroupLabels: StoryObj = {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner>
-              <NavigationMenu.Popup>
-                <NavigationMenu.Group>
-                  <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
-                  <NavigationMenu.PopupItem>
-                    <CentralIcon name="IconGlobe2" size={16} />
-                    Dashboard
-                  </NavigationMenu.PopupItem>
-                  <NavigationMenu.PopupItem>
-                    <CentralIcon name="IconGlobe2" size={16} />
-                    Reports
-                  </NavigationMenu.PopupItem>
-                </NavigationMenu.Group>
-                <NavigationMenu.Separator />
-                <NavigationMenu.Group>
-                  <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
-                  <NavigationMenu.PopupItem>
-                    <CentralIcon name="IconSettingsGear1" size={16} />
-                    Preferences
-                  </NavigationMenu.PopupItem>
-                  <NavigationMenu.PopupItem>
-                    <CentralIcon name="IconSettingsGear1" size={16} />
-                    Account
-                  </NavigationMenu.PopupItem>
-                </NavigationMenu.Group>
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.Group>
+              <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
+              <NavigationMenu.PopupItem>
+                <CentralIcon name="IconGlobe2" size={16} />
+                Dashboard
+              </NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>
+                <CentralIcon name="IconGlobe2" size={16} />
+                Reports
+              </NavigationMenu.PopupItem>
+            </NavigationMenu.Group>
+            <NavigationMenu.Separator />
+            <NavigationMenu.Group>
+              <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
+              <NavigationMenu.PopupItem>
+                <CentralIcon name="IconSettingsGear1" size={16} />
+                Preferences
+              </NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>
+                <CentralIcon name="IconSettingsGear1" size={16} />
+                Account
+              </NavigationMenu.PopupItem>
+            </NavigationMenu.Group>
+          </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
+
+      <NavigationMenu.Portal>
+        <NavigationMenu.Positioner>
+          <NavigationMenu.Popup>
+            <NavigationMenu.Viewport />
+          </NavigationMenu.Popup>
+        </NavigationMenu.Positioner>
+      </NavigationMenu.Portal>
     </NavigationMenu.Root>
   ),
 };
@@ -172,16 +176,20 @@ export const WithActionButtons: StoryObj = {
                 <CentralIcon name="IconChevronDownSmall" size={16} />
               </NavigationMenu.Icon>
             </NavigationMenu.Trigger>
-            <NavigationMenu.Portal>
-              <NavigationMenu.Positioner>
-                <NavigationMenu.Popup>
-                  <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
-                  <NavigationMenu.PopupItem>Analytics</NavigationMenu.PopupItem>
-                </NavigationMenu.Popup>
-              </NavigationMenu.Positioner>
-            </NavigationMenu.Portal>
+            <NavigationMenu.Content>
+              <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>Analytics</NavigationMenu.PopupItem>
+            </NavigationMenu.Content>
           </NavigationMenu.Item>
         </NavigationMenu.List>
+
+        <NavigationMenu.Portal>
+          <NavigationMenu.Positioner>
+            <NavigationMenu.Popup>
+              <NavigationMenu.Viewport />
+            </NavigationMenu.Popup>
+          </NavigationMenu.Positioner>
+        </NavigationMenu.Portal>
       </NavigationMenu.Root>
       {/* Standalone action buttons outside NavigationMenu */}
       <Button variant="ghost" size="sm">
