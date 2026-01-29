@@ -35,6 +35,13 @@ export function WithDropdown() {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
           <NavigationMenu.Content>
             <NavigationMenu.PopupItem>
               <CentralIcon name="IconGlobe2" size={16} />
@@ -54,14 +61,38 @@ export function WithDropdown() {
           <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
         </NavigationMenu.Item>
       </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
 
-      <NavigationMenu.Portal>
-        <NavigationMenu.Positioner>
-          <NavigationMenu.Popup>
-            <NavigationMenu.Viewport />
-          </NavigationMenu.Popup>
-        </NavigationMenu.Positioner>
-      </NavigationMenu.Portal>
+// Navigation menu with submenu
+export function WithSubmenu() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Trigger>
+            Products
+            <NavigationMenu.Icon>
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </NavigationMenu.Icon>
+          </NavigationMenu.Trigger>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+            <NavigationMenu.SubmenuTrigger>
+              More Options
+              <CentralIcon name="IconChevronRightSmall" size={16} />
+            </NavigationMenu.SubmenuTrigger>
+          </NavigationMenu.Content>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
     </NavigationMenu.Root>
   );
 }
@@ -145,6 +176,13 @@ export function WithGroupLabels() {
               <CentralIcon name="IconChevronDownSmall" size={16} />
             </NavigationMenu.Icon>
           </NavigationMenu.Trigger>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
           <NavigationMenu.Content>
             <NavigationMenu.Group>
               <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
@@ -160,14 +198,6 @@ export function WithGroupLabels() {
           </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
-
-      <NavigationMenu.Portal>
-        <NavigationMenu.Positioner>
-          <NavigationMenu.Popup>
-            <NavigationMenu.Viewport />
-          </NavigationMenu.Popup>
-        </NavigationMenu.Positioner>
-      </NavigationMenu.Portal>
     </NavigationMenu.Root>
   );
 }
