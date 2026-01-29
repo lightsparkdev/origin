@@ -15,12 +15,11 @@ export interface RootProps extends BaseNavigationMenu.Root.Props {
 
 export const Root = React.forwardRef<HTMLElement, RootProps>(
   function Root(props, forwardedRef) {
-    const { className, closeDelay = 0, ...rootProps } = props;
+    const { className, ...rootProps } = props;
     return (
       <BaseNavigationMenu.Root
         ref={forwardedRef}
         className={clsx(styles.root, className)}
-        closeDelay={closeDelay}
         {...rootProps}
       />
     );
