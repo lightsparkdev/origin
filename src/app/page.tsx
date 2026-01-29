@@ -59,11 +59,11 @@ const groupedFruits = {
 function ToastDemo() {
   const toastManager = Toast.useToastManager();
 
-  const showToast = (variant: ToastVariant, title: string, description?: string) => {
+  const showToast = (variant: ToastVariant, title: string, description?: string, actionLabel?: string) => {
     toastManager.add({
       title,
       description,
-      data: { variant },
+      data: { variant, actionLabel },
     });
   };
 
@@ -84,6 +84,9 @@ function ToastDemo() {
       <Button variant="outline" onClick={() => showToast('invalid', 'Error', 'Something went wrong.')}>
         Invalid
       </Button>
+      <Button variant="outline" onClick={() => showToast('default', 'Item deleted', 'The item has been moved to trash.', 'Undo')}>
+        With Action
+      </Button>
     </div>
   );
 }
@@ -95,6 +98,7 @@ function ToastRenderer() {
     <>
       {toastManager.toasts.map((toast) => {
         const variant = (toast.data?.variant as ToastVariant) || 'default';
+        const actionLabel = toast.data?.actionLabel as string | undefined;
         return (
           <Toast.Root key={toast.id} toast={toast} variant={variant}>
             {variant !== 'default' && <Toast.Icon variant={variant} />}
@@ -104,6 +108,7 @@ function ToastRenderer() {
                 <Toast.Description>{toast.description}</Toast.Description>
               )}
             </Toast.Content>
+            {actionLabel && <Toast.Action>{actionLabel}</Toast.Action>}
             <Toast.Close aria-label="Close toast" />
           </Toast.Root>
         );

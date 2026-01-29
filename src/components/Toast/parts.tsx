@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Toast as BaseToast } from '@base-ui/react/toast';
 import clsx from 'clsx';
+import { Button } from '@/components/Button';
 import { CentralIcon } from '@/components/Icon';
 import styles from './Toast.module.scss';
 
@@ -128,18 +129,21 @@ export const Description = React.forwardRef<HTMLDivElement, DescriptionProps>(
 );
 
 // Action
-export interface ActionProps extends BaseToast.Action.Props {}
+export interface ActionProps extends Omit<BaseToast.Action.Props, 'render'> {}
 
 export const Action = React.forwardRef<HTMLButtonElement, ActionProps>(
   function Action(props, ref) {
-    const { className, ...other } = props;
+    const { className, children, ...other } = props;
 
     return (
       <BaseToast.Action
         ref={ref}
         className={clsx(styles.action, className)}
+        render={<Button variant="outline" size="compact" />}
         {...other}
-      />
+      >
+        {children}
+      </BaseToast.Action>
     );
   }
 );
