@@ -1811,7 +1811,7 @@ export default function Home() {
 
       <h2 style={{ marginBottom: '1rem' }}>Navigation Menu Component</h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem', marginBottom: '128px' }}>
         <div>
           <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
             With Dropdown
