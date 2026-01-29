@@ -1,0 +1,21 @@
+export { NavigationMenu } from './parts';
+export type {
+  RootProps as NavigationMenuRootProps,
+  ListProps as NavigationMenuListProps,
+  ItemProps as NavigationMenuItemProps,
+  TriggerProps as NavigationMenuTriggerProps,
+  IconProps as NavigationMenuIconProps,
+  LinkProps as NavigationMenuLinkProps,
+  ContentProps as NavigationMenuContentProps,
+  PortalProps as NavigationMenuPortalProps,
+  PositionerProps as NavigationMenuPositionerProps,
+  PopupProps as NavigationMenuPopupProps,
+  ViewportProps as NavigationMenuViewportProps,
+  ArrowProps as NavigationMenuArrowProps,
+  BackdropProps as NavigationMenuBackdropProps,
+  PopupItemProps as NavigationMenuPopupItemProps,
+  SubmenuTriggerProps as NavigationMenuSubmenuTriggerProps,
+  GroupProps as NavigationMenuGroupProps,
+  GroupLabelProps as NavigationMenuGroupLabelProps,
+  SeparatorProps as NavigationMenuSeparatorProps,
+} from './parts';

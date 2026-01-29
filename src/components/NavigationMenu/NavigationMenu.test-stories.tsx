@@ -1,0 +1,203 @@
+'use client';
+
+import * as React from 'react';
+import { NavigationMenu } from './parts';
+import { CentralIcon } from '@/components/Icon';
+
+// Basic navigation menu with links only
+export function LinksOnly() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/home">Home</NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/about">About</NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/contact">Contact</NavigationMenu.Link>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Navigation menu with trigger and dropdown
+export function WithDropdown() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Trigger>
+            Products
+            <NavigationMenu.Icon>
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </NavigationMenu.Icon>
+          </NavigationMenu.Trigger>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Dashboard
+            </NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Analytics
+            </NavigationMenu.PopupItem>
+            <NavigationMenu.PopupItem>
+              <CentralIcon name="IconGlobe2" size={16} />
+              Reports
+            </NavigationMenu.PopupItem>
+          </NavigationMenu.Content>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Navigation menu with submenu
+export function WithSubmenu() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Trigger>
+            Products
+            <NavigationMenu.Icon>
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </NavigationMenu.Icon>
+          </NavigationMenu.Trigger>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+            <NavigationMenu.SubmenuTrigger>
+              More Options
+              <CentralIcon name="IconChevronRightSmall" size={16} />
+            </NavigationMenu.SubmenuTrigger>
+          </NavigationMenu.Content>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Active link state
+export function ActiveLink() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/home">Home</NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/about" active>
+            About
+          </NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/contact">Contact</NavigationMenu.Link>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Disabled states
+export function DisabledStates() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/home" disabled>
+            Disabled Link
+          </NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Trigger disabled>
+            Disabled Trigger
+            <NavigationMenu.Icon>
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </NavigationMenu.Icon>
+          </NavigationMenu.Trigger>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// PopupItem with leading and trailing icons
+export function PopupItemVariants() {
+  return (
+    <div style={{ padding: 16, background: 'var(--surface-primary)', borderRadius: 6 }}>
+      <NavigationMenu.PopupItem>
+        <CentralIcon name="IconGlobe2" size={16} />
+        With Leading Icon
+      </NavigationMenu.PopupItem>
+      <NavigationMenu.PopupItem>
+        Label Only
+      </NavigationMenu.PopupItem>
+      <NavigationMenu.PopupItem trailing={<CentralIcon name="IconSettingsGear1" size={16} />}>
+        <CentralIcon name="IconGlobe2" size={16} />
+        With Both Icons
+      </NavigationMenu.PopupItem>
+      <NavigationMenu.PopupItem disabled>
+        <CentralIcon name="IconGlobe2" size={16} />
+        Disabled Item
+      </NavigationMenu.PopupItem>
+    </div>
+  );
+}
+
+// Group labels in popup
+export function WithGroupLabels() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Trigger>
+            Products
+            <NavigationMenu.Icon>
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </NavigationMenu.Icon>
+          </NavigationMenu.Trigger>
+          <NavigationMenu.Portal>
+            <NavigationMenu.Positioner>
+              <NavigationMenu.Popup>
+                <NavigationMenu.Viewport />
+              </NavigationMenu.Popup>
+            </NavigationMenu.Positioner>
+          </NavigationMenu.Portal>
+          <NavigationMenu.Content>
+            <NavigationMenu.Group>
+              <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
+              <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>Reports</NavigationMenu.PopupItem>
+            </NavigationMenu.Group>
+            <NavigationMenu.Separator />
+            <NavigationMenu.Group>
+              <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
+              <NavigationMenu.PopupItem>Preferences</NavigationMenu.PopupItem>
+              <NavigationMenu.PopupItem>Account</NavigationMenu.PopupItem>
+            </NavigationMenu.Group>
+          </NavigationMenu.Content>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
