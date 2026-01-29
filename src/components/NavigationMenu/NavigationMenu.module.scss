@@ -38,12 +38,15 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-focus);
-    outline-offset: -2px;
+    background-color: var(--surface-secondary);
+    border: var(--stroke-xs) solid var(--border-secondary);
+    box-shadow: 0 0 0 3px var(--input-focus);
+    outline: none;
   }
 
+  // Active state has no background; Active + Hover gets hover background via :hover
   &[data-active] {
-    background-color: var(--surface-hover);
+    // Active indicator (no background in default state)
   }
 
   &[data-disabled] {
@@ -80,12 +83,15 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-focus);
-    outline-offset: -2px;
+    background-color: var(--surface-secondary);
+    border: var(--stroke-xs) solid var(--border-secondary);
+    box-shadow: 0 0 0 3px var(--input-focus);
+    outline: none;
   }
 
+  // Open state has no background; Open + Highlighted gets hover background via :hover
   &[data-popup-open] {
-    background-color: var(--surface-hover);
+    // Icon rotation is handled in .icon
   }
 
   &:disabled {
@@ -105,7 +111,7 @@
   justify-content: center;
   width: 20px;
   height: 20px;
-  color: var(--icon-primary);
+  color: var(--icon-secondary);
   transition: transform 200ms ease;
 
   &[data-popup-open] {
@@ -125,6 +131,8 @@
 .popup {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-4xs);
+  padding: var(--spacing-3xs);
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);

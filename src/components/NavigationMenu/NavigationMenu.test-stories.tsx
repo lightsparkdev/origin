@@ -38,24 +38,21 @@ export function WithDropdown() {
           <NavigationMenu.Portal>
             <NavigationMenu.Positioner>
               <NavigationMenu.Popup>
-                <NavigationMenu.Viewport />
+                <NavigationMenu.PopupItem>
+                  <CentralIcon name="IconGlobe2" size={16} />
+                  Dashboard
+                </NavigationMenu.PopupItem>
+                <NavigationMenu.PopupItem>
+                  <CentralIcon name="IconGlobe2" size={16} />
+                  Analytics
+                </NavigationMenu.PopupItem>
+                <NavigationMenu.PopupItem>
+                  <CentralIcon name="IconGlobe2" size={16} />
+                  Reports
+                </NavigationMenu.PopupItem>
               </NavigationMenu.Popup>
             </NavigationMenu.Positioner>
           </NavigationMenu.Portal>
-          <NavigationMenu.Content>
-            <NavigationMenu.PopupItem>
-              <CentralIcon name="IconGlobe2" size={16} />
-              Dashboard
-            </NavigationMenu.PopupItem>
-            <NavigationMenu.PopupItem>
-              <CentralIcon name="IconGlobe2" size={16} />
-              Analytics
-            </NavigationMenu.PopupItem>
-            <NavigationMenu.PopupItem>
-              <CentralIcon name="IconGlobe2" size={16} />
-              Reports
-            </NavigationMenu.PopupItem>
-          </NavigationMenu.Content>
         </NavigationMenu.Item>
         <NavigationMenu.Item>
           <NavigationMenu.Link href="/pricing">Pricing</NavigationMenu.Link>
@@ -80,17 +77,14 @@ export function WithSubmenu() {
           <NavigationMenu.Portal>
             <NavigationMenu.Positioner>
               <NavigationMenu.Popup>
-                <NavigationMenu.Viewport />
+                <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+                <NavigationMenu.SubmenuTrigger>
+                  More Options
+                  <CentralIcon name="IconChevronRightSmall" size={16} />
+                </NavigationMenu.SubmenuTrigger>
               </NavigationMenu.Popup>
             </NavigationMenu.Positioner>
           </NavigationMenu.Portal>
-          <NavigationMenu.Content>
-            <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
-            <NavigationMenu.SubmenuTrigger>
-              More Options
-              <CentralIcon name="IconChevronRightSmall" size={16} />
-            </NavigationMenu.SubmenuTrigger>
-          </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
     </NavigationMenu.Root>
@@ -179,23 +173,20 @@ export function WithGroupLabels() {
           <NavigationMenu.Portal>
             <NavigationMenu.Positioner>
               <NavigationMenu.Popup>
-                <NavigationMenu.Viewport />
+                <NavigationMenu.Group>
+                  <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
+                  <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
+                  <NavigationMenu.PopupItem>Reports</NavigationMenu.PopupItem>
+                </NavigationMenu.Group>
+                <NavigationMenu.Separator />
+                <NavigationMenu.Group>
+                  <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
+                  <NavigationMenu.PopupItem>Preferences</NavigationMenu.PopupItem>
+                  <NavigationMenu.PopupItem>Account</NavigationMenu.PopupItem>
+                </NavigationMenu.Group>
               </NavigationMenu.Popup>
             </NavigationMenu.Positioner>
           </NavigationMenu.Portal>
-          <NavigationMenu.Content>
-            <NavigationMenu.Group>
-              <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
-              <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
-              <NavigationMenu.PopupItem>Reports</NavigationMenu.PopupItem>
-            </NavigationMenu.Group>
-            <NavigationMenu.Separator />
-            <NavigationMenu.Group>
-              <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
-              <NavigationMenu.PopupItem>Preferences</NavigationMenu.PopupItem>
-              <NavigationMenu.PopupItem>Account</NavigationMenu.PopupItem>
-            </NavigationMenu.Group>
-          </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>
     </NavigationMenu.Root>
