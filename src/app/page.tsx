@@ -1811,128 +1811,57 @@ export default function Home() {
 
       <h2 style={{ marginBottom: '1rem' }}>Navigation Menu Component</h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            With Dropdown
-          </span>
-          <NavigationMenu.Root>
-            <NavigationMenu.List>
-              <NavigationMenu.Item>
-                <NavigationMenu.Trigger>
-                  Products
-                  <NavigationMenu.Icon>
-                    <CentralIcon name="IconChevronDownSmall" size={16} />
-                  </NavigationMenu.Icon>
-                </NavigationMenu.Trigger>
-                <NavigationMenu.Portal>
-                  <NavigationMenu.Positioner>
-                    <NavigationMenu.Popup>
-                      <NavigationMenu.PopupItem>
-                        <CentralIcon name="IconGlobe2" size={16} />
-                        Dashboard
-                      </NavigationMenu.PopupItem>
-                      <NavigationMenu.PopupItem>
-                        <CentralIcon name="IconGlobe2" size={16} />
-                        Analytics
-                      </NavigationMenu.PopupItem>
-                      <NavigationMenu.PopupItem>
-                        <CentralIcon name="IconGlobe2" size={16} />
-                        Reports
-                      </NavigationMenu.PopupItem>
-                    </NavigationMenu.Popup>
-                  </NavigationMenu.Positioner>
-                </NavigationMenu.Portal>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Trigger>
-                  Resources
-                  <NavigationMenu.Icon>
-                    <CentralIcon name="IconChevronDownSmall" size={16} />
-                  </NavigationMenu.Icon>
-                </NavigationMenu.Trigger>
-                <NavigationMenu.Portal>
-                  <NavigationMenu.Positioner>
-                    <NavigationMenu.Popup>
-                      <NavigationMenu.PopupItem>Documentation</NavigationMenu.PopupItem>
-                      <NavigationMenu.PopupItem>API Reference</NavigationMenu.PopupItem>
-                      <NavigationMenu.PopupItem>Blog</NavigationMenu.PopupItem>
-                    </NavigationMenu.Popup>
-                  </NavigationMenu.Positioner>
-                </NavigationMenu.Portal>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link href="#">Pricing</NavigationMenu.Link>
-              </NavigationMenu.Item>
-            </NavigationMenu.List>
-          </NavigationMenu.Root>
-        </div>
-
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Links Only
-          </span>
-          <NavigationMenu.Root>
-            <NavigationMenu.List>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link href="#">Home</NavigationMenu.Link>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link href="#" active>About</NavigationMenu.Link>
-              </NavigationMenu.Item>
-              <NavigationMenu.Item>
-                <NavigationMenu.Link href="#">Contact</NavigationMenu.Link>
-              </NavigationMenu.Item>
-            </NavigationMenu.List>
-          </NavigationMenu.Root>
-        </div>
-
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            With Group Labels
-          </span>
-          <NavigationMenu.Root>
-            <NavigationMenu.List>
-              <NavigationMenu.Item>
-                <NavigationMenu.Trigger>
-                  Products
-                  <NavigationMenu.Icon>
-                    <CentralIcon name="IconChevronDownSmall" size={16} />
-                  </NavigationMenu.Icon>
-                </NavigationMenu.Trigger>
-                <NavigationMenu.Portal>
-                  <NavigationMenu.Positioner>
-                    <NavigationMenu.Popup>
-                      <NavigationMenu.Group>
-                        <NavigationMenu.GroupLabel>Analytics</NavigationMenu.GroupLabel>
-                        <NavigationMenu.PopupItem>
-                          <CentralIcon name="IconGlobe2" size={16} />
-                          Dashboard
-                        </NavigationMenu.PopupItem>
-                        <NavigationMenu.PopupItem>
-                          <CentralIcon name="IconGlobe2" size={16} />
-                          Reports
-                        </NavigationMenu.PopupItem>
-                      </NavigationMenu.Group>
-                      <NavigationMenu.Separator />
-                      <NavigationMenu.Group>
-                        <NavigationMenu.GroupLabel>Settings</NavigationMenu.GroupLabel>
-                        <NavigationMenu.PopupItem>
-                          <CentralIcon name="IconSettingsGear1" size={16} />
-                          Preferences
-                        </NavigationMenu.PopupItem>
-                        <NavigationMenu.PopupItem>
-                          <CentralIcon name="IconSettingsGear1" size={16} />
-                          Account
-                        </NavigationMenu.PopupItem>
-                      </NavigationMenu.Group>
-                    </NavigationMenu.Popup>
-                  </NavigationMenu.Positioner>
-                </NavigationMenu.Portal>
-              </NavigationMenu.Item>
-            </NavigationMenu.List>
-          </NavigationMenu.Root>
-        </div>
+      <div style={{ marginBottom: '128px' }}>
+        <NavigationMenu.Root>
+          <NavigationMenu.List>
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                Products
+                <NavigationMenu.Icon>
+                  <CentralIcon name="IconChevronDownSmall" size={16} />
+                </NavigationMenu.Icon>
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Portal>
+                <NavigationMenu.Positioner>
+                  <NavigationMenu.Popup>
+                    <NavigationMenu.PopupItem>
+                      <CentralIcon name="IconGlobe2" size={16} />
+                      Dashboard
+                    </NavigationMenu.PopupItem>
+                    <NavigationMenu.PopupItem>
+                      <CentralIcon name="IconGlobe2" size={16} />
+                      Analytics
+                    </NavigationMenu.PopupItem>
+                    <NavigationMenu.PopupItem>
+                      <CentralIcon name="IconGlobe2" size={16} />
+                      Reports
+                    </NavigationMenu.PopupItem>
+                  </NavigationMenu.Popup>
+                </NavigationMenu.Positioner>
+              </NavigationMenu.Portal>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Trigger>
+                Resources
+                <NavigationMenu.Icon>
+                  <CentralIcon name="IconChevronDownSmall" size={16} />
+                </NavigationMenu.Icon>
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Portal>
+                <NavigationMenu.Positioner>
+                  <NavigationMenu.Popup>
+                    <NavigationMenu.PopupItem>Documentation</NavigationMenu.PopupItem>
+                    <NavigationMenu.PopupItem>API Reference</NavigationMenu.PopupItem>
+                    <NavigationMenu.PopupItem>Blog</NavigationMenu.PopupItem>
+                  </NavigationMenu.Popup>
+                </NavigationMenu.Positioner>
+              </NavigationMenu.Portal>
+            </NavigationMenu.Item>
+            <NavigationMenu.Item>
+              <NavigationMenu.Link href="#">Pricing</NavigationMenu.Link>
+            </NavigationMenu.Item>
+          </NavigationMenu.List>
+        </NavigationMenu.Root>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>
