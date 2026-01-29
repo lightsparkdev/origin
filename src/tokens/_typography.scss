@@ -2,10 +2,6 @@
 
 @use 'text-styles' as *;
 
-// Reset
-h1, h2, h3, h4, h5, h6 { margin: 0; font: inherit; }
-p { margin: 0; }
-
 // Text style classes
 .headline { @include headline; }
 .headline-sm { @include headline-sm; }

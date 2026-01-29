@@ -1,0 +1,38 @@
+// Origin CSS Reset
+// Copy this file to your app's tokens folder
+
+// Box sizing
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-feature-settings: inherit;
+}
+
+// Form elements - remove browser defaults
+input,
+textarea,
+select,
+button {
+  background: transparent;
+}
+
+// Typography - remove default margins
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font: inherit;
+}
+
+p {
+  margin: 0;
+}
+
+// Font features
+:root {
+  font-feature-settings: "salt" 1, "kern" 1;
+}
+
+// Icon system - preserve 1.5px stroke at any size
+.central-icon-absolute-stroke path {
+  vector-effect: non-scaling-stroke;
+}

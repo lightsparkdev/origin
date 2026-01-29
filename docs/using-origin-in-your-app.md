@@ -11,19 +11,7 @@
 @use '../tokens/fonts';
 @use '../tokens/typography';
 @use '../tokens/effects';
-
-*, *::before, *::after {
-  box-sizing: border-box;
-  font-feature-settings: inherit;
-}
-
-input, textarea, select, button {
-  background: transparent;
-}
-
-:root {
-  font-feature-settings: "salt" 1, "kern" 1;
-}
+@use '../tokens/reset';
 
 body {
   margin: 0;
@@ -34,9 +22,16 @@ body {
 }
 ```
 
+The `_reset.scss` file includes:
+- Box-sizing reset
+- Form element defaults (removes browser backgrounds)
+- Typography resets (h1-h6, p margins)
+- Font feature settings
+- Icon system CSS (preserves stroke width at any icon size)
+
 ## CSS Modules Constraint
 
-Files with `:root` selectors (`_variables.scss`, `_fonts.scss`, etc.) can only be imported in `globals.scss`.
+Files with `:root` selectors (`_variables.scss`, `_fonts.scss`, `_reset.scss`, etc.) can only be imported in `globals.scss`.
 
 In `.module.scss` files, use tokens directly — they're globally available:
 

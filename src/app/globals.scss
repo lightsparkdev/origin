@@ -11,33 +11,11 @@
 // Import effect tokens (shadows, focus rings)
 @use '../tokens/effects';
 
-// Import typography reset and text styles
+// Import typography text styles
 @use '../tokens/typography';
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  font-feature-settings: inherit;
-}
-
-input,
-textarea,
-select,
-button {
-  background: transparent;
-}
-
-:root {
-  font-feature-settings: "salt" 1, "kern" 1;
-}
-
-// ===== ICON SYSTEM =====
-// Apply absolute stroke width to all Central Icons
-// Strokes remain 1.5px regardless of icon size
-.central-icon-absolute-stroke path {
-  vector-effect: non-scaling-stroke;
-}
+// Import CSS reset (box-sizing, form elements, icon system)
+@use '../tokens/reset';
 
 body {
   margin: 0;
@@ -49,4 +27,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
