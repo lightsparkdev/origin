@@ -84,6 +84,14 @@
   outline: none;
   transition: background-color 150ms ease;
 
+  // Optical balance when icon is present
+  // Figma uses a label wrapper with 2px padding, we simplify with asymmetric padding + gap
+  &:has(.icon) {
+    padding-inline-start: var(--spacing-xs); // 8px (6px outer + 2px optical)
+    padding-inline-end: var(--spacing-2xs); // 6px
+    gap: var(--spacing-4xs); // 2px between label and icon
+  }
+
   &:hover {
     background-color: var(--surface-hover);
   }
