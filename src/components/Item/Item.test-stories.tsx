@@ -27,7 +27,7 @@ export function ItemWithTrailing() {
   return (
     <Item
       title="Settings"
-      trailing={<CentralIcon name="IconChevronRightSmall" size={20} color="var(--icon-secondary)" />}
+      trailing={<CentralIcon name="IconChevronRightSmall" size={20} />}
     />
   );
 }
@@ -38,7 +38,7 @@ export function ItemWithBothSlots() {
       title="Settings"
       description="Manage your preferences"
       leading={<CentralIcon name="IconSettingsGear1" size={24} />}
-      trailing={<CentralIcon name="IconChevronRightSmall" size={20} color="var(--icon-secondary)" />}
+      trailing={<CentralIcon name="IconChevronRightSmall" size={20} />}
     />
   );
 }
@@ -110,7 +110,7 @@ export function NavigationItem() {
       title="Account settings"
       description="Manage your account"
       leading={<CentralIcon name="IconHome" size={24} />}
-      trailing={<CentralIcon name="IconChevronRightSmall" size={20} color="var(--icon-secondary)" />}
+      trailing={<CentralIcon name="IconChevronRightSmall" size={20} />}
       onClick={() => {}}
     />
   );
