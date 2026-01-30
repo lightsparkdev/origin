@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
 import { CentralIcon } from '../Icon';
 import { CheckboxIndicator } from '../Checkbox';
-import { Chip as DesignSystemChip } from '../Chip';
 import clsx from 'clsx';
 import styles from './Combobox.module.scss';
 

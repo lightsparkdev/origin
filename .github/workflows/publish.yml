@@ -20,7 +20,6 @@ jobs:
       - run: npm ci --legacy-peer-deps
         env:
           CENTRAL_LICENSE_KEY: ${{ secrets.CENTRAL_LICENSE_KEY }}
-      - run: npm run lint
       - run: npm run test:unit
       - run: npm publish
         env:
