@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { devWarn } from '@/lib/dev-warn';
+import { devWarn } from '../../lib/dev-warn';
 import { ICON_REGISTRY, type CentralIconName } from './icon-registry';
 
 export interface CentralIconProps {

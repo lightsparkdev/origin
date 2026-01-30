@@ -5,7 +5,7 @@ import { ContextMenu as BaseContextMenu } from '@base-ui/react/context-menu';
 import clsx from 'clsx';
 // Reuse Menu styles - visually identical
 import styles from '../Menu/Menu.module.scss';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 
 // ============================================================================
 // Root

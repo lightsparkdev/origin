@@ -61,8 +61,8 @@
     }
 
     &:focus-visible {
-      outline: 2px solid var(--border-focus);
-      outline-offset: -2px;
+      outline: none;
+      box-shadow: 0 0 0 2px var(--input-focus);
       border-radius: var(--corner-radius-xs);
     }
   }

@@ -2,8 +2,8 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { Button } from '@/components/Button';
-import { CentralIcon } from '@/components/Icon';
+import { Button } from '../Button';
+import { CentralIcon } from '../Icon';
 import styles from './Pagination.module.scss';
 
 interface PaginationContextValue {

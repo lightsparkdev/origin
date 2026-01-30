@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Button as BaseButton } from '@base-ui/react/button';
 import clsx from 'clsx';
-import { Loader } from '@/components/Loader';
+import { Loader } from '../Loader';
 import styles from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

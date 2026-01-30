@@ -4,8 +4,8 @@ import * as React from 'react';
 import { useStableCallback } from '@base-ui/utils/useStableCallback';
 import { useMergedRefs } from '@base-ui/utils/useMergedRefs';
 import clsx from 'clsx';
-import { CentralIcon } from '@/components/Icon';
-import { createChangeEventDetails, type ChangeEventDetails } from '@/lib/base-ui-utils';
+import { CentralIcon } from '../Icon';
+import { createChangeEventDetails, type ChangeEventDetails } from '../../lib/base-ui-utils';
 import styles from './Chip.module.scss';
 
 export interface ChipProps {

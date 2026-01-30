@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Select as BaseSelect, SelectRootProps } from '@base-ui/react/select';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 import clsx from 'clsx';
 import styles from './Select.module.scss';
 

@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { Toast as BaseToast } from '@base-ui/react/toast';
 import clsx from 'clsx';
-import { Button } from '@/components/Button';
-import { CentralIcon } from '@/components/Icon';
+import { Button } from '../Button';
+import { CentralIcon } from '../Icon';
 import styles from './Toast.module.scss';
 
 export type ToastVariant = 'default' | 'info' | 'success' | 'warning' | 'invalid';

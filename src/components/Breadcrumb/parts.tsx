@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 import styles from './Breadcrumb.module.scss';
 
 interface BreadcrumbContextValue {

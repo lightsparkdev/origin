@@ -73,20 +73,67 @@ All ~100 icons from the Figma design system are available.
 
 ## Using as a Package
 
-```json
-{ "dependencies": { "@grid/origin": "file:../origin" } }
+### Installation
+
+Add `.npmrc` to your project root:
+
+```
+@jaymantri:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
 ```
 
-```js
-// next.config.js
-module.exports = { transpilePackages: ['@grid/origin'] };
+Install:
+
+```bash
+npm install @jaymantri/origin
 ```
+
+Or for local development:
+
+```json
+{ "dependencies": { "@jaymantri/origin": "file:../origin" } }
+```
+
+### Next.js Configuration
+
+```ts
+// next.config.ts
+import type { NextConfig } from "next";
+import * as sass from "sass";
+
+const nextConfig: NextConfig = {
+  transpilePackages: ['@jaymantri/origin'],
+  sassOptions: {
+    importers: [new sass.NodePackageImporter()],
+  },
+};
+
+export default nextConfig;
+```
+
+### Usage
 
 ```tsx
-import { Button, Input, Field } from '@grid/origin';
+import { Button, Input, Field } from '@jaymantri/origin';
 ```
 
-For token and font setup, see [Using Origin in Your App](docs/using-origin-in-your-app.md).
+### Token Imports (SCSS)
+
+Use `pkg:` prefix to import tokens from the package:
+
+```scss
+// globals.scss
+@use 'pkg:@jaymantri/origin/tokens/variables';
+@use 'pkg:@jaymantri/origin/tokens/fonts';
+@use 'pkg:@jaymantri/origin/tokens/typography';
+@use 'pkg:@jaymantri/origin/tokens/effects';
+@use 'pkg:@jaymantri/origin/tokens/reset';
+
+// In component SCSS
+@use 'pkg:@jaymantri/origin/tokens/text-styles' as *;
+```
+
+For full setup details, see [Using Origin in Your App](docs/using-origin-in-your-app.md).
 
 ## Documentation
 

@@ -5,7 +5,7 @@ import { CheckboxGroup as BaseCheckboxGroup } from '@base-ui/react/checkbox-grou
 import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox';
 import { Field } from '@base-ui/react/field';
 import clsx from 'clsx';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 import styles from './Checkbox.module.scss';
 
 interface CheckboxGroupContextValue {

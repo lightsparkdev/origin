@@ -3,7 +3,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import styles from './Table.module.scss';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 
 // ============================================================================
 // Root

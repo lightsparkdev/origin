@@ -4,7 +4,7 @@ import * as React from 'react';
 import { Menu as BaseMenu } from '@base-ui/react/menu';
 import clsx from 'clsx';
 import styles from './Menu.module.scss';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 
 // ============================================================================
 // Root

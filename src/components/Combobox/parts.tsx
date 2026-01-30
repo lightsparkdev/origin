@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
-import { CentralIcon } from '@/components/Icon';
-import { CheckboxIndicator } from '@/components/Checkbox';
-import { Chip as DesignSystemChip } from '@/components/Chip';
+import { CentralIcon } from '../Icon';
+import { CheckboxIndicator } from '../Checkbox';
+import { Chip as DesignSystemChip } from '../Chip';
 import clsx from 'clsx';
 import styles from './Combobox.module.scss';
 

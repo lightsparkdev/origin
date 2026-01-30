@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Accordion as BaseAccordion } from '@base-ui/react/accordion';
-import { CentralIcon } from '@/components/Icon';
+import { CentralIcon } from '../Icon';
 import clsx from 'clsx';
 import styles from './Accordion.module.scss';
 
