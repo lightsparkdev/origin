@@ -1942,6 +1942,37 @@ export default function Home() {
             </NavigationMenu.Portal>
           </NavigationMenu.Root>
         </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            With Actions
+          </span>
+          <NavigationMenu.Root>
+            <NavigationMenu.List>
+              <NavigationMenu.Item>
+                <NavigationMenu.Link href="#" active>Dashboard</NavigationMenu.Link>
+              </NavigationMenu.Item>
+              <NavigationMenu.Item>
+                <NavigationMenu.Link href="#">Settings</NavigationMenu.Link>
+              </NavigationMenu.Item>
+              <NavigationMenu.Item>
+                <NavigationMenu.ActionIcon aria-label="Notifications">
+                  <CentralIcon name="IconBell" size={20} />
+                </NavigationMenu.ActionIcon>
+              </NavigationMenu.Item>
+              <NavigationMenu.Item>
+                <NavigationMenu.ActionIcon aria-label="Settings">
+                  <CentralIcon name="IconSettingsGear1" size={20} />
+                </NavigationMenu.ActionIcon>
+              </NavigationMenu.Item>
+              <NavigationMenu.Item>
+                <NavigationMenu.Action onClick={() => alert('Signed out!')}>
+                  Sign Out
+                </NavigationMenu.Action>
+              </NavigationMenu.Item>
+            </NavigationMenu.List>
+          </NavigationMenu.Root>
+        </div>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>

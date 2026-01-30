@@ -201,3 +201,114 @@ export function WithGroupLabels() {
     </NavigationMenu.Root>
   );
 }
+
+// Action variant - text button for actions
+export function ActionVariant() {
+  const [clicked, setClicked] = React.useState(false);
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/home">Home</NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Action onClick={() => setClicked(true)}>
+            {clicked ? 'Clicked!' : 'Sign Out'}
+          </NavigationMenu.Action>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Action with active state
+export function ActionActive() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Action>Default</NavigationMenu.Action>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.Action active>Active</NavigationMenu.Action>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Disabled Action
+export function ActionDisabled() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Action disabled>Disabled Action</NavigationMenu.Action>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// ActionIcon variant - icon-only button
+export function ActionIconVariant() {
+  const [clicked, setClicked] = React.useState(false);
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.Link href="/home">Home</NavigationMenu.Link>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.ActionIcon
+            aria-label="Settings"
+            onClick={() => setClicked(true)}
+            data-testid="settings-action"
+          >
+            <CentralIcon name={clicked ? 'IconCheck1' : 'IconSettingsGear1'} size={20} />
+          </NavigationMenu.ActionIcon>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.ActionIcon aria-label="Notifications">
+            <CentralIcon name="IconBell" size={20} />
+          </NavigationMenu.ActionIcon>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// ActionIcon with active state
+export function ActionIconActive() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.ActionIcon aria-label="Settings">
+            <CentralIcon name="IconSettingsGear1" size={20} />
+          </NavigationMenu.ActionIcon>
+        </NavigationMenu.Item>
+        <NavigationMenu.Item>
+          <NavigationMenu.ActionIcon aria-label="Notifications" active>
+            <CentralIcon name="IconBell" size={20} />
+          </NavigationMenu.ActionIcon>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}
+
+// Disabled ActionIcon
+export function ActionIconDisabled() {
+  return (
+    <NavigationMenu.Root>
+      <NavigationMenu.List>
+        <NavigationMenu.Item>
+          <NavigationMenu.ActionIcon aria-label="Settings" disabled>
+            <CentralIcon name="IconSettingsGear1" size={20} />
+          </NavigationMenu.ActionIcon>
+        </NavigationMenu.Item>
+      </NavigationMenu.List>
+    </NavigationMenu.Root>
+  );
+}

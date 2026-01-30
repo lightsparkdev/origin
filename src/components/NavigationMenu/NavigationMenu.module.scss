@@ -65,6 +65,103 @@
   }
 }
 
+// Nav Item - Action variant (text button for actions)
+.action {
+  @include label;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding-inline: var(--spacing-sm);
+  border: var(--stroke-xs) solid transparent;
+  border-radius: var(--corner-radius-sm);
+  background-color: transparent;
+  color: var(--text-primary);
+  font-family: inherit;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:focus-visible {
+    background-color: var(--surface-secondary);
+    border-color: var(--border-secondary);
+    box-shadow: 0 0 0 3px var(--input-focus);
+    outline: none;
+  }
+
+  // Active state - no background by default
+  &[data-active] {
+    // Visual indicator handled by hover state
+  }
+
+  // Active + Hover state
+  &[data-active]:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:disabled {
+    opacity: calc(var(--opacity-50) / 100);
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Nav Item - Action Icon variant (icon-only button)
+.actionIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: var(--stroke-xs) solid transparent;
+  border-radius: var(--corner-radius-sm);
+  background-color: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:focus-visible {
+    background-color: var(--surface-secondary);
+    border-color: var(--border-secondary);
+    box-shadow: 0 0 0 3px var(--input-focus);
+    outline: none;
+  }
+
+  // Active state - no background by default
+  &[data-active] {
+    // Visual indicator handled by hover state
+  }
+
+  // Active + Hover state
+  &[data-active]:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:disabled {
+    opacity: calc(var(--opacity-50) / 100);
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
 // Nav Item - Button/Trigger variant
 .trigger {
   @include label;

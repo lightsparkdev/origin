@@ -6,6 +6,8 @@ export type {
   TriggerProps as NavigationMenuTriggerProps,
   IconProps as NavigationMenuIconProps,
   LinkProps as NavigationMenuLinkProps,
+  ActionProps as NavigationMenuActionProps,
+  ActionIconProps as NavigationMenuActionIconProps,
   ContentProps as NavigationMenuContentProps,
   PortalProps as NavigationMenuPortalProps,
   PositionerProps as NavigationMenuPositionerProps,

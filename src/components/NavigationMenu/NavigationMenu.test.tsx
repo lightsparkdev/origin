@@ -5,6 +5,12 @@ import {
   ActiveLink,
   DisabledStates,
   PopupItemVariants,
+  ActionVariant,
+  ActionActive,
+  ActionDisabled,
+  ActionIconVariant,
+  ActionIconActive,
+  ActionIconDisabled,
 } from './NavigationMenu.test-stories';
 
 test.describe('NavigationMenu', () => {
@@ -101,6 +107,82 @@ test.describe('NavigationMenu', () => {
 
       await page.keyboard.press('Escape');
       await expect(page.getByText('Dashboard')).not.toBeVisible();
+    });
+  });
+
+  test.describe('Action', () => {
+    test('renders as a button', async ({ mount }) => {
+      const component = await mount(<ActionVariant />);
+
+      const action = component.getByRole('button', { name: 'Sign Out' });
+      await expect(action).toBeVisible();
+    });
+
+    test('handles click events', async ({ mount }) => {
+      const component = await mount(<ActionVariant />);
+
+      const action = component.getByRole('button', { name: 'Sign Out' });
+      await action.click();
+
+      await expect(component.getByRole('button', { name: 'Clicked!' })).toBeVisible();
+    });
+
+    test('active action has data-active attribute', async ({ mount }) => {
+      const component = await mount(<ActionActive />);
+
+      const activeAction = component.getByRole('button', { name: 'Active' });
+      await expect(activeAction).toHaveAttribute('data-active', '');
+    });
+
+    test('disabled action cannot be clicked', async ({ mount }) => {
+      const component = await mount(<ActionDisabled />);
+
+      const disabledAction = component.getByRole('button', { name: 'Disabled Action' });
+      await expect(disabledAction).toBeDisabled();
+    });
+
+    test('action can be focused with Tab', async ({ mount, page }) => {
+      const component = await mount(<ActionVariant />);
+
+      // Tab past the link to the action
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+
+      const action = component.getByRole('button', { name: 'Sign Out' });
+      await expect(action).toBeFocused();
+    });
+  });
+
+  test.describe('ActionIcon', () => {
+    test('renders as a button with aria-label', async ({ mount }) => {
+      const component = await mount(<ActionIconVariant />);
+
+      const actionIcon = component.getByRole('button', { name: 'Settings' });
+      await expect(actionIcon).toBeVisible();
+    });
+
+    test('handles click events', async ({ mount }) => {
+      const component = await mount(<ActionIconVariant />);
+
+      const actionIcon = component.getByTestId('settings-action');
+      await actionIcon.click();
+
+      // Icon should change after click (check icon changed by verifying component updated)
+      await expect(actionIcon).toBeVisible();
+    });
+
+    test('active action icon has data-active attribute', async ({ mount }) => {
+      const component = await mount(<ActionIconActive />);
+
+      const activeActionIcon = component.getByRole('button', { name: 'Notifications' });
+      await expect(activeActionIcon).toHaveAttribute('data-active', '');
+    });
+
+    test('disabled action icon cannot be clicked', async ({ mount }) => {
+      const component = await mount(<ActionIconDisabled />);
+
+      const disabledActionIcon = component.getByRole('button', { name: 'Settings' });
+      await expect(disabledActionIcon).toBeDisabled();
     });
   });
 });

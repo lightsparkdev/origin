@@ -139,6 +139,56 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 );
 
 /* -------------------------------------------------------------------------------------------------
+ * Action (Button for actions like Sign Out)
+ * -----------------------------------------------------------------------------------------------*/
+
+export interface ActionProps extends React.ComponentPropsWithoutRef<'button'> {
+  /** Whether the action is currently active */
+  active?: boolean;
+}
+
+export const Action = React.forwardRef<HTMLButtonElement, ActionProps>(
+  function Action(props, forwardedRef) {
+    const { className, active, disabled, ...actionProps } = props;
+    return (
+      <button
+        ref={forwardedRef}
+        type="button"
+        className={clsx(styles.action, className)}
+        data-active={active ? '' : undefined}
+        disabled={disabled}
+        {...actionProps}
+      />
+    );
+  }
+);
+
+/* -------------------------------------------------------------------------------------------------
+ * ActionIcon (Icon-only button for actions)
+ * -----------------------------------------------------------------------------------------------*/
+
+export interface ActionIconProps extends React.ComponentPropsWithoutRef<'button'> {
+  /** Whether the action is currently active */
+  active?: boolean;
+}
+
+export const ActionIcon = React.forwardRef<HTMLButtonElement, ActionIconProps>(
+  function ActionIcon(props, forwardedRef) {
+    const { className, active, disabled, ...actionProps } = props;
+    return (
+      <button
+        ref={forwardedRef}
+        type="button"
+        className={clsx(styles.actionIcon, className)}
+        data-active={active ? '' : undefined}
+        disabled={disabled}
+        {...actionProps}
+      />
+    );
+  }
+);
+
+/* -------------------------------------------------------------------------------------------------
  * Content (Dropdown content container)
  * -----------------------------------------------------------------------------------------------*/
 
@@ -397,6 +447,8 @@ export const NavigationMenu = {
   Trigger,
   Icon,
   Link,
+  Action,
+  ActionIcon,
   Content,
   Portal,
   Positioner,
