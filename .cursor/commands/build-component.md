@@ -107,6 +107,7 @@
 12. **Update consumers** — add to `page.tsx` for demo
 
 13. **Final verification:**
+    - Add to `src/index.ts` — export component and types for package consumers
     - `npm run build` — catch export/import errors
     - `npm test` — full test suite
 
