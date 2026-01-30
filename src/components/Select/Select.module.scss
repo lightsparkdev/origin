@@ -76,7 +76,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  [data-placeholder] {
+  &[data-placeholder] {
     color: var(--text-secondary);
   }
 }
