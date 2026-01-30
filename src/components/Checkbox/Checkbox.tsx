@@ -18,12 +18,12 @@ if (process.env.NODE_ENV !== 'production') {
   CheckboxGroupContext.displayName = 'CheckboxGroupContext';
 }
 
+/**
+ * Hook to get checkbox group context. Returns undefined if not inside a group,
+ * allowing standalone checkbox usage with default values.
+ */
 function useCheckboxGroupContext() {
-  const context = React.useContext(CheckboxGroupContext);
-  if (context === undefined) {
-    throw new Error('Checkbox.Item must be used within a Checkbox.Group');
-  }
-  return context;
+  return React.useContext(CheckboxGroupContext);
 }
 
 export interface CheckboxGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
@@ -87,11 +87,17 @@ export interface CheckboxItemProps extends React.HTMLAttributes<HTMLElement> {
   description?: string;
   checkedIcon?: React.ReactNode;
   indeterminateIcon?: React.ReactNode;
+  /** Visual variant - can be overridden when not inside a Group */
+  variant?: 'default' | 'card';
 }
 
 const defaultCheckedIcon = <CentralIcon name="IconCheckmark2Small" size={12} />;
 const defaultIndeterminateIcon = <CentralIcon name="IconMinusSmall" size={12} />;
 
+/**
+ * A single checkbox item. Can be used standalone or within a Checkbox.Group.
+ * When inside a Group, it inherits the group's variant unless explicitly overridden.
+ */
 export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
   function CheckboxItem(props, ref) {
     const {
@@ -109,11 +115,14 @@ export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
       description,
       checkedIcon = defaultCheckedIcon,
       indeterminateIcon = defaultIndeterminateIcon,
+      variant: variantProp,
       className,
       children,
       ...other
     } = props;
-    const { variant } = useCheckboxGroupContext();
+    const context = useCheckboxGroupContext();
+    // Use prop variant, fall back to context variant, default to 'default'
+    const variant = variantProp ?? context?.variant ?? 'default';
 
     return (
       <BaseCheckbox.Root
@@ -191,8 +200,13 @@ export const CheckboxError = React.forwardRef<
 /**
  * Standalone visual checkbox indicator.
  * 
- * Use this when you need just the checkbox visual (16px box with checkmark)
- * without the full Checkbox.Item structure or group context.
+ * This is a pure visual component for displaying a checkbox indicator
+ * without Base UI's form behavior. Use this when you need just the 
+ * checkbox visual (16px box with checkmark) in custom contexts.
+ * 
+ * Note: This intentionally does NOT wrap Base UI's Checkbox.Indicator
+ * because it's designed for use cases where you control the checked
+ * state externally (e.g., Combobox multi-select, custom list items).
  * 
  * @example
  * ```tsx
@@ -200,6 +214,12 @@ export const CheckboxError = React.forwardRef<
  * <Combobox.ItemCheckbox>
  *   <Checkbox.Indicator checked={selected} />
  * </Combobox.ItemCheckbox>
+ * 
+ * // In a custom list:
+ * <li onClick={toggle}>
+ *   <Checkbox.Indicator checked={isSelected} />
+ *   {item.name}
+ * </li>
  * ```
  */
 export interface CheckboxIndicatorProps {

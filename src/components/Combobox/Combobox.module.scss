@@ -337,78 +337,12 @@
   display: contents;
 }
 
+// Chips container for multi-select
+// Individual chip styling comes from Origin's Chip component (../Chip/Chip.module.scss)
 .chips {
   display: flex;
   flex: 1;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-4xs);
-}
-
-.chip {
-  box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  height: 24px;
-  border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-xs);
-  background-color: var(--surface-secondary);
-  outline: none;
-
-  &:focus-visible {
-    outline: 2px solid var(--border-primary);
-    outline-offset: -2px;
-  }
-
-  &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100);
-    pointer-events: none;
-  }
-}
-
-.chipText {
-  @include body-sm;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--spacing-xs);
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.chipRemove {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  height: 100%;
-  padding: 0 var(--spacing-3xs);
-  border: none;
-  border-left: var(--stroke-xs) solid var(--border-tertiary);
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition:
-    color 150ms ease,
-    background-color 150ms ease;
-
-  &:hover:not(:disabled) {
-    color: var(--text-primary);
-    background-color: var(--surface-tertiary);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--border-primary);
-    outline-offset: -2px;
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
 }

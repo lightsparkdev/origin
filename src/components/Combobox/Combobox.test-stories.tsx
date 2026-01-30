@@ -49,28 +49,6 @@ export function ConformanceValue(props: React.HTMLAttributes<HTMLSpanElement>) {
   );
 }
 
-/** ChipText conformance - forwards props, ref, className */
-export function ConformanceChipText(props: React.HTMLAttributes<HTMLSpanElement>) {
-  // Using controlled value to ensure chips render
-  const [value] = useState<string[]>(['Apple']);
-  return (
-    <Combobox.Root items={fruits} multiple value={value}>
-      <Combobox.InputWrapper>
-        <Combobox.Chips>
-          {(chipValue: string) => (
-            <Combobox.Chip key={chipValue}>
-              <Combobox.ChipText data-testid="test-root" {...props}>
-                {chipValue}
-              </Combobox.ChipText>
-            </Combobox.Chip>
-          )}
-        </Combobox.Chips>
-        <Combobox.Input placeholder="Test" />
-      </Combobox.InputWrapper>
-    </Combobox.Root>
-  );
-}
-
 /** ActionButtons conformance - forwards props, ref, className */
 export function ConformanceActionButtons(props: React.HTMLAttributes<HTMLDivElement>) {
   return (

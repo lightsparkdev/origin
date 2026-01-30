@@ -81,15 +81,19 @@ export function Icon({ variant, className, ...props }: IconProps) {
   );
 }
 
-// Content
-export interface ContentProps extends React.HTMLAttributes<HTMLDivElement> {}
+// Content - wraps BaseToast.Content for proper stacking animations (data-behind, data-expanded)
+export interface ContentProps extends BaseToast.Content.Props {}
 
 export const Content = React.forwardRef<HTMLDivElement, ContentProps>(
   function Content(props, ref) {
     const { className, ...other } = props;
 
     return (
-      <div ref={ref} className={clsx(styles.content, className)} {...other} />
+      <BaseToast.Content
+        ref={ref}
+        className={clsx(styles.content, className)}
+        {...other}
+      />
     );
   }
 );

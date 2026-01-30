@@ -39,29 +39,20 @@ export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
   }
 );
 
-// Value
-export interface ValueProps extends Omit<BaseSelect.Value.Props, 'children'> {
-  placeholder?: string;
-  children?: BaseSelect.Value.Props['children'];
+// Value - uses Base UI's built-in placeholder prop and data-placeholder attribute for styling
+export interface ValueProps extends BaseSelect.Value.Props {
+  /** Placeholder text shown when no value is selected */
+  placeholder?: React.ReactNode;
 }
 
 export const Value = React.forwardRef<HTMLSpanElement, ValueProps>(
-  function Value({ className, placeholder, children, ...props }, ref) {
+  function Value({ className, ...props }, ref) {
     return (
       <BaseSelect.Value
         ref={ref}
         className={clsx(styles.value, className)}
         {...props}
-      >
-        {children ?? ((value) => {
-          if (value != null) {
-            return value;
-          }
-          return placeholder ? (
-            <span data-placeholder="">{placeholder}</span>
-          ) : null;
-        })}
-      </BaseSelect.Value>
+      />
     );
   }
 );
@@ -211,22 +202,18 @@ export const ItemFlag = React.forwardRef<HTMLSpanElement, ItemFlagProps>(
   }
 );
 
-// ItemIndicator - renders selection dot
+// ItemIndicator - renders selection dot (visibility handled via CSS on parent [data-selected])
 export interface ItemIndicatorProps extends Omit<BaseSelect.ItemIndicator.Props, 'children'> {
   children?: React.ReactNode;
 }
 
 export const ItemIndicator = React.forwardRef<HTMLSpanElement, ItemIndicatorProps>(
-  function ItemIndicator({ className, children, keepMounted = true, style, ...props }, ref) {
+  function ItemIndicator({ className, children, keepMounted = true, ...props }, ref) {
     return (
       <BaseSelect.ItemIndicator
         ref={ref}
         className={clsx(styles.itemIndicator, className)}
         keepMounted={keepMounted}
-        style={(state) => ({
-          visibility: state.selected ? 'visible' : 'hidden',
-          ...(typeof style === 'function' ? style(state) : style),
-        })}
         {...props}
       >
         {children ?? <span className={styles.itemIndicatorDot} />}

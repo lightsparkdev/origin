@@ -354,31 +354,6 @@ export const PopupItem = React.forwardRef<HTMLDivElement, PopupItemProps>(
 );
 
 /* -------------------------------------------------------------------------------------------------
- * SubmenuTrigger (Opens nested submenu - custom)
- * -----------------------------------------------------------------------------------------------*/
-
-export interface SubmenuTriggerProps extends React.ComponentPropsWithoutRef<'div'> {
-  /** Whether the trigger is disabled */
-  disabled?: boolean;
-}
-
-export const SubmenuTrigger = React.forwardRef<HTMLDivElement, SubmenuTriggerProps>(
-  function SubmenuTrigger(props, forwardedRef) {
-    const { className, children, disabled, ...triggerProps } = props;
-    return (
-      <div
-        ref={forwardedRef}
-        className={clsx(styles.submenuTrigger, className)}
-        data-disabled={disabled || undefined}
-        {...triggerProps}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-
-/* -------------------------------------------------------------------------------------------------
  * Group (Groups items with optional label)
  * -----------------------------------------------------------------------------------------------*/
 
@@ -457,7 +432,6 @@ export const NavigationMenu = {
   Arrow,
   Backdrop,
   PopupItem,
-  SubmenuTrigger,
   Group,
   GroupLabel,
   Separator,

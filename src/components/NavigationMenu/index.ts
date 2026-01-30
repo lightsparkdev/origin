@@ -16,7 +16,6 @@ export type {
   ArrowProps as NavigationMenuArrowProps,
   BackdropProps as NavigationMenuBackdropProps,
   PopupItemProps as NavigationMenuPopupItemProps,
-  SubmenuTriggerProps as NavigationMenuSubmenuTriggerProps,
   GroupProps as NavigationMenuGroupProps,
   GroupLabelProps as NavigationMenuGroupLabelProps,
   SeparatorProps as NavigationMenuSeparatorProps,

@@ -27,6 +27,7 @@
 .trigger {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-xs);
   width: 100%;
   padding: var(--spacing-md) 0;
@@ -34,6 +35,8 @@
   border: none;
   cursor: pointer;
   text-align: left;
+  @include label;
+  color: var(--text-primary);
 
   &:focus-visible {
     outline: 2px solid var(--input-focus);
@@ -41,14 +44,8 @@
   }
 }
 
-.title {
-  flex: 1;
-  @include label;
-  color: var(--text-primary);
-}
-
 @media (hover: hover) {
-  .trigger:hover .title {
+  .trigger:hover {
     text-decoration: underline;
   }
 }
@@ -73,6 +70,9 @@
   width: 100%;
   height: var(--accordion-panel-height);
   overflow: hidden;
+  padding-bottom: var(--spacing-sm);
+  @include body;
+  color: var(--text-primary);
   transition: height 200ms ease-out;
 
   &[data-starting-style],
@@ -83,10 +83,4 @@
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
-}
-
-.content {
-  padding-bottom: var(--spacing-sm);
-  @include body;
-  color: var(--text-primary);
 }

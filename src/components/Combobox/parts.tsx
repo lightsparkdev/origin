@@ -6,6 +6,7 @@ import { CentralIcon } from '../Icon';
 import { CheckboxIndicator } from '../Checkbox';
 import clsx from 'clsx';
 import styles from './Combobox.module.scss';
+import chipStyles from '../Chip/Chip.module.scss';
 
 // Context to share InputWrapper ref with Positioner for proper anchor width
 const AnchorContext = React.createContext<React.RefObject<HTMLDivElement | null> | null>(null);
@@ -479,8 +480,8 @@ export interface ChipsProps extends BaseCombobox.Chips.Props {}
  *     <Combobox.Value>
  *       {(values) =>
  *         values?.map((value) => (
- *           <Combobox.Chip key={value}>
- *             <Combobox.ChipText>{value}</Combobox.ChipText>
+ *           <Combobox.Chip key={value} aria-label={value}>
+ *             {value}
  *             <Combobox.ChipRemove />
  *           </Combobox.Chip>
  *         ))
@@ -508,37 +509,37 @@ export interface ChipProps extends BaseCombobox.Chip.Props {}
 /**
  * Combobox.Chip - Individual chip representing a selected value.
  *
- * Uses the design system's Chip styling (24px height, sm size).
+ * Uses the design system's Chip component styling (24px height, sm size).
+ * Follow the simple Base UI pattern: content + ChipRemove as children.
  *
  * @example
  * ```tsx
- * <Combobox.Chip>
- *   <Combobox.ChipText>{value}</Combobox.ChipText>
+ * <Combobox.Chip aria-label={value}>
+ *   {value}
  *   <Combobox.ChipRemove />
  * </Combobox.Chip>
  * ```
  */
 export const Chip = React.forwardRef<HTMLDivElement, ChipProps>(
-  function Chip({ className, ...props }, ref) {
+  function Chip({ className, children, ...props }, ref) {
+    // Separate ChipRemove from label content
+    const childArray = React.Children.toArray(children);
+    const chipRemove = childArray.filter(
+      (child) => React.isValidElement(child) && child.type === ChipRemove
+    );
+    const labelContent = childArray.filter(
+      (child) => !React.isValidElement(child) || child.type !== ChipRemove
+    );
+
     return (
       <BaseCombobox.Chip
         ref={ref}
-        className={clsx(styles.chip, className)}
+        className={clsx(chipStyles.root, chipStyles.sm, className)}
         {...props}
-      />
-    );
-  }
-);
-
-export interface ChipTextProps extends React.HTMLAttributes<HTMLSpanElement> {}
-
-/**
- * Combobox.ChipText - Text content of a chip.
- */
-export const ChipText = React.forwardRef<HTMLSpanElement, ChipTextProps>(
-  function ChipText({ className, ...props }, ref) {
-    return (
-      <span ref={ref} className={clsx(styles.chipText, className)} {...props} />
+      >
+        <span className={chipStyles.label}>{labelContent}</span>
+        {chipRemove}
+      </BaseCombobox.Chip>
     );
   }
 );
@@ -548,14 +549,14 @@ export interface ChipRemoveProps extends BaseCombobox.ChipRemove.Props {}
 /**
  * Combobox.ChipRemove - Button to remove a chip.
  *
- * Uses the design system's × icon and styling.
+ * Uses the design system's Chip dismiss styling and icon.
  */
 export const ChipRemove = React.forwardRef<HTMLButtonElement, ChipRemoveProps>(
   function ChipRemove({ className, children, ...props }, ref) {
     return (
       <BaseCombobox.ChipRemove
         ref={ref}
-        className={clsx(styles.chipRemove, className)}
+        className={clsx(chipStyles.dismiss, className)}
         {...props}
       >
         {children ?? <CentralIcon name="IconCrossSmall" size={10} />}

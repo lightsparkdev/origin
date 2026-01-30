@@ -23,17 +23,26 @@ export interface ListProps extends BaseTabs.List.Props {
   variant?: 'default' | 'minimal';
 }
 
+/**
+ * Tab list container - compose with Tabs.Indicator for the active indicator.
+ * 
+ * @example
+ * ```tsx
+ * <Tabs.List>
+ *   <Tabs.Indicator />
+ *   <Tabs.Tab value="a">Tab A</Tabs.Tab>
+ *   <Tabs.Tab value="b">Tab B</Tabs.Tab>
+ * </Tabs.List>
+ * ```
+ */
 export const List = React.forwardRef<HTMLDivElement, ListProps>(
-  function List({ className, variant = 'default', children, ...props }, ref) {
+  function List({ className, variant = 'default', ...props }, ref) {
     return (
       <BaseTabs.List
         ref={ref}
         className={clsx(styles.list, styles[variant], className)}
         {...props}
-      >
-        <Indicator />
-        {children}
-      </BaseTabs.List>
+      />
     );
   }
 );

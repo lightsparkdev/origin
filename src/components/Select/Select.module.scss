@@ -207,6 +207,11 @@
   flex-shrink: 0;
   width: 16px;
   height: 16px;
+  visibility: hidden;
+
+  .item[data-selected] & {
+    visibility: visible;
+  }
 }
 
 .itemIndicatorDot {

@@ -14,7 +14,10 @@ export const Default: StoryObj = {
     <Accordion.Root defaultValue={['item-1']}>
       <Accordion.Item value="item-1">
         <Accordion.Header>
-          <Accordion.Trigger>What is Base UI?</Accordion.Trigger>
+          <Accordion.Trigger>
+            What is Base UI?
+            <Accordion.Icon />
+          </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>
           Base UI is an unstyled component library for building accessible web applications.
@@ -22,7 +25,10 @@ export const Default: StoryObj = {
       </Accordion.Item>
       <Accordion.Item value="item-2">
         <Accordion.Header>
-          <Accordion.Trigger>How does it work?</Accordion.Trigger>
+          <Accordion.Trigger>
+            How does it work?
+            <Accordion.Icon />
+          </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>
           It provides behavior and accessibility while you bring your own styles.
@@ -30,7 +36,10 @@ export const Default: StoryObj = {
       </Accordion.Item>
       <Accordion.Item value="item-3">
         <Accordion.Header>
-          <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+          <Accordion.Trigger>
+            Is it accessible?
+            <Accordion.Icon />
+          </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>
           Yes, all components follow WAI-ARIA patterns.
@@ -45,13 +54,19 @@ export const Multiple: StoryObj = {
     <Accordion.Root multiple>
       <Accordion.Item value="item-1">
         <Accordion.Header>
-          <Accordion.Trigger>First</Accordion.Trigger>
+          <Accordion.Trigger>
+            First
+            <Accordion.Icon />
+          </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>Multiple items can be open.</Accordion.Panel>
       </Accordion.Item>
       <Accordion.Item value="item-2">
         <Accordion.Header>
-          <Accordion.Trigger>Second</Accordion.Trigger>
+          <Accordion.Trigger>
+            Second
+            <Accordion.Icon />
+          </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>This stays open when others open.</Accordion.Panel>
       </Accordion.Item>
@@ -71,13 +86,19 @@ export const Controlled: StoryObj = {
         <Accordion.Root value={value} onValueChange={setValue}>
           <Accordion.Item value="item-1">
             <Accordion.Header>
-              <Accordion.Trigger>Controlled Item 1</Accordion.Trigger>
+              <Accordion.Trigger>
+                Controlled Item 1
+                <Accordion.Icon />
+              </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Panel>Content for item 1.</Accordion.Panel>
           </Accordion.Item>
           <Accordion.Item value="item-2">
             <Accordion.Header>
-              <Accordion.Trigger>Controlled Item 2</Accordion.Trigger>
+              <Accordion.Trigger>
+                Controlled Item 2
+                <Accordion.Icon />
+              </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Panel>Content for item 2.</Accordion.Panel>
           </Accordion.Item>

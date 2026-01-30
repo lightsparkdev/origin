@@ -1076,8 +1076,8 @@ function ComboboxExamples() {
                 {(values: string[]) => (
                   <>
                     {values?.map((value) => (
-                      <Combobox.Chip key={value}>
-                        <Combobox.ChipText>{value}</Combobox.ChipText>
+                      <Combobox.Chip key={value} aria-label={value}>
+                        {value}
                         <Combobox.ChipRemove />
                       </Combobox.Chip>
                     ))}
