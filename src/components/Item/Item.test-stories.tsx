@@ -64,7 +64,7 @@ export function SelectedItem() {
     <Item
       title="Selected option"
       selected
-      trailing={<CentralIcon name="IconCheckmark2Small" size={24} color="var(--icon-primary)" />}
+      trailing={<CentralIcon name="IconCheckmark2Small" size={24} />}
     />
   );
 }
@@ -125,13 +125,13 @@ export function SelectableItems() {
         title="Option 1"
         selected={selected === 'item-1'}
         onClick={() => setSelected('item-1')}
-        trailing={selected === 'item-1' ? <CentralIcon name="IconCheckmark2Small" size={24} color="var(--icon-primary)" /> : undefined}
+        trailing={selected === 'item-1' ? <CentralIcon name="IconCheckmark2Small" size={24} /> : undefined}
       />
       <Item
         title="Option 2"
         selected={selected === 'item-2'}
         onClick={() => setSelected('item-2')}
-        trailing={selected === 'item-2' ? <CentralIcon name="IconCheckmark2Small" size={24} color="var(--icon-primary)" /> : undefined}
+        trailing={selected === 'item-2' ? <CentralIcon name="IconCheckmark2Small" size={24} /> : undefined}
       />
     </div>
   );
