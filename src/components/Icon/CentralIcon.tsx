@@ -34,7 +34,7 @@ export interface CentralIconProps {
 export const CentralIcon: React.FC<CentralIconProps> = ({
   name,
   size = 24,
-  color,
+  color = 'currentColor',
   className,
   style,
 }) => {
