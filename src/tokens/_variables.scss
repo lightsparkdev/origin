@@ -217,6 +217,14 @@
   --color-red-900: #8B1111;
   --color-red-950: #4C0303;
   --color-red-050: #FFF1F1;
+  // Line-height ratios (unitless)
+  --font-leading-none: 1;
+  --font-leading-snug: 1.3;
+  --font-leading-normal: 1.4;
+  --font-leading-relaxed: 1.5;
+  --font-leading-loose: 1.6;
+
+  // Legacy line-height tokens (px) - deprecated
   --font-leading-2xs: 12px;
   --font-leading-xs: 16px;
   --font-leading-sm: 18px;
