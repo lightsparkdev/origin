@@ -30,7 +30,7 @@
   height: 32px;
   padding: 0 var(--spacing-xs);
   font-size: var(--font-size-xs);
-  line-height: var(--font-leading-2xs);
+  line-height: var(--font-leading-none);
 
   &.iconOnly {
     width: 32px;
@@ -42,7 +42,7 @@
   height: 36px;
   padding: 0 var(--spacing-xs);
   font-size: var(--font-size-base);
-  line-height: var(--font-leading-base);
+  line-height: var(--font-leading-normal);
 
   &.iconOnly {
     width: 36px;

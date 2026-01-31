@@ -76,11 +76,11 @@ function needsPxUnits(tokenName) {
     'corner-radius/',
     'stroke/',
     'font/size',
-    'font/leading',
     'max-width/',
     'screens/',
   ];
   const lower = tokenName.toLowerCase();
+  // font/leading is unitless (ratios like 1.4, 1.5) - don't add px
   return pxPatterns.some(pattern => lower.includes(pattern));
 }
 

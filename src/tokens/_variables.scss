@@ -217,20 +217,6 @@
   --color-red-900: #8B1111;
   --color-red-950: #4C0303;
   --color-red-050: #FFF1F1;
-  // Line-height ratios (unitless)
-  --font-leading-none: 1;
-  --font-leading-snug: 1.3;
-  --font-leading-normal: 1.4;
-  --font-leading-relaxed: 1.5;
-  --font-leading-loose: 1.6;
-
-  // Legacy line-height tokens (px) - deprecated
-  --font-leading-2xs: 12px;
-  --font-leading-xs: 16px;
-  --font-leading-sm: 18px;
-  --font-leading-base: 20px;
-  --font-leading-lg: 24px;
-  --font-leading-xl: 32px;
   --font-family-sans: "Suisse Intl";
   --font-family-mono: "Suisse Int'l Mono";
   --font-size-2xs: 10px;
@@ -256,6 +242,11 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-black: 900;
+  --font-leading-none: 1;
+  --font-leading-snug: 1.3300000429153442;
+  --font-leading-normal: 1.4299999475479126;
+  --font-leading-relaxed: 1.5;
+  --font-leading-loose: 1.600000023841858;
   --border-primary: #1A1A1A;
   --border-secondary: #C1C0B8;
   --border-tertiary: rgba(0, 0, 0, 0.10);
