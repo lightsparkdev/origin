@@ -1,0 +1,37 @@
+# Typography System
+
+## Font Metric Overrides
+
+Suisse Intl has unusually large internal ascender/descender metrics. Without correction, this causes:
+- Tall text cursors in inputs
+- Inconsistent vertical rhythm
+- Elements appearing taller than designed
+
+The `@font-face` declarations in `_fonts.scss` include metric overrides:
+- `ascent-override: 85%`
+- `descent-override: 15%`
+- `line-gap-override: 0%`
+
+These values compress the font's vertical bounds to match design intent.
+
+**Do not remove these overrides.** They are essential for proper rendering.
+
+## Line-Height Tokens
+
+Line-heights use unitless ratios that scale with font size:
+
+| Token | Value | Use Case |
+|-------|-------|----------|
+| `--font-leading-none` | 1 | Buttons, inputs, single-line |
+| `--font-leading-snug` | 1.33 | Headlines, code |
+| `--font-leading-normal` | 1.43 | Body text |
+| `--font-leading-relaxed` | 1.5 | Large body, labels |
+| `--font-leading-loose` | 1.6 | Extra spacing |
+
+The build script (`scripts/build-tokens.js`) outputs these as unitless values. The `font/leading` pattern is intentionally excluded from `needsPxUnits()`.
+
+## Do Not
+
+- Add `px` suffix to line-height tokens
+- Remove font metric overrides from `_fonts.scss`
+- Use hardcoded pixel line-heights in components
