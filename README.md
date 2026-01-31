@@ -51,6 +51,51 @@ Import in Figma → Plugins → Development → `manifest.json`
 
 Validates component structure against Base UI's expected anatomy.
 
+## Typography
+
+### Font Metric Overrides (Critical)
+
+Suisse Intl has unusually large internal ascender/descender metrics, which causes issues with:
+- Tall text cursors in inputs
+- Inconsistent vertical rhythm
+- Elements appearing taller than designed
+
+We fix this with `@font-face` metric overrides in `_fonts.scss`:
+
+```scss
+@font-face {
+  font-family: 'Suisse Intl';
+  src: url('/fonts/SuisseIntl-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 85%;    /* Compress ascender space */
+  descent-override: 15%;   /* Compress descender space */
+  line-gap-override: 0%;   /* Remove extra line gap */
+}
+```
+
+**Consumers must import the fonts file** to get proper rendering:
+
+```scss
+// In your globals.scss
+@use 'pkg:@jaymantri/origin/tokens/fonts';
+```
+
+Without this import, you'll see tall cursors and misaligned text.
+
+### Unitless Line Heights
+
+All line-height tokens use unitless ratios that scale with font size:
+
+| Token | Value | Use Case |
+|-------|-------|----------|
+| `--font-leading-none` | 1 | Buttons, inputs, single-line elements |
+| `--font-leading-snug` | 1.33 | Headlines, code blocks |
+| `--font-leading-normal` | 1.43 | Body text (default) |
+| `--font-leading-relaxed` | 1.5 | Large body text, labels |
+| `--font-leading-loose` | 1.6 | Extra spacing for readability |
+
 ## Icons
 
 ```tsx

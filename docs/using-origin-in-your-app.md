@@ -53,7 +53,7 @@ Font files must be served from the consuming app's public folder.
 
 ```scss
 @use 'pkg:@jaymantri/origin/tokens/variables';
-@use 'pkg:@jaymantri/origin/tokens/fonts';
+@use 'pkg:@jaymantri/origin/tokens/fonts';      // CRITICAL - see note below
 @use 'pkg:@jaymantri/origin/tokens/typography';
 @use 'pkg:@jaymantri/origin/tokens/effects';
 @use 'pkg:@jaymantri/origin/tokens/reset';
@@ -66,6 +66,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 ```
+
+> **Critical: Font Metrics Override**
+> 
+> The `fonts` import includes `@font-face` declarations with metric overrides (`ascent-override`, `descent-override`, `line-gap-override`) that fix Suisse Intl's unusually large internal metrics. Without this import, you'll see:
+> - Tall text cursors in inputs
+> - Inconsistent vertical rhythm
+> - Elements appearing taller than designed
+>
+> Always import `fonts` before using any Origin components.
 
 The `_reset.scss` file includes:
 - Box-sizing reset
