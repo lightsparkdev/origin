@@ -59,7 +59,7 @@
   margin: 0;
   background: transparent;
   border: none;
-  @include body;
+  @include input;
   color: var(--text-primary);
   outline: none;
 
@@ -326,7 +326,7 @@
 }
 
 .value {
-  @include body;
+  @include input;
   color: var(--text-primary);
   overflow: hidden;
   text-overflow: ellipsis;

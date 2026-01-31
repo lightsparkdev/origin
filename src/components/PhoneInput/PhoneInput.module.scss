@@ -57,7 +57,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-2xs);
-  @include body;
+  @include input;
   color: var(--text-primary);
   white-space: nowrap;
 }
@@ -105,7 +105,7 @@
   padding: var(--spacing-none) var(--spacing-sm);
   border: none;
   background: transparent;
-  @include body;
+  @include input;
   color: var(--text-primary);
 
   &::placeholder {

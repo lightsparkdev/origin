@@ -36,7 +36,7 @@
   font-family: var(--font-family-sans);
   font-size: var(--font-size-base, 14px);
   font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-base, 20px);
+  line-height: 14px;
   letter-spacing: var(--font-tracking-normal, 0);
 }
 
@@ -44,7 +44,7 @@
   font-family: var(--font-family-sans);
   font-size: var(--font-size-lg, 16px);
   font-weight: var(--font-weight-book, 450);
-  line-height: var(--font-leading-lg, 24px);
+  line-height: var(--font-leading-xs, 16px);
   letter-spacing: var(--font-tracking-normal, 0);
 }
 
@@ -78,6 +78,14 @@
   font-weight: var(--font-weight-medium, 500);
   line-height: var(--font-leading-lg, 24px);
   letter-spacing: var(--font-tracking-tight, -0.2px);
+}
+
+@mixin input {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: 1;
+  letter-spacing: var(--font-tracking-normal, 0);
 }
 
 @mixin label {

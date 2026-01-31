@@ -3,7 +3,7 @@
 @use '../../tokens/mixins' as *;
 
 .trigger {
-  @include body;
+  @include input;
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);

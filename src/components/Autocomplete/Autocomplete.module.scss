@@ -5,7 +5,7 @@
 
 // Input - styled identically to Input component
 .input {
-  @include body;
+  @include input;
 
   display: block;
   width: 100%;
