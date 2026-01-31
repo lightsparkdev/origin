@@ -11,9 +11,28 @@ const meta: Meta = {
 
 export default meta;
 
-export const Structured: StoryObj = {
+export const StructuredLeft: StoryObj = {
   render: () => (
     <Card.Root variant="structured" style={{ width: 360 }}>
+      <Card.Header>
+        <Card.TitleGroup>
+          <Card.Title>Card title</Card.Title>
+          <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        </Card.TitleGroup>
+      </Card.Header>
+      <Card.Body>
+        <p>Slot components in to the body here to extend the functionality of the card.</p>
+      </Card.Body>
+      <Card.Footer>
+        <Button>Button</Button>
+      </Card.Footer>
+    </Card.Root>
+  ),
+};
+
+export const StructuredCenter: StoryObj = {
+  render: () => (
+    <Card.Root variant="structured" alignment="center" style={{ width: 360 }}>
       <Card.Header>
         <Card.TitleGroup>
           <Card.Title>Card title</Card.Title>
@@ -50,7 +69,7 @@ export const StructuredWithBackButton: StoryObj = {
   ),
 };
 
-export const Simple: StoryObj = {
+export const SimpleLeft: StoryObj = {
   render: () => (
     <Card.Root variant="simple" style={{ width: 360 }}>
       <Card.TitleGroup>
@@ -65,19 +84,69 @@ export const Simple: StoryObj = {
   ),
 };
 
+export const SimpleCenter: StoryObj = {
+  render: () => (
+    <Card.Root variant="simple" alignment="center" style={{ width: 360 }}>
+      <Card.TitleGroup>
+        <Card.Title>Card title</Card.Title>
+        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+      </Card.TitleGroup>
+      <Card.Body>
+        <p>Slot components in to the body here to extend the functionality of the card.</p>
+      </Card.Body>
+      <Button>Button</Button>
+    </Card.Root>
+  ),
+};
+
+export const FullwidthBody: StoryObj = {
+  render: () => (
+    <Card.Root variant="structured" style={{ width: 360 }}>
+      <Card.Header>
+        <Card.TitleGroup>
+          <Card.Title>Fullwidth body</Card.Title>
+          <Card.Subtitle>Body content goes edge-to-edge</Card.Subtitle>
+        </Card.TitleGroup>
+      </Card.Header>
+      <Card.Body fullwidth>
+        <div style={{ background: 'var(--surface-secondary)', padding: '12px 24px' }}>
+          Edge-to-edge content
+        </div>
+      </Card.Body>
+      <Card.Footer>
+        <Button>Button</Button>
+      </Card.Footer>
+    </Card.Root>
+  ),
+};
+
 export const AllVariants: StoryObj = {
   render: () => (
-    <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start' }}>
+    <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
       <Card.Root variant="structured" style={{ width: 360 }}>
         <Card.Header>
-          <Card.BackButton />
           <Card.TitleGroup>
-            <Card.Title>Structured</Card.Title>
-            <Card.Subtitle>With back button</Card.Subtitle>
+            <Card.Title>Structured Left</Card.Title>
+            <Card.Subtitle>Default alignment</Card.Subtitle>
           </Card.TitleGroup>
         </Card.Header>
         <Card.Body>
-          <p>Body content with sectioned layout and individual padding per section.</p>
+          <p>Body content with sectioned layout.</p>
+        </Card.Body>
+        <Card.Footer>
+          <Button>Button</Button>
+        </Card.Footer>
+      </Card.Root>
+
+      <Card.Root variant="structured" alignment="center" style={{ width: 360 }}>
+        <Card.Header>
+          <Card.TitleGroup>
+            <Card.Title>Structured Center</Card.Title>
+            <Card.Subtitle>Center alignment</Card.Subtitle>
+          </Card.TitleGroup>
+        </Card.Header>
+        <Card.Body>
+          <p>Body content with sectioned layout.</p>
         </Card.Body>
         <Card.Footer>
           <Button>Button</Button>
@@ -86,11 +155,22 @@ export const AllVariants: StoryObj = {
 
       <Card.Root variant="simple" style={{ width: 360 }}>
         <Card.TitleGroup>
-          <Card.Title>Simple</Card.Title>
-          <Card.Subtitle>Flat layout</Card.Subtitle>
+          <Card.Title>Simple Left</Card.Title>
+          <Card.Subtitle>No card surface</Card.Subtitle>
         </Card.TitleGroup>
         <Card.Body>
-          <p>Body content with uniform padding and gap-based spacing.</p>
+          <p>Body content with uniform padding.</p>
+        </Card.Body>
+        <Button>Button</Button>
+      </Card.Root>
+
+      <Card.Root variant="simple" alignment="center" style={{ width: 360 }}>
+        <Card.TitleGroup>
+          <Card.Title>Simple Center</Card.Title>
+          <Card.Subtitle>No card surface</Card.Subtitle>
+        </Card.TitleGroup>
+        <Card.Body>
+          <p>Body content with uniform padding.</p>
         </Card.Body>
         <Button>Button</Button>
       </Card.Root>
