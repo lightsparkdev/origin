@@ -1422,8 +1422,10 @@ export default function Home() {
         <Card.Root variant="structured" style={{ width: 360 }}>
           <Card.Header>
             <Card.BackButton />
-            <Card.Title>Structured</Card.Title>
-            <Card.Subtitle>With back button</Card.Subtitle>
+            <Card.TitleGroup>
+              <Card.Title>Structured</Card.Title>
+              <Card.Subtitle>With back button</Card.Subtitle>
+            </Card.TitleGroup>
           </Card.Header>
           <Card.Body>
             <p>Body content with sectioned layout and individual padding per section.</p>
@@ -1434,8 +1436,10 @@ export default function Home() {
         </Card.Root>
 
         <Card.Root variant="simple" style={{ width: 360 }}>
-          <Card.Title>Simple</Card.Title>
-          <Card.Subtitle>Flat layout</Card.Subtitle>
+          <Card.TitleGroup>
+            <Card.Title>Simple</Card.Title>
+            <Card.Subtitle>Flat layout</Card.Subtitle>
+          </Card.TitleGroup>
           <Card.Body>
             <p>Body content with uniform padding and gap-based spacing.</p>
           </Card.Body>

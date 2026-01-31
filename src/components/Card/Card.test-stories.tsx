@@ -8,8 +8,10 @@ export function StructuredCard() {
   return (
     <Card.Root variant="structured" data-testid="card">
       <Card.Header>
-        <Card.Title>Card title</Card.Title>
-        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        <Card.TitleGroup>
+          <Card.Title>Card title</Card.Title>
+          <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        </Card.TitleGroup>
       </Card.Header>
       <Card.Body>
         <p>Slot components in to the body here to extend the functionality of the card.</p>
@@ -29,8 +31,10 @@ export function StructuredCardWithBackButton() {
       <Card.Root variant="structured" data-testid="card">
         <Card.Header>
           <Card.BackButton onClick={() => setClicked(true)} data-testid="back-button" />
-          <Card.Title>Card title</Card.Title>
-          <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+          <Card.TitleGroup>
+            <Card.Title>Card title</Card.Title>
+            <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+          </Card.TitleGroup>
         </Card.Header>
         <Card.Body>
           <p>Body content here.</p>
@@ -47,8 +51,10 @@ export function StructuredCardWithBackButton() {
 export function SimpleCard() {
   return (
     <Card.Root variant="simple" data-testid="card">
-      <Card.Title>Card title</Card.Title>
-      <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+      <Card.TitleGroup>
+        <Card.Title>Card title</Card.Title>
+        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+      </Card.TitleGroup>
       <Card.Body>
         <p>Slot components in to the body here to extend the functionality of the card.</p>
       </Card.Body>

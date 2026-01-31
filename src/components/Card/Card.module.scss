@@ -64,6 +64,13 @@
   }
 }
 
+// TitleGroup (wraps Title + Subtitle)
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3xs);
+}
+
 // Title
 .title {
   @include headline-sm;

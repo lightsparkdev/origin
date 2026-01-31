@@ -15,8 +15,10 @@ export const Structured: StoryObj = {
   render: () => (
     <Card.Root variant="structured" style={{ width: 360 }}>
       <Card.Header>
-        <Card.Title>Card title</Card.Title>
-        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        <Card.TitleGroup>
+          <Card.Title>Card title</Card.Title>
+          <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        </Card.TitleGroup>
       </Card.Header>
       <Card.Body>
         <p>Slot components in to the body here to extend the functionality of the card.</p>
@@ -33,8 +35,10 @@ export const StructuredWithBackButton: StoryObj = {
     <Card.Root variant="structured" style={{ width: 360 }}>
       <Card.Header>
         <Card.BackButton onClick={() => console.log('Back clicked')} />
-        <Card.Title>Card title</Card.Title>
-        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        <Card.TitleGroup>
+          <Card.Title>Card title</Card.Title>
+          <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+        </Card.TitleGroup>
       </Card.Header>
       <Card.Body>
         <p>Slot components in to the body here to extend the functionality of the card.</p>
@@ -49,8 +53,10 @@ export const StructuredWithBackButton: StoryObj = {
 export const Simple: StoryObj = {
   render: () => (
     <Card.Root variant="simple" style={{ width: 360 }}>
-      <Card.Title>Card title</Card.Title>
-      <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+      <Card.TitleGroup>
+        <Card.Title>Card title</Card.Title>
+        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+      </Card.TitleGroup>
       <Card.Body>
         <p>Slot components in to the body here to extend the functionality of the card.</p>
       </Card.Body>
@@ -65,8 +71,10 @@ export const AllVariants: StoryObj = {
       <Card.Root variant="structured" style={{ width: 360 }}>
         <Card.Header>
           <Card.BackButton />
-          <Card.Title>Structured</Card.Title>
-          <Card.Subtitle>With back button</Card.Subtitle>
+          <Card.TitleGroup>
+            <Card.Title>Structured</Card.Title>
+            <Card.Subtitle>With back button</Card.Subtitle>
+          </Card.TitleGroup>
         </Card.Header>
         <Card.Body>
           <p>Body content with sectioned layout and individual padding per section.</p>
@@ -77,8 +85,10 @@ export const AllVariants: StoryObj = {
       </Card.Root>
 
       <Card.Root variant="simple" style={{ width: 360 }}>
-        <Card.Title>Simple</Card.Title>
-        <Card.Subtitle>Flat layout</Card.Subtitle>
+        <Card.TitleGroup>
+          <Card.Title>Simple</Card.Title>
+          <Card.Subtitle>Flat layout</Card.Subtitle>
+        </Card.TitleGroup>
         <Card.Body>
           <p>Body content with uniform padding and gap-based spacing.</p>
         </Card.Body>

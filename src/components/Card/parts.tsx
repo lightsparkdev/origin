@@ -74,6 +74,21 @@ export const BackButton = React.forwardRef<HTMLButtonElement, BackButtonProps>(
   }
 );
 
+// TitleGroup (wraps Title + Subtitle with gap)
+export interface TitleGroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode;
+}
+
+export const TitleGroup = React.forwardRef<HTMLDivElement, TitleGroupProps>(
+  function TitleGroup({ className, children, ...props }, ref) {
+    return (
+      <div ref={ref} className={clsx(styles.titleGroup, className)} {...props}>
+        {children}
+      </div>
+    );
+  }
+);
+
 // Title
 export interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children?: React.ReactNode;
@@ -143,6 +158,7 @@ if (process.env.NODE_ENV !== 'production') {
   Root.displayName = 'Card';
   Header.displayName = 'Card.Header';
   BackButton.displayName = 'Card.BackButton';
+  TitleGroup.displayName = 'Card.TitleGroup';
   Title.displayName = 'Card.Title';
   Subtitle.displayName = 'Card.Subtitle';
   Body.displayName = 'Card.Body';
