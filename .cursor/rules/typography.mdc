@@ -1,37 +1,59 @@
-# Typography System
+---
+description: Font rendering and line-height token conventions
+globs:
+  - src/tokens/_fonts.scss
+  - src/tokens/_variables.scss
+  - scripts/build-tokens.js
+  - "**/*.scss"
+alwaysApply: false
+---
+
+# Typography
 
 ## Font Metric Overrides
 
-Suisse Intl has unusually large internal ascender/descender metrics. Without correction, this causes:
-- Tall text cursors in inputs
-- Inconsistent vertical rhythm
-- Elements appearing taller than designed
+`src/tokens/_fonts.scss` contains `@font-face` declarations for Suisse Intl with these properties:
 
-The `@font-face` declarations in `_fonts.scss` include metric overrides:
-- `ascent-override: 85%`
-- `descent-override: 15%`
-- `line-gap-override: 0%`
+```scss
+ascent-override: 85%;
+descent-override: 15%;
+line-gap-override: 0%;
+```
 
-These values compress the font's vertical bounds to match design intent.
+These compress the font's internal vertical metrics. Suisse Intl's default metrics are unusually large, causing tall cursors in inputs and inconsistent vertical rhythm.
 
-**Do not remove these overrides.** They are essential for proper rendering.
+**Do not remove or modify these values.**
 
 ## Line-Height Tokens
 
-Line-heights use unitless ratios that scale with font size:
+| Token | Value |
+|-------|-------|
+| `--font-leading-none` | 1 |
+| `--font-leading-snug` | 1.33 |
+| `--font-leading-normal` | 1.43 |
+| `--font-leading-relaxed` | 1.5 |
+| `--font-leading-loose` | 1.6 |
 
-| Token | Value | Use Case |
-|-------|-------|----------|
-| `--font-leading-none` | 1 | Buttons, inputs, single-line |
-| `--font-leading-snug` | 1.33 | Headlines, code |
-| `--font-leading-normal` | 1.43 | Body text |
-| `--font-leading-relaxed` | 1.5 | Large body, labels |
-| `--font-leading-loose` | 1.6 | Extra spacing |
+Source: `tokens/figma/origin/Value.tokens.json` → `font.leading.*`
 
-The build script (`scripts/build-tokens.js`) outputs these as unitless values. The `font/leading` pattern is intentionally excluded from `needsPxUnits()`.
+Generated to: `src/tokens/_variables.scss`
 
-## Do Not
+## Build Script Behavior
 
-- Add `px` suffix to line-height tokens
-- Remove font metric overrides from `_fonts.scss`
-- Use hardcoded pixel line-heights in components
+`scripts/build-tokens.js` adds `px` suffix to number tokens matching these patterns:
+- `spacing/`
+- `corner-radius/`
+- `stroke/`
+- `font/size`
+- `max-width/`
+- `screens/`
+
+`font/leading` is **not** in this list. Line-height tokens output as unitless values.
+
+## Do / Do Not
+
+- **Do** use `var(--font-leading-*)` for all line-heights
+- **Do** use `@include` text-style mixins (they reference the tokens)
+- **Do not** add `font/leading` to `needsPxUnits()` in build script
+- **Do not** hardcode pixel line-heights in component SCSS
+- **Do not** remove `ascent-override`, `descent-override`, `line-gap-override` from `_fonts.scss`
