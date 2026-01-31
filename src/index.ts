@@ -6,6 +6,7 @@ export { Accordion } from './components/Accordion';
 export { AlertDialog } from './components/AlertDialog';
 export { Autocomplete } from './components/Autocomplete';
 export { Breadcrumb } from './components/Breadcrumb';
+export { Card } from './components/Card';
 export { Checkbox } from './components/Checkbox';
 export { Combobox } from './components/Combobox';
 export { ContextMenu } from './components/ContextMenu';

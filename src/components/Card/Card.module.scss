@@ -1,0 +1,104 @@
+// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6113-6959
+
+@use '../../tokens/text-styles' as *;
+
+// Root
+.root {
+  background-color: var(--surface-primary);
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-xl);
+  overflow: clip;
+}
+
+// Structured variant - sections have individual padding
+.structured {
+  display: flex;
+  flex-direction: column;
+}
+
+// Simple variant - uniform padding with gap
+.simple {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl);
+}
+
+// Header (structured variant)
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-block-start: var(--spacing-xl);
+  padding-block-end: var(--spacing-sm);
+  padding-inline: var(--spacing-xl);
+}
+
+// Back button
+.backButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background-color: var(--surface-primary);
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-sm);
+  box-shadow: var(--shadow-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-sm), var(--input-focus);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Title
+.title {
+  @include headline-sm;
+
+  margin: 0;
+  color: var(--text-primary);
+}
+
+// Subtitle
+.subtitle {
+  @include body;
+
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+// Body
+.body {
+  @include body;
+
+  color: var(--text-primary);
+}
+
+// Body in structured variant has padding
+.bodyStructured {
+  padding-block: var(--spacing-sm);
+  padding-inline: var(--spacing-xl);
+}
+
+// Footer (structured variant)
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-block-start: var(--spacing-sm);
+  padding-block-end: var(--spacing-xl);
+  padding-inline: var(--spacing-xl);
+}

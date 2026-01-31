@@ -10,6 +10,7 @@ import { AlertDialog } from '@/components/AlertDialog';
 import { Badge } from '@/components/Badge';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
 import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
 import { Combobox } from '@/components/Combobox';
@@ -1413,6 +1414,33 @@ export default function Home() {
         <Alert variant="critical" title="Title" description="Description here." />
         <Alert variant="default" title="Title only alert" />
         <Alert variant="default" title="No icon alert" description="This alert has no icon." icon={false} />
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Card Component</h2>
+      
+      <div style={{ display: 'flex', gap: '24px', alignItems: 'flex-start', marginBottom: '128px' }}>
+        <Card.Root variant="structured" style={{ width: 360 }}>
+          <Card.Header>
+            <Card.BackButton />
+            <Card.Title>Structured</Card.Title>
+            <Card.Subtitle>With back button</Card.Subtitle>
+          </Card.Header>
+          <Card.Body>
+            <p>Body content with sectioned layout and individual padding per section.</p>
+          </Card.Body>
+          <Card.Footer>
+            <Button>Button</Button>
+          </Card.Footer>
+        </Card.Root>
+
+        <Card.Root variant="simple" style={{ width: 360 }}>
+          <Card.Title>Simple</Card.Title>
+          <Card.Subtitle>Flat layout</Card.Subtitle>
+          <Card.Body>
+            <p>Body content with uniform padding and gap-based spacing.</p>
+          </Card.Body>
+          <Button>Button</Button>
+        </Card.Root>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Alert Dialog Component</h2>
