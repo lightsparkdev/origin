@@ -1422,23 +1422,8 @@ export default function Home() {
         <Card.Root variant="structured" style={{ width: 360 }}>
           <Card.Header>
             <Card.TitleGroup>
-              <Card.Title>Structured Left</Card.Title>
-              <Card.Subtitle>Default alignment</Card.Subtitle>
-            </Card.TitleGroup>
-          </Card.Header>
-          <Card.Body>
-            <p>Body content with sectioned layout.</p>
-          </Card.Body>
-          <Card.Footer>
-            <Button>Button</Button>
-          </Card.Footer>
-        </Card.Root>
-
-        <Card.Root variant="structured" alignment="center" style={{ width: 360 }}>
-          <Card.Header>
-            <Card.TitleGroup>
-              <Card.Title>Structured Center</Card.Title>
-              <Card.Subtitle>Center alignment</Card.Subtitle>
+              <Card.Title>Structured</Card.Title>
+              <Card.Subtitle>With card surface</Card.Subtitle>
             </Card.TitleGroup>
           </Card.Header>
           <Card.Body>
@@ -1451,18 +1436,7 @@ export default function Home() {
 
         <Card.Root variant="simple" style={{ width: 360 }}>
           <Card.TitleGroup>
-            <Card.Title>Simple Left</Card.Title>
-            <Card.Subtitle>No card surface</Card.Subtitle>
-          </Card.TitleGroup>
-          <Card.Body>
-            <p>Body content with uniform padding.</p>
-          </Card.Body>
-          <Button>Button</Button>
-        </Card.Root>
-
-        <Card.Root variant="simple" alignment="center" style={{ width: 360 }}>
-          <Card.TitleGroup>
-            <Card.Title>Simple Center</Card.Title>
+            <Card.Title>Simple</Card.Title>
             <Card.Subtitle>No card surface</Card.Subtitle>
           </Card.TitleGroup>
           <Card.Body>

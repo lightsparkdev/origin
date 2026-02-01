@@ -48,43 +48,9 @@ export function StructuredCardWithBackButton() {
   );
 }
 
-export function StructuredCardCentered() {
-  return (
-    <Card.Root variant="structured" alignment="center" data-testid="card">
-      <Card.Header>
-        <Card.TitleGroup>
-          <Card.Title>Card title</Card.Title>
-          <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
-        </Card.TitleGroup>
-      </Card.Header>
-      <Card.Body>
-        <p>Slot components in to the body here to extend the functionality of the card.</p>
-      </Card.Body>
-      <Card.Footer>
-        <Button>Button</Button>
-      </Card.Footer>
-    </Card.Root>
-  );
-}
-
 export function SimpleCard() {
   return (
     <Card.Root variant="simple" data-testid="card">
-      <Card.TitleGroup>
-        <Card.Title>Card title</Card.Title>
-        <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
-      </Card.TitleGroup>
-      <Card.Body>
-        <p>Slot components in to the body here to extend the functionality of the card.</p>
-      </Card.Body>
-      <Button>Button</Button>
-    </Card.Root>
-  );
-}
-
-export function SimpleCardCentered() {
-  return (
-    <Card.Root variant="simple" alignment="center" data-testid="card">
       <Card.TitleGroup>
         <Card.Title>Card title</Card.Title>
         <Card.Subtitle>Subtitle goes here.</Card.Subtitle>

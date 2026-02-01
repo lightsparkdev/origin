@@ -5,13 +5,11 @@ import clsx from 'clsx';
 import { CentralIcon } from '../Icon';
 import styles from './Card.module.scss';
 
-// Context for variant and alignment
+// Context for variant
 type CardVariant = 'structured' | 'simple';
-type CardAlignment = 'left' | 'center';
 
 interface CardContextValue {
   variant: CardVariant;
-  alignment: CardAlignment;
 }
 
 const CardContext = React.createContext<CardContextValue | undefined>(undefined);
@@ -28,23 +26,16 @@ function useCardContext() {
 export interface RootProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Visual variant of the card */
   variant?: CardVariant;
-  /** Content alignment */
-  alignment?: CardAlignment;
   children?: React.ReactNode;
 }
 
 export const Root = React.forwardRef<HTMLDivElement, RootProps>(
-  function Root({ variant = 'structured', alignment = 'left', className, children, ...props }, ref) {
+  function Root({ variant = 'structured', className, children, ...props }, ref) {
     return (
-      <CardContext.Provider value={{ variant, alignment }}>
+      <CardContext.Provider value={{ variant }}>
         <div
           ref={ref}
-          className={clsx(
-            styles.root,
-            styles[variant],
-            alignment === 'center' && styles.center,
-            className
-          )}
+          className={clsx(styles.root, styles[variant], className)}
           {...props}
         >
           {children}
@@ -95,13 +86,8 @@ export interface TitleGroupProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const TitleGroup = React.forwardRef<HTMLDivElement, TitleGroupProps>(
   function TitleGroup({ className, children, ...props }, ref) {
-    const { alignment } = useCardContext();
     return (
-      <div
-        ref={ref}
-        className={clsx(styles.titleGroup, alignment === 'center' && styles.titleGroupCenter, className)}
-        {...props}
-      >
+      <div ref={ref} className={clsx(styles.titleGroup, className)} {...props}>
         {children}
       </div>
     );
@@ -147,14 +133,13 @@ export interface BodyProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Body = React.forwardRef<HTMLDivElement, BodyProps>(
   function Body({ fullwidth = false, className, children, ...props }, ref) {
-    const { variant, alignment } = useCardContext();
+    const { variant } = useCardContext();
     return (
       <div
         ref={ref}
         className={clsx(
           styles.body,
           variant === 'structured' && !fullwidth && styles.bodyStructured,
-          alignment === 'center' && styles.bodyCenter,
           className
         )}
         {...props}

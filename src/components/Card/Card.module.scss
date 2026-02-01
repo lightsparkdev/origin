@@ -22,11 +22,6 @@
   padding: var(--spacing-xl);
 }
 
-// Center alignment
-.center {
-  align-items: center;
-}
-
 // Header (structured variant)
 // Default: pt 32px, pb 16px
 // With BackButton: pt 24px, pb 16px, gap 16px
@@ -82,11 +77,6 @@
   width: 100%;
 }
 
-.titleGroupCenter {
-  align-items: center;
-  text-align: center;
-}
-
 // Title
 .title {
   @include headline-sm;
@@ -115,11 +105,6 @@
 .bodyStructured {
   padding-block: var(--spacing-sm);
   padding-inline: var(--spacing-xl);
-}
-
-// Body center alignment
-.bodyCenter {
-  text-align: center;
 }
 
 // Footer (structured variant)

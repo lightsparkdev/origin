@@ -2,9 +2,7 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import {
   StructuredCard,
   StructuredCardWithBackButton,
-  StructuredCardCentered,
   SimpleCard,
-  SimpleCardCentered,
   CardTitleOnly,
   CardCustomClassName,
   CardWithMultipleFooterButtons,
@@ -31,13 +29,6 @@ test.describe('Card', () => {
       await expect(page.getByTestId('back-clicked')).toBeVisible();
     });
 
-    test('renders centered alignment', async ({ mount, page }) => {
-      await mount(<StructuredCardCentered />);
-      const card = page.getByTestId('card');
-      await expect(card).toBeVisible();
-      await expect(page.getByText('Card title')).toBeVisible();
-    });
-
     test('renders multiple footer buttons', async ({ mount, page }) => {
       await mount(<CardWithMultipleFooterButtons />);
       await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
@@ -59,13 +50,6 @@ test.describe('Card', () => {
       await expect(page.getByText('Card title')).toBeVisible();
       await expect(page.getByText('Subtitle goes here.')).toBeVisible();
       await expect(page.getByRole('button', { name: 'Button' })).toBeVisible();
-    });
-
-    test('renders centered alignment', async ({ mount, page }) => {
-      await mount(<SimpleCardCentered />);
-      const card = page.getByTestId('card');
-      await expect(card).toBeVisible();
-      await expect(page.getByText('Card title')).toBeVisible();
     });
 
     test('renders without subtitle', async ({ mount, page }) => {
