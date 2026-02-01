@@ -17,7 +17,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   children?: React.ReactNode;
 }
 
-const defaultLoadingIndicator = <Loader size="sm" />;
+const defaultLoadingIndicator = <Loader />;
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   function Button(
@@ -36,13 +36,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) {
-    const isDisabled = disabled || loading;
-
     return (
       <BaseButton
         ref={ref}
-        disabled={isDisabled}
-        focusableWhenDisabled={loading}
+        disabled={disabled}
+        aria-busy={loading || undefined}
         className={clsx(
           styles.button,
           styles[variant],

@@ -1,7 +1,7 @@
 /**
  * Loader Component
  * 
- * A simple 3×3 dot grid loading indicator with pulse animation.
+ * A simple 3-dot loading indicator with pulse animation.
  * Pure CSS animation - no Base UI needed.
  */
 
@@ -11,8 +11,6 @@ import * as React from 'react';
 import styles from './Loader.module.scss';
 
 export interface LoaderProps {
-  /** Size variant */
-  size?: 'sm' | 'md' | 'lg';
   /** Additional CSS class */
   className?: string;
   /** Accessible label for screen readers */
@@ -20,23 +18,18 @@ export interface LoaderProps {
 }
 
 export function Loader({
-  size = 'md',
   className,
   label = 'Loading',
 }: LoaderProps) {
   return (
     <div
-      className={`${styles.loader} ${styles[size]} ${className || ''}`}
+      className={`${styles.loader} ${className || ''}`}
       role="status"
       aria-label={label}
     >
-      {Array.from({ length: 9 }).map((_, i) => (
-        <div
-          key={i}
-          className={styles.dot}
-          style={{ animationDelay: `${i * 0.1}s` }}
-        />
-      ))}
+      <div className={styles.dot} style={{ animationDelay: '0s' }} />
+      <div className={styles.dot} style={{ animationDelay: '0.15s' }} />
+      <div className={styles.dot} style={{ animationDelay: '0.3s' }} />
       <span className={styles.srOnly}>{label}</span>
     </div>
   );

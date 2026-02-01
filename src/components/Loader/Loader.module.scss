@@ -1,39 +1,15 @@
-/**
- * Loader Component Styles
- * 
- * 3×3 dot grid with staggered pulse animation.
- * Converted from Figma Dev Mode CSS using semantic tokens.
- */
+// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=2734-4241
 
 .loader {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: var(--loader-gap);
-  width: fit-content;
-}
-
-// Size variants - exact Figma spec
-// Base: 14×14 total with 2px dots and 4px gap
-.sm {
-  --dot-size: 2px;
-  --loader-gap: 4px;
-}
-
-.md {
-  --dot-size: 3px;
-  --loader-gap: 6px;
-}
-
-.lg {
-  --dot-size: 4px;
-  --loader-gap: 8px;
+  display: flex;
+  gap: 2px;
+  padding: 0 var(--spacing-4xs);
 }
 
 .dot {
-  width: var(--dot-size);
-  height: var(--dot-size);
-  // Square dots per Figma spec (no border-radius)
-  // Uses currentColor to inherit from parent (e.g., button text color)
+  width: 4px;
+  height: 4px;
+  border-radius: 1px;
   background-color: currentColor;
   animation: pulse 0.9s ease-in-out infinite;
 }
@@ -47,7 +23,6 @@
   }
 }
 
-// Screen reader only text
 .srOnly {
   position: absolute;
   width: 1px;
