@@ -51,12 +51,13 @@ const FONT_SIZE_MAP: Record<number, string> = {
 };
 
 const LINE_HEIGHT_MAP: Record<number, string> = {
-  12: '--font-leading-2xs',
-  16: '--font-leading-xs',
-  18: '--font-leading-sm',
-  20: '--font-leading-base',
-  24: '--font-leading-lg',
-  32: '--font-leading-xl',
+  12: '--font-leading-12',
+  14: '--font-leading-14',
+  16: '--font-leading-16',
+  18: '--font-leading-18',
+  20: '--font-leading-20',
+  24: '--font-leading-24',
+  32: '--font-leading-32',
 };
 
 const FONT_WEIGHT_MAP: Record<number, string> = {
