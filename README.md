@@ -135,6 +135,21 @@ Use `pkg:` prefix to import tokens from the package:
 
 For full setup details, see [Using Origin in Your App](docs/using-origin-in-your-app.md).
 
+## Typography
+
+Suisse Intl requires font metric overrides to prevent an oversized text caret in inputs:
+
+```scss
+@font-face {
+  font-family: 'Suisse Intl';
+  ascent-override: 85%;
+  descent-override: 15%;
+  line-gap-override: 0%;
+}
+```
+
+These values are applied to all weights (Regular, Book, Medium) in `_fonts.scss`. Consuming apps **must** import Origin's fonts to get correct input rendering.
+
 ## Documentation
 
 - `docs/using-origin-in-your-app.md` — Token/font setup for consuming apps
