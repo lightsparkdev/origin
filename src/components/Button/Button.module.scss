@@ -129,6 +129,7 @@
   padding: 0;
   height: auto;
   color: var(--text-primary);
+  font-weight: var(--font-weight-regular);
   text-decoration: none;
 
   @media (hover: hover) {
@@ -147,15 +148,19 @@
     opacity: 0.5;
   }
 
-  // Override size-specific heights for link variant
+  // Size-specific overrides for link variant (uses link text styles)
   &.default {
     height: auto;
     padding: 0;
+    font-size: var(--font-size-base);
+    line-height: var(--font-leading-20);
   }
 
   &.compact {
     height: auto;
     padding: 0;
+    font-size: var(--font-size-xs);
+    line-height: var(--font-leading-18);
   }
 }
 
