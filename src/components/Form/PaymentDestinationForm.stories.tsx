@@ -11,7 +11,7 @@ const meta = {
   title: 'Examples/Payment Destination Form',
   component: Form,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
   },
 } satisfies Meta<typeof Form>;
 
@@ -238,7 +238,7 @@ export const PaymentDestinationForm: Story = {
     }
 
     return (
-      <div style={{ width: 400, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xl)' }}>
+      <div style={{ width: 400, display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xl)', padding: 4 }}>
         <BalanceCard />
 
         <Form onSubmit={handleSubmit} errors={errors}>
