@@ -76,6 +76,7 @@ function needsPxUnits(tokenName) {
     'corner-radius/',
     'stroke/',
     'font/size',
+    'font/leading',
     'max-width/',
     'screens/',
   ];

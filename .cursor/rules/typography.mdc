@@ -3,7 +3,6 @@ description: Font rendering and line-height token conventions
 globs:
   - src/tokens/_fonts.scss
   - src/tokens/_variables.scss
-  - scripts/build-tokens.js
   - "**/*.scss"
 alwaysApply: false
 ---
@@ -26,34 +25,32 @@ These compress the font's internal vertical metrics. Suisse Intl's default metri
 
 ## Line-Height Tokens
 
+Line-heights use **pixel-based tokens** (not unitless ratios) due to Figma constraints:
+
 | Token | Value |
 |-------|-------|
-| `--font-leading-none` | 1 |
-| `--font-leading-snug` | 1.33 |
-| `--font-leading-normal` | 1.43 |
-| `--font-leading-relaxed` | 1.5 |
-| `--font-leading-loose` | 1.6 |
+| `--font-leading-2xs` | 12px |
+| `--font-leading-xs` | 16px |
+| `--font-leading-sm` | 18px |
+| `--font-leading-base` | 20px |
+| `--font-leading-lg` | 24px |
+| `--font-leading-xl` | 32px |
 
 Source: `tokens/figma/origin/Value.tokens.json` → `font.leading.*`
 
 Generated to: `src/tokens/_variables.scss`
 
-## Build Script Behavior
+### Why Pixel-Based (Not Unitless)
 
-`scripts/build-tokens.js` adds `px` suffix to number tokens matching these patterns:
-- `spacing/`
-- `corner-radius/`
-- `stroke/`
-- `font/size`
-- `max-width/`
-- `screens/`
+Figma does not support:
+- Unitless line-height values (interprets as pixels)
+- Percentage-type variables
 
-`font/leading` is **not** in this list. Line-height tokens output as unitless values.
+Pixel-based tokens can be applied to Figma text styles and exported.
 
 ## Do / Do Not
 
 - **Do** use `var(--font-leading-*)` for all line-heights
 - **Do** use `@include` text-style mixins (they reference the tokens)
-- **Do not** add `font/leading` to `needsPxUnits()` in build script
 - **Do not** hardcode pixel line-heights in component SCSS
 - **Do not** remove `ascent-override`, `descent-override`, `line-gap-override` from `_fonts.scss`

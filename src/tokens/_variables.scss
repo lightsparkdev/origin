@@ -226,6 +226,12 @@
   --font-size-lg: 16px;
   --font-size-xl: 18px;
   --font-size-2xl: 24px;
+  --font-leading-2xs: 12px;
+  --font-leading-xs: 16px;
+  --font-leading-sm: 18px;
+  --font-leading-base: 20px;
+  --font-leading-lg: 24px;
+  --font-leading-xl: 32px;
   --font-style-italic: italic;
   --font-style-not-italic: normal;
   --font-tracking-tighter: -0.699999988079071;
@@ -242,11 +248,6 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-black: 900;
-  --font-leading-none: 1;
-  --font-leading-snug: 1.3300000429153442;
-  --font-leading-normal: 1.4299999475479126;
-  --font-leading-relaxed: 1.5;
-  --font-leading-loose: 1.600000023841858;
   --border-primary: #1A1A1A;
   --border-secondary: #C1C0B8;
   --border-tertiary: rgba(0, 0, 0, 0.10);

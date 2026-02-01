@@ -84,17 +84,18 @@ We fix this with `@font-face` metric overrides in `_fonts.scss`:
 
 Without this import, you'll see tall cursors and misaligned text.
 
-### Unitless Line Heights
+### Line-Height Tokens
 
-All line-height tokens use unitless ratios that scale with font size:
+Line-heights use pixel-based tokens (Figma doesn't support unitless line-height variables):
 
-| Token | Value | Use Case |
-|-------|-------|----------|
-| `--font-leading-none` | 1 | Buttons, inputs, single-line elements |
-| `--font-leading-snug` | 1.33 | Headlines, code blocks |
-| `--font-leading-normal` | 1.43 | Body text (default) |
-| `--font-leading-relaxed` | 1.5 | Large body text, labels |
-| `--font-leading-loose` | 1.6 | Extra spacing for readability |
+| Token | Value |
+|-------|-------|
+| `--font-leading-2xs` | 12px |
+| `--font-leading-xs` | 16px |
+| `--font-leading-sm` | 18px |
+| `--font-leading-base` | 20px |
+| `--font-leading-lg` | 24px |
+| `--font-leading-xl` | 32px |
 
 ## Icons
 

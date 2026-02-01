@@ -34,8 +34,6 @@ interface FigmaNodeResponse {
         fontSize?: number;
         letterSpacing?: number;
         lineHeightPx?: number;
-        lineHeightUnit?: 'PIXELS' | 'FONT_SIZE_%' | 'INTRINSIC';
-        lineHeightPercentFontSize?: number;
       };
       effects?: FigmaEffect[];
     };
@@ -86,7 +84,7 @@ function mapFontSize(px: number): string {
   return token ? `var(${token}, ${px}px)` : `${px}px`;
 }
 
-function mapLineHeightPx(px: number): string {
+function mapLineHeight(px: number): string {
   const token = LINE_HEIGHT_MAP[px];
   return token ? `var(${token}, ${px}px)` : `${px}px`;
 }
@@ -101,56 +99,6 @@ function mapLetterSpacing(px: number): string {
   const rounded = Math.round(px * 10) / 10;
   const token = LETTER_SPACING_MAP[String(rounded)];
   return token ? `var(${token}, ${rounded}px)` : `${rounded}px`;
-}
-
-// Map unitless line-height ratios to semantic tokens
-// Use string keys for reliable matching after rounding
-const LINE_HEIGHT_RATIO_MAP: Record<string, string> = {
-  '1': '--font-leading-none',
-  '1.3': '--font-leading-snug',
-  '1.4': '--font-leading-normal',
-  '1.5': '--font-leading-relaxed',
-  '1.6': '--font-leading-loose',
-};
-
-// Convert line-height ratio to token reference
-function mapLineHeightRatio(ratio: number): string {
-  // Round to 1 decimal place for token matching
-  const unitless = Math.round(ratio * 10) / 10;
-  const unitlessKey = String(unitless);
-  const token = LINE_HEIGHT_RATIO_MAP[unitlessKey];
-  return token ? `var(${token})` : String(unitless);
-}
-
-// Convert line-height based on Figma's unit setting
-function mapLineHeight(
-  lineHeightUnit?: 'PIXELS' | 'FONT_SIZE_%' | 'INTRINSIC',
-  lineHeightPx?: number,
-  lineHeightPercentFontSize?: number
-): string | null {
-  // Handle INTRINSIC (Auto) first
-  if (lineHeightUnit === 'INTRINSIC') {
-    return 'normal';
-  }
-
-  // If we have a percentage value, use it
-  if (lineHeightUnit === 'FONT_SIZE_%' && lineHeightPercentFontSize) {
-    return mapLineHeightRatio(lineHeightPercentFontSize);
-  }
-
-  // If lineHeightPx is a small value (< 5), it's likely a ratio, not pixels
-  // This handles cases where Figma stores the ratio in lineHeightPx
-  if (lineHeightPx) {
-    if (lineHeightPx < 5) {
-      // It's a ratio
-      return mapLineHeightRatio(lineHeightPx);
-    } else {
-      // It's actual pixels - use token mapping
-      return mapLineHeightPx(lineHeightPx);
-    }
-  }
-
-  return null;
 }
 
 function generateEffectSCSS(styles: Array<{ name: string; effects: FigmaEffect[] }>): string {
@@ -189,9 +137,7 @@ function generateTextMixinsSCSS(styles: Array<{
   fontFamily?: string;
   fontWeight?: number;
   fontSize?: number;
-  lineHeightUnit?: 'PIXELS' | 'FONT_SIZE_%' | 'INTRINSIC';
   lineHeightPx?: number;
-  lineHeightPercentFontSize?: number;
   letterSpacing?: number;
 }>): string {
   let scss = `// Auto-generated — do not edit. Run: npm run figma:styles
@@ -211,16 +157,9 @@ function generateTextMixinsSCSS(styles: Array<{
     if (style.fontWeight) {
       scss += `  font-weight: ${mapFontWeight(style.fontWeight)};\n`;
     }
-    
-    const lineHeight = mapLineHeight(
-      style.lineHeightUnit,
-      style.lineHeightPx,
-      style.lineHeightPercentFontSize
-    );
-    if (lineHeight) {
-      scss += `  line-height: ${lineHeight};\n`;
+    if (style.lineHeightPx) {
+      scss += `  line-height: ${mapLineHeight(style.lineHeightPx)};\n`;
     }
-    
     if (style.letterSpacing !== undefined) {
       scss += `  letter-spacing: ${mapLetterSpacing(style.letterSpacing)};\n`;
     }
@@ -250,9 +189,7 @@ async function main() {
       fontFamily?: string;
       fontWeight?: number;
       fontSize?: number;
-      lineHeightUnit?: 'PIXELS' | 'FONT_SIZE_%' | 'INTRINSIC';
       lineHeightPx?: number;
-      lineHeightPercentFontSize?: number;
       letterSpacing?: number;
     }> = [];
     
@@ -265,9 +202,7 @@ async function main() {
           fontFamily: s.fontFamily,
           fontWeight: s.fontWeight,
           fontSize: s.fontSize,
-          lineHeightUnit: s.lineHeightUnit,
           lineHeightPx: s.lineHeightPx,
-          lineHeightPercentFontSize: s.lineHeightPercentFontSize,
           letterSpacing: s.letterSpacing,
         });
       }
