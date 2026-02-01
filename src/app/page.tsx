@@ -2545,6 +2545,7 @@ export default function Home() {
           </span>
           <Tabs.Root defaultValue="account" style={{ maxWidth: '400px' }}>
             <Tabs.List>
+              <Tabs.Indicator />
               <Tabs.Tab value="account">Account</Tabs.Tab>
               <Tabs.Tab value="password">Password</Tabs.Tab>
               <Tabs.Tab value="settings">Settings</Tabs.Tab>
@@ -2567,6 +2568,7 @@ export default function Home() {
           </span>
           <Tabs.Root defaultValue="overview" style={{ maxWidth: '400px' }}>
             <Tabs.List variant="minimal">
+              <Tabs.Indicator />
               <Tabs.Tab value="overview">Overview</Tabs.Tab>
               <Tabs.Tab value="details">Details</Tabs.Tab>
               <Tabs.Tab value="history">History</Tabs.Tab>
@@ -2589,6 +2591,7 @@ export default function Home() {
           </span>
           <Tabs.Root defaultValue="active" style={{ maxWidth: '400px' }}>
             <Tabs.List>
+              <Tabs.Indicator />
               <Tabs.Tab value="active">Active</Tabs.Tab>
               <Tabs.Tab value="disabled" disabled>Disabled</Tabs.Tab>
               <Tabs.Tab value="another">Another</Tabs.Tab>
