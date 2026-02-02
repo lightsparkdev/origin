@@ -210,7 +210,7 @@
   margin-inline-start: 18px; // Aligns with parent icon center (8px padding + 10px half of 20px icon)
   padding-inline-start: 10px; // 28px total indent - 18px margin
   padding-inline-end: var(--spacing-lg); // 24px right indent
-  border-inline-start: var(--stroke-sm) solid var(--border-tertiary);
+  border-inline-start: var(--stroke-sm) solid var(--border-secondary);
 }
 
 // Submenu (vertical chevron)
@@ -308,7 +308,7 @@
   margin-inline-start: 18px; // Aligns with parent icon center (8px padding + 10px half of 20px icon)
   padding-inline-start: 10px; // 28px total indent - 18px margin
   padding-inline-end: var(--spacing-lg); // 24px right indent
-  border-inline-start: var(--stroke-sm) solid var(--border-tertiary);
+  border-inline-start: var(--stroke-sm) solid var(--border-secondary);
 }
 
 // Drilldown
