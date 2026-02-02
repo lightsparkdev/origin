@@ -207,7 +207,7 @@
 
 .treePanelBorder {
   position: relative;
-  margin-inline-start: 18px; // Aligns with parent icon center (8px padding + 10px half of 20px icon)
+  margin-inline-start: 17.5px; // Centers 1px stroke on icon center (8px padding + 10px - 0.5px)
   padding-inline-start: 10px; // 28px total indent - 18px margin
   padding-inline-end: var(--spacing-lg); // 24px right indent
   border-inline-start: var(--stroke-sm) solid var(--border-secondary);
@@ -305,7 +305,7 @@
 
 .submenuPanelBorder {
   position: relative;
-  margin-inline-start: 18px; // Aligns with parent icon center (8px padding + 10px half of 20px icon)
+  margin-inline-start: 17.5px; // Centers 1px stroke on icon center (8px padding + 10px - 0.5px)
   padding-inline-start: 10px; // 28px total indent - 18px margin
   padding-inline-end: var(--spacing-lg); // 24px right indent
   border-inline-start: var(--stroke-sm) solid var(--border-secondary);
