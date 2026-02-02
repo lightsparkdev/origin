@@ -32,6 +32,7 @@ import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
 import { Separator } from '@/components/Separator';
+import { Sidebar } from '@/components/Sidebar';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
 import { Table } from '@/components/Table';
@@ -2499,6 +2500,48 @@ export default function Home() {
         </div>
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Sidebar Component</h2>
+      
+      <div style={{ display: 'flex', gap: '2rem', marginBottom: '128px' }}>
+        <div style={{ height: '400px' }}>
+          <Sidebar.Root style={{ width: 224, borderRight: 'var(--stroke-xs) solid var(--border-tertiary)' }}>
+            <Sidebar.Header>
+              <Logo aria-label="Origin" height={24} />
+            </Sidebar.Header>
+            <Sidebar.Content>
+              <Sidebar.Group>
+                <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
+                <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
+                  Dashboard
+                </Sidebar.Item>
+                <Sidebar.Item icon={<CentralIcon name="IconArrowInbox" size={20} />}>
+                  Inbox
+                </Sidebar.Item>
+                <Sidebar.Tree icon={<CentralIcon name="IconTarget" size={20} />} label="Projects" defaultOpen variant="border">
+                  <Sidebar.Item icon={<CentralIcon name="IconFileBend" size={20} />}>
+                    Project Alpha
+                  </Sidebar.Item>
+                  <Sidebar.Item icon={<CentralIcon name="IconFileBend" size={20} />}>
+                    Project Beta
+                  </Sidebar.Item>
+                </Sidebar.Tree>
+                <Sidebar.Submenu icon={<CentralIcon name="IconSettingsGear1" size={20} />} label="Settings" variant="border">
+                  <Sidebar.Item icon={<CentralIcon name="IconPeopleCircle" size={20} />}>
+                    Profile
+                  </Sidebar.Item>
+                  <Sidebar.Item icon={<CentralIcon name="IconLock" size={20} />}>
+                    Security
+                  </Sidebar.Item>
+                </Sidebar.Submenu>
+              </Sidebar.Group>
+            </Sidebar.Content>
+            <Sidebar.Footer>
+              <span>Jay Mantri</span>
+            </Sidebar.Footer>
+          </Sidebar.Root>
+        </div>
+      </div>
+
       <h2 style={{ marginBottom: '1rem' }}>Tabs Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '128px' }}>
