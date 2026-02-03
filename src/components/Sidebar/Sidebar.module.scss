@@ -25,6 +25,7 @@
   flex-shrink: 0;
   overflow: hidden;
   padding: 0 var(--spacing-sm);
+  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
 
   [data-collapsed='true'] & {
     justify-content: center;
@@ -56,6 +57,7 @@
   flex-shrink: 0;
   overflow: hidden;
   padding: var(--spacing-xs);
+  border-top: var(--stroke-xs) solid var(--border-tertiary);
 
   [data-collapsed='true'] & {
     align-items: center;
