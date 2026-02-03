@@ -44,8 +44,8 @@ export const Default: Story = {
       </Sidebar.Header>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -55,18 +55,18 @@ export const Default: Story = {
             <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
               Settings
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Projects</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Projects</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}>
               All Projects
             </Sidebar.Item>
             <Sidebar.Item icon={<CentralIcon name="IconHeart2" size={20} />}>
               Favorites
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
       <Sidebar.Footer>
@@ -89,7 +89,7 @@ export const Collapsed: Story = {
       </Sidebar.Header>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.Items>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -102,7 +102,7 @@ export const Collapsed: Story = {
             <Sidebar.Item icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}>
               Projects
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
       <Sidebar.Footer>
@@ -127,8 +127,8 @@ export const WithProviderAndTrigger: Story = {
         </Sidebar.Header>
         <Sidebar.Content>
           <Sidebar.Group>
-            <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-            <Sidebar.Items>
+            <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+            <Sidebar.Menu>
               <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
                 Dashboard
               </Sidebar.Item>
@@ -138,7 +138,7 @@ export const WithProviderAndTrigger: Story = {
               <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
                 Settings
               </Sidebar.Item>
-            </Sidebar.Items>
+            </Sidebar.Menu>
           </Sidebar.Group>
         </Sidebar.Content>
       </Sidebar.Root>
@@ -177,8 +177,8 @@ function ControlledSidebarContent() {
         </Sidebar.Header>
         <Sidebar.Content>
           <Sidebar.Group>
-            <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-            <Sidebar.Items>
+            <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+            <Sidebar.Menu>
               <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
                 Dashboard
               </Sidebar.Item>
@@ -188,7 +188,7 @@ function ControlledSidebarContent() {
               <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
                 Settings
               </Sidebar.Item>
-            </Sidebar.Items>
+            </Sidebar.Menu>
           </Sidebar.Group>
         </Sidebar.Content>
       </Sidebar.Root>
@@ -226,8 +226,8 @@ export const WithExpandableItems: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -257,7 +257,7 @@ export const WithExpandableItems: Story = {
                 Security
               </Sidebar.SubmenuItem>
             </Sidebar.ExpandableItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -272,8 +272,8 @@ export const SubmenuIndentVariant: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -305,7 +305,7 @@ export const SubmenuIndentVariant: Story = {
                 Security
               </Sidebar.SubmenuItem>
             </Sidebar.ExpandableItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -320,8 +320,8 @@ export const WithDisabledItems: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -334,7 +334,7 @@ export const WithDisabledItems: Story = {
             <Sidebar.Item icon={<CentralIcon name="IconLock" size={20} />} disabled>
               Admin (disabled)
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -349,27 +349,27 @@ export const WithSeparator: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
             <Sidebar.Item icon={<CentralIcon name="IconPeopleCircle" size={20} />}>
               Profile
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
         <Sidebar.Separator />
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Settings</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Settings</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
               Preferences
             </Sidebar.Item>
             <Sidebar.Item icon={<CentralIcon name="IconLock" size={20} />}>
               Security
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -384,8 +384,8 @@ export const ItemAsLink: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item
               icon={<CentralIcon name="IconHome" size={20} />}
               active
@@ -405,7 +405,7 @@ export const ItemAsLink: Story = {
             >
               Settings
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -425,8 +425,8 @@ export const FigmaDesign: Story = {
       </Sidebar.Header>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Group header</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Group header</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.ExpandableItem
               icon={<CentralIcon name="IconGlobe2" size={20} />}
               label="Label"
@@ -445,11 +445,11 @@ export const FigmaDesign: Story = {
                 Label
               </Sidebar.SubmenuItem>
             </Sidebar.ExpandableItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Group header</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Group header</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.ExpandableItem
               icon={<CentralIcon name="IconGlobe2" size={20} />}
               label="Label"
@@ -468,7 +468,7 @@ export const FigmaDesign: Story = {
                 Label
               </Sidebar.SubmenuItem>
             </Sidebar.ExpandableItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
       <Sidebar.Footer>
@@ -494,8 +494,8 @@ export const CustomSizing: Story = {
         </Sidebar.Header>
         <Sidebar.Content>
           <Sidebar.Group>
-            <Sidebar.GroupHeader>Custom Width: 280px</Sidebar.GroupHeader>
-            <Sidebar.Items>
+            <Sidebar.GroupLabel>Custom Width: 280px</Sidebar.GroupLabel>
+            <Sidebar.Menu>
               <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
                 Dashboard
               </Sidebar.Item>
@@ -505,7 +505,7 @@ export const CustomSizing: Story = {
               <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
                 Settings
               </Sidebar.Item>
-            </Sidebar.Items>
+            </Sidebar.Menu>
           </Sidebar.Group>
         </Sidebar.Content>
       </Sidebar.Root>
@@ -522,8 +522,8 @@ export const WithDrilldownItems: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Drilldown Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Drilldown Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -547,7 +547,7 @@ export const WithDrilldownItems: Story = {
             >
               Settings (disabled)
             </Sidebar.DrilldownItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -562,8 +562,8 @@ export const WithTreeItems: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Tree Navigation</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Tree Navigation</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Dashboard
             </Sidebar.Item>
@@ -601,7 +601,7 @@ export const WithTreeItems: Story = {
                 Security
               </Sidebar.SubmenuItem>
             </Sidebar.TreeItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -616,8 +616,8 @@ export const WithShortcuts: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Quick Actions</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Quick Actions</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item
               icon={<CentralIcon name="IconHome" size={20} />}
               trailing={<Shortcut keys={['⌘', 'H']} />}
@@ -643,7 +643,7 @@ export const WithShortcuts: Story = {
             >
               New Project
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>
@@ -668,8 +668,8 @@ export const AllItemVariants: Story = {
     <Sidebar.Root>
       <Sidebar.Content>
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Default Items</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Default Items</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
               Active Item
             </Sidebar.Item>
@@ -682,14 +682,14 @@ export const AllItemVariants: Story = {
             >
               With Shortcut
             </Sidebar.Item>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
 
         <Sidebar.Separator />
 
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Submenu (Vertical Chevron)</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Submenu (Vertical Chevron)</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.ExpandableItem
               icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}
               label="Expandable"
@@ -699,14 +699,14 @@ export const AllItemVariants: Story = {
                 Submenu Item
               </Sidebar.SubmenuItem>
             </Sidebar.ExpandableItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
 
         <Sidebar.Separator />
 
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Tree (Horizontal Chevron)</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Tree (Horizontal Chevron)</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.TreeItem
               icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}
               label="Tree Item"
@@ -716,18 +716,18 @@ export const AllItemVariants: Story = {
                 Child Item
               </Sidebar.SubmenuItem>
             </Sidebar.TreeItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
 
         <Sidebar.Separator />
 
         <Sidebar.Group>
-          <Sidebar.GroupHeader>Drilldown (Navigate Button)</Sidebar.GroupHeader>
-          <Sidebar.Items>
+          <Sidebar.GroupLabel>Drilldown (Navigate Button)</Sidebar.GroupLabel>
+          <Sidebar.Menu>
             <Sidebar.DrilldownItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}>
               Drilldown Item
             </Sidebar.DrilldownItem>
-          </Sidebar.Items>
+          </Sidebar.Menu>
         </Sidebar.Group>
       </Sidebar.Content>
     </Sidebar.Root>

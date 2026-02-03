@@ -2537,8 +2537,8 @@ export default function Home() {
               </Sidebar.Header>
               <Sidebar.Content>
                 <Sidebar.Group>
-                  <Sidebar.GroupHeader>Default Items</Sidebar.GroupHeader>
-                  <Sidebar.Items>
+                  <Sidebar.GroupLabel>Default Items</Sidebar.GroupLabel>
+                  <Sidebar.Menu>
                     <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
                       Dashboard
                     </Sidebar.Item>
@@ -2548,14 +2548,14 @@ export default function Home() {
                     <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />} disabled>
                       Disabled
                     </Sidebar.Item>
-                  </Sidebar.Items>
+                  </Sidebar.Menu>
                 </Sidebar.Group>
 
                 <Sidebar.Separator />
 
                 <Sidebar.Group>
-                  <Sidebar.GroupHeader>Submenu (Vertical Chevron)</Sidebar.GroupHeader>
-                  <Sidebar.Items>
+                  <Sidebar.GroupLabel>Submenu (Vertical Chevron)</Sidebar.GroupLabel>
+                  <Sidebar.Menu>
                     <Sidebar.ExpandableItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />} label="Projects" defaultOpen>
                       <Sidebar.SubmenuItem icon={<CentralIcon name="IconFileBend" size={20} />}>
                         Alpha
@@ -2564,14 +2564,14 @@ export default function Home() {
                         Beta
                       </Sidebar.SubmenuItem>
                     </Sidebar.ExpandableItem>
-                  </Sidebar.Items>
+                  </Sidebar.Menu>
                 </Sidebar.Group>
 
                 <Sidebar.Separator />
 
                 <Sidebar.Group>
-                  <Sidebar.GroupHeader>Tree (Horizontal Chevron)</Sidebar.GroupHeader>
-                  <Sidebar.Items>
+                  <Sidebar.GroupLabel>Tree (Horizontal Chevron)</Sidebar.GroupLabel>
+                  <Sidebar.Menu>
                     <Sidebar.TreeItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />} label="Files" defaultOpen>
                       <Sidebar.SubmenuItem icon={<CentralIcon name="IconFileBend" size={20} />}>
                         Document
@@ -2582,29 +2582,29 @@ export default function Home() {
                         </Sidebar.SubmenuItem>
                       </Sidebar.TreeItem>
                     </Sidebar.TreeItem>
-                  </Sidebar.Items>
+                  </Sidebar.Menu>
                 </Sidebar.Group>
 
                 <Sidebar.Separator />
 
                 <Sidebar.Group>
-                  <Sidebar.GroupHeader>Drilldown (Navigate)</Sidebar.GroupHeader>
-                  <Sidebar.Items>
+                  <Sidebar.GroupLabel>Drilldown (Navigate)</Sidebar.GroupLabel>
+                  <Sidebar.Menu>
                     <Sidebar.DrilldownItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}>
                       Teams
                     </Sidebar.DrilldownItem>
                     <Sidebar.DrilldownItem icon={<CentralIcon name="IconPeopleCircle" size={20} />}>
                       Members
                     </Sidebar.DrilldownItem>
-                  </Sidebar.Items>
+                  </Sidebar.Menu>
                 </Sidebar.Group>
               </Sidebar.Content>
               <Sidebar.Footer>
-                <Sidebar.Items>
+                <Sidebar.Menu>
                   <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
                     Settings
                   </Sidebar.Item>
-                </Sidebar.Items>
+                </Sidebar.Menu>
               </Sidebar.Footer>
             </Sidebar.Root>
           </Sidebar.Provider>

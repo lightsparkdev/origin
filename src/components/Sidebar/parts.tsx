@@ -7,13 +7,46 @@ import clsx from 'clsx';
 import styles from './Sidebar.module.scss';
 import { CentralIcon } from '../Icon';
 
-interface SidebarContextValue {
+export interface SidebarContextValue {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
   toggle: () => void;
 }
 
 const SidebarContext = React.createContext<SidebarContextValue | null>(null);
+
+const TreeContext = React.createContext<boolean>(false);
+
+function mergeRenderProps<T extends Record<string, unknown>>(
+  render: React.ReactElement,
+  props: T
+): T {
+  const renderProps = render.props as Record<string, unknown>;
+  const merged = { ...renderProps, ...props } as T;
+
+  if (renderProps.className && props.className) {
+    (merged as Record<string, unknown>).className = clsx(
+      props.className as string,
+      renderProps.className as string
+    );
+  }
+
+  if (renderProps.style && props.style) {
+    (merged as Record<string, unknown>).style = {
+      ...(renderProps.style as React.CSSProperties),
+      ...(props.style as React.CSSProperties),
+    };
+  }
+
+  if (renderProps.onClick && props.onClick) {
+    (merged as Record<string, unknown>).onClick = (e: React.MouseEvent) => {
+      (renderProps.onClick as (e: React.MouseEvent) => void)(e);
+      (props.onClick as (e: React.MouseEvent) => void)(e);
+    };
+  }
+
+  return merged;
+}
 
 export function useSidebar() {
   const context = React.useContext(SidebarContext);
@@ -72,7 +105,7 @@ export interface RootProps extends React.ComponentPropsWithoutRef<'nav'> {
 
 export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
   {
-    collapsed: collapsedProp = false,
+    collapsed: collapsedProp,
     onCollapsedChange,
     width,
     collapsedWidth,
@@ -85,24 +118,27 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
   ref
 ) {
   const context = React.useContext(SidebarContext);
-  const [internalCollapsed, setInternalCollapsed] = React.useState(collapsedProp);
+  const isControlled = collapsedProp !== undefined;
+  const [internalCollapsed, setInternalCollapsed] = React.useState(
+    isControlled ? collapsedProp : false
+  );
 
-  React.useEffect(() => {
-    if (!context) {
-      setInternalCollapsed(collapsedProp);
-    }
-  }, [collapsedProp, context]);
-
-  const collapsed = context ? context.collapsed : internalCollapsed;
+  const collapsed = context
+    ? context.collapsed
+    : isControlled
+      ? collapsedProp
+      : internalCollapsed;
 
   const handleCollapsedChange = React.useCallback(
     (value: boolean) => {
       if (!context) {
-        setInternalCollapsed(value);
+        if (!isControlled) {
+          setInternalCollapsed(value);
+        }
         onCollapsedChange?.(value);
       }
     },
-    [context, onCollapsedChange]
+    [context, isControlled, onCollapsedChange]
   );
 
   const customStyles = {
@@ -232,35 +268,60 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(function Group
   );
 });
 
-export interface GroupHeaderProps extends React.ComponentPropsWithoutRef<'div'> {}
+export interface GroupLabelProps extends React.ComponentPropsWithoutRef<'div'> {}
 
-export const GroupHeader = React.forwardRef<HTMLDivElement, GroupHeaderProps>(function GroupHeader(
+export const GroupLabel = React.forwardRef<HTMLDivElement, GroupLabelProps>(function GroupLabel(
   { className, children, ...props },
   ref
 ) {
   const { collapsed } = useSidebar();
 
-  if (collapsed) {
-    return null;
-  }
-
   return (
-    <div ref={ref} className={clsx(styles.groupHeader, className)} role="heading" aria-level={2} {...props}>
+    <div
+      ref={ref}
+      className={clsx(styles.groupLabel, collapsed && styles.visuallyHidden, className)}
+      role="heading"
+      aria-level={2}
+      {...props}
+    >
       {children}
     </div>
   );
 });
 
-export interface ItemsProps extends React.ComponentPropsWithoutRef<'div'> {}
+export interface MenuProps extends React.ComponentPropsWithoutRef<'div'> {}
 
-export const Items = React.forwardRef<HTMLDivElement, ItemsProps>(function Items(
+export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(function Menu(
   { className, children, ...props },
   ref
 ) {
   return (
-    <div ref={ref} className={clsx(styles.items, className)} role="menu" {...props}>
+    <div ref={ref} className={clsx(styles.menu, className)} role="menu" {...props}>
       {children}
     </div>
+  );
+});
+
+export interface TreeProps extends React.ComponentPropsWithoutRef<'div'> {
+  label?: string;
+}
+
+export const Tree = React.forwardRef<HTMLDivElement, TreeProps>(function Tree(
+  { label = 'File tree', className, children, ...props },
+  ref
+) {
+  return (
+    <TreeContext.Provider value={true}>
+      <div
+        ref={ref}
+        className={clsx(styles.menu, className)}
+        role="tree"
+        aria-label={label}
+        {...props}
+      >
+        {children}
+      </div>
+    </TreeContext.Provider>
   );
 });
 
@@ -276,6 +337,7 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
   ref
 ) {
   const { collapsed } = useSidebar();
+  const isInTree = React.useContext(TreeContext);
 
   const itemProps = {
     ref,
@@ -283,7 +345,7 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
     'data-active': active || undefined,
     'data-disabled': disabled || undefined,
     disabled: render ? undefined : disabled,
-    role: 'menuitem' as const,
+    role: isInTree ? ('treeitem' as const) : ('menuitem' as const),
     'aria-current': active ? ('page' as const) : undefined,
     ...props,
   };
@@ -297,7 +359,7 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
   );
 
   if (render) {
-    return React.cloneElement(render, itemProps, content);
+    return React.cloneElement(render, mergeRenderProps(render, itemProps), content);
   }
 
   return (
@@ -316,6 +378,7 @@ export interface ExpandableItemProps extends React.ComponentPropsWithoutRef<'div
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
   submenuVariant?: 'border' | 'indent';
+  render?: React.ReactElement;
 }
 
 export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemProps>(
@@ -329,6 +392,7 @@ export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemPro
       onOpenChange,
       disabled = false,
       submenuVariant = 'border',
+      render,
       className,
       children,
       ...props
@@ -352,28 +416,38 @@ export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemPro
 
     const showSubmenu = !collapsed && isOpen;
 
+    const buttonProps = {
+      className: styles.item,
+      'data-active': active || undefined,
+      'data-disabled': disabled || undefined,
+      disabled: render ? undefined : disabled,
+      onClick: handleToggle,
+      role: 'menuitem' as const,
+      'aria-expanded': collapsed ? undefined : isOpen,
+      'aria-controls': collapsed ? undefined : submenuId,
+    };
+
+    const buttonContent = (
+      <>
+        {icon && <span className={styles.itemIcon}>{icon}</span>}
+        {!collapsed && <span className={styles.itemLabel}>{label}</span>}
+        {!collapsed && (
+          <span className={styles.chevron} data-open={isOpen}>
+            <CentralIcon name="IconChevronDownSmall" size={20} />
+          </span>
+        )}
+      </>
+    );
+
     return (
       <div ref={ref} className={clsx(styles.expandableItem, className)} {...props}>
-        <button
-          type="button"
-          className={styles.item}
-          data-active={active || undefined}
-          data-disabled={disabled || undefined}
-          disabled={disabled}
-          onClick={handleToggle}
-          role="menuitem"
-          aria-expanded={collapsed ? undefined : isOpen}
-          aria-controls={collapsed ? undefined : submenuId}
-          aria-haspopup={collapsed ? undefined : 'menu'}
-        >
-          {icon && <span className={styles.itemIcon}>{icon}</span>}
-          {!collapsed && <span className={styles.itemLabel}>{label}</span>}
-          {!collapsed && (
-            <span className={styles.chevron} data-open={isOpen}>
-              <CentralIcon name="IconChevronDownSmall" size={20} />
-            </span>
-          )}
-        </button>
+        {render ? (
+          React.cloneElement(render, mergeRenderProps(render, buttonProps), buttonContent)
+        ) : (
+          <button type="button" {...buttonProps}>
+            {buttonContent}
+          </button>
+        )}
         {showSubmenu && (
           <div id={submenuId} className={styles.submenu} data-variant={submenuVariant} role="menu">
             {children}
@@ -392,13 +466,15 @@ export interface SubmenuItemProps extends React.ComponentPropsWithoutRef<'button
 
 export const SubmenuItem = React.forwardRef<HTMLButtonElement, SubmenuItemProps>(
   function SubmenuItem({ icon, active = false, disabled = false, render, className, children, ...props }, ref) {
+    const isInTree = React.useContext(TreeContext);
+
     const itemProps = {
       ref,
       className: clsx(styles.submenuItem, className),
       'data-active': active || undefined,
       'data-disabled': disabled || undefined,
       disabled: render ? undefined : disabled,
-      role: 'menuitem' as const,
+      role: isInTree ? ('treeitem' as const) : ('menuitem' as const),
       'aria-current': active ? ('page' as const) : undefined,
       ...props,
     };
@@ -411,7 +487,7 @@ export const SubmenuItem = React.forwardRef<HTMLButtonElement, SubmenuItemProps>
     );
 
     if (render) {
-      return React.cloneElement(render, itemProps, content);
+      return React.cloneElement(render, mergeRenderProps(render, itemProps), content);
     }
 
     return (
@@ -427,16 +503,32 @@ export interface DrilldownItemProps extends React.ComponentPropsWithoutRef<'div'
   active?: boolean;
   disabled?: boolean;
   onDrilldown?: () => void;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   drilldownLabel?: string;
+  render?: React.ReactElement;
 }
 
 export const DrilldownItem = React.forwardRef<HTMLDivElement, DrilldownItemProps>(
   function DrilldownItem(
-    { icon, active = false, disabled = false, onDrilldown, onClick, drilldownLabel, className, children, ...props },
+    { icon, active = false, disabled = false, onDrilldown, onClick, drilldownLabel, render, className, children, ...props },
     ref
   ) {
     const { collapsed } = useSidebar();
+
+    const buttonProps = {
+      className: styles.drilldownMain,
+      disabled: render ? undefined : disabled,
+      onClick,
+      role: 'menuitem' as const,
+      'aria-current': active ? ('page' as const) : undefined,
+    };
+
+    const buttonContent = (
+      <>
+        {icon && <span className={styles.itemIcon}>{icon}</span>}
+        {!collapsed && <span className={styles.itemLabel}>{children}</span>}
+      </>
+    );
 
     return (
       <div
@@ -446,17 +538,13 @@ export const DrilldownItem = React.forwardRef<HTMLDivElement, DrilldownItemProps
         data-disabled={disabled || undefined}
         {...props}
       >
-        <button
-          type="button"
-          className={styles.drilldownMain}
-          disabled={disabled}
-          onClick={onClick}
-          role="menuitem"
-          aria-current={active ? 'page' : undefined}
-        >
-          {icon && <span className={styles.itemIcon}>{icon}</span>}
-          {!collapsed && <span className={styles.itemLabel}>{children}</span>}
-        </button>
+        {render ? (
+          React.cloneElement(render, mergeRenderProps(render, buttonProps), buttonContent)
+        ) : (
+          <button type="button" {...buttonProps}>
+            {buttonContent}
+          </button>
+        )}
         {!collapsed && (
           <button
             type="button"
@@ -481,6 +569,7 @@ export interface TreeItemProps extends React.ComponentPropsWithoutRef<'div'> {
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   disabled?: boolean;
+  render?: React.ReactElement;
 }
 
 export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
@@ -493,6 +582,7 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
       defaultOpen = false,
       onOpenChange,
       disabled = false,
+      render,
       className,
       children,
       ...props
@@ -500,6 +590,7 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
     ref
   ) {
     const { collapsed } = useSidebar();
+    const isInTree = React.useContext(TreeContext);
     const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
@@ -516,27 +607,38 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
 
     const showChildren = !collapsed && isOpen;
 
+    const buttonProps = {
+      className: styles.treeItemButton,
+      'data-active': active || undefined,
+      'data-disabled': disabled || undefined,
+      disabled: render ? undefined : disabled,
+      onClick: handleToggle,
+      role: isInTree ? ('treeitem' as const) : ('menuitem' as const),
+      'aria-expanded': collapsed ? undefined : isOpen,
+      'aria-controls': collapsed ? undefined : treeId,
+    };
+
+    const buttonContent = (
+      <>
+        {!collapsed && (
+          <span className={styles.treeChevron} data-open={isOpen}>
+            <CentralIcon name="IconChevronRightSmall" size={20} />
+          </span>
+        )}
+        {icon && <span className={styles.itemIcon}>{icon}</span>}
+        {!collapsed && <span className={styles.itemLabel}>{label}</span>}
+      </>
+    );
+
     return (
       <div ref={ref} className={clsx(styles.treeItem, className)} {...props}>
-        <button
-          type="button"
-          className={styles.treeItemButton}
-          data-active={active || undefined}
-          data-disabled={disabled || undefined}
-          disabled={disabled}
-          onClick={handleToggle}
-          role="menuitem"
-          aria-expanded={collapsed ? undefined : isOpen}
-          aria-controls={collapsed ? undefined : treeId}
-        >
-          {!collapsed && (
-            <span className={styles.treeChevron} data-open={isOpen}>
-              <CentralIcon name="IconChevronRightSmall" size={20} />
-            </span>
-          )}
-          {icon && <span className={styles.itemIcon}>{icon}</span>}
-          {!collapsed && <span className={styles.itemLabel}>{label}</span>}
-        </button>
+        {render ? (
+          React.cloneElement(render, mergeRenderProps(render, buttonProps), buttonContent)
+        ) : (
+          <button type="button" {...buttonProps}>
+            {buttonContent}
+          </button>
+        )}
         {showChildren && (
           <div id={treeId} className={styles.treeChildren} role="group">
             {children}
@@ -564,8 +666,9 @@ if (process.env.NODE_ENV !== 'production') {
   Content.displayName = 'Sidebar.Content';
   Footer.displayName = 'Sidebar.Footer';
   Group.displayName = 'Sidebar.Group';
-  GroupHeader.displayName = 'Sidebar.GroupHeader';
-  Items.displayName = 'Sidebar.Items';
+  GroupLabel.displayName = 'Sidebar.GroupLabel';
+  Menu.displayName = 'Sidebar.Menu';
+  Tree.displayName = 'Sidebar.Tree';
   Item.displayName = 'Sidebar.Item';
   ExpandableItem.displayName = 'Sidebar.ExpandableItem';
   SubmenuItem.displayName = 'Sidebar.SubmenuItem';
