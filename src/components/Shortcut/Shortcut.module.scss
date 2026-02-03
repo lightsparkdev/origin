@@ -13,8 +13,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
+  min-width: 20px;
   height: 20px;
+  padding-inline: var(--spacing-3xs);
   border-radius: var(--corner-radius-2xs);
   background-color: var(--surface-secondary);
   color: var(--text-secondary);

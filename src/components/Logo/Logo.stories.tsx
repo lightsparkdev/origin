@@ -8,6 +8,10 @@ const meta: Meta<typeof Logo> = {
     layout: 'centered',
   },
   argTypes: {
+    brand: {
+      control: 'select',
+      options: ['lightspark', 'grid'],
+    },
     variant: {
       control: 'select',
       options: ['logo', 'logomark', 'wordmark'],
@@ -77,6 +81,22 @@ export const CustomHeight: Story = {
   },
 };
 
+export const GridLogo: Story = {
+  args: {
+    brand: 'grid',
+    variant: 'logo',
+    'aria-label': 'Grid',
+  },
+};
+
+export const GridLogomark: Story = {
+  args: {
+    brand: 'grid',
+    variant: 'logomark',
+    'aria-label': 'Grid',
+  },
+};
+
 export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-start' }}>
@@ -85,6 +105,8 @@ export const AllVariants: Story = {
       <Logo variant="logomark" weight="regular" aria-label="Lightspark logomark regular" />
       <Logo variant="logomark" weight="light" aria-label="Lightspark logomark light" />
       <Logo variant="wordmark" aria-label="Lightspark wordmark" />
+      <Logo brand="grid" variant="logo" aria-label="Grid logo" />
+      <Logo brand="grid" variant="logomark" aria-label="Grid logomark" />
     </div>
   ),
 };

@@ -1,0 +1,230 @@
+// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=2348-283
+@use '../../tokens/text-styles' as *;
+
+// Backdrop
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: var(--surface-scrim);
+  transition: opacity 150ms ease;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Popup container - matches Figma Command design
+// Anchored at top so input stays fixed as results change
+.popup {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  width: 408px;
+  max-width: calc(100vw - 48px);
+  max-height: min(420px, 70vh);
+  background-color: var(--surface-primary);
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  border-radius: var(--corner-radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  outline: none;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.98) translateY(-8px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Input wrapper - contains the input field
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+}
+
+// Input field
+.input {
+  @include input;
+  width: 100%;
+  padding: var(--spacing-md);
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Scrollable list container
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4xs);
+  // Padding on all sides - creates visual gap at scroll edges
+  padding: var(--spacing-3xs);
+  // scroll-padding ensures scrollIntoView respects the gap
+  scroll-padding-block: var(--spacing-3xs);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  flex: 1;
+  min-height: 0;
+  outline: none;
+
+  // Hide scrollbar but keep scroll functionality
+  scrollbar-width: none; // Firefox
+  -ms-overflow-style: none; // IE/Edge
+
+  &::-webkit-scrollbar {
+    display: none; // Chrome/Safari/Opera
+  }
+
+  // Bottom border when there's content
+  &:not([data-empty]) {
+    border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+  }
+}
+
+// Group container
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+// Group heading - matches Figma _Group Header
+.groupHeading {
+  @include label-sm;
+  display: flex;
+  align-items: center;
+  padding-inline: var(--spacing-sm);
+  padding-block: var(--spacing-2xs);
+  color: var(--text-secondary);
+}
+
+// Command item - matches Figma _Item
+.item {
+  @include body;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+  border-radius: var(--corner-radius-xs);
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+
+  &[data-highlighted] {
+    background-color: var(--surface-hover);
+  }
+
+  &[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Item leading content (icon + label)
+.itemLeading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+}
+
+// Item icon slot
+.itemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--icon-primary);
+
+  > svg,
+  > [data-icon] {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Item label (allows flex-grow for shortcut alignment)
+.itemLabel {
+  flex: 1;
+  min-width: 0;
+}
+
+// Footer for keyboard navigation hints
+// flex-shrink: 0 keeps footer fixed while list scrolls
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: var(--spacing-xs);
+  @include label-sm;
+  color: var(--text-secondary);
+}
+
+.footerGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.footerTrailing {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.footerHint {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+// Empty state
+.empty {
+  @include body;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-4xl);
+  color: var(--text-primary);
+
+  &:empty {
+    display: none;
+  }
+}
+
+// Separator between groups
+.separator {
+  height: var(--stroke-xs);
+  margin-block: var(--spacing-3xs);
+  background-color: var(--border-tertiary);
+}

@@ -21,6 +21,7 @@ import { CentralIcon } from '@/components/Icon';
 import { Input } from '@/components/Input';
 import { Item } from '@/components/Item';
 import { Loader } from '@/components/Loader';
+import { Command } from '@/components/Command';
 import { Menu } from '@/components/Menu';
 import { Menubar } from '@/components/Menubar';
 import { NavigationMenu } from '@/components/NavigationMenu';
@@ -32,7 +33,7 @@ import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
 import { Separator } from '@/components/Separator';
-import { Sidebar } from '@/components/Sidebar';
+import { Shortcut } from '@/components/Shortcut';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
 import { Table } from '@/components/Table';
@@ -47,7 +48,6 @@ import {
 } from '@tanstack/react-table';
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
-import { Shortcut } from '@/components/Shortcut';
 import { Logo } from '@/components/Logo';
 
 // Data for combobox examples
@@ -212,6 +212,128 @@ function FuzzyMatchingDemo() {
           </Autocomplete.Positioner>
         </Autocomplete.Portal>
       </Autocomplete.Root>
+    </div>
+  );
+}
+
+function CommandDemo() {
+  const [basicOpen, setBasicOpen] = React.useState(false);
+  const [fullOpen, setFullOpen] = React.useState(false);
+
+  // Basic items (flat)
+  const basicItems: import('@/components/Command').CommandItem[] = [
+    { id: '1', label: 'Calendar', icon: <CentralIcon name="IconCalendarDays" size={16} /> },
+    { id: '2', label: 'Search Emoji', icon: <CentralIcon name="IconMagnifyingGlass2" size={16} /> },
+    { id: '3', label: 'Calculator', icon: <CentralIcon name="IconSquareBehindSquare1" size={16} /> },
+    { id: '4', label: 'Settings', icon: <CentralIcon name="IconSettingsGear1" size={16} /> },
+  ];
+
+  // Full items (grouped) - 20+ items to test scrolling
+  const fullItems: import('@/components/Command').CommandGroup[] = [
+    {
+      label: 'Suggestions',
+      items: [
+        { id: '1', label: 'Linear', icon: <CentralIcon name="IconGlobe2" size={16} />, shortcut: <Shortcut keys={['⌘', 'L']} /> },
+        { id: '2', label: 'Figma', icon: <CentralIcon name="IconGlobe2" size={16} />, shortcut: <Shortcut keys={['⌘', 'F']} /> },
+        { id: '3', label: 'Slack', icon: <CentralIcon name="IconGlobe2" size={16} />, shortcut: <Shortcut keys={['⌘', 'S']} /> },
+        { id: '4', label: 'Notion', icon: <CentralIcon name="IconGlobe2" size={16} />, shortcut: <Shortcut keys={['⌘', 'N']} /> },
+        { id: '5', label: 'GitHub', icon: <CentralIcon name="IconGlobe2" size={16} />, shortcut: <Shortcut keys={['⌘', 'G']} /> },
+      ],
+    },
+    {
+      label: 'Commands',
+      items: [
+        { id: '6', label: 'Clipboard History', icon: <CentralIcon name="IconClipboard2" size={16} />, shortcut: <Shortcut keys={['⌘', '⇧', 'C']} />, keywords: ['clipboard', 'paste'] },
+        { id: '7', label: 'System Preferences', icon: <CentralIcon name="IconSettingsGear1" size={16} />, shortcut: <Shortcut keys={['⌘', ',']} />, keywords: ['settings'] },
+        { id: '8', label: 'Screenshot', icon: <CentralIcon name="IconSquareBehindSquare1" size={16} />, shortcut: <Shortcut keys={['⌘', '⇧', '4']} />, keywords: ['capture', 'screen'] },
+        { id: '9', label: 'Lock Screen', icon: <CentralIcon name="IconSettingsGear1" size={16} />, shortcut: <Shortcut keys={['⌘', '⌃', 'Q']} /> },
+        { id: '10', label: 'Force Quit', icon: <CentralIcon name="IconSettingsGear1" size={16} />, shortcut: <Shortcut keys={['⌘', '⌥', 'Esc']} /> },
+      ],
+    },
+    {
+      label: 'Navigation',
+      items: [
+        { id: '11', label: 'Go to Dashboard', icon: <CentralIcon name="IconGlobe2" size={16} /> },
+        { id: '12', label: 'Go to Settings', icon: <CentralIcon name="IconSettingsGear1" size={16} /> },
+        { id: '13', label: 'Go to Profile', icon: <CentralIcon name="IconGlobe2" size={16} /> },
+        { id: '14', label: 'Go to Notifications', icon: <CentralIcon name="IconGlobe2" size={16} /> },
+        { id: '15', label: 'Go to Help', icon: <CentralIcon name="IconGlobe2" size={16} /> },
+      ],
+    },
+    {
+      label: 'Actions',
+      items: [
+        { id: '16', label: 'New Document', icon: <CentralIcon name="IconFileBend" size={16} />, shortcut: <Shortcut keys={['⌘', 'N']} /> },
+        { id: '17', label: 'New Folder', icon: <CentralIcon name="IconFileBend" size={16} />, shortcut: <Shortcut keys={['⌘', '⇧', 'N']} /> },
+        { id: '18', label: 'Duplicate', icon: <CentralIcon name="IconSquareBehindSquare1" size={16} />, shortcut: <Shortcut keys={['⌘', 'D']} /> },
+        { id: '19', label: 'Delete', icon: <CentralIcon name="IconSettingsGear1" size={16} />, shortcut: <Shortcut keys={['⌘', '⌫']} /> },
+        { id: '20', label: 'Archive', icon: <CentralIcon name="IconFileBend" size={16} />, shortcut: <Shortcut keys={['⌘', 'E']} /> },
+      ],
+    },
+  ];
+
+  // Keyboard shortcut to open (Cmd+K)
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setFullOpen((open) => !open);
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+      {/* Basic Command */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Basic
+        </span>
+        <Button variant="secondary" onClick={() => setBasicOpen(true)}>
+          Type a command or search...
+        </Button>
+        <Command.Root
+          items={basicItems}
+          open={basicOpen}
+          onOpenChange={setBasicOpen}
+        />
+      </div>
+
+      {/* Full Command with shortcuts and footer */}
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          With Groups, Shortcuts &amp; Footer (⌘K to open)
+        </span>
+        <Button variant="secondary" onClick={() => setFullOpen(true)}>
+          Open Command Palette
+          <Shortcut keys={['⌘', 'K']} style={{ marginLeft: 'auto' }} />
+        </Button>
+        <Command.Root
+          items={fullItems}
+          open={fullOpen}
+          onOpenChange={setFullOpen}
+          placeholder="Search for apps and commands..."
+        >
+          <Command.Footer>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Shortcut keys={['↑', '↓']} />
+              <span>Navigate</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>Select</span>
+                <Shortcut keys={['↵']} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span>Close</span>
+                <Shortcut keys={['Esc']} />
+              </div>
+            </div>
+          </Command.Footer>
+        </Command.Root>
+      </div>
     </div>
   );
 }
@@ -1316,35 +1438,6 @@ export default function Home() {
       <h1>Origin</h1>
       <p style={{ marginBottom: '2rem' }}>Design system rebuild — Base UI + Figma-first approach.</p>
       
-      <h2 style={{ marginBottom: '1rem' }}>Logo Component</h2>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logo Regular</span>
-          <Logo variant="logo" weight="regular" height={40} aria-label="Lightspark" />
-        </div>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logo Light</span>
-          <Logo variant="logo" weight="light" height={40} aria-label="Lightspark" />
-        </div>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logomark Regular</span>
-          <Logo variant="logomark" weight="regular" height={40} aria-label="Lightspark" />
-        </div>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Logomark Light</span>
-          <Logo variant="logomark" weight="light" height={40} aria-label="Lightspark" />
-        </div>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Wordmark</span>
-          <Logo variant="wordmark" height={40} aria-label="Lightspark" />
-        </div>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Custom Height (24px)</span>
-          <Logo height={24} aria-label="Lightspark" />
-        </div>
-      </div>
-      
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
       <Accordion.Root defaultValue={['item-1']} style={{ marginBottom: '128px' }}>
@@ -1415,36 +1508,6 @@ export default function Home() {
         <Alert variant="critical" title="Title" description="Description here." />
         <Alert variant="default" title="Title only alert" />
         <Alert variant="default" title="No icon alert" description="This alert has no icon." icon={false} />
-      </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Card Component</h2>
-      
-      <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '128px' }}>
-        <Card.Root variant="structured" style={{ width: 360 }}>
-          <Card.Header>
-            <Card.TitleGroup>
-              <Card.Title>Structured</Card.Title>
-              <Card.Subtitle>With card surface</Card.Subtitle>
-            </Card.TitleGroup>
-          </Card.Header>
-          <Card.Body>
-            <p>Body content with sectioned layout.</p>
-          </Card.Body>
-          <Card.Footer>
-            <Button>Button</Button>
-          </Card.Footer>
-        </Card.Root>
-
-        <Card.Root variant="simple" style={{ width: 360 }}>
-          <Card.TitleGroup>
-            <Card.Title>Simple</Card.Title>
-            <Card.Subtitle>No card surface</Card.Subtitle>
-          </Card.TitleGroup>
-          <Card.Body>
-            <p>Body content with uniform padding.</p>
-          </Card.Body>
-          <Button>Button</Button>
-        </Card.Root>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Alert Dialog Component</h2>
@@ -1636,6 +1699,36 @@ export default function Home() {
         <Button variant="link" disabled>Disabled link</Button>
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Card Component</h2>
+      
+      <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '128px' }}>
+        <Card.Root variant="structured" style={{ width: 360 }}>
+          <Card.Header>
+            <Card.TitleGroup>
+              <Card.Title>Structured</Card.Title>
+              <Card.Subtitle>With card surface</Card.Subtitle>
+            </Card.TitleGroup>
+          </Card.Header>
+          <Card.Body>
+            <p>Body content with sectioned layout.</p>
+          </Card.Body>
+          <Card.Footer>
+            <Button>Button</Button>
+          </Card.Footer>
+        </Card.Root>
+
+        <Card.Root variant="simple" style={{ width: 360 }}>
+          <Card.TitleGroup>
+            <Card.Title>Simple</Card.Title>
+            <Card.Subtitle>No card surface</Card.Subtitle>
+          </Card.TitleGroup>
+          <Card.Body>
+            <p>Body content with uniform padding.</p>
+          </Card.Body>
+          <Button>Button</Button>
+        </Card.Root>
+      </div>
+      
       <h2 style={{ marginBottom: '1rem' }}>Checkbox Component</h2>
       
       <div style={{ display: 'flex', gap: '3rem', marginBottom: '128px' }}>
@@ -1702,6 +1795,10 @@ export default function Home() {
       <h2 style={{ marginBottom: '1rem' }}>Combobox Component</h2>
       
       <ComboboxExamples />
+      
+      <h2 style={{ marginBottom: '1rem' }}>Command Component</h2>
+      
+      <CommandDemo />
       
       <h2 style={{ marginBottom: '1rem' }}>Context Menu Component</h2>
       
@@ -1827,6 +1924,39 @@ export default function Home() {
         <Loader />
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Logo Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Lightspark Logo Regular</span>
+          <Logo variant="logo" weight="regular" aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Lightspark Logo Light</span>
+          <Logo variant="logo" weight="light" aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Lightspark Logomark Regular</span>
+          <Logo variant="logomark" weight="regular" aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Lightspark Logomark Light</span>
+          <Logo variant="logomark" weight="light" aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Lightspark Wordmark</span>
+          <Logo variant="wordmark" aria-label="Lightspark" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Grid Logo</span>
+          <Logo brand="grid" variant="logo" aria-label="Grid" />
+        </div>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Grid Logomark</span>
+          <Logo brand="grid" variant="logomark" aria-label="Grid" />
+        </div>
+      </div>
+      
       <h2 style={{ marginBottom: '1rem' }}>Menu Component</h2>
       
       <MenuExamples />
@@ -1835,6 +1965,60 @@ export default function Home() {
 
       <MenubarDemo />
 
+      <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Storage (50%)
+          </span>
+          <Meter.Root value={50}>
+            <Meter.Label>Storage used</Meter.Label>
+            <Meter.Value />
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Low (25%)
+          </span>
+          <Meter.Root value={25}>
+            <Meter.Label>Battery level</Meter.Label>
+            <Meter.Value />
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            High (90%)
+          </span>
+          <Meter.Root value={90}>
+            <Meter.Label>Disk space</Meter.Label>
+            <Meter.Value />
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+        
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Track Only
+          </span>
+          <Meter.Root value={65}>
+            <Meter.Track>
+              <Meter.Indicator />
+            </Meter.Track>
+          </Meter.Root>
+        </div>
+      </div>
+      
       <h2 style={{ marginBottom: '1rem' }}>Navigation Menu Component</h2>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
@@ -1993,60 +2177,6 @@ export default function Home() {
               </NavigationMenu.Item>
             </NavigationMenu.List>
           </NavigationMenu.Root>
-        </div>
-      </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Meter Component</h2>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', maxWidth: '240px' }}>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Storage (50%)
-          </span>
-          <Meter.Root value={50}>
-            <Meter.Label>Storage used</Meter.Label>
-            <Meter.Value />
-            <Meter.Track>
-              <Meter.Indicator />
-            </Meter.Track>
-          </Meter.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Low (25%)
-          </span>
-          <Meter.Root value={25}>
-            <Meter.Label>Battery level</Meter.Label>
-            <Meter.Value />
-            <Meter.Track>
-              <Meter.Indicator />
-            </Meter.Track>
-          </Meter.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            High (90%)
-          </span>
-          <Meter.Root value={90}>
-            <Meter.Label>Disk space</Meter.Label>
-            <Meter.Value />
-            <Meter.Track>
-              <Meter.Indicator />
-            </Meter.Track>
-          </Meter.Root>
-        </div>
-        
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Track Only
-          </span>
-          <Meter.Root value={65}>
-            <Meter.Track>
-              <Meter.Indicator />
-            </Meter.Track>
-          </Meter.Root>
         </div>
       </div>
       
@@ -2500,48 +2630,10 @@ export default function Home() {
         </div>
       </div>
       
-      <h2 style={{ marginBottom: '1rem' }}>Sidebar Component</h2>
+      <h2 style={{ marginBottom: '1rem' }}>Table Component</h2>
       
-      <div style={{ display: 'flex', gap: '2rem', marginBottom: '128px' }}>
-        <div style={{ height: '400px' }}>
-          <Sidebar.Root style={{ width: 224, borderRight: 'var(--stroke-xs) solid var(--border-tertiary)' }}>
-            <Sidebar.Header>
-              <Logo aria-label="Origin" height={24} />
-            </Sidebar.Header>
-            <Sidebar.Content>
-              <Sidebar.Group>
-                <Sidebar.GroupHeader>Navigation</Sidebar.GroupHeader>
-                <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
-                  Dashboard
-                </Sidebar.Item>
-                <Sidebar.Item icon={<CentralIcon name="IconArrowInbox" size={20} />}>
-                  Inbox
-                </Sidebar.Item>
-                <Sidebar.Tree icon={<CentralIcon name="IconTarget" size={20} />} label="Projects" defaultOpen variant="border">
-                  <Sidebar.Item icon={<CentralIcon name="IconFileBend" size={20} />}>
-                    Project Alpha
-                  </Sidebar.Item>
-                  <Sidebar.Item icon={<CentralIcon name="IconFileBend" size={20} />}>
-                    Project Beta
-                  </Sidebar.Item>
-                </Sidebar.Tree>
-                <Sidebar.Submenu icon={<CentralIcon name="IconSettingsGear1" size={20} />} label="Settings" variant="border">
-                  <Sidebar.Item icon={<CentralIcon name="IconPeopleCircle" size={20} />}>
-                    Profile
-                  </Sidebar.Item>
-                  <Sidebar.Item icon={<CentralIcon name="IconLock" size={20} />}>
-                    Security
-                  </Sidebar.Item>
-                </Sidebar.Submenu>
-              </Sidebar.Group>
-            </Sidebar.Content>
-            <Sidebar.Footer>
-              <span>Jay Mantri</span>
-            </Sidebar.Footer>
-          </Sidebar.Root>
-        </div>
-      </div>
-
+      <TableExamples />
+      
       <h2 style={{ marginBottom: '1rem' }}>Tabs Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '128px' }}>
@@ -2614,10 +2706,6 @@ export default function Home() {
           </Tabs.Root>
         </div>
       </div>
-      
-      <h2 style={{ marginBottom: '1rem' }}>Table Component</h2>
-      
-      <TableExamples />
       
       <h2 style={{ marginBottom: '1rem' }}>Toast Component</h2>
       
