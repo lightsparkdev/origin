@@ -292,7 +292,7 @@ function CommandDemo() {
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           Basic
         </span>
-        <Button variant="secondary" onClick={() => setBasicOpen(true)}>
+        <Button variant="outline" onClick={() => setBasicOpen(true)}>
           Type a command or search...
         </Button>
         <Command.Root
@@ -307,7 +307,7 @@ function CommandDemo() {
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           With Groups, Shortcuts &amp; Footer (⌘K to open)
         </span>
-        <Button variant="secondary" onClick={() => setFullOpen(true)}>
+        <Button variant="outline" onClick={() => setFullOpen(true)}>
           Open Command Palette
           <Shortcut keys={['⌘', 'K']} style={{ marginLeft: 'auto' }} />
         </Button>

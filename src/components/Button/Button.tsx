@@ -39,7 +39,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <BaseButton
         ref={ref}
-        disabled={disabled}
+        disabled={disabled || loading}
         aria-busy={loading || undefined}
         className={clsx(
           styles.button,
@@ -54,6 +54,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {/* Content wrapper - hidden but preserved during loading to maintain width */}
         <span className={clsx(styles.content, loading && styles.contentHidden)}>
           {leadingIcon && <span className={styles.leadingIcon}>{leadingIcon}</span>}
+          {iconOnly && children}
           {!iconOnly && children && <span className={styles.label}>{children}</span>}
           {trailingIcon && <span className={styles.trailingIcon}>{trailingIcon}</span>}
         </span>

@@ -498,7 +498,7 @@ export const SubmenuItem = React.forwardRef<HTMLButtonElement, SubmenuItemProps>
   }
 );
 
-export interface DrilldownItemProps extends React.ComponentPropsWithoutRef<'div'> {
+export interface DrilldownItemProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'onClick'> {
   icon?: React.ReactNode;
   active?: boolean;
   disabled?: boolean;

@@ -167,6 +167,12 @@
 .loading {
   position: relative;
   pointer-events: none;
+
+  // Loading buttons are disabled but should not look faded - the action is "in flight"
+  &[data-disabled] {
+    opacity: 1;
+    cursor: wait;
+  }
 }
 
 .content {

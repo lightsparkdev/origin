@@ -10,6 +10,7 @@ import {
   LoadingButton,
   AllSizes,
   IconOnlyButton,
+  IconOnlyButtonWithChildren,
   ButtonWithLeadingIcon,
   ButtonWithTrailingIcon,
   LinkButton,
@@ -118,6 +119,17 @@ test.describe('Button', () => {
     
     const button = page.getByRole('button', { name: 'Add item' });
     await expect(button).toBeVisible();
+    
+    const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test('icon-only button renders children as icon', async ({ mount, page }) => {
+    await mount(<IconOnlyButtonWithChildren />);
+    
+    const button = page.getByRole('button', { name: 'Add item' });
+    await expect(button).toBeVisible();
+    await expect(button.locator('svg')).toBeVisible();
     
     const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
     expect(results.violations).toEqual([]);

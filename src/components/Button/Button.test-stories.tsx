@@ -69,6 +69,14 @@ export function IconOnlyButton() {
   );
 }
 
+export function IconOnlyButtonWithChildren() {
+  return (
+    <Button iconOnly aria-label="Add item">
+      <PlusIcon />
+    </Button>
+  );
+}
+
 export function ButtonWithLeadingIcon() {
   return (
     <Button leadingIcon={<ChevronLeft />}>Back</Button>
