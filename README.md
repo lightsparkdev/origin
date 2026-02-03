@@ -142,8 +142,8 @@ Suisse Intl requires font metric overrides to prevent an oversized text caret in
 ```scss
 @font-face {
   font-family: 'Suisse Intl';
-  ascent-override: 85%;
-  descent-override: 15%;
+  ascent-override: 81%;
+  descent-override: 19%;
   line-gap-override: 0%;
 }
 ```
