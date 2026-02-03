@@ -22,6 +22,7 @@ export { PhoneInput } from './components/PhoneInput';
 export { Progress } from './components/Progress';
 export { Radio } from './components/Radio';
 export { Select } from './components/Select';
+export { Sidebar } from './components/Sidebar';
 export { Table } from './components/Table';
 export { Tabs } from './components/Tabs';
 export { Toast } from './components/Toast';

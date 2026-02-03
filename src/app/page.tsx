@@ -33,6 +33,7 @@ import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
 import { Separator } from '@/components/Separator';
+import { Sidebar } from '@/components/Sidebar';
 import { Shortcut } from '@/components/Shortcut';
 import { Switch } from '@/components/Switch';
 import { Tabs } from '@/components/Tabs';
@@ -2520,6 +2521,93 @@ export default function Home() {
               </Select.Positioner>
             </Select.Portal>
           </Select.Root>
+        </div>
+      </div>
+      
+      <h2 style={{ marginBottom: '1rem' }}>Sidebar Component</h2>
+      
+      <div style={{ display: 'flex', gap: '2rem', marginBottom: '128px' }}>
+        <div style={{ height: '600px' }}>
+          <Sidebar.Provider>
+            <Sidebar.Root>
+              <Sidebar.Header>
+                <div style={{ padding: 'var(--spacing-xs)', display: 'flex', justifyContent: 'flex-end' }}>
+                  <Sidebar.Trigger />
+                </div>
+              </Sidebar.Header>
+              <Sidebar.Content>
+                <Sidebar.Group>
+                  <Sidebar.GroupHeader>Default Items</Sidebar.GroupHeader>
+                  <Sidebar.Items>
+                    <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
+                      Dashboard
+                    </Sidebar.Item>
+                    <Sidebar.Item icon={<CentralIcon name="IconPeopleCircle" size={20} />} trailing={<Shortcut keys={['⌘', 'P']} />}>
+                      Profile
+                    </Sidebar.Item>
+                    <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />} disabled>
+                      Disabled
+                    </Sidebar.Item>
+                  </Sidebar.Items>
+                </Sidebar.Group>
+
+                <Sidebar.Separator />
+
+                <Sidebar.Group>
+                  <Sidebar.GroupHeader>Submenu (Vertical Chevron)</Sidebar.GroupHeader>
+                  <Sidebar.Items>
+                    <Sidebar.ExpandableItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />} label="Projects" defaultOpen>
+                      <Sidebar.SubmenuItem icon={<CentralIcon name="IconFileBend" size={20} />}>
+                        Alpha
+                      </Sidebar.SubmenuItem>
+                      <Sidebar.SubmenuItem icon={<CentralIcon name="IconFileBend" size={20} />} active>
+                        Beta
+                      </Sidebar.SubmenuItem>
+                    </Sidebar.ExpandableItem>
+                  </Sidebar.Items>
+                </Sidebar.Group>
+
+                <Sidebar.Separator />
+
+                <Sidebar.Group>
+                  <Sidebar.GroupHeader>Tree (Horizontal Chevron)</Sidebar.GroupHeader>
+                  <Sidebar.Items>
+                    <Sidebar.TreeItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />} label="Files" defaultOpen>
+                      <Sidebar.SubmenuItem icon={<CentralIcon name="IconFileBend" size={20} />}>
+                        Document
+                      </Sidebar.SubmenuItem>
+                      <Sidebar.TreeItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />} label="Nested">
+                        <Sidebar.SubmenuItem icon={<CentralIcon name="IconFileBend" size={20} />}>
+                          Child
+                        </Sidebar.SubmenuItem>
+                      </Sidebar.TreeItem>
+                    </Sidebar.TreeItem>
+                  </Sidebar.Items>
+                </Sidebar.Group>
+
+                <Sidebar.Separator />
+
+                <Sidebar.Group>
+                  <Sidebar.GroupHeader>Drilldown (Navigate)</Sidebar.GroupHeader>
+                  <Sidebar.Items>
+                    <Sidebar.DrilldownItem icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}>
+                      Teams
+                    </Sidebar.DrilldownItem>
+                    <Sidebar.DrilldownItem icon={<CentralIcon name="IconPeopleCircle" size={20} />}>
+                      Members
+                    </Sidebar.DrilldownItem>
+                  </Sidebar.Items>
+                </Sidebar.Group>
+              </Sidebar.Content>
+              <Sidebar.Footer>
+                <Sidebar.Items>
+                  <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
+                    Settings
+                  </Sidebar.Item>
+                </Sidebar.Items>
+              </Sidebar.Footer>
+            </Sidebar.Root>
+          </Sidebar.Provider>
         </div>
       </div>
       
