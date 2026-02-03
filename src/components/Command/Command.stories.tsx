@@ -1,52 +1,60 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import * as React from 'react';
-import { Command } from './index';
+import { Command, type CommandItem, type CommandGroup } from './index';
 import { CentralIcon } from '../Icon';
 import { Shortcut } from '../Shortcut';
 
-const meta: Meta = {
+const meta: Meta<typeof Command.Root> = {
   title: 'Components/Command',
+  component: Command.Root,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    placeholder: { control: 'text' },
+    loop: { control: 'boolean' },
+    open: { control: 'boolean' },
+    defaultOpen: { control: 'boolean' },
   },
 };
 
 export default meta;
-type Story = StoryObj;
+type Story = StoryObj<typeof Command.Root>;
+
+// Sample data
+const basicItems: CommandItem[] = [
+  { id: '1', label: 'Copy', icon: <CentralIcon name="IconCopy" size={16} /> },
+  { id: '2', label: 'Paste', icon: <CentralIcon name="IconClipboard" size={16} /> },
+  { id: '3', label: 'Cut', icon: <CentralIcon name="IconScissors" size={16} /> },
+];
+
+const groupedItems: CommandGroup[] = [
+  {
+    label: 'Suggestions',
+    items: [
+      { id: '1', label: 'Calendar', icon: <CentralIcon name="IconCalendar" size={16} /> },
+      { id: '2', label: 'Search', icon: <CentralIcon name="IconSearch" size={16} /> },
+      { id: '3', label: 'Calculator', icon: <CentralIcon name="IconCalculator" size={16} /> },
+    ],
+  },
+  {
+    label: 'Settings',
+    items: [
+      { id: '4', label: 'Profile', icon: <CentralIcon name="IconUser" size={16} /> },
+      { id: '5', label: 'Billing', icon: <CentralIcon name="IconCreditCard" size={16} /> },
+      { id: '6', label: 'Preferences', icon: <CentralIcon name="IconSettings" size={16} /> },
+    ],
+  },
+];
 
 /**
- * Default command palette with a trigger button.
+ * Default command palette with basic items.
  */
 export const Default: Story = {
-  render: () => {
-    const [open, setOpen] = React.useState(false);
-
-    return (
-      <Command.Root open={open} onOpenChange={setOpen}>
-        <Command.Trigger>Type a command or search...</Command.Trigger>
-        <Command.Portal>
-          <Command.Backdrop />
-          <Command.Popup>
-            <Command.Input placeholder="Type a command or search..." />
-            <Command.List>
-              <Command.Item onSelect={() => setOpen(false)}>
-                <CentralIcon name="IconCalendar" size={16} />
-                Calendar
-              </Command.Item>
-              <Command.Item onSelect={() => setOpen(false)}>
-                <CentralIcon name="IconSearch" size={16} />
-                Search Emoji
-              </Command.Item>
-              <Command.Item onSelect={() => setOpen(false)}>
-                <CentralIcon name="IconCalculator" size={16} />
-                Calculator
-              </Command.Item>
-            </Command.List>
-            <Command.Empty>No results found.</Command.Empty>
-          </Command.Popup>
-        </Command.Portal>
-      </Command.Root>
-    );
+  args: {
+    items: basicItems,
+    defaultOpen: true,
+    placeholder: 'Type a command or search...',
   },
 };
 
@@ -54,257 +62,134 @@ export const Default: Story = {
  * Command palette with grouped items.
  */
 export const WithGroups: Story = {
-  render: () => {
-    const [open, setOpen] = React.useState(false);
-
-    return (
-      <Command.Root open={open} onOpenChange={setOpen}>
-        <Command.Trigger>Open Command Palette</Command.Trigger>
-        <Command.Portal>
-          <Command.Backdrop />
-          <Command.Popup>
-            <Command.Input placeholder="What do you need?" />
-            <Command.List>
-              <Command.Group heading="Suggestions">
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconCalendar" size={16} />
-                  Calendar
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconSearch" size={16} />
-                  Search Emoji
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconCalculator" size={16} />
-                  Calculator
-                </Command.Item>
-              </Command.Group>
-              <Command.Separator />
-              <Command.Group heading="Settings">
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconUser" size={16} />
-                  Profile
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconCreditCard" size={16} />
-                  Billing
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconSettings" size={16} />
-                  Settings
-                </Command.Item>
-              </Command.Group>
-            </Command.List>
-            <Command.Empty>No results found.</Command.Empty>
-          </Command.Popup>
-        </Command.Portal>
-      </Command.Root>
-    );
+  args: {
+    items: groupedItems,
+    defaultOpen: true,
+    placeholder: 'What do you need?',
   },
 };
 
 /**
- * Command with shortcuts displayed.
+ * Command with keyboard shortcuts displayed on items.
  */
 export const WithShortcuts: Story = {
   render: () => {
-    const [open, setOpen] = React.useState(false);
+    const items: CommandGroup[] = [
+      {
+        label: 'Actions',
+        items: [
+          {
+            id: '1',
+            label: 'Copy',
+            icon: <CentralIcon name="IconCopy" size={16} />,
+            shortcut: <Shortcut keys={['⌘', 'C']} />,
+          },
+          {
+            id: '2',
+            label: 'Paste',
+            icon: <CentralIcon name="IconClipboard" size={16} />,
+            shortcut: <Shortcut keys={['⌘', 'V']} />,
+          },
+          {
+            id: '3',
+            label: 'Cut',
+            icon: <CentralIcon name="IconScissors" size={16} />,
+            shortcut: <Shortcut keys={['⌘', 'X']} />,
+          },
+        ],
+      },
+    ];
 
     return (
-      <Command.Root open={open} onOpenChange={setOpen}>
-        <Command.Trigger>
-          Open Command Palette
-          <Shortcut keys={['⌘', 'K']} style={{ marginLeft: 'auto' }} />
-        </Command.Trigger>
-        <Command.Portal>
-          <Command.Backdrop />
-          <Command.Popup>
-            <Command.Input placeholder="Type a command or search..." />
-            <Command.List>
-              <Command.Group heading="Actions">
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconCopy" size={16} />
-                  <span style={{ flex: 1 }}>Copy</span>
-                  <Shortcut keys={['⌘', 'C']} />
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconClipboard" size={16} />
-                  <span style={{ flex: 1 }}>Paste</span>
-                  <Shortcut keys={['⌘', 'V']} />
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconScissors" size={16} />
-                  <span style={{ flex: 1 }}>Cut</span>
-                  <Shortcut keys={['⌘', 'X']} />
-                </Command.Item>
-              </Command.Group>
-            </Command.List>
-            <Command.Empty>No results found.</Command.Empty>
-            <Command.Footer>
-              <span>↑↓ Navigate</span>
-              <span>↵ Open</span>
-              <span>Esc Close</span>
-            </Command.Footer>
-          </Command.Popup>
-        </Command.Portal>
+      <Command.Root items={items} defaultOpen>
+        <Command.Footer>
+          <span>↑↓ Navigate</span>
+          <span>↵ Open</span>
+          <span>Esc Close</span>
+        </Command.Footer>
       </Command.Root>
     );
   },
 };
 
 /**
- * Command with disabled items.
+ * Command with disabled items (skipped during keyboard navigation).
  */
 export const WithDisabledItems: Story = {
-  render: () => {
-    const [open, setOpen] = React.useState(false);
-
-    return (
-      <Command.Root open={open} onOpenChange={setOpen}>
-        <Command.Trigger>Open Command</Command.Trigger>
-        <Command.Portal>
-          <Command.Backdrop />
-          <Command.Popup>
-            <Command.Input placeholder="Search..." />
-            <Command.List>
-              <Command.Item onSelect={() => setOpen(false)}>Enabled Item 1</Command.Item>
-              <Command.Item disabled>Disabled Item</Command.Item>
-              <Command.Item onSelect={() => setOpen(false)}>Enabled Item 2</Command.Item>
-            </Command.List>
-            <Command.Empty>No results.</Command.Empty>
-          </Command.Popup>
-        </Command.Portal>
-      </Command.Root>
-    );
+  args: {
+    items: [
+      { id: '1', label: 'Enabled Item 1' },
+      { id: '2', label: 'Disabled Item', disabled: true },
+      { id: '3', label: 'Enabled Item 2' },
+    ],
+    defaultOpen: true,
   },
 };
 
 /**
- * Controlled command palette with open state.
+ * Controlled command palette with external state.
  */
 export const Controlled: Story = {
   render: () => {
     const [open, setOpen] = React.useState(false);
-    const [selectedItem, setSelectedItem] = React.useState<string | null>(null);
+    const [selected, setSelected] = React.useState<string | null>(null);
 
-    const handleSelect = (item: string) => {
-      setSelectedItem(item);
-      setOpen(false);
-    };
+    const items: CommandItem[] = [
+      { id: '1', label: 'Calendar', onSelect: () => setSelected('Calendar') },
+      { id: '2', label: 'Search', onSelect: () => setSelected('Search') },
+      { id: '3', label: 'Calculator', onSelect: () => setSelected('Calculator') },
+    ];
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-        <Command.Root open={open} onOpenChange={setOpen}>
-          <Command.Trigger>
-            {selectedItem ? `Selected: ${selectedItem}` : 'Select an item'}
-          </Command.Trigger>
-          <Command.Portal>
-            <Command.Backdrop />
-            <Command.Popup>
-              <Command.Input placeholder="Search..." />
-              <Command.List>
-                <Command.Item onSelect={() => handleSelect('Calendar')}>
-                  <CentralIcon name="IconCalendar" size={16} />
-                  Calendar
-                </Command.Item>
-                <Command.Item onSelect={() => handleSelect('Search Emoji')}>
-                  <CentralIcon name="IconSearch" size={16} />
-                  Search Emoji
-                </Command.Item>
-                <Command.Item onSelect={() => handleSelect('Calculator')}>
-                  <CentralIcon name="IconCalculator" size={16} />
-                  Calculator
-                </Command.Item>
-              </Command.List>
-              <Command.Empty>No results.</Command.Empty>
-            </Command.Popup>
-          </Command.Portal>
-        </Command.Root>
-        <p style={{ fontSize: '0.875rem', color: '#666' }}>
-          Try selecting an item - the selection persists.
+        <button onClick={() => setOpen(true)}>
+          {selected ? `Selected: ${selected}` : 'Open Command Palette'}
+        </button>
+        <Command.Root items={items} open={open} onOpenChange={setOpen} />
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          Selection persists after closing.
         </p>
       </div>
-    );
-  },
-};
-
-/**
- * Matching the Figma design exactly.
- */
-export const FigmaDesign: Story = {
-  render: () => {
-    const [open, setOpen] = React.useState(true);
-
-    return (
-      <Command.Root open={open} onOpenChange={setOpen}>
-        <Command.Trigger>Run a command or search</Command.Trigger>
-        <Command.Portal>
-          <Command.Backdrop />
-          <Command.Popup>
-            <Command.Input placeholder="Run a command or search" />
-            <Command.List>
-              <Command.Group heading="Title">
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Command
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Command
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Command
-                </Command.Item>
-                <Command.Item onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconGlobe2" size={16} />
-                  Command
-                </Command.Item>
-              </Command.Group>
-            </Command.List>
-            <Command.Empty>No results.</Command.Empty>
-          </Command.Popup>
-        </Command.Portal>
-      </Command.Root>
     );
   },
 };
 
 /**
  * Command with keyword search support.
+ * Try searching "duplicate" to find Copy, or "remove" to find Cut.
  */
 export const WithKeywords: Story = {
   render: () => {
-    const [open, setOpen] = React.useState(false);
+    const items: CommandItem[] = [
+      {
+        id: '1',
+        label: 'Copy',
+        icon: <CentralIcon name="IconCopy" size={16} />,
+        keywords: ['duplicate', 'clone'],
+      },
+      {
+        id: '2',
+        label: 'Paste',
+        icon: <CentralIcon name="IconClipboard" size={16} />,
+        keywords: ['insert'],
+      },
+      {
+        id: '3',
+        label: 'Cut',
+        icon: <CentralIcon name="IconScissors" size={16} />,
+        keywords: ['remove', 'delete'],
+      },
+    ];
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-        <Command.Root open={open} onOpenChange={setOpen}>
-          <Command.Trigger>Open Command</Command.Trigger>
-          <Command.Portal>
-            <Command.Backdrop />
-            <Command.Popup>
-              <Command.Input placeholder="Try searching 'duplicate' or 'clone'" />
-              <Command.List>
-                <Command.Item keywords={['duplicate', 'clone']} onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconCopy" size={16} />
-                  Copy
-                </Command.Item>
-                <Command.Item keywords={['insert']} onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconClipboard" size={16} />
-                  Paste
-                </Command.Item>
-                <Command.Item keywords={['remove', 'delete']} onSelect={() => setOpen(false)}>
-                  <CentralIcon name="IconScissors" size={16} />
-                  Cut
-                </Command.Item>
-              </Command.List>
-              <Command.Empty>No results.</Command.Empty>
-            </Command.Popup>
-          </Command.Portal>
-        </Command.Root>
-        <p style={{ fontSize: '0.875rem', color: '#666' }}>
-          Items have keywords - try searching &quot;duplicate&quot; to find Copy
+        <Command.Root
+          items={items}
+          defaultOpen
+          placeholder="Try searching 'duplicate' or 'remove'..."
+        />
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          Items have hidden keywords for better discoverability.
         </p>
       </div>
     );
@@ -312,11 +197,127 @@ export const WithKeywords: Story = {
 };
 
 /**
- * Full-featured Raycast-style command palette.
+ * Empty state when no items match the search.
+ */
+export const EmptyState: Story = {
+  args: {
+    items: [
+      { id: '1', label: 'Apple' },
+      { id: '2', label: 'Banana' },
+    ],
+    defaultOpen: true,
+    placeholder: "Type 'xyz' to see empty state...",
+  },
+};
+
+/**
+ * Command with many items to demonstrate scrolling.
+ */
+export const ManyItems: Story = {
+  render: () => {
+    const items: CommandItem[] = Array.from({ length: 50 }, (_, i) => ({
+      id: String(i + 1),
+      label: `Item ${i + 1}`,
+      icon: <CentralIcon name="IconFileBend" size={16} />,
+    }));
+
+    return <Command.Root items={items} defaultOpen />;
+  },
+};
+
+/**
+ * Custom item rendering via renderItem prop.
+ */
+export const CustomRenderItem: Story = {
+  render: () => {
+    const items: CommandItem[] = [
+      { id: '1', label: 'High Priority Task' },
+      { id: '2', label: 'Medium Priority Task' },
+      { id: '3', label: 'Low Priority Task' },
+    ];
+
+    const priorities: Record<string, { color: string; label: string }> = {
+      '1': { color: '#ef4444', label: 'High' },
+      '2': { color: '#f59e0b', label: 'Medium' },
+      '3': { color: '#22c55e', label: 'Low' },
+    };
+
+    return (
+      <Command.Root
+        items={items}
+        defaultOpen
+        renderItem={(item) => (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', width: '100%' }}>
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                backgroundColor: priorities[item.id].color,
+              }}
+            />
+            <span style={{ flex: 1 }}>{item.label}</span>
+            <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+              {priorities[item.id].label}
+            </span>
+          </div>
+        )}
+      />
+    );
+  },
+};
+
+/**
+ * Full-featured Raycast-style command palette with ⌘K trigger.
  */
 export const RaycastStyle: Story = {
   render: () => {
     const [open, setOpen] = React.useState(false);
+
+    const items: CommandGroup[] = [
+      {
+        label: 'Suggestions',
+        items: [
+          {
+            id: '1',
+            label: 'Linear',
+            icon: <CentralIcon name="IconGlobe2" size={16} />,
+            shortcut: <Shortcut keys={['⌘', 'L']} />,
+          },
+          {
+            id: '2',
+            label: 'Figma',
+            icon: <CentralIcon name="IconGlobe2" size={16} />,
+            shortcut: <Shortcut keys={['⌘', 'F']} />,
+          },
+          {
+            id: '3',
+            label: 'Slack',
+            icon: <CentralIcon name="IconGlobe2" size={16} />,
+            shortcut: <Shortcut keys={['⌘', 'S']} />,
+          },
+        ],
+      },
+      {
+        label: 'Commands',
+        items: [
+          {
+            id: '4',
+            label: 'Clipboard History',
+            icon: <CentralIcon name="IconCopy" size={16} />,
+            shortcut: <Shortcut keys={['⌘', '⇧', 'C']} />,
+            keywords: ['clipboard', 'paste'],
+          },
+          {
+            id: '5',
+            label: 'System Preferences',
+            icon: <CentralIcon name="IconSettings" size={16} />,
+            shortcut: <Shortcut keys={['⌘', ',']} />,
+            keywords: ['settings', 'preferences'],
+          },
+        ],
+      },
+    ];
 
     // Listen for Cmd+K
     React.useEffect(() => {
@@ -332,58 +333,19 @@ export const RaycastStyle: Story = {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-        <Command.Root open={open} onOpenChange={setOpen}>
-          <Command.Trigger>
-            Open Command Palette
-            <Shortcut keys={['⌘', 'K']} style={{ marginLeft: 'auto' }} />
-          </Command.Trigger>
-          <Command.Portal>
-            <Command.Backdrop />
-            <Command.Popup>
-              <Command.Input placeholder="Type a command or search..." />
-              <Command.List>
-                <Command.Group heading="Suggestions">
-                  <Command.Item onSelect={() => setOpen(false)}>
-                    <CentralIcon name="IconGlobe2" size={16} />
-                    <span style={{ flex: 1 }}>Linear</span>
-                    <Shortcut keys={['⌘', 'L']} />
-                  </Command.Item>
-                  <Command.Item onSelect={() => setOpen(false)}>
-                    <CentralIcon name="IconGlobe2" size={16} />
-                    <span style={{ flex: 1 }}>Figma</span>
-                    <Shortcut keys={['⌘', 'F']} />
-                  </Command.Item>
-                  <Command.Item onSelect={() => setOpen(false)}>
-                    <CentralIcon name="IconGlobe2" size={16} />
-                    <span style={{ flex: 1 }}>Slack</span>
-                    <Shortcut keys={['⌘', 'S']} />
-                  </Command.Item>
-                </Command.Group>
-                <Command.Separator />
-                <Command.Group heading="Commands">
-                  <Command.Item keywords={['clipboard']} onSelect={() => setOpen(false)}>
-                    <CentralIcon name="IconCopy" size={16} />
-                    <span style={{ flex: 1 }}>Clipboard History</span>
-                    <Shortcut keys={['⌘', '⇧', 'C']} />
-                  </Command.Item>
-                  <Command.Item keywords={['preferences']} onSelect={() => setOpen(false)}>
-                    <CentralIcon name="IconSettings" size={16} />
-                    <span style={{ flex: 1 }}>System Preferences</span>
-                    <Shortcut keys={['⌘', ',']} />
-                  </Command.Item>
-                </Command.Group>
-              </Command.List>
-              <Command.Empty>No results found.</Command.Empty>
-              <Command.Footer>
-                <span>↑↓ Navigate</span>
-                <span>↵ Open</span>
-                <span>Esc Close</span>
-              </Command.Footer>
-            </Command.Popup>
-          </Command.Portal>
+        <button onClick={() => setOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          Open Command Palette
+          <Shortcut keys={['⌘', 'K']} />
+        </button>
+        <Command.Root items={items} open={open} onOpenChange={setOpen}>
+          <Command.Footer>
+            <span>↑↓ Navigate</span>
+            <span>↵ Open</span>
+            <span>Esc Close</span>
+          </Command.Footer>
         </Command.Root>
-        <p style={{ fontSize: '0.875rem', color: '#666' }}>
-          Press ⌘K to open the command palette
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          Press ⌘K to toggle the command palette
         </p>
       </div>
     );
