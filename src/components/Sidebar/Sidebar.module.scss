@@ -489,8 +489,10 @@
 }
 
 .separator {
+  --separator-margin-block: var(--spacing-xs);
+  
   height: var(--stroke-xs);
-  margin: var(--spacing-xs) 0;
+  margin-block: var(--separator-margin-block);
   background-color: var(--border-tertiary);
   border: none;
 }
