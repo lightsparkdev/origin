@@ -28,7 +28,7 @@
   }
 
   &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100);
+    opacity: 0.5;
     cursor: not-allowed;
   }
 
@@ -41,15 +41,57 @@
   }
 }
 
+// Ghost - minimal inline select with full background hover
 .triggerGhost {
+  @include body-sm;
+  width: auto;
+  gap: var(--spacing-none);
+  padding: var(--spacing-2xs);
+  border: none;
+  border-radius: var(--corner-radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  transition: background-color 150ms ease;
+
+  @media (hover: hover) {
+    &:hover:not([data-disabled]) {
+      background-color: var(--surface-hover);
+    }
+  }
+
+  &:active:not([data-disabled]) {
+    background-color: var(--surface-secondary);
+  }
+
+  &:focus,
+  &[data-popup-open] {
+    background-color: var(--surface-hover);
+    box-shadow: none;
+  }
+
+  &[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &[data-invalid] {
+    box-shadow: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+// Hybrid - label + icon button for navigation/toolbars
+.triggerHybrid {
   width: auto;
   gap: var(--spacing-3xs);
   padding: var(--spacing-4xs);
   border: none;
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 
-  &:focus,
   &[data-popup-open] {
     border: none;
     background: transparent;
@@ -57,7 +99,7 @@
   }
 
   &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100);
+    opacity: 0.5;
     color: var(--text-secondary);
     cursor: not-allowed;
   }
@@ -66,6 +108,13 @@
     border: none;
     background: transparent;
     box-shadow: none;
+  }
+
+  // On hover, label becomes primary color
+  @media (hover: hover) {
+    &:hover:not([data-disabled]) {
+      color: var(--text-primary);
+    }
   }
 }
 
@@ -100,40 +149,41 @@
   }
 }
 
-.ghostIcon {
+.hybridIcon {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.ghostIconButton {
+.hybridIconButton {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-xs) var(--spacing-2xs);
+  border: var(--stroke-xs) solid transparent;
   border-radius: var(--corner-radius-xs);
   color: var(--icon-primary);
-  transition: background-color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
 
-  .triggerGhost:hover & {
+  .triggerHybrid:hover:not([data-disabled]) & {
     background-color: var(--surface-hover);
   }
 
-  .triggerGhost:focus & {
-    background-color: var(--surface-secondary);
+  .triggerHybrid:focus-visible:not([data-disabled]) & {
+    border-color: var(--border-secondary);
+    box-shadow: 0 0 0 3px var(--input-focus);
   }
 
-  .triggerGhost[data-popup-open] & {
+  .triggerHybrid[data-popup-open] & {
     background-color: transparent;
   }
 
-  .triggerGhost[data-disabled] & {
-    background-color: transparent;
-  }
-
-  .triggerGhost[data-invalid] & {
-    border: var(--stroke-sm) solid var(--border-critical);
+  .triggerHybrid[data-invalid] & {
+    border-color: var(--border-critical);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -195,9 +245,18 @@
   }
 
   &[data-disabled] {
-    opacity: calc(var(--opacity-50) / 100);
+    opacity: 0.5;
     cursor: not-allowed;
   }
+}
+
+.empty {
+  @include body;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg) var(--spacing-sm);
+  color: var(--text-secondary);
 }
 
 .itemIndicator {

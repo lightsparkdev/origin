@@ -847,29 +847,81 @@ function ContextMenuExamples() {
 
 function PaginationDemo() {
   const [page, setPage] = React.useState(1);
-  const [manyPage, setManyPage] = React.useState(50);
+  const [pageSize, setPageSize] = React.useState(100);
+  const totalItems = 2500;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-          Few Pages
+          Default
         </span>
-        <Pagination.Root page={page} totalPages={5} onPageChange={setPage}>
-          <Pagination.Previous />
-          <Pagination.Items />
-          <Pagination.Next />
+        <Pagination.Root
+          page={page}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          onPageChange={setPage}
+        >
+          <Pagination.Label />
+          <Select.Root value={String(pageSize)} onValueChange={(v) => setPageSize(Number(v))}>
+            <Select.Trigger variant="ghost">
+              <Select.Value />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="10">
+                      <Select.ItemText>10</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="25">
+                      <Select.ItemText>25</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="50">
+                      <Select.ItemText>50</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="100">
+                      <Select.ItemText>100</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+          <Pagination.Range />
+          <Pagination.Navigation>
+            <Pagination.Previous />
+            <Pagination.Next />
+          </Pagination.Navigation>
         </Pagination.Root>
       </div>
 
       <div>
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-          Many Pages (with ellipsis)
+          First Page (Previous disabled)
         </span>
-        <Pagination.Root page={manyPage} totalPages={100} onPageChange={setManyPage}>
-          <Pagination.Previous />
-          <Pagination.Items />
-          <Pagination.Next />
+        <Pagination.Root page={1} totalItems={1000} pageSize={100}>
+          <Pagination.Label />
+          <Pagination.Range />
+          <Pagination.Navigation>
+            <Pagination.Previous />
+            <Pagination.Next />
+          </Pagination.Navigation>
+        </Pagination.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+          Last Page (Next disabled)
+        </span>
+        <Pagination.Root page={10} totalItems={1000} pageSize={100}>
+          <Pagination.Label />
+          <Pagination.Range />
+          <Pagination.Navigation>
+            <Pagination.Previous />
+            <Pagination.Next />
+          </Pagination.Navigation>
         </Pagination.Root>
       </div>
 
@@ -877,10 +929,13 @@ function PaginationDemo() {
         <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
           Single Page (both disabled)
         </span>
-        <Pagination.Root page={1} totalPages={1}>
-          <Pagination.Previous />
-          <Pagination.Items />
-          <Pagination.Next />
+        <Pagination.Root page={1} totalItems={50} pageSize={100}>
+          <Pagination.Label />
+          <Pagination.Range />
+          <Pagination.Navigation>
+            <Pagination.Previous />
+            <Pagination.Next />
+          </Pagination.Navigation>
         </Pagination.Root>
       </div>
     </div>
@@ -2456,19 +2511,51 @@ export default function Home() {
         
         <div>
           <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Ghost Variant (for navbars/toolbars)
+            Ghost Variant (minimal inline)
+          </span>
+          <Select.Root defaultValue="apple">
+            <Select.Trigger variant="ghost">
+              <Select.Value placeholder="Select" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.List>
+                    <Select.Item value="apple">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Apple</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="banana">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Banana</Select.ItemText>
+                    </Select.Item>
+                    <Select.Item value="orange">
+                      <Select.ItemIndicator />
+                      <Select.ItemText>Orange</Select.ItemText>
+                    </Select.Item>
+                  </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Hybrid Variant (for navbars/toolbars)
           </span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ color: 'var(--text-secondary)' }}>Environment:</span>
             <Select.Root defaultValue="production">
-              <Select.Trigger variant="ghost">
+              <Select.Trigger variant="hybrid">
                 <Select.Value>
                   {(value: string) => {
                     const labels: Record<string, string> = { production: 'Production', sandbox: 'Sandbox', staging: 'Staging' };
                     return labels[value] || value;
                   }}
                 </Select.Value>
-                <Select.GhostIcon />
+                <Select.HybridIcon />
               </Select.Trigger>
               <Select.Portal>
                 <Select.Positioner>
@@ -2496,17 +2583,17 @@ export default function Home() {
         
         <div>
           <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
-            Ghost Disabled
+            Hybrid Disabled
           </span>
           <Select.Root disabled defaultValue="production">
-            <Select.Trigger variant="ghost">
+            <Select.Trigger variant="hybrid">
               <Select.Value>
                 {(value: string) => {
                   const labels: Record<string, string> = { production: 'Production', sandbox: 'Sandbox', staging: 'Staging' };
                   return labels[value] || value;
                 }}
               </Select.Value>
-              <Select.GhostIcon />
+              <Select.HybridIcon />
             </Select.Trigger>
             <Select.Portal>
               <Select.Positioner>
@@ -2517,6 +2604,25 @@ export default function Home() {
                       <Select.ItemIndicator />
                     </Select.Item>
                   </Select.List>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>
+            Empty State
+          </span>
+          <Select.Root>
+            <Select.Trigger>
+              <Select.Value placeholder="Select an option" />
+              <Select.Icon />
+            </Select.Trigger>
+            <Select.Portal>
+              <Select.Positioner>
+                <Select.Popup>
+                  <Select.Empty>No options available</Select.Empty>
                 </Select.Popup>
               </Select.Positioner>
             </Select.Portal>

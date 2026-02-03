@@ -2,13 +2,17 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { Button } from '../Button';
 import { CentralIcon } from '../Icon';
 import styles from './Pagination.module.scss';
 
+// Context for sharing pagination state
 interface PaginationContextValue {
   page: number;
+  totalItems: number;
+  pageSize: number;
   totalPages: number;
+  startItem: number;
+  endItem: number;
   onPageChange?: (page: number) => void;
 }
 
@@ -24,24 +28,30 @@ function usePaginationContext() {
   return context;
 }
 
+// Root
 export interface PaginationRootProps extends React.ComponentPropsWithoutRef<'nav'> {
   /** Current page number (1-indexed) */
   page: number;
-  /** Total number of pages */
-  totalPages: number;
+  /** Total number of items */
+  totalItems: number;
+  /** Number of items per page */
+  pageSize: number;
   /** Callback when page changes */
   onPageChange?: (page: number) => void;
-  children?: React.ReactNode;
 }
 
 const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
   function PaginationRoot(props, forwardedRef) {
-    const { page, totalPages, onPageChange, className, children, ...elementProps } =
+    const { page, totalItems, pageSize, onPageChange, className, children, ...elementProps } =
       props;
 
+    const totalPages = Math.ceil(totalItems / pageSize);
+    const startItem = totalItems === 0 ? 0 : (page - 1) * pageSize + 1;
+    const endItem = Math.min(page * pageSize, totalItems);
+
     const contextValue = React.useMemo(
-      () => ({ page, totalPages, onPageChange }),
-      [page, totalPages, onPageChange]
+      () => ({ page, totalItems, pageSize, totalPages, startItem, endItem, onPageChange }),
+      [page, totalItems, pageSize, totalPages, startItem, endItem, onPageChange]
     );
 
     return (
@@ -59,18 +69,98 @@ const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
   }
 );
 
-export interface PaginationPreviousProps
-  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
-  /** Custom label (default: "Previous") */
-  label?: string;
+// Label - "Items per page" text
+export interface PaginationLabelProps extends React.ComponentPropsWithoutRef<'span'> {}
+
+const PaginationLabel = React.forwardRef<HTMLSpanElement, PaginationLabelProps>(
+  function PaginationLabel(props, forwardedRef) {
+    const { className, children = 'Items per page', ...elementProps } = props;
+
+    return (
+      <span
+        ref={forwardedRef}
+        className={clsx(styles.label, className)}
+        {...elementProps}
+      >
+        {children}
+      </span>
+    );
+  }
+);
+
+// Range - Shows "{start} / {end} of {total}"
+export interface PaginationRangeProps extends Omit<React.ComponentPropsWithoutRef<'span'>, 'children'> {
+  /** 
+   * Custom render function for the range text.
+   * Receives startItem, endItem, and totalItems.
+   */
+  children?: (context: { startItem: number; endItem: number; totalItems: number }) => React.ReactNode;
+  /** Format for total items (e.g., "2.5K" vs "2500"). Default shows formatted. */
+  formatTotal?: (total: number) => string;
 }
+
+function formatNumber(num: number): string {
+  if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(1).replace(/\.0$/, '')}M`;
+  }
+  if (num >= 1000) {
+    return `${(num / 1000).toFixed(1).replace(/\.0$/, '')}K`;
+  }
+  return num.toString();
+}
+
+const PaginationRange = React.forwardRef<HTMLSpanElement, PaginationRangeProps>(
+  function PaginationRange(props, forwardedRef) {
+    const { className, children, formatTotal = formatNumber, ...elementProps } = props;
+    const { startItem, endItem, totalItems } = usePaginationContext();
+
+    const content = children
+      ? children({ startItem, endItem, totalItems })
+      : `${startItem}–${endItem} of ${formatTotal(totalItems)}`;
+
+    return (
+      <span
+        ref={forwardedRef}
+        className={clsx(styles.range, className)}
+        {...elementProps}
+      >
+        {content}
+      </span>
+    );
+  }
+);
+
+// Navigation - Container for joined prev/next buttons
+export interface PaginationNavigationProps extends React.ComponentPropsWithoutRef<'div'> {}
+
+const PaginationNavigation = React.forwardRef<HTMLDivElement, PaginationNavigationProps>(
+  function PaginationNavigation(props, forwardedRef) {
+    const { className, children, ...elementProps } = props;
+
+    return (
+      <div
+        ref={forwardedRef}
+        className={clsx(styles.navigation, className)}
+        role="group"
+        aria-label="Page navigation"
+        {...elementProps}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+// Previous button
+export interface PaginationPreviousProps
+  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {}
 
 const PaginationPrevious = React.forwardRef<HTMLButtonElement, PaginationPreviousProps>(
   function PaginationPrevious(props, forwardedRef) {
-    const { label = 'Previous', className, onClick, ...elementProps } = props;
+    const { className, onClick, disabled, ...elementProps } = props;
     const { page, onPageChange } = usePaginationContext();
 
-    const isDisabled = page <= 1;
+    const isDisabled = disabled ?? page <= 1;
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
@@ -80,34 +170,31 @@ const PaginationPrevious = React.forwardRef<HTMLButtonElement, PaginationPreviou
     };
 
     return (
-      <Button
+      <button
         ref={forwardedRef}
-        variant="ghost"
-        size="default"
+        type="button"
+        aria-label="Previous page"
         disabled={isDisabled}
         onClick={handleClick}
-        className={clsx(styles.navButton, className)}
-        leadingIcon={<CentralIcon name="IconChevronLeft" size={16} />}
+        className={clsx(styles.button, className)}
         {...elementProps}
       >
-        {label}
-      </Button>
+        <CentralIcon name="IconChevronLeftSmall" size={16} />
+      </button>
     );
   }
 );
 
+// Next button
 export interface PaginationNextProps
-  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
-  /** Custom label (default: "Next") */
-  label?: string;
-}
+  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {}
 
 const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNextProps>(
   function PaginationNext(props, forwardedRef) {
-    const { label = 'Next', className, onClick, ...elementProps } = props;
+    const { className, onClick, disabled, ...elementProps } = props;
     const { page, totalPages, onPageChange } = usePaginationContext();
 
-    const isDisabled = page >= totalPages;
+    const isDisabled = disabled ?? page >= totalPages;
 
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
@@ -117,158 +204,29 @@ const PaginationNext = React.forwardRef<HTMLButtonElement, PaginationNextProps>(
     };
 
     return (
-      <Button
-        ref={forwardedRef}
-        variant="ghost"
-        size="default"
-        disabled={isDisabled}
-        onClick={handleClick}
-        className={clsx(styles.navButton, className)}
-        trailingIcon={<CentralIcon name="IconChevronRight" size={16} />}
-        {...elementProps}
-      >
-        {label}
-      </Button>
-    );
-  }
-);
-
-export interface PaginationItemProps
-  extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
-  /** Page number this item represents */
-  pageNumber: number;
-}
-
-const PaginationItem = React.forwardRef<HTMLButtonElement, PaginationItemProps>(
-  function PaginationItem(props, forwardedRef) {
-    const { pageNumber, className, onClick, ...elementProps } = props;
-    const { page, onPageChange } = usePaginationContext();
-
-    const isSelected = page === pageNumber;
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      onClick?.(event);
-      if (!event.defaultPrevented && onPageChange && !isSelected) {
-        onPageChange(pageNumber);
-      }
-    };
-
-    return (
       <button
         ref={forwardedRef}
         type="button"
-        aria-label={`Page ${pageNumber}`}
-        aria-current={isSelected ? 'page' : undefined}
-        data-selected={isSelected || undefined}
+        aria-label="Next page"
+        disabled={isDisabled}
         onClick={handleClick}
-        className={clsx(styles.item, className)}
+        className={clsx(styles.button, className)}
         {...elementProps}
       >
-        {pageNumber}
+        <CentralIcon name="IconChevronRightSmall" size={16} />
       </button>
     );
   }
 );
 
-export interface PaginationEllipsisProps
-  extends React.ComponentPropsWithoutRef<'span'> {}
-
-const PaginationEllipsis = React.forwardRef<HTMLSpanElement, PaginationEllipsisProps>(
-  function PaginationEllipsis(props, forwardedRef) {
-    const { className, ...elementProps } = props;
-
-    return (
-      <span
-        ref={forwardedRef}
-        aria-hidden="true"
-        className={clsx(styles.ellipsis, className)}
-        {...elementProps}
-      >
-        <CentralIcon name="IconDotGrid1x3Horizontal" size={16} />
-      </span>
-    );
-  }
-);
-
-export interface PaginationItemsProps extends React.ComponentPropsWithoutRef<'div'> {
-  /** Number of siblings to show around current page */
-  siblingCount?: number;
-}
-
-const PaginationItems = React.forwardRef<HTMLDivElement, PaginationItemsProps>(
-  function PaginationItems(props, forwardedRef) {
-    const { siblingCount = 1, className, ...elementProps } = props;
-    const { page, totalPages } = usePaginationContext();
-
-    const range = React.useMemo(() => {
-      return generatePaginationRange(page, totalPages, siblingCount);
-    }, [page, totalPages, siblingCount]);
-
-    return (
-      <div
-        ref={forwardedRef}
-        className={clsx(styles.items, className)}
-        {...elementProps}
-      >
-        {range.map((item, index) => {
-          if (item === 'ellipsis') {
-            return <PaginationEllipsis key={`ellipsis-${index}`} />;
-          }
-          return <PaginationItem key={item} pageNumber={item} />;
-        })}
-      </div>
-    );
-  }
-);
-
-type PaginationRangeItem = number | 'ellipsis';
-
-function generatePaginationRange(
-  currentPage: number,
-  totalPages: number,
-  siblingCount: number
-): PaginationRangeItem[] {
-  const totalPageNumbers = siblingCount * 2 + 5;
-
-  if (totalPages <= totalPageNumbers) {
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
-  }
-
-  const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
-  const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
-
-  const showLeftEllipsis = leftSiblingIndex > 2;
-  const showRightEllipsis = rightSiblingIndex < totalPages - 1;
-
-  if (!showLeftEllipsis && showRightEllipsis) {
-    const leftItemCount = 3 + 2 * siblingCount;
-    const leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
-    return [...leftRange, 'ellipsis', totalPages];
-  }
-
-  if (showLeftEllipsis && !showRightEllipsis) {
-    const rightItemCount = 3 + 2 * siblingCount;
-    const rightRange = Array.from(
-      { length: rightItemCount },
-      (_, i) => totalPages - rightItemCount + i + 1
-    );
-    return [1, 'ellipsis', ...rightRange];
-  }
-
-  const middleRange = Array.from(
-    { length: rightSiblingIndex - leftSiblingIndex + 1 },
-    (_, i) => leftSiblingIndex + i
-  );
-  return [1, 'ellipsis', ...middleRange, 'ellipsis', totalPages];
-}
-
+// Export compound component
 export const Pagination = {
   Root: PaginationRoot,
+  Label: PaginationLabel,
+  Range: PaginationRange,
+  Navigation: PaginationNavigation,
   Previous: PaginationPrevious,
   Next: PaginationNext,
-  Item: PaginationItem,
-  Items: PaginationItems,
-  Ellipsis: PaginationEllipsis,
 };
 
 export default Pagination;

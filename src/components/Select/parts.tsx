@@ -18,8 +18,13 @@ export function Root<Value = string, Multiple extends boolean | undefined = fals
 
 // Trigger
 export interface TriggerProps extends BaseSelect.Trigger.Props {
-  /** Visual variant - "default" for form fields, "ghost" for navigation/toolbars */
-  variant?: 'default' | 'ghost';
+  /**
+   * Visual variant:
+   * - "default" for form fields (bordered, full width)
+   * - "ghost" for minimal inline selects (no border, hover bg)
+   * - "hybrid" for navigation/toolbars (label + icon button)
+   */
+  variant?: 'default' | 'ghost' | 'hybrid';
 }
 
 export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
@@ -30,6 +35,7 @@ export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
         className={clsx(
           styles.trigger,
           variant === 'ghost' && styles.triggerGhost,
+          variant === 'hybrid' && styles.triggerHybrid,
           className
         )}
         data-variant={variant}
@@ -76,26 +82,29 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
   }
 );
 
-// GhostIcon - icon for ghost variant with its own hover/focus container
-export interface GhostIconProps extends Omit<BaseSelect.Icon.Props, 'children'> {
+// HybridIcon - icon for hybrid variant with its own hover/focus container
+export interface HybridIconProps extends Omit<BaseSelect.Icon.Props, 'children'> {
   children?: React.ReactNode;
 }
 
-export const GhostIcon = React.forwardRef<HTMLSpanElement, GhostIconProps>(
-  function GhostIcon({ className, children, ...props }, ref) {
+export const HybridIcon = React.forwardRef<HTMLSpanElement, HybridIconProps>(
+  function HybridIcon({ className, children, ...props }, ref) {
     return (
       <BaseSelect.Icon
         ref={ref}
-        className={clsx(styles.ghostIcon, className)}
+        className={clsx(styles.hybridIcon, className)}
         {...props}
       >
-        <span className={styles.ghostIconButton}>
+        <span className={styles.hybridIconButton}>
           {children ?? <CentralIcon name="IconChevronGrabberVertical" size={16} />}
         </span>
       </BaseSelect.Icon>
     );
   }
 );
+
+/** @deprecated Use HybridIcon instead */
+export const GhostIcon = HybridIcon;
 
 // Portal
 export interface PortalProps extends BaseSelect.Portal.Props {}
@@ -233,6 +242,19 @@ export const ItemText = React.forwardRef<HTMLDivElement, ItemTextProps>(
         className={clsx(styles.itemText, className)}
         {...props}
       />
+    );
+  }
+);
+
+// Empty - shown when no options available
+export interface EmptyProps extends React.ComponentPropsWithoutRef<'div'> {}
+
+export const Empty = React.forwardRef<HTMLDivElement, EmptyProps>(
+  function Empty({ className, children, ...props }, ref) {
+    return (
+      <div ref={ref} className={clsx(styles.empty, className)} {...props}>
+        {children ?? 'No options available'}
+      </div>
     );
   }
 );

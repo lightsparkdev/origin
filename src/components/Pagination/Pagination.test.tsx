@@ -3,10 +3,11 @@ import {
   BasicPagination,
   FirstPage,
   LastPage,
-  ManyPages,
-  FewPages,
   SinglePage,
+  MiddlePage,
+  EmptyState,
   ControlledPagination,
+  CustomRangeFormat,
 } from './Pagination.test-stories';
 
 test.describe('Pagination', () => {
@@ -23,21 +24,24 @@ test.describe('Pagination', () => {
       await expect(nextButton).toBeVisible();
     });
 
-    test('renders page number buttons', async ({ mount, page }) => {
-      await mount(<FewPages />);
+    test('renders label text', async ({ mount, page }) => {
+      await mount(<FirstPage />);
 
-      // Should show all 5 pages without ellipsis
-      for (let i = 1; i <= 5; i++) {
-        const pageButton = page.getByRole('button', { name: `Page ${i}` });
-        await expect(pageButton).toBeVisible();
-      }
+      await expect(page.getByText('Items per page')).toBeVisible();
     });
 
-    test('marks current page as selected', async ({ mount, page }) => {
-      await mount(<FewPages />);
+    test('renders range text', async ({ mount, page }) => {
+      await mount(<FirstPage />);
 
-      const currentPage = page.getByRole('button', { name: 'Page 2', exact: true });
-      await expect(currentPage).toHaveAttribute('aria-current', 'page');
+      // Should show "1–100 of 2.5K"
+      await expect(page.getByText(/1–100 of 2\.5K/)).toBeVisible();
+    });
+
+    test('renders last page range correctly', async ({ mount, page }) => {
+      await mount(<LastPage />);
+
+      // Page 25 of 2500 items at 100 per page = items 2401-2500
+      await expect(page.getByText(/2401–2500 of 2\.5K/)).toBeVisible();
     });
   });
 
@@ -66,7 +70,7 @@ test.describe('Pagination', () => {
     });
 
     test('both buttons enabled for middle pages', async ({ mount, page }) => {
-      await mount(<ManyPages />);
+      await mount(<MiddlePage />);
 
       const prevButton = page.getByRole('button', { name: /previous/i });
       const nextButton = page.getByRole('button', { name: /next/i });
@@ -75,36 +79,24 @@ test.describe('Pagination', () => {
     });
   });
 
-  test.describe('Ellipsis', () => {
-    test('shows ellipsis for many pages', async ({ mount, page }) => {
-      await mount(<ManyPages />);
+  test.describe('Empty State', () => {
+    test('shows 0–0 for empty state', async ({ mount, page }) => {
+      await mount(<EmptyState />);
 
-      // Should have ellipsis elements
-      const ellipses = page.locator('[aria-hidden="true"]');
-      await expect(ellipses.first()).toBeVisible();
+      await expect(page.getByText(/0–0 of 0/)).toBeVisible();
     });
 
-    test('no ellipsis for few pages', async ({ mount, page }) => {
-      await mount(<FewPages />);
+    test('both buttons disabled for empty state', async ({ mount, page }) => {
+      await mount(<EmptyState />);
 
-      // Should not have ellipsis
-      const ellipsis = page.locator('span:has-text("...")');
-      await expect(ellipsis).toHaveCount(0);
+      const prevButton = page.getByRole('button', { name: /previous/i });
+      const nextButton = page.getByRole('button', { name: /next/i });
+      await expect(prevButton).toBeDisabled();
+      await expect(nextButton).toBeDisabled();
     });
   });
 
   test.describe('Interaction', () => {
-    test('clicking page number updates selection', async ({ mount, page }) => {
-      await mount(<ControlledPagination />);
-
-      // Initial state
-      await expect(page.getByTestId('current-page')).toHaveText('Current page: 5');
-
-      // Click page 6 (visible sibling of page 5)
-      await page.getByRole('button', { name: 'Page 6', exact: true }).click();
-      await expect(page.getByTestId('current-page')).toHaveText('Current page: 6');
-    });
-
     test('clicking Previous goes to previous page', async ({ mount, page }) => {
       await mount(<ControlledPagination />);
 
@@ -125,46 +117,64 @@ test.describe('Pagination', () => {
   });
 
   test.describe('Keyboard Navigation', () => {
-    test('page buttons are focusable', async ({ mount, page }) => {
-      await mount(<FewPages />);
+    test('nav buttons are focusable', async ({ mount, page }) => {
+      await mount(<MiddlePage />);
 
-      const pageButton = page.getByRole('button', { name: 'Page 1' });
-      await pageButton.focus();
-      await expect(pageButton).toBeFocused();
+      const prevButton = page.getByRole('button', { name: /previous/i });
+      await prevButton.focus();
+      await expect(prevButton).toBeFocused();
     });
 
-    test('Enter activates page button', async ({ mount, page }) => {
+    test('Enter activates nav button', async ({ mount, page }) => {
       await mount(<ControlledPagination />);
 
-      const page6Button = page.getByRole('button', { name: 'Page 6', exact: true });
-      await page6Button.focus();
+      const nextButton = page.getByRole('button', { name: /next/i });
+      await nextButton.focus();
       await page.keyboard.press('Enter');
 
       await expect(page.getByTestId('current-page')).toHaveText('Current page: 6');
     });
   });
 
+  test.describe('Custom Render', () => {
+    test('supports custom range format', async ({ mount, page }) => {
+      await mount(<CustomRangeFormat />);
+
+      await expect(page.getByText(/Showing/)).toBeVisible();
+      await expect(page.getByText(/1-100/)).toBeVisible();
+      await expect(page.getByText(/of/)).toBeVisible();
+      await expect(page.getByText(/2500/)).toBeVisible();
+    });
+  });
+
   test.describe('Styling', () => {
-    test('page items have correct border radius', async ({ mount, page }) => {
-      await mount(<FewPages />);
+    test('navigation buttons have correct size', async ({ mount, page }) => {
+      await mount(<MiddlePage />);
 
-      const pageButton = page.getByRole('button', { name: 'Page 1' });
-      const borderRadius = await pageButton.evaluate((el) =>
-        getComputedStyle(el).borderRadius
-      );
+      const prevButton = page.getByRole('button', { name: /previous/i });
+      const box = await prevButton.boundingBox();
 
-      expect(borderRadius).toBe('6px');
+      expect(box?.width).toBe(24);
+      expect(box?.height).toBe(24);
     });
 
-    test('selected page has distinct styling', async ({ mount, page }) => {
-      await mount(<FewPages />);
+    test('buttons have correct border radius for joined appearance', async ({ mount, page }) => {
+      await mount(<MiddlePage />);
 
-      const selectedPage = page.getByRole('button', { name: 'Page 2', exact: true });
-      const hasSelectedAttr = await selectedPage.evaluate((el) =>
-        el.hasAttribute('data-selected')
+      const prevButton = page.getByRole('button', { name: /previous/i });
+      const nextButton = page.getByRole('button', { name: /next/i });
+
+      // Left button: rounded on left, square on right
+      const prevRadius = await prevButton.evaluate((el) =>
+        getComputedStyle(el).borderRadius
       );
+      expect(prevRadius).toBe('6px 0px 0px 6px');
 
-      expect(hasSelectedAttr).toBe(true);
+      // Right button: square on left, rounded on right
+      const nextRadius = await nextButton.evaluate((el) =>
+        getComputedStyle(el).borderRadius
+      );
+      expect(nextRadius).toBe('0px 6px 6px 0px');
     });
   });
 });

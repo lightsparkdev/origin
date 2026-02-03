@@ -7,7 +7,10 @@ export type {
   TriggerProps as SelectTriggerProps,
   ValueProps as SelectValueProps,
   IconProps as SelectIconProps,
-  GhostIconProps as SelectGhostIconProps,
+  HybridIconProps as SelectHybridIconProps,
+  /** @deprecated Use SelectHybridIconProps instead */
+  HybridIconProps as SelectGhostIconProps,
+  EmptyProps as SelectEmptyProps,
   PortalProps as SelectPortalProps,
   PositionerProps as SelectPositionerProps,
   PopupProps as SelectPopupProps,

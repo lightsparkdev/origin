@@ -1,9 +1,9 @@
 export { Pagination } from './Pagination';
 export type {
   PaginationRootProps,
+  PaginationLabelProps,
+  PaginationRangeProps,
+  PaginationNavigationProps,
   PaginationPreviousProps,
   PaginationNextProps,
-  PaginationItemProps,
-  PaginationItemsProps,
-  PaginationEllipsisProps,
 } from './Pagination';
