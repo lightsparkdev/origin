@@ -491,6 +491,7 @@
 .separator {
   --separator-margin-block: var(--spacing-xs);
   
+  width: 100%;
   height: var(--stroke-xs);
   margin-block: var(--separator-margin-block);
   background-color: var(--border-tertiary);
