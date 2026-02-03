@@ -1,9 +1,7 @@
-// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6144-3042
+// https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6144-3042
 
 @use '../../tokens/text-styles';
 
-// Root container
-// CSS custom properties can be overridden via props: width, collapsedWidth, itemSize
 .root {
   display: flex;
   flex-direction: column;
@@ -21,7 +19,6 @@
   }
 }
 
-// Header slot
 .header {
   display: flex;
   flex-direction: column;
@@ -34,7 +31,6 @@
   }
 }
 
-// Content area
 .content {
   display: flex;
   flex-direction: column;
@@ -42,12 +38,10 @@
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-
-  // Hide scrollbar but keep scroll functionality
-  scrollbar-width: none; // Firefox
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none; // Chrome/Safari
+    display: none;
   }
 
   [data-collapsed='true'] & {
@@ -55,7 +49,6 @@
   }
 }
 
-// Footer slot
 .footer {
   display: flex;
   flex-direction: column;
@@ -68,7 +61,6 @@
   }
 }
 
-// Group container
 .group {
   display: flex;
   flex-direction: column;
@@ -80,7 +72,6 @@
   }
 }
 
-// Group header
 .groupHeader {
   @include text-styles.label-sm;
   display: flex;
@@ -90,7 +81,6 @@
   color: var(--text-secondary);
 }
 
-// Items container within a group
 .items {
   display: flex;
   flex-direction: column;
@@ -101,7 +91,6 @@
   }
 }
 
-// Button reset mixin
 @mixin button-reset {
   background: transparent;
   border: none;
@@ -117,7 +106,6 @@
   }
 }
 
-// Individual item
 .item {
   @include button-reset;
   display: flex;
@@ -127,12 +115,10 @@
   border-radius: var(--corner-radius-md);
   transition: background-color 150ms ease;
 
-  // Expanded state
   [data-collapsed='false'] & {
     width: 100%;
   }
 
-  // Collapsed state - icon only
   [data-collapsed='true'] & {
     width: var(--sidebar-item-size, 36px);
     height: var(--sidebar-item-size, 36px);
@@ -140,13 +126,11 @@
     padding: 0;
   }
 
-  // Focus state
   &:focus-visible {
     outline: 2px solid var(--border-primary);
     outline-offset: -2px;
   }
 
-  // Hover state - promotes text and icon to primary colors
   &:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
 
@@ -159,7 +143,6 @@
     }
   }
 
-  // Active/selected state - no background, just color promotion
   &[data-active='true'] {
     .itemLabel {
       color: var(--text-primary);
@@ -170,19 +153,16 @@
     }
   }
 
-  // Active + hover - shows hover background
   &[data-active='true']:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
   }
 
-  // Disabled state
   &:disabled,
   &[data-disabled='true'] {
     opacity: 0.5;
   }
 }
 
-// Trigger button
 .trigger {
   @include button-reset;
   display: flex;
@@ -205,7 +185,6 @@
   }
 }
 
-// Item icon
 .itemIcon {
   display: flex;
   align-items: center;
@@ -216,7 +195,6 @@
   color: var(--icon-secondary);
 }
 
-// Item label
 .itemLabel {
   @include text-styles.body;
   flex: 1;
@@ -227,14 +205,12 @@
   text-overflow: ellipsis;
 }
 
-// Item trailing content (chevron, shortcut, etc.)
 .itemTrailing {
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
 
-// Chevron icon for expandable items
 .chevron {
   display: flex;
   align-items: center;
@@ -249,20 +225,17 @@
   }
 }
 
-// Expandable item wrapper
 .expandableItem {
   display: flex;
   flex-direction: column;
 }
 
-// Submenu (nested items)
 .submenu {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-px);
   position: relative;
 
-  // Border variant (default): left border indicator with asymmetric padding
   &[data-variant='border'] {
     padding-left: 28px;
     padding-right: var(--spacing-lg);
@@ -278,13 +251,11 @@
     }
   }
 
-  // Indent variant: simple indentation with equal horizontal padding
   &[data-variant='indent'] {
     padding-inline: var(--spacing-xs);
   }
 }
 
-// Submenu item
 .submenuItem {
   @include button-reset;
   display: flex;
@@ -299,7 +270,6 @@
     outline-offset: -2px;
   }
 
-  // Hover state - promotes text and icon to primary colors
   &:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
 
@@ -312,7 +282,6 @@
     }
   }
 
-  // Active/selected state - no background, just color promotion
   &[data-active='true'] {
     .itemLabel {
       color: var(--text-primary);
@@ -323,7 +292,6 @@
     }
   }
 
-  // Active + hover - shows hover background
   &[data-active='true']:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
   }
@@ -334,7 +302,6 @@
   }
 }
 
-// Drilldown item wrapper
 .drilldownItem {
   display: flex;
   align-items: center;
@@ -344,12 +311,10 @@
     opacity: 0.5;
   }
 
-  // Expanded state
   [data-collapsed='false'] & {
     width: 100%;
   }
 
-  // Collapsed state - show only main area as icon
   [data-collapsed='true'] & {
     width: var(--sidebar-item-size, 36px);
     height: var(--sidebar-item-size, 36px);
@@ -378,7 +343,6 @@
   }
 }
 
-// Drilldown main clickable area
 .drilldownMain {
   @include button-reset;
   display: flex;
@@ -400,7 +364,6 @@
   }
 }
 
-// Drilldown button (navigate action)
 .drilldownButton {
   @include button-reset;
   display: flex;
@@ -424,13 +387,11 @@
   }
 }
 
-// Tree item wrapper
 .treeItem {
   display: flex;
   flex-direction: column;
 }
 
-// Tree item button (asymmetric padding per Figma spec)
 .treeItemButton {
   @include button-reset;
   display: flex;
@@ -440,12 +401,10 @@
   border-radius: var(--corner-radius-md);
   transition: background-color 150ms ease;
 
-  // Expanded state
   [data-collapsed='false'] & {
     width: 100%;
   }
 
-  // Collapsed state - icon only
   [data-collapsed='true'] & {
     width: var(--sidebar-item-size, 36px);
     height: var(--sidebar-item-size, 36px);
@@ -453,13 +412,11 @@
     padding: 0;
   }
 
-  // Focus state
   &:focus-visible {
     outline: 2px solid var(--border-primary);
     outline-offset: -2px;
   }
 
-  // Hover state
   &:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
 
@@ -472,7 +429,6 @@
     }
   }
 
-  // Active/selected state
   &[data-active='true'] {
     .itemLabel {
       color: var(--text-primary);
@@ -483,19 +439,16 @@
     }
   }
 
-  // Active + hover
   &[data-active='true']:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
   }
 
-  // Disabled state
   &:disabled,
   &[data-disabled='true'] {
     opacity: 0.5;
   }
 }
 
-// Tree chevron (horizontal, rotates 90° when open)
 .treeChevron {
   display: flex;
   align-items: center;
@@ -511,7 +464,6 @@
   }
 }
 
-// Tree children container
 .treeChildren {
   display: flex;
   flex-direction: column;
@@ -520,7 +472,6 @@
   padding-right: var(--spacing-xs);
 }
 
-// Separator
 .separator {
   height: var(--stroke-xs);
   margin: var(--spacing-xs) 0;
@@ -528,7 +479,6 @@
   border: none;
 }
 
-// Reduced motion support
 @media (prefers-reduced-motion: reduce) {
   .root,
   .item,

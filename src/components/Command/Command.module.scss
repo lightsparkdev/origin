@@ -1,7 +1,7 @@
-// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=2348-283
+// https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2348-283
+
 @use '../../tokens/text-styles' as *;
 
-// Backdrop
 .backdrop {
   position: fixed;
   inset: 0;
@@ -18,8 +18,6 @@
   }
 }
 
-// Popup container - matches Figma Command design
-// Anchored at top so input stays fixed as results change
 .popup {
   position: fixed;
   top: 15%;
@@ -51,7 +49,6 @@
   }
 }
 
-// Input wrapper - contains the input field
 .inputWrapper {
   display: flex;
   flex-direction: column;
@@ -59,7 +56,6 @@
   border-bottom: var(--stroke-xs) solid var(--border-tertiary);
 }
 
-// Input field
 .input {
   @include input;
   width: 100%;
@@ -79,14 +75,11 @@
   }
 }
 
-// Scrollable list container
 .list {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4xs);
-  // Padding on all sides - creates visual gap at scroll edges
   padding: var(--spacing-3xs);
-  // scroll-padding ensures scrollIntoView respects the gap
   scroll-padding-block: var(--spacing-3xs);
   overflow-y: auto;
   overflow-x: hidden;
@@ -94,28 +87,22 @@
   flex: 1;
   min-height: 0;
   outline: none;
-
-  // Hide scrollbar but keep scroll functionality
-  scrollbar-width: none; // Firefox
-  -ms-overflow-style: none; // IE/Edge
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none; // Chrome/Safari/Opera
+    display: none;
   }
 
-  // Bottom border when there's content
   &:not([data-empty]) {
     border-bottom: var(--stroke-xs) solid var(--border-tertiary);
   }
 }
 
-// Group container
 .group {
   display: flex;
   flex-direction: column;
 }
 
-// Group heading - matches Figma _Group Header
 .groupHeading {
   @include label-sm;
   display: flex;
@@ -125,7 +112,6 @@
   color: var(--text-secondary);
 }
 
-// Command item - matches Figma _Item
 .item {
   @include body;
   display: flex;
@@ -148,14 +134,12 @@
   }
 }
 
-// Item leading content (icon + label)
 .itemLeading {
   display: flex;
   align-items: center;
   gap: var(--spacing-2xs);
 }
 
-// Item icon slot
 .itemIcon {
   display: flex;
   align-items: center;
@@ -172,14 +156,11 @@
   }
 }
 
-// Item label (allows flex-grow for shortcut alignment)
 .itemLabel {
   flex: 1;
   min-width: 0;
 }
 
-// Footer for keyboard navigation hints
-// flex-shrink: 0 keeps footer fixed while list scrolls
 .footer {
   display: flex;
   align-items: center;
@@ -208,7 +189,6 @@
   gap: var(--spacing-xs);
 }
 
-// Empty state
 .empty {
   @include body;
   display: flex;
@@ -222,7 +202,6 @@
   }
 }
 
-// Separator between groups
 .separator {
   height: var(--stroke-xs);
   margin-block: var(--spacing-3xs);

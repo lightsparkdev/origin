@@ -1,4 +1,4 @@
-// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6144-3042
+// https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6144-3042
 
 'use client';
 
@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import styles from './Sidebar.module.scss';
 import { CentralIcon } from '../Icon';
 
-// Context
 interface SidebarContextValue {
   collapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
@@ -16,10 +15,6 @@ interface SidebarContextValue {
 
 const SidebarContext = React.createContext<SidebarContextValue | null>(null);
 
-/**
- * Hook to access sidebar state and controls.
- * Must be used within a Sidebar.Provider.
- */
 export function useSidebar() {
   const context = React.useContext(SidebarContext);
   if (!context) {
@@ -28,15 +23,10 @@ export function useSidebar() {
   return context;
 }
 
-// Provider
 export interface ProviderProps {
-  /** Controlled collapsed state */
   collapsed?: boolean;
-  /** Default collapsed state (uncontrolled) */
   defaultCollapsed?: boolean;
-  /** Callback when collapsed state changes */
   onCollapsedChange?: (collapsed: boolean) => void;
-  /** Children */
   children: React.ReactNode;
 }
 
@@ -72,21 +62,11 @@ export function Provider({
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
 }
 
-// Root
 export interface RootProps extends React.ComponentPropsWithoutRef<'nav'> {
-  /**
-   * Whether the sidebar is collapsed (icon-only mode).
-   * If used without Provider, this controls the collapsed state directly.
-   * If used with Provider, this prop is ignored and Provider state is used.
-   */
   collapsed?: boolean;
-  /** Callback when collapsed state should change (only used without Provider) */
   onCollapsedChange?: (collapsed: boolean) => void;
-  /** Width of the sidebar when expanded. Default: 224px */
   width?: number | string;
-  /** Width of the sidebar when collapsed. Default: 52px */
   collapsedWidth?: number | string;
-  /** Size of items when collapsed (square). Default: 36px */
   itemSize?: number | string;
 }
 
@@ -105,11 +85,8 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
   ref
 ) {
   const context = React.useContext(SidebarContext);
-
-  // If no Provider, create internal state
   const [internalCollapsed, setInternalCollapsed] = React.useState(collapsedProp);
 
-  // Sync with prop changes when uncontrolled
   React.useEffect(() => {
     if (!context) {
       setInternalCollapsed(collapsedProp);
@@ -128,7 +105,6 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
     [context, onCollapsedChange]
   );
 
-  // Build custom properties for sizing
   const customStyles = {
     ...style,
     ...(width !== undefined && { '--sidebar-width': typeof width === 'number' ? `${width}px` : width }),
@@ -136,7 +112,6 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
     ...(itemSize !== undefined && { '--sidebar-item-size': typeof itemSize === 'number' ? `${itemSize}px` : itemSize }),
   } as React.CSSProperties;
 
-  // Wrap in provider if not already in one
   const content = (
     <nav
       ref={ref}
@@ -150,7 +125,6 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
     </nav>
   );
 
-  // Memoize implicit provider value for standalone usage
   const implicitValue = React.useMemo(
     () => ({
       collapsed,
@@ -164,7 +138,6 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
     return content;
   }
 
-  // Create implicit provider for standalone usage
   return (
     <SidebarContext.Provider value={implicitValue}>
       {content}
@@ -172,15 +145,10 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
   );
 });
 
-// Trigger
 export interface TriggerProps extends Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> {
-  /** Icon to show when sidebar is expanded */
   expandedIcon?: React.ReactNode;
-  /** Icon to show when sidebar is collapsed */
   collapsedIcon?: React.ReactNode;
-  /** Label for accessibility */
   label?: string;
-  /** Custom children (overrides icons) */
   children?: React.ReactNode;
 }
 
@@ -212,7 +180,6 @@ export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(functio
   );
 });
 
-// Header
 export interface HeaderProps extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const Header = React.forwardRef<HTMLDivElement, HeaderProps>(function Header(
@@ -226,7 +193,6 @@ export const Header = React.forwardRef<HTMLDivElement, HeaderProps>(function Hea
   );
 });
 
-// Content
 export interface ContentProps extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const Content = React.forwardRef<HTMLDivElement, ContentProps>(function Content(
@@ -240,7 +206,6 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>(function C
   );
 });
 
-// Footer
 export interface FooterProps extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const Footer = React.forwardRef<HTMLDivElement, FooterProps>(function Footer(
@@ -254,7 +219,6 @@ export const Footer = React.forwardRef<HTMLDivElement, FooterProps>(function Foo
   );
 });
 
-// Group
 export interface GroupProps extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const Group = React.forwardRef<HTMLDivElement, GroupProps>(function Group(
@@ -268,7 +232,6 @@ export const Group = React.forwardRef<HTMLDivElement, GroupProps>(function Group
   );
 });
 
-// Group Header
 export interface GroupHeaderProps extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const GroupHeader = React.forwardRef<HTMLDivElement, GroupHeaderProps>(function GroupHeader(
@@ -288,7 +251,6 @@ export const GroupHeader = React.forwardRef<HTMLDivElement, GroupHeaderProps>(fu
   );
 });
 
-// Items container
 export interface ItemsProps extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const Items = React.forwardRef<HTMLDivElement, ItemsProps>(function Items(
@@ -302,15 +264,10 @@ export const Items = React.forwardRef<HTMLDivElement, ItemsProps>(function Items
   );
 });
 
-// Item
 export interface ItemProps extends React.ComponentPropsWithoutRef<'button'> {
-  /** Icon to display */
   icon?: React.ReactNode;
-  /** Whether the item is currently active/selected */
   active?: boolean;
-  /** Trailing content (shortcut, badge, etc.) */
   trailing?: React.ReactNode;
-  /** Custom element to render as (for links, etc.) */
   render?: React.ReactElement;
 }
 
@@ -350,23 +307,14 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
   );
 });
 
-// Expandable Item (with submenu)
 export interface ExpandableItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  /** Icon to display */
   icon?: React.ReactNode;
-  /** Label text */
   label: string;
-  /** Whether the item is currently active/selected */
   active?: boolean;
-  /** Whether the submenu is open */
   open?: boolean;
-  /** Default open state (uncontrolled) */
   defaultOpen?: boolean;
-  /** Callback when open state changes */
   onOpenChange?: (open: boolean) => void;
-  /** Whether the item is disabled */
   disabled?: boolean;
-  /** Submenu variant: 'border' shows left border indicator, 'indent' uses simple indentation */
   submenuVariant?: 'border' | 'indent';
 }
 
@@ -391,8 +339,6 @@ export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemPro
     const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
-
-    // Generate unique ID for accessibility (SSR-safe)
     const submenuId = React.useId();
 
     const handleToggle = () => {
@@ -404,7 +350,6 @@ export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemPro
       onOpenChange?.(newOpen);
     };
 
-    // Don't render submenu in collapsed mode
     const showSubmenu = !collapsed && isOpen;
 
     return (
@@ -439,13 +384,9 @@ export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemPro
   }
 );
 
-// Submenu Item
 export interface SubmenuItemProps extends React.ComponentPropsWithoutRef<'button'> {
-  /** Icon to display */
   icon?: React.ReactNode;
-  /** Whether the item is currently active/selected */
   active?: boolean;
-  /** Custom element to render as (for links, etc.) */
   render?: React.ReactElement;
 }
 
@@ -481,19 +422,12 @@ export const SubmenuItem = React.forwardRef<HTMLButtonElement, SubmenuItemProps>
   }
 );
 
-// Drilldown Item (navigates to another view)
 export interface DrilldownItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  /** Icon to display */
   icon?: React.ReactNode;
-  /** Whether the item is currently active/selected */
   active?: boolean;
-  /** Whether the item is disabled */
   disabled?: boolean;
-  /** Callback when the drilldown button is clicked */
   onDrilldown?: () => void;
-  /** Callback when the main item area is clicked */
   onClick?: () => void;
-  /** Accessible label for the drilldown button */
   drilldownLabel?: string;
 }
 
@@ -539,21 +473,13 @@ export const DrilldownItem = React.forwardRef<HTMLDivElement, DrilldownItemProps
   }
 );
 
-// Tree Item (expandable with horizontal chevron)
 export interface TreeItemProps extends React.ComponentPropsWithoutRef<'div'> {
-  /** Icon to display */
   icon?: React.ReactNode;
-  /** Label text */
   label: string;
-  /** Whether the item is currently active/selected */
   active?: boolean;
-  /** Whether the tree is open/expanded */
   open?: boolean;
-  /** Default open state (uncontrolled) */
   defaultOpen?: boolean;
-  /** Callback when open state changes */
   onOpenChange?: (open: boolean) => void;
-  /** Whether the item is disabled */
   disabled?: boolean;
 }
 
@@ -577,8 +503,6 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
     const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
-
-    // Generate unique ID for accessibility (SSR-safe)
     const treeId = React.useId();
 
     const handleToggle = () => {
@@ -590,7 +514,6 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
       onOpenChange?.(newOpen);
     };
 
-    // Don't render children in collapsed mode
     const showChildren = !collapsed && isOpen;
 
     return (
@@ -624,7 +547,6 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
   }
 );
 
-// Separator
 export interface SeparatorProps extends React.ComponentPropsWithoutRef<'hr'> {}
 
 export const Separator = React.forwardRef<HTMLHRElement, SeparatorProps>(function Separator(
@@ -634,7 +556,6 @@ export const Separator = React.forwardRef<HTMLHRElement, SeparatorProps>(functio
   return <hr ref={ref} className={clsx(styles.separator, className)} role="separator" {...props} />;
 });
 
-// Display names
 if (process.env.NODE_ENV !== 'production') {
   Provider.displayName = 'Sidebar.Provider';
   Root.displayName = 'Sidebar.Root';
