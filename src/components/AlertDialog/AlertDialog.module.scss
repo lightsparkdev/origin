@@ -40,10 +40,6 @@
   box-shadow: var(--shadow-lg);
   transition: opacity 200ms ease-out, transform 200ms ease-out;
 
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
-
   &[data-open] {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
