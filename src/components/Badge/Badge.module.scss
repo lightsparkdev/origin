@@ -3,12 +3,12 @@
 @use '../../tokens/text-styles' as *;
 
 .root {
-  @include label;
+  @include label-sm;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 24px;
-  padding: 0 var(--spacing-xs);
+  height: 20px;
+  padding: var(--spacing-4xs) var(--spacing-2xs);
   border-radius: var(--corner-radius-xs);
 
   @supports (corner-shape: squircle) {
@@ -21,7 +21,7 @@
   color: var(--text-primary);
 
   &.vibrant {
-    background-color: var(--surface-inverted);
+    background-color: var(--surface-strong);
     color: var(--text-surface);
   }
 }
