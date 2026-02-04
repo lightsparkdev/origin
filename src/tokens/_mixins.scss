@@ -36,6 +36,16 @@
   border: 0;
 }
 
+/// iOS-style corner smoothing (continuous corners)
+/// @param {String} $radius - The border-radius value
+@mixin smooth-corners($radius) {
+  border-radius: $radius;
+
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+}
+
 /// Surface with hover overlay (preserves base color)
 /// Works with both data-disabled attribute and native :disabled
 /// @param {String} $base - The base background color

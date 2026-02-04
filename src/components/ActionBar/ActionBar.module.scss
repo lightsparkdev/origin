@@ -13,6 +13,10 @@
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: 10px;
   box-shadow: var(--shadow-lg);
+
+  @supports (corner-shape: superellipse) {
+    corner-shape: superellipse;
+  }
 }
 
 .label {

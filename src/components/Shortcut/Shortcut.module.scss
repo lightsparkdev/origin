@@ -20,4 +20,8 @@
   background-color: var(--surface-secondary);
   color: var(--text-secondary);
   font-feature-settings: 'salt' 1;
+
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
 }

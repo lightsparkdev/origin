@@ -9,6 +9,10 @@
   border-radius: var(--corner-radius-sm);
   background-color: var(--surface-secondary);
 
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+
   &.sm {
     height: 24px;
   }

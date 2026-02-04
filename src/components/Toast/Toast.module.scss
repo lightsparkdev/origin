@@ -28,6 +28,10 @@
   outline: none;
   transition: opacity 200ms ease, transform 200ms ease;
 
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
@@ -56,6 +60,10 @@
   height: 24px;
   border-radius: var(--corner-radius-md);
   overflow: hidden;
+
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
 }
 
 .indicator {

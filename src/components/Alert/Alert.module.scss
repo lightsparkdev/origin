@@ -7,6 +7,10 @@
   flex-direction: column;
   border-radius: var(--corner-radius-md);
   overflow: clip;
+
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
 }
 
 .content {

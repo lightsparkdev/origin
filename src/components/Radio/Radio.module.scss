@@ -82,6 +82,10 @@
   border-radius: var(--corner-radius-md);
   overflow: hidden;
 
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+
   &:focus-visible {
     box-shadow: var(--input-focus);
 

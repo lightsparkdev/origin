@@ -45,6 +45,10 @@
 
 // Variants - Shape
 .squircle {
+  @supports (corner-shape: squircle) {
+    corner-shape: squircle;
+  }
+
   &.size16 {
     border-radius: 5px;
   }

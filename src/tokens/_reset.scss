@@ -12,10 +12,6 @@
   &::-webkit-scrollbar {
     display: none;
   }
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 }
 
 body {
