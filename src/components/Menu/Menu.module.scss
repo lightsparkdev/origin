@@ -43,7 +43,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   height: 36px;
-  padding: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--corner-radius-xs);
   color: var(--text-primary);
   cursor: pointer;
@@ -66,7 +66,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   height: 36px;
-  padding: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--corner-radius-xs);
   color: var(--text-primary);
   cursor: pointer;
@@ -121,7 +121,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   height: 36px;
-  padding: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--corner-radius-xs);
   color: var(--text-primary);
   cursor: pointer;
@@ -197,7 +197,7 @@
   gap: var(--spacing-xs);
   height: 36px;
   padding-block: var(--spacing-xs);
-  padding-inline-start: var(--spacing-xs);
+  padding-inline-start: var(--spacing-sm);
   padding-inline-end: var(--spacing-3xs);
   border-radius: var(--corner-radius-xs);
   color: var(--text-primary);

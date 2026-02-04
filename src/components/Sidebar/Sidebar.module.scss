@@ -67,10 +67,8 @@
 .group {
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-xs);
 
   [data-collapsed='true'] & {
-    padding: var(--spacing-xs);
     align-items: center;
   }
 }
