@@ -84,6 +84,7 @@
 }
 
 // Hybrid - label + icon button for navigation/toolbars
+// Only the icon button is clickable (mouse), not the label text
 .triggerHybrid {
   width: auto;
   gap: var(--spacing-3xs);
@@ -91,6 +92,9 @@
   border: none;
   background: transparent;
   color: var(--text-secondary);
+  // Disable mouse clicks on the whole trigger area (icon re-enables its own)
+  // Keyboard navigation (Tab/Enter/Space) still works
+  pointer-events: none;
 
   &[data-popup-open] {
     border: none;
@@ -108,13 +112,6 @@
     border: none;
     background: transparent;
     box-shadow: none;
-  }
-
-  // On hover, label becomes primary color
-  @media (hover: hover) {
-    &:hover:not([data-disabled]) {
-      color: var(--text-primary);
-    }
   }
 }
 
@@ -164,6 +161,9 @@
   border: var(--stroke-xs) solid transparent;
   border-radius: var(--corner-radius-xs);
   color: var(--icon-primary);
+  cursor: pointer;
+  // Re-enable mouse clicks on the icon button only
+  pointer-events: auto;
   transition:
     background-color 150ms ease,
     border-color 150ms ease,

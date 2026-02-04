@@ -12,6 +12,8 @@ import {
   GhostSelectPlaceholder,
   GhostSelectDisabled,
   GhostSelectControlled,
+  HybridSelect,
+  HybridSelectControlled,
 } from './Select.test-stories';
 
 test.describe('Select', () => {
@@ -232,5 +234,76 @@ test.describe('Select Ghost Variant', () => {
     // Escape closes
     await page.keyboard.press('Escape');
     await expect(listbox).not.toBeVisible();
+  });
+});
+
+test.describe('Select Hybrid Variant', () => {
+  test('renders hybrid trigger with value', async ({ mount, page }) => {
+    await mount(<HybridSelect />);
+    
+    const trigger = page.getByRole('combobox');
+    await expect(trigger).toBeVisible();
+    await expect(trigger).toHaveAttribute('data-variant', 'hybrid');
+    // Value is the raw value 'production', not the display label
+    await expect(trigger).toContainText('production');
+  });
+
+  test('hybrid icon click opens popup', async ({ mount, page }) => {
+    await mount(<HybridSelectControlled />);
+    
+    // Click on the icon button to open
+    const icon = page.getByTestId('hybrid-icon');
+    await icon.click();
+    
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).toBeVisible();
+  });
+
+  test('hybrid label click does not open popup', async ({ mount, page }) => {
+    await mount(<HybridSelectControlled />);
+    
+    // Click on the label/value text (not the icon)
+    const value = page.getByTestId('hybrid-value');
+    await value.click({ force: true }); // force: true to click even with pointer-events: none
+    
+    // Popup should NOT be visible because click passed through
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).not.toBeVisible();
+  });
+
+  test('hybrid trigger keyboard navigation still works', async ({ mount, page }) => {
+    await mount(<HybridSelectControlled />);
+    
+    // Tab to focus the trigger, then Enter to open
+    const trigger = page.getByRole('combobox');
+    await trigger.focus();
+    await trigger.press('Enter');
+    
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).toBeVisible();
+    
+    // Navigate and select with keyboard - select Staging explicitly
+    await page.getByRole('option', { name: 'Staging' }).focus();
+    await page.keyboard.press('Enter');
+    
+    // Verify selection changed
+    await expect(page.getByTestId('selected-env')).toHaveText('staging');
+  });
+
+  test('hybrid trigger selects an option via icon click', async ({ mount, page }) => {
+    await mount(<HybridSelectControlled />);
+    
+    // Click on the icon to open
+    const icon = page.getByTestId('hybrid-icon');
+    await icon.click();
+    
+    const listbox = page.getByRole('listbox');
+    await expect(listbox).toBeVisible();
+    
+    // Select Staging
+    await page.getByRole('option', { name: 'Staging' }).click();
+    
+    // Verify selection
+    await expect(page.getByTestId('selected-env')).toHaveText('staging');
   });
 });

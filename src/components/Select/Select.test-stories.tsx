@@ -369,3 +369,59 @@ export function GhostSelectControlled() {
     </div>
   );
 }
+
+// Hybrid variant test fixtures (only icon button is clickable, not the label)
+export function HybridSelect() {
+  return (
+    <Select.Root defaultValue="production">
+      <Select.Trigger variant="hybrid">
+        <Select.Value placeholder="Select environment" />
+        <Select.HybridIcon />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Positioner>
+          <Select.Popup>
+            <Select.List>
+              {environments.map((env) => (
+                <Select.Item key={env.value} value={env.value}>
+                  <Select.ItemText>{env.label}</Select.ItemText>
+                  <Select.ItemIndicator />
+                </Select.Item>
+              ))}
+            </Select.List>
+          </Select.Popup>
+        </Select.Positioner>
+      </Select.Portal>
+    </Select.Root>
+  );
+}
+
+export function HybridSelectControlled() {
+  const [value, setValue] = React.useState<string | null>('production');
+
+  return (
+    <div>
+      <Select.Root value={value} onValueChange={setValue}>
+        <Select.Trigger variant="hybrid" data-testid="hybrid-trigger">
+          <Select.Value placeholder="Select environment" data-testid="hybrid-value" />
+          <Select.HybridIcon data-testid="hybrid-icon" />
+        </Select.Trigger>
+        <Select.Portal>
+          <Select.Positioner>
+            <Select.Popup>
+              <Select.List>
+                {environments.map((env) => (
+                  <Select.Item key={env.value} value={env.value}>
+                    <Select.ItemText>{env.label}</Select.ItemText>
+                    <Select.ItemIndicator />
+                  </Select.Item>
+                ))}
+              </Select.List>
+            </Select.Popup>
+          </Select.Positioner>
+        </Select.Portal>
+      </Select.Root>
+      <span data-testid="selected-env">{value ?? 'none'}</span>
+    </div>
+  );
+}
