@@ -132,8 +132,19 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
         {...props}
       >
         <span className={styles.headerCellContent}>
+          {sortable && align === 'right' && (
+            <span className={styles.sortIcon} aria-hidden="true">
+              {sortDirection === 'asc' ? (
+                <CentralIcon name="IconChevronTopSmall" size={12} />
+              ) : sortDirection === 'desc' ? (
+                <CentralIcon name="IconChevronDownSmall" size={12} />
+              ) : (
+                <CentralIcon name="IconChevronGrabberVertical" size={12} />
+              )}
+            </span>
+          )}
           {children}
-          {sortable && (
+          {sortable && align !== 'right' && (
             <span className={styles.sortIcon} aria-hidden="true">
               {sortDirection === 'asc' ? (
                 <CentralIcon name="IconChevronTopSmall" size={12} />

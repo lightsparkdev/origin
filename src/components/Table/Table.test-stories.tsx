@@ -409,6 +409,74 @@ export function ResizableTable() {
 }
 
 /**
+ * Table with sortable right-aligned columns (tests icon position)
+ */
+export function SortableAlignedTable() {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const alignedSortableColumns = [
+    columnHelper.accessor('name', {
+      header: 'Name',
+      cell: (info) => info.getValue(),
+      enableSorting: true,
+    }),
+    columnHelper.accessor('status', {
+      header: 'Status',
+      cell: (info) => info.getValue(),
+      enableSorting: true,
+      meta: { align: 'right' as const },
+    }),
+  ];
+
+  const table = useReactTable({
+    data: sampleData,
+    columns: alignedSortableColumns,
+    state: { sorting },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
+
+  return (
+    <Table.Root>
+      <Table.Header>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Table.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <Table.HeaderCell
+                key={header.id}
+                align={(header.column.columnDef.meta as { align?: 'left' | 'right' })?.align}
+                sortable={header.column.getCanSort()}
+                sortDirection={header.column.getIsSorted() || undefined}
+                onSort={header.column.getToggleSortingHandler()}
+              >
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </Table.HeaderCell>
+            ))}
+          </Table.HeaderRow>
+        ))}
+      </Table.Header>
+      <Table.Body>
+        {table.getRowModel().rows.map((row) => (
+          <Table.Row key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <Table.Cell
+                key={cell.id}
+                align={(cell.column.columnDef.meta as { align?: 'left' | 'right' })?.align}
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Table.Cell>
+            ))}
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table.Root>
+  );
+}
+
+/**
  * Table with cell description (secondary text)
  */
 export function DescriptionTable() {

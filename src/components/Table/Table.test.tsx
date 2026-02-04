@@ -3,6 +3,7 @@ import {
   BasicTable,
   SortableTable,
   AlignedTable,
+  SortableAlignedTable,
   LoadingTable,
   DescriptionTable,
 } from './Table.test-stories';
@@ -57,6 +58,24 @@ test.describe('Table', () => {
       // Status column should be right-aligned
       const statusHeader = component.locator('th').filter({ hasText: 'Status' });
       await expect(statusHeader).toHaveAttribute('data-align', 'right');
+    });
+
+    test('sort icon position respects alignment', async ({ mount }) => {
+      const component = await mount(<SortableAlignedTable />);
+
+      // Left-aligned Name column: label should come before icon
+      const nameHeader = component.locator('th').filter({ hasText: 'Name' });
+      const nameContent = nameHeader.locator('span').first();
+      const nameText = await nameContent.textContent();
+      // For left-aligned, text should start with "Name" (icon after)
+      expect(nameText?.startsWith('Name')).toBe(true);
+
+      // Right-aligned Status column: icon should come before label
+      const statusHeader = component.locator('th').filter({ hasText: 'Status' });
+      const statusContent = statusHeader.locator('span').first();
+      const statusText = await statusContent.textContent();
+      // For right-aligned, text should end with "Status" (icon before)
+      expect(statusText?.endsWith('Status')).toBe(true);
     });
   });
 
