@@ -11,6 +11,7 @@ export { Checkbox } from './components/Checkbox';
 export { Command } from './components/Command';
 export { Combobox } from './components/Combobox';
 export { ContextMenu } from './components/ContextMenu';
+export { Dialog } from './components/Dialog';
 export { Field } from './components/Field';
 export { Fieldset } from './components/Fieldset';
 export { Menu } from './components/Menu';

@@ -1,4 +1,4 @@
-// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=5779-340
+// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=6239-931
 @use '../../tokens/text-styles' as *;
 
 .backdrop {
@@ -29,9 +29,7 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  min-width: 280px;
-  width: 420px;
+  width: 360px;
   max-width: calc(100vw - var(--spacing-2xl));
   overflow: clip;
   background-color: var(--surface-elevated);
@@ -63,7 +61,7 @@
 .title {
   @include headline-sm;
   width: 100%;
-  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-3xs);
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-3xs);
   margin: 0;
   color: var(--text-primary);
 }
@@ -71,16 +69,16 @@
 .description {
   @include body;
   width: 100%;
-  padding: 0 var(--spacing-xl) var(--spacing-sm);
+  padding: 0 var(--spacing-xl) var(--spacing-md);
   margin: 0;
   color: var(--text-secondary);
 }
 
 .actions {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: flex-end;
   gap: var(--spacing-xs);
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-xl) var(--spacing-xl) var(--spacing-xl);
 }
