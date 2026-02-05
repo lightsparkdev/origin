@@ -102,6 +102,13 @@
     box-shadow: none;
   }
 
+  // Override base trigger focus - no ring on whole trigger for hybrid
+  // Focus styling only appears on the .hybridIconButton
+  &:focus {
+    border-color: transparent;
+    box-shadow: none;
+  }
+
   &[data-disabled] {
     opacity: 0.5;
     color: var(--text-secondary);
