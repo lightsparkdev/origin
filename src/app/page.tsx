@@ -53,10 +53,6 @@ import { Logo } from '@/components/Logo';
 
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
-const groupedFruits = {
-  common: ['Apple', 'Banana', 'Orange'],
-  exotic: ['Dragon Fruit', 'Mangosteen', 'Rambutan'],
-};
 
 // Toast demo components
 function ToastDemo() {

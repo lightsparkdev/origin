@@ -85,10 +85,13 @@ test.describe('ContextMenu', () => {
     const minimapItem = page.getByRole('menuitemcheckbox', { name: 'Show Minimap' });
     await expect(minimapItem).toHaveAttribute('aria-checked', 'true');
 
-    // Click to toggle
+    // Click to toggle (checkbox items keep menu open)
     await minimapItem.click();
 
-    // Re-open menu and check state
+    // Close menu with Escape, then re-open to verify state
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('menu')).not.toBeVisible();
+
     await page.getByText('Right-click here').click({ button: 'right' });
     await expect(page.getByRole('menuitemcheckbox', { name: 'Show Minimap' })).toHaveAttribute('aria-checked', 'false');
   });
@@ -102,10 +105,13 @@ test.describe('ContextMenu', () => {
     await expect(page.getByRole('menuitemradio', { name: 'Name' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('menuitemradio', { name: 'Date' })).toHaveAttribute('aria-checked', 'false');
 
-    // Select "Date"
+    // Select "Date" (radio items keep menu open)
     await page.getByRole('menuitemradio', { name: 'Date' }).click();
 
-    // Re-open and verify
+    // Close menu with Escape, then re-open to verify state
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('menu')).not.toBeVisible();
+
     await page.getByText('Right-click here').click({ button: 'right' });
     await expect(page.getByRole('menuitemradio', { name: 'Name' })).toHaveAttribute('aria-checked', 'false');
     await expect(page.getByRole('menuitemradio', { name: 'Date' })).toHaveAttribute('aria-checked', 'true');

@@ -5,21 +5,14 @@ import clsx from 'clsx';
 import styles from './Item.module.scss';
 
 export interface ItemProps extends Omit<React.ComponentPropsWithoutRef<'div'>, 'title'> {
-  /** Main text content */
   title: string;
-  /** Secondary text below title */
   description?: string;
-  /** Slot for leading content (icon, avatar) */
   leading?: React.ReactNode;
-  /** Slot for trailing content (buttons, switch, chevron, checkmark) */
   trailing?: React.ReactNode;
-  /** Whether the item has hover/focus states (default: true) */
+  trailingPadding?: 'sm' | 'lg';
   clickable?: boolean;
-  /** Selected state */
   selected?: boolean;
-  /** Disabled state */
   disabled?: boolean;
-  /** Custom element to render as */
   render?: React.ReactElement;
 }
 
@@ -30,6 +23,7 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
       description,
       leading,
       trailing,
+      trailingPadding,
       clickable = true,
       selected,
       disabled,
@@ -76,7 +70,17 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
             {description && <span className={styles.description}>{description}</span>}
           </div>
         </div>
-        {trailing && <div className={styles.trailing}>{trailing}</div>}
+        {trailing && (
+          <div
+            className={clsx(
+              styles.trailing,
+              trailingPadding === 'sm' && styles.trailingSm,
+              trailingPadding === 'lg' && styles.trailingLg
+            )}
+          >
+            {trailing}
+          </div>
+        )}
       </>
     );
 

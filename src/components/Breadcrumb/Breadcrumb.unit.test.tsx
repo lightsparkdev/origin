@@ -249,5 +249,3 @@ describe('Breadcrumb separator', () => {
   });
 });
 
-// Import vi for mocking
-import { vi } from 'vitest';

@@ -129,29 +129,31 @@ export const WithDisabledItems: Story = {
 /**
  * Controlled command palette with external state.
  */
+function ControlledStoryComponent() {
+  const [open, setOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState<string | null>(null);
+
+  const items: CommandItem[] = [
+    { id: '1', label: 'Calendar', onSelect: () => setSelected('Calendar') },
+    { id: '2', label: 'Search', onSelect: () => setSelected('Search') },
+    { id: '3', label: 'Calculator', onSelect: () => setSelected('Calculator') },
+  ];
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+      <button onClick={() => setOpen(true)}>
+        {selected ? `Selected: ${selected}` : 'Open Command Palette'}
+      </button>
+      <Command.Root items={items} open={open} onOpenChange={setOpen} />
+      <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+        Selection persists after closing.
+      </p>
+    </div>
+  );
+}
+
 export const Controlled: Story = {
-  render: () => {
-    const [open, setOpen] = React.useState(false);
-    const [selected, setSelected] = React.useState<string | null>(null);
-
-    const items: CommandItem[] = [
-      { id: '1', label: 'Calendar', onSelect: () => setSelected('Calendar') },
-      { id: '2', label: 'Search', onSelect: () => setSelected('Search') },
-      { id: '3', label: 'Calculator', onSelect: () => setSelected('Calculator') },
-    ];
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-        <button onClick={() => setOpen(true)}>
-          {selected ? `Selected: ${selected}` : 'Open Command Palette'}
-        </button>
-        <Command.Root items={items} open={open} onOpenChange={setOpen} />
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Selection persists after closing.
-        </p>
-      </div>
-    );
-  },
+  render: () => <ControlledStoryComponent />,
 };
 
 /**
@@ -270,84 +272,86 @@ export const CustomRenderItem: Story = {
 /**
  * Full-featured Raycast-style command palette with ⌘K trigger.
  */
+function RaycastStyleComponent() {
+  const [open, setOpen] = React.useState(false);
+
+  const items: CommandGroup[] = [
+    {
+      label: 'Suggestions',
+      items: [
+        {
+          id: '1',
+          label: 'Linear',
+          icon: <CentralIcon name="IconGlobe2" size={16} />,
+          shortcut: <Shortcut keys={['⌘', 'L']} />,
+        },
+        {
+          id: '2',
+          label: 'Figma',
+          icon: <CentralIcon name="IconGlobe2" size={16} />,
+          shortcut: <Shortcut keys={['⌘', 'F']} />,
+        },
+        {
+          id: '3',
+          label: 'Slack',
+          icon: <CentralIcon name="IconGlobe2" size={16} />,
+          shortcut: <Shortcut keys={['⌘', 'S']} />,
+        },
+      ],
+    },
+    {
+      label: 'Commands',
+      items: [
+        {
+          id: '4',
+          label: 'Clipboard History',
+          icon: <CentralIcon name="IconCopy" size={16} />,
+          shortcut: <Shortcut keys={['⌘', '⇧', 'C']} />,
+          keywords: ['clipboard', 'paste'],
+        },
+        {
+          id: '5',
+          label: 'System Preferences',
+          icon: <CentralIcon name="IconSettings" size={16} />,
+          shortcut: <Shortcut keys={['⌘', ',']} />,
+          keywords: ['settings', 'preferences'],
+        },
+      ],
+    },
+  ];
+
+  // Listen for Cmd+K
+  React.useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setOpen((o) => !o);
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, []);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+      <button onClick={() => setOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        Open Command Palette
+        <Shortcut keys={['⌘', 'K']} />
+      </button>
+      <Command.Root items={items} open={open} onOpenChange={setOpen}>
+        <Command.Footer>
+          <span>↑↓ Navigate</span>
+          <span>↵ Open</span>
+          <span>Esc Close</span>
+        </Command.Footer>
+      </Command.Root>
+      <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+        Press ⌘K to toggle the command palette
+      </p>
+    </div>
+  );
+}
+
 export const RaycastStyle: Story = {
-  render: () => {
-    const [open, setOpen] = React.useState(false);
-
-    const items: CommandGroup[] = [
-      {
-        label: 'Suggestions',
-        items: [
-          {
-            id: '1',
-            label: 'Linear',
-            icon: <CentralIcon name="IconGlobe2" size={16} />,
-            shortcut: <Shortcut keys={['⌘', 'L']} />,
-          },
-          {
-            id: '2',
-            label: 'Figma',
-            icon: <CentralIcon name="IconGlobe2" size={16} />,
-            shortcut: <Shortcut keys={['⌘', 'F']} />,
-          },
-          {
-            id: '3',
-            label: 'Slack',
-            icon: <CentralIcon name="IconGlobe2" size={16} />,
-            shortcut: <Shortcut keys={['⌘', 'S']} />,
-          },
-        ],
-      },
-      {
-        label: 'Commands',
-        items: [
-          {
-            id: '4',
-            label: 'Clipboard History',
-            icon: <CentralIcon name="IconCopy" size={16} />,
-            shortcut: <Shortcut keys={['⌘', '⇧', 'C']} />,
-            keywords: ['clipboard', 'paste'],
-          },
-          {
-            id: '5',
-            label: 'System Preferences',
-            icon: <CentralIcon name="IconSettings" size={16} />,
-            shortcut: <Shortcut keys={['⌘', ',']} />,
-            keywords: ['settings', 'preferences'],
-          },
-        ],
-      },
-    ];
-
-    // Listen for Cmd+K
-    React.useEffect(() => {
-      const handler = (e: KeyboardEvent) => {
-        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-          e.preventDefault();
-          setOpen((o) => !o);
-        }
-      };
-      document.addEventListener('keydown', handler);
-      return () => document.removeEventListener('keydown', handler);
-    }, []);
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-        <button onClick={() => setOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          Open Command Palette
-          <Shortcut keys={['⌘', 'K']} />
-        </button>
-        <Command.Root items={items} open={open} onOpenChange={setOpen}>
-          <Command.Footer>
-            <span>↑↓ Navigate</span>
-            <span>↵ Open</span>
-            <span>Esc Close</span>
-          </Command.Footer>
-        </Command.Root>
-        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Press ⌘K to toggle the command palette
-        </p>
-      </div>
-    );
-  },
+  render: () => <RaycastStyleComponent />,
 };

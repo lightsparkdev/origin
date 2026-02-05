@@ -44,7 +44,7 @@ test.describe('NavigationMenu', () => {
       await expect(page.getByText('Reports')).toBeVisible();
     });
 
-    test('trigger has popup-open attribute when open', async ({ mount, page }) => {
+    test('trigger has popup-open attribute when open', async ({ mount, page: _page }) => {
       const component = await mount(<WithDropdown />);
 
       const trigger = component.getByRole('button', { name: 'Products' });

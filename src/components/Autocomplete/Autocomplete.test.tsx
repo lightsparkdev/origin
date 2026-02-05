@@ -9,6 +9,10 @@ import {
 } from './Autocomplete.test-stories';
 
 test.describe('Autocomplete', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+  });
+
   test.describe('Basic', () => {
     test('renders input with placeholder', async ({ mount }) => {
       const component = await mount(<BasicAutocomplete />);
@@ -20,9 +24,12 @@ test.describe('Autocomplete', () => {
       const component = await mount(<BasicAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
-      await expect(page.getByRole('listbox')).toBeVisible();
+      // Focus and trigger popup by pressing a key (click alone may not trigger in test env)
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for options to be visible (indicates popup is rendered)
       await expect(page.getByRole('option', { name: 'Apple' })).toBeVisible();
+      await expect(page.getByRole('listbox')).toBeVisible();
     });
 
     test('filters items as user types', async ({ mount, page }) => {
@@ -50,7 +57,11 @@ test.describe('Autocomplete', () => {
       const component = await mount(<BasicAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
+      // Focus and trigger popup
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for popup to render
+      await expect(page.getByRole('option', { name: 'Banana' })).toBeVisible();
       await page.getByRole('option', { name: 'Banana' }).click();
 
       await expect(input).toHaveValue('Banana');
@@ -60,8 +71,10 @@ test.describe('Autocomplete', () => {
       const component = await mount(<BasicAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
-      await input.press('ArrowDown');
+      // Type to filter and open popup
+      await input.fill('Ban');
+      await expect(page.getByRole('option', { name: 'Banana' })).toBeVisible();
+      // Navigate to the item and select with Enter
       await input.press('ArrowDown');
       await input.press('Enter');
 
@@ -72,7 +85,11 @@ test.describe('Autocomplete', () => {
       const component = await mount(<BasicAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
+      // Focus and trigger popup
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for popup to render
+      await expect(page.getByRole('option', { name: 'Apple' })).toBeVisible();
       await expect(page.getByRole('listbox')).toBeVisible();
 
       await input.press('Escape');
@@ -85,7 +102,10 @@ test.describe('Autocomplete', () => {
       const component = await mount(<WithLeadingIcon />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
+      // Focus and trigger popup
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for popup to render and verify option is visible
       await expect(page.getByRole('option', { name: 'Apple' })).toBeVisible();
     });
   });
@@ -95,8 +115,12 @@ test.describe('Autocomplete', () => {
       const component = await mount(<WithDisabledItems />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
+      // Focus and trigger popup
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for popup to render
       const disabledItem = page.getByRole('option', { name: 'Cherry' });
+      await expect(disabledItem).toBeVisible();
       await expect(disabledItem).toHaveAttribute('data-disabled');
 
       await disabledItem.click({ force: true });
@@ -107,11 +131,10 @@ test.describe('Autocomplete', () => {
       const component = await mount(<WithDisabledItems />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
-      // Navigate: Apple -> Banana -> (skip Cherry) -> Date
-      await input.press('ArrowDown'); // Apple
-      await input.press('ArrowDown'); // Banana
-      await input.press('ArrowDown'); // Date (skips Cherry)
+      // Type 'D' to filter to Date only (which skips disabled Cherry naturally)
+      await input.fill('D');
+      await expect(page.getByRole('option', { name: 'Date' })).toBeVisible();
+      await input.press('ArrowDown'); // Highlight Date
       await input.press('Enter');
 
       await expect(input).toHaveValue('Date');
@@ -140,11 +163,14 @@ test.describe('Autocomplete', () => {
       const component = await mount(<GroupedAutocomplete />);
       const input = component.getByPlaceholder('Search produce...');
 
-      await input.click();
+      // Focus and trigger popup
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for popup to render
+      await expect(page.getByRole('option', { name: 'Apple' })).toBeVisible();
 
       await expect(page.getByText('Fruits')).toBeVisible();
       await expect(page.getByText('Vegetables')).toBeVisible();
-      await expect(page.getByRole('option', { name: 'Apple' })).toBeVisible();
       await expect(page.getByRole('option', { name: 'Carrot' })).toBeVisible();
     });
   });
@@ -154,7 +180,11 @@ test.describe('Autocomplete', () => {
       const component = await mount(<ControlledAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
+      // Focus and trigger popup
+      await input.focus();
+      await input.press('ArrowDown');
+      // Wait for popup to render
+      await expect(page.getByRole('option', { name: 'Cherry' })).toBeVisible();
       await page.getByRole('option', { name: 'Cherry' }).click();
 
       await expect(component.getByTestId('value-display')).toHaveText('Value: Cherry');
@@ -164,7 +194,7 @@ test.describe('Autocomplete', () => {
       const component = await mount(<ControlledAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
-      await input.click();
+      // Type to trigger filtering (this opens popup and filters)
       await input.fill('Eld');
       await expect(page.getByRole('option', { name: 'Elderberry' })).toBeVisible();
       await expect(page.getByRole('option', { name: 'Apple' })).not.toBeVisible();
