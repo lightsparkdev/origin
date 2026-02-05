@@ -87,6 +87,7 @@ test.describe('ContextMenu', () => {
 
     // Click to toggle
     await minimapItem.click();
+    await expect(page.getByRole('menu')).not.toBeVisible();
 
     // Re-open menu and check state
     await page.getByText('Right-click here').click({ button: 'right' });
@@ -104,6 +105,7 @@ test.describe('ContextMenu', () => {
 
     // Select "Date"
     await page.getByRole('menuitemradio', { name: 'Date' }).click();
+    await expect(page.getByRole('menu')).not.toBeVisible();
 
     // Re-open and verify
     await page.getByText('Right-click here').click({ button: 'right' });

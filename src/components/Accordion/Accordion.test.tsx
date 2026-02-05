@@ -32,8 +32,10 @@ test.describe('Accordion', () => {
     test('respects prefers-reduced-motion', async ({ mount, page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const component = await mount(<TestAccordion />);
-      const icon = component.locator('svg').first();
-      const transition = await icon.evaluate((el) =>
+      // Target the icon wrapper span (has .icon class) instead of the SVG,
+      // since the transition CSS property is applied to the wrapper
+      const iconWrapper = component.locator('button').first().locator('span').filter({ has: page.locator('svg') }).first();
+      const transition = await iconWrapper.evaluate((el) =>
         window.getComputedStyle(el).transition
       );
       expect(transition).toMatch(/none|all 0s/);
