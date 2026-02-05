@@ -61,7 +61,7 @@ export function getStateAttributesProps<S extends Record<string, unknown>>(
 
   for (const key in state) {
     const value = state[key];
-    if (customMapping?.hasOwnProperty(key)) {
+    if (customMapping && Object.hasOwn(customMapping, key)) {
       const customProps = customMapping[key]!(value);
       if (customProps != null) {
         Object.assign(props, customProps);
