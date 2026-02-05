@@ -43,3 +43,6 @@ playwright-report/
 test-results/
 playwright/.cache/
 origin.code-workspace
+
+# Cursor workspace handoff
+handoff/
