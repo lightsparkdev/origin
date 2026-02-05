@@ -17,7 +17,6 @@ export default defineConfig({
   reporter: 'html',
   use: {
     ctPort: 3100,
-    reducedMotion: 'reduce',
     trace: 'on-first-retry',
     ctViteConfig: {
       resolve: {

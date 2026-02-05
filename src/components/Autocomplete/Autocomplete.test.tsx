@@ -9,6 +9,10 @@ import {
 } from './Autocomplete.test-stories';
 
 test.describe('Autocomplete', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+  });
+
   test.describe('Basic', () => {
     test('renders input with placeholder', async ({ mount }) => {
       const component = await mount(<BasicAutocomplete />);
