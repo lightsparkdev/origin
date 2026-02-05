@@ -206,7 +206,7 @@
   box-shadow: var(--shadow-lg);
   outline: 0;
   overflow: hidden;
-  min-width: var(--anchor-width);
+  min-width: var(--select-popup-min-width, var(--anchor-width));
   transform-origin: var(--transform-origin);
   transition:
     opacity 150ms ease,
