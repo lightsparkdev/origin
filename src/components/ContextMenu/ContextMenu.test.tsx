@@ -87,6 +87,7 @@ test.describe('ContextMenu', () => {
 
     // Click to toggle (checkbox items keep menu open)
     await minimapItem.click();
+    await expect(page.getByRole('menu')).not.toBeVisible();
 
     // Close menu with Escape, then re-open to verify state
     await page.keyboard.press('Escape');
@@ -107,6 +108,7 @@ test.describe('ContextMenu', () => {
 
     // Select "Date" (radio items keep menu open)
     await page.getByRole('menuitemradio', { name: 'Date' }).click();
+    await expect(page.getByRole('menu')).not.toBeVisible();
 
     // Close menu with Escape, then re-open to verify state
     await page.keyboard.press('Escape');
