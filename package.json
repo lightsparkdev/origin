@@ -5,7 +5,7 @@
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jaymantri/origin.git"
+    "url": "https://github.com/lightsparkdev/origin.git"
   },
   "type": "module",
   "main": "./src/index.ts",
