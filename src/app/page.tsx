@@ -7,6 +7,7 @@ import { ActionBar, ActionBarLabel, ActionBarActions } from '@/components/Action
 import { Autocomplete } from '@/components/Autocomplete';
 import { Alert } from '@/components/Alert';
 import { AlertDialog } from '@/components/AlertDialog';
+import { Dialog } from '@/components/Dialog';
 import { Badge } from '@/components/Badge';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
@@ -1612,6 +1613,71 @@ export default function Home() {
         </AlertDialog.Root>
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Dialog Component</h2>
+      
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '128px' }}>
+        <Dialog.Root>
+          <Dialog.Trigger render={<Button variant="outline" />}>
+            Open Dialog
+          </Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Backdrop />
+            <Dialog.Popup>
+              <Dialog.CloseButton />
+              <Dialog.Header>
+                <Dialog.Title>Dialog Title</Dialog.Title>
+                <Dialog.Description>
+                  This is a description of the dialog content.
+                </Dialog.Description>
+              </Dialog.Header>
+              <Dialog.Content>
+                <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)' }}>
+                  Dialog content goes here. This area can contain forms, text, or any other content.
+                </p>
+              </Dialog.Content>
+              <Dialog.Footer>
+                <Dialog.Close render={<Button variant="outline" />}>
+                  Cancel
+                </Dialog.Close>
+                <Button variant="filled">
+                  Confirm
+                </Button>
+              </Dialog.Footer>
+            </Dialog.Popup>
+          </Dialog.Portal>
+        </Dialog.Root>
+
+        <Dialog.Root>
+          <Dialog.Trigger render={<Button variant="outline" />}>
+            Without Close Button
+          </Dialog.Trigger>
+          <Dialog.Portal>
+            <Dialog.Backdrop />
+            <Dialog.Popup>
+              <Dialog.Header>
+                <Dialog.Title>No Close Button</Dialog.Title>
+                <Dialog.Description>
+                  This dialog does not have an X close button.
+                </Dialog.Description>
+              </Dialog.Header>
+              <Dialog.Content>
+                <p style={{ margin: 0, fontSize: 14, color: 'var(--text-secondary)' }}>
+                  The user must use the footer buttons or press Escape to close.
+                </p>
+              </Dialog.Content>
+              <Dialog.Footer>
+                <Dialog.Close render={<Button variant="outline" />}>
+                  Cancel
+                </Dialog.Close>
+                <Dialog.Close render={<Button variant="filled" />}>
+                  Done
+                </Dialog.Close>
+              </Dialog.Footer>
+            </Dialog.Popup>
+          </Dialog.Portal>
+        </Dialog.Root>
+      </div>
+
       <h2 style={{ marginBottom: '1rem' }}>Autocomplete Component</h2>
       
       <AutocompleteExamples />
