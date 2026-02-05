@@ -95,7 +95,6 @@
   // Disable mouse clicks on the whole trigger area (icon re-enables its own)
   // Keyboard navigation (Tab/Enter/Space) still works
   pointer-events: none;
-  cursor: default;
 
   &[data-popup-open] {
     border: none;
