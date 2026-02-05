@@ -67,7 +67,7 @@ test.describe('Autocomplete', () => {
       await expect(input).toHaveValue('Banana');
     });
 
-    test('navigates with keyboard and selects with Enter', async ({ mount, page }) => {
+    test('navigates with keyboard and selects with Enter', async ({ mount, page: _page }) => {
       const component = await mount(<BasicAutocomplete />);
       const input = component.getByPlaceholder('Search fruits...');
 
@@ -127,7 +127,7 @@ test.describe('Autocomplete', () => {
       await expect(input).not.toHaveValue('Cherry');
     });
 
-    test('skips disabled items during keyboard navigation', async ({ mount, page }) => {
+    test('skips disabled items during keyboard navigation', async ({ mount, page: _page }) => {
       const component = await mount(<WithDisabledItems />);
       const input = component.getByPlaceholder('Search fruits...');
 
