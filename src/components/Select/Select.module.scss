@@ -82,14 +82,11 @@
     transition: none;
   }
 
-  // Visual balance padding for label against trailing icon
   .value {
     padding-inline: var(--spacing-4xs);
   }
 }
 
-// Hybrid - label + icon button for navigation/toolbars
-// Only the icon button is clickable (mouse), not the label text
 .triggerHybrid {
   width: auto;
   gap: var(--spacing-3xs);
@@ -97,8 +94,6 @@
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  // Disable mouse clicks on the whole trigger area (icon re-enables its own)
-  // Keyboard navigation (Tab/Enter/Space) still works
   pointer-events: none;
 
   &[data-popup-open] {
@@ -107,8 +102,6 @@
     box-shadow: none;
   }
 
-  // Override base trigger focus - no ring on whole trigger for hybrid
-  // Focus styling only appears on the .hybridIconButton
   &:focus {
     border-color: transparent;
     box-shadow: none;
@@ -174,7 +167,6 @@
   border-radius: var(--corner-radius-xs);
   color: var(--icon-secondary);
   cursor: pointer;
-  // Re-enable mouse clicks on the icon button only
   pointer-events: auto;
   transition:
     background-color 150ms ease,
