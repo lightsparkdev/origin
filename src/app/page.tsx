@@ -39,6 +39,8 @@ import { Separator } from '@/components/Separator';
 import { Sidebar } from '@/components/Sidebar';
 import { Shortcut } from '@/components/Shortcut';
 import { Switch } from '@/components/Switch';
+import { Textarea } from '@/components/Textarea';
+import { TextareaGroup } from '@/components/TextareaGroup';
 import { Tabs } from '@/components/Tabs';
 import { Table } from '@/components/Table';
 import {
@@ -1879,6 +1881,125 @@ export default function Home() {
             <Button variant="secondary">Button</Button>
             <Button variant="secondary">Button</Button>
           </ButtonGroup>
+        </div>
+      </div>
+
+      <h2 style={{ marginBottom: '1rem' }}>Textarea</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: 300, marginBottom: '2rem' }}>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Default
+          </span>
+          <Textarea placeholder="Placeholder" />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Filled
+          </span>
+          <Textarea defaultValue="Content" />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Disabled
+          </span>
+          <Textarea placeholder="Placeholder" disabled />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Invalid
+          </span>
+          <Textarea defaultValue="Invalid content" data-invalid="" />
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            With Field
+          </span>
+          <Field.Root>
+            <Field.Label>Description</Field.Label>
+            <Textarea placeholder="Enter a description..." rows={4} />
+            <Field.Description>
+              Provide additional details
+            </Field.Description>
+          </Field.Root>
+        </div>
+      </div>
+
+      <h2 style={{ marginBottom: '1rem' }}>Textarea Group</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: 400, marginBottom: '2rem' }}>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Default
+          </span>
+          <TextareaGroup.Root>
+            <TextareaGroup.Textarea placeholder="Write a message..." />
+          </TextareaGroup.Root>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            With Header
+          </span>
+          <TextareaGroup.Root>
+            <TextareaGroup.Header>
+              <Chip onDismiss={() => {}}>recipient-1</Chip>
+              <Chip onDismiss={() => {}}>recipient-2</Chip>
+            </TextareaGroup.Header>
+            <TextareaGroup.Textarea placeholder="Write a message..." />
+          </TextareaGroup.Root>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Full Composer
+          </span>
+          <TextareaGroup.Root>
+            <TextareaGroup.Header>
+              <Chip onDismiss={() => {}}>tag-1</Chip>
+              <Chip onDismiss={() => {}}>tag-2</Chip>
+            </TextareaGroup.Header>
+            <TextareaGroup.Textarea placeholder="Write a message..." />
+            <TextareaGroup.Footer>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <Chip onDismiss={() => {}}>label</Chip>
+              </div>
+              <div>
+                <Button>Send</Button>
+              </div>
+            </TextareaGroup.Footer>
+          </TextareaGroup.Root>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            With Max Height (200px)
+          </span>
+          <TextareaGroup.Root maxHeight={200}>
+            <TextareaGroup.Textarea
+              placeholder="Write a long prompt..."
+              defaultValue={'This is a long prompt that grows.\n'.repeat(15)}
+            />
+            <TextareaGroup.Footer>
+              <div />
+              <div>
+                <Button>Send</Button>
+              </div>
+            </TextareaGroup.Footer>
+          </TextareaGroup.Root>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Disabled
+          </span>
+          <TextareaGroup.Root disabled>
+            <TextareaGroup.Textarea placeholder="Write a message..." />
+          </TextareaGroup.Root>
+        </div>
+        <div>
+          <span style={{ fontSize: '12px', color: '#7c7c7c', marginBottom: '4px', display: 'block' }}>
+            Invalid
+          </span>
+          <TextareaGroup.Root invalid>
+            <TextareaGroup.Textarea defaultValue="Bad content" />
+          </TextareaGroup.Root>
         </div>
       </div>
 

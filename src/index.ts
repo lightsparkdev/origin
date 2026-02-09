@@ -91,3 +91,13 @@ export { Shortcut, type ShortcutProps } from './components/Shortcut';
 
 export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
+
+export { Textarea, type TextareaProps } from './components/Textarea';
+
+export { TextareaGroup } from './components/TextareaGroup';
+export type {
+  TextareaGroupRootProps,
+  TextareaGroupHeaderProps,
+  TextareaGroupTextareaProps,
+  TextareaGroupFooterProps,
+} from './components/TextareaGroup';

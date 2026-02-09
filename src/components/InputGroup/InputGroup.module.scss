@@ -26,14 +26,14 @@
     transition: none;
   }
 
-  &:focus-within {
+  &:has(> .input:focus) {
     @include input-focus;
   }
 
   &[data-invalid] {
     border-color: var(--border-critical);
 
-    &:focus-within {
+    &:has(> .input:focus) {
       @include input-critical;
     }
   }
@@ -43,15 +43,18 @@
     cursor: not-allowed;
   }
 
-  // Reduce edge padding when button/trigger sits at an edge
+  // Reduce edge padding when button/trigger sits at an edge.
+  // Intentional non-token value: 5px matches the vertical centering gap
+  // ((36px height - 2px border - 24px button) / 2 = 5px) so the button
+  // has equal visual spacing on all sides.
   &:has(> .button:last-child),
   &:has(> .selectTrigger:last-child) {
-    padding-right: var(--spacing-2xs);
+    padding-right: 5px;
   }
 
   &:has(> .button:first-child),
   &:has(> .selectTrigger:first-child) {
-    padding-left: var(--spacing-2xs);
+    padding-left: 5px;
   }
 
   // No edge padding when sunken addon sits at an edge;
