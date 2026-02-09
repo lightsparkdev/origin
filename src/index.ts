@@ -14,6 +14,15 @@ export { ContextMenu } from './components/ContextMenu';
 export { Dialog } from './components/Dialog';
 export { Field } from './components/Field';
 export { Fieldset } from './components/Fieldset';
+export { InputGroup } from './components/InputGroup';
+export type {
+  InputGroupRootProps,
+  InputGroupAddonProps,
+  InputGroupInputProps,
+  InputGroupButtonProps,
+  InputGroupSelectTriggerProps,
+  InputGroupTextProps,
+} from './components/InputGroup';
 export { Menu } from './components/Menu';
 export { Menubar } from './components/Menubar';
 export { Meter } from './components/Meter';
@@ -53,6 +62,9 @@ export { Badge, type BadgeProps, type BadgeVariant } from './components/Badge';
 export { Button } from './components/Button';
 export type { ButtonProps } from './components/Button';
 
+export { ButtonGroup } from './components/ButtonGroup';
+export type { ButtonGroupProps } from './components/ButtonGroup';
+
 export { Chip, ChipFilter } from './components/Chip';
 export type { ChipProps, ChipFilterProps } from './components/Chip';
 
@@ -79,3 +91,13 @@ export { Shortcut, type ShortcutProps } from './components/Shortcut';
 
 export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
+
+export { Textarea, type TextareaProps } from './components/Textarea';
+
+export { TextareaGroup } from './components/TextareaGroup';
+export type {
+  TextareaGroupRootProps,
+  TextareaGroupHeaderProps,
+  TextareaGroupTextareaProps,
+  TextareaGroupFooterProps,
+} from './components/TextareaGroup';

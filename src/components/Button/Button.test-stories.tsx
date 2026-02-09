@@ -42,6 +42,14 @@ export function DisabledLinkButton() {
   return <Button variant="link" disabled>Learn more</Button>;
 }
 
+export function SecondaryButton() {
+  return <Button variant="secondary">Click me</Button>;
+}
+
+export function DisabledSecondaryButton() {
+  return <Button variant="secondary" disabled>Disabled</Button>;
+}
+
 export function DisabledButton() {
   return <Button disabled>Disabled</Button>;
 }

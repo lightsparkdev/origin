@@ -24,6 +24,15 @@ export default defineConfig({
           '@': path.resolve(__dirname, './src'),
         },
       },
+      css: {
+        preprocessorOptions: {
+          scss: {
+            api: 'modern-compiler',
+            // Mirror next.config.js sassOptions.includePaths
+            loadPaths: [path.resolve(__dirname, './src/tokens')],
+          },
+        },
+      },
     },
   },
   projects: [

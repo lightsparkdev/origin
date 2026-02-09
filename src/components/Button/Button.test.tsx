@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import AxeBuilder from '@axe-core/playwright';
 import {
   FilledButton,
+  SecondaryButton,
+  DisabledSecondaryButton,
   OutlineButton,
   GhostButton,
   CriticalButton,
@@ -48,6 +50,45 @@ test.describe('Button', () => {
     await mount(<CriticalButton />);
     const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
     expect(results.violations).toEqual([]);
+  });
+
+  test('secondary variant has no accessibility violations', async ({ mount, page }) => {
+    await mount(<SecondaryButton />);
+    const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
+    expect(results.violations).toEqual([]);
+  });
+
+  test('secondary variant has subtle background', async ({ mount, page }) => {
+    await mount(<SecondaryButton />);
+
+    const button = page.getByRole('button');
+    const bgColor = await button.evaluate((el) =>
+      getComputedStyle(el).backgroundColor
+    );
+    // --color-alpha-black-04 = rgba(0, 0, 0, 0.04)
+    expect(bgColor).toMatch(/rgba\(0,\s*0,\s*0,\s*0\.0[34]\d*\)/);
+  });
+
+  test('secondary variant has no border by default', async ({ mount, page }) => {
+    await mount(<SecondaryButton />);
+
+    const button = page.getByRole('button');
+    const borderColor = await button.evaluate((el) =>
+      getComputedStyle(el).borderColor
+    );
+    // transparent border (reserving space for focus state)
+    expect(borderColor).toMatch(/rgba\(0,\s*0,\s*0,\s*0\)/);
+  });
+
+  test('disabled secondary button has correct opacity', async ({ mount, page }) => {
+    await mount(<DisabledSecondaryButton />);
+
+    const button = page.getByRole('button');
+    const opacity = await button.evaluate((el) =>
+      getComputedStyle(el).opacity
+    );
+    // Secondary uses same 15% opacity as filled when disabled
+    expect(parseFloat(opacity)).toBeCloseTo(0.15, 2);
   });
 
   test('can be activated with Enter key', async ({ mount, page }) => {

@@ -36,7 +36,8 @@
     "tokens:build": "node scripts/build-tokens.js",
     "figma:styles": "npx tsx tools/figma-styles/fetch-styles.ts",
     "figma:node": "npx tsx tools/figma-styles/fetch-node-css.ts",
-    "check:baseui": "node scripts/check-baseui-version.js"
+    "check:baseui": "node scripts/check-baseui-version.js",
+    "postinstall": "node scripts/patch-playwright-ct.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

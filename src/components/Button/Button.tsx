@@ -7,7 +7,7 @@ import { Loader } from '../Loader';
 import styles from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'filled' | 'outline' | 'ghost' | 'critical' | 'link';
+  variant?: 'filled' | 'secondary' | 'outline' | 'ghost' | 'critical' | 'link';
   size?: 'default' | 'compact';
   loading?: boolean;
   loadingIndicator?: React.ReactNode;
