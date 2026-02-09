@@ -35,7 +35,7 @@ export const Default: Story = {
   },
 };
 
-export const Logo: Story = {
+export const LogoVariant: Story = {
   args: {
     variant: 'logo',
     weight: 'regular',
