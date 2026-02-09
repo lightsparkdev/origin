@@ -29,7 +29,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['filled', 'outline', 'ghost', 'critical', 'link'],
+      options: ['filled', 'secondary', 'outline', 'ghost', 'critical', 'link'],
     },
     size: {
       control: 'select',
@@ -48,6 +48,13 @@ export const Filled: Story = {
   args: {
     variant: 'filled',
     children: 'Filled Button',
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    variant: 'secondary',
+    children: 'Secondary Button',
   },
 };
 
@@ -138,6 +145,7 @@ export const AllVariants: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button variant="filled">Filled</Button>
+        <Button variant="secondary">Secondary</Button>
         <Button variant="outline">Outline</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="critical">Critical</Button>
@@ -145,6 +153,7 @@ export const AllVariants: Story = {
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button variant="filled" disabled>Filled</Button>
+        <Button variant="secondary" disabled>Secondary</Button>
         <Button variant="outline" disabled>Outline</Button>
         <Button variant="ghost" disabled>Ghost</Button>
         <Button variant="critical" disabled>Critical</Button>
@@ -152,6 +161,7 @@ export const AllVariants: Story = {
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button variant="filled" loading>Filled</Button>
+        <Button variant="secondary" loading>Secondary</Button>
         <Button variant="outline" loading>Outline</Button>
         <Button variant="ghost" loading>Ghost</Button>
         <Button variant="critical" loading>Critical</Button>
@@ -165,6 +175,7 @@ export const AllSizes: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button size="compact" variant="filled">Compact Filled</Button>
+        <Button size="compact" variant="secondary">Compact Secondary</Button>
         <Button size="compact" variant="outline">Compact Outline</Button>
         <Button size="compact" variant="ghost">Compact Ghost</Button>
         <Button size="compact" variant="critical">Compact Critical</Button>
@@ -172,6 +183,7 @@ export const AllSizes: Story = {
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button size="default" variant="filled">Default Filled</Button>
+        <Button size="default" variant="secondary">Default Secondary</Button>
         <Button size="default" variant="outline">Default Outline</Button>
         <Button size="default" variant="ghost">Default Ghost</Button>
         <Button size="default" variant="critical">Default Critical</Button>

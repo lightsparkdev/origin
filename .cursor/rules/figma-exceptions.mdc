@@ -17,3 +17,19 @@ Before "fixing" a Figma/code mismatch, check if it's listed here. If listed, the
 | `--surface-primary` fill | No background (transparent) |
 
 **Reason**: Form inputs must blend with any surface color. Figma requires a fill for focus ring effects to render — this is a tooling limitation, not a design decision.
+
+### InputGroup.Button: 3px border-radius
+
+**Applies to**: InputGroup.Button
+
+| Figma | Code |
+|-------|------|
+| 3px radius (intentional) | `border-radius: 3px` (raw value) |
+
+**Reason**: Intentional non-token value per design. The inline button uses a radius between `--corner-radius-2xs` (2px) and `--corner-radius-xs` (4px) to optically balance with the container's `--corner-radius-sm` (6px).
+
+### InputGroup: Transparent background
+
+**Applies to**: InputGroup (Root)
+
+Same as form inputs above — uses transparent background despite Figma showing `--surface-primary`.

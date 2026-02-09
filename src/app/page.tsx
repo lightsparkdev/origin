@@ -11,6 +11,8 @@ import { Dialog } from '@/components/Dialog';
 import { Badge } from '@/components/Badge';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
+import { ButtonGroup } from '@/components/ButtonGroup';
+import { InputGroup } from '@/components/InputGroup';
 import { Card } from '@/components/Card';
 import { Checkbox } from '@/components/Checkbox';
 import { Chip, ChipFilter } from '@/components/Chip';
@@ -1772,6 +1774,7 @@ export default function Home() {
       {/* Variants */}
       <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
         <Button variant="filled">Filled</Button>
+        <Button variant="secondary">Secondary</Button>
         <Button variant="outline">Outline</Button>
         <Button variant="ghost">Ghost</Button>
         <Button variant="critical">Critical</Button>
@@ -1817,6 +1820,126 @@ export default function Home() {
         <Button variant="link" disabled>Disabled link</Button>
       </div>
       
+      <h2 style={{ marginBottom: '1rem' }}>Button Group</h2>
+
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', marginBottom: '1rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '12px', color: '#7c7c7c' }}>Filled horizontal</span>
+          <ButtonGroup>
+            <Button variant="filled">Button</Button>
+            <Button variant="filled">Button</Button>
+            <Button variant="filled" iconOnly aria-label="More">
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </Button>
+          </ButtonGroup>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '12px', color: '#7c7c7c' }}>Outline horizontal</span>
+          <ButtonGroup variant="outline">
+            <Button variant="outline">Button</Button>
+            <Button variant="outline">Button</Button>
+            <Button variant="outline" iconOnly aria-label="More">
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </Button>
+          </ButtonGroup>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '12px', color: '#7c7c7c' }}>Secondary horizontal</span>
+          <ButtonGroup variant="secondary">
+            <Button variant="secondary">Button</Button>
+            <Button variant="secondary">Button</Button>
+            <Button variant="secondary" iconOnly aria-label="More">
+              <CentralIcon name="IconChevronDownSmall" size={16} />
+            </Button>
+          </ButtonGroup>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start', marginBottom: '128px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '12px', color: '#7c7c7c' }}>Filled vertical</span>
+          <ButtonGroup orientation="vertical">
+            <Button variant="filled">Button</Button>
+            <Button variant="filled">Button</Button>
+            <Button variant="filled">Button</Button>
+          </ButtonGroup>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '12px', color: '#7c7c7c' }}>Outline vertical</span>
+          <ButtonGroup orientation="vertical" variant="outline">
+            <Button variant="outline">Button</Button>
+            <Button variant="outline">Button</Button>
+            <Button variant="outline">Button</Button>
+          </ButtonGroup>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          <span style={{ fontSize: '12px', color: '#7c7c7c' }}>Secondary vertical</span>
+          <ButtonGroup orientation="vertical" variant="secondary">
+            <Button variant="secondary">Button</Button>
+            <Button variant="secondary">Button</Button>
+            <Button variant="secondary">Button</Button>
+          </ButtonGroup>
+        </div>
+      </div>
+
+      <h2 style={{ marginBottom: '1rem' }}>Input Group</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: 300, marginBottom: '1rem' }}>
+        <InputGroup.Root>
+          <InputGroup.Addon>
+            <CentralIcon name="IconMagnifyingGlass2" size={16} />
+          </InputGroup.Addon>
+          <InputGroup.Input placeholder="Search..." />
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Input placeholder="Search..." />
+          <InputGroup.Button>Search</InputGroup.Button>
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Input placeholder="Search..." />
+          <InputGroup.Button variant="outline">Search</InputGroup.Button>
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Input placeholder="0.00" />
+          <InputGroup.SelectTrigger>USD</InputGroup.SelectTrigger>
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Input placeholder="0.00" />
+          <InputGroup.SelectTrigger variant="outline">USD</InputGroup.SelectTrigger>
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Addon sunken>https://</InputGroup.Addon>
+          <InputGroup.Input placeholder="example.com" />
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Text>$</InputGroup.Text>
+          <InputGroup.Input placeholder="0.00" />
+          <InputGroup.Text>USD</InputGroup.Text>
+        </InputGroup.Root>
+
+        <InputGroup.Root disabled>
+          <InputGroup.Addon>
+            <CentralIcon name="IconMagnifyingGlass2" size={16} />
+          </InputGroup.Addon>
+          <InputGroup.Input placeholder="Disabled" />
+        </InputGroup.Root>
+
+        <InputGroup.Root invalid>
+          <InputGroup.Addon>
+            <CentralIcon name="IconMagnifyingGlass2" size={16} />
+          </InputGroup.Addon>
+          <InputGroup.Input defaultValue="Invalid" />
+        </InputGroup.Root>
+      </div>
+
+      <div style={{ marginBottom: '128px' }} />
+
       <h2 style={{ marginBottom: '1rem' }}>Card Component</h2>
       
       <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start', marginBottom: '128px' }}>
