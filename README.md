@@ -75,6 +75,22 @@ All ~100 icons from the Figma design system are available.
 
 ### Installation
 
+#### 1. Generate a GitHub token
+
+Each developer needs a **GitHub Personal Access Token (classic)** with the `read:packages` scope:
+
+1. Go to [GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
+2. Generate a new token with the **`read:packages`** scope
+3. Add it to your shell profile (`~/.zshrc` or `~/.bashrc`):
+
+```bash
+export NPM_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+```
+
+You must be a member of the `lightsparkdev` GitHub org for the token to have access.
+
+#### 2. Configure `.npmrc`
+
 Add `.npmrc` to your project root:
 
 ```
@@ -82,7 +98,7 @@ Add `.npmrc` to your project root:
 //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
 ```
 
-Install:
+#### 3. Install
 
 ```bash
 npm install @lightsparkdev/origin

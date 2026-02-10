@@ -2,7 +2,21 @@
 
 ## Installation
 
-### 1. Configure npm for GitHub Packages
+### 1. Generate a GitHub token
+
+Each developer needs a **GitHub Personal Access Token (classic)** with the `read:packages` scope:
+
+1. Go to [GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
+2. Generate a new token with the **`read:packages`** scope
+3. Add it to your shell profile (`~/.zshrc` or `~/.bashrc`):
+
+```bash
+export NPM_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+```
+
+You must be a member of the `lightsparkdev` GitHub org for the token to have access.
+
+### 2. Configure `.npmrc`
 
 Create `.npmrc` in your project root:
 
@@ -11,9 +25,7 @@ Create `.npmrc` in your project root:
 //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
 ```
 
-Set the `NPM_TOKEN` environment variable with a GitHub Personal Access Token that has `read:packages` scope.
-
-### 2. Install the Package
+### 3. Install the Package
 
 ```bash
 npm install @lightsparkdev/origin
@@ -25,7 +37,7 @@ For local development alongside Origin:
 { "dependencies": { "@lightsparkdev/origin": "file:../origin" } }
 ```
 
-### 3. Configure Next.js
+### 4. Configure Next.js
 
 ```ts
 // next.config.ts
@@ -43,13 +55,13 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-### 4. Copy Fonts
+### 5. Copy Fonts
 
 Copy fonts from `origin/public/fonts/` to `your-app/public/fonts/`.
 
 Font files must be served from the consuming app's public folder.
 
-### 5. Configure `globals.scss`
+### 6. Configure `globals.scss`
 
 ```scss
 @use 'pkg:@lightsparkdev/origin/tokens/variables';
