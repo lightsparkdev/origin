@@ -15,16 +15,13 @@ alwaysApply: false
 
 ## Base UI Research
 
-1. **Discovery**: `https://base-ui.com/llms.txt` — what components exist
-2. **Read docs for your component**: `https://base-ui.com/react/components/{name}`
-   - The examples show the simplest wrapper — trust that Base UI authors have already optimized this
-   - Note all `data-` attributes provided (e.g., `data-disabled`, `data-invalid`, `data-focused`)
-   - Understand Field integration for form controls
+1. **Read the Base UI expert skill**: `.cursor/skills/base-ui-expert/SKILL.md` — component availability, core patterns, known quirks
+2. **For detailed API**: `.cursor/skills/base-ui-expert/reference.md` — full props, parts, data attributes, composition/form/animation patterns
 3. **Then** apply project styling conventions (tokens, size variants)
 
 ## Base UI Utilities
 
-Base UI provides utilities beyond components. Reference: `https://base-ui.com/react/utils/{name}`
+Base UI provides utilities beyond components. See the expert skill for details.
 
 ### mergeProps
 

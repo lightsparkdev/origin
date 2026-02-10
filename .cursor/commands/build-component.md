@@ -11,7 +11,7 @@
    - Design context → extract CSS for EACH variant, not just parent
    - Output summary before proceeding
 
-3. **Check Base UI** (start at https://base-ui.com/llms.txt) — follow decision tree:
+3. **Check Base UI** (read `.cursor/skills/base-ui-expert/SKILL.md`, then `reference.md` if needed) — follow decision tree:
 
    **A. Exact match exists?**
    - Yes → Use Base UI primitive, follow `components.mdc`
@@ -125,7 +125,7 @@ Figma URL
 Deep Figma Analysis (figma-analysis.mdc)
     │
     ▼
-Base UI Check (llms.txt)
+Base UI Check (expert skill)
     │
     ▼
 A/B/C Path Decision
