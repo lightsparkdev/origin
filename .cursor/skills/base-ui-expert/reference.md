@@ -411,6 +411,96 @@ Base UI detects animation completion via `element.getAnimations()`. If your anim
 - **Parts**: `Root`, `Trigger`, `Portal`, `Positioner`, `Popup`, `Arrow`, `Provider`
 - **Key props (Trigger)**: `delay`, `closeDelay`, `disableHoverablePopup`
 
+## Utilities
+
+### CSP Provider (v1.1.0+)
+- **Import**: `@base-ui/react/csp-provider`
+- **Purpose**: Applies a nonce to inline `<style>` and `<script>` tags rendered by Base UI components for Content Security Policy compliance.
+- **Key props**:
+  - `nonce`: String nonce value for inline tags
+  - `disableStyleElements`: Boolean to avoid rendering inline `<style>` tags entirely
+- **Usage**:
+
+```tsx
+import { CSPProvider } from '@base-ui/react/csp-provider';
+
+<CSPProvider nonce={serverNonce}>
+  {/* Your app */}
+</CSPProvider>
+```
+
+- **Note**: If `disableStyleElements` is used, add this CSS manually:
+```css
+.base-ui-disable-scrollbar { scrollbar-width: none; }
+.base-ui-disable-scrollbar::-webkit-scrollbar { display: none; }
+```
+
+### mergeProps (v1.1.0+)
+- **Import**: `@base-ui/react/merge-props`
+- **Purpose**: Merges multiple sets of React props, intelligently handling event handlers, className, and style.
+- **Behavior**:
+  - Most props: rightmost value wins (like `Object.assign`)
+  - `className`: concatenated right-to-left (rightmost first in string)
+  - `style`: merged, rightmost keys override
+  - Event handlers: merged, executed right-to-left (rightmost first)
+  - `ref`: NOT merged, only rightmost ref is used
+- **Key feature**: `event.preventBaseUIHandler()` stops Base UI's internal logic from running (does not call `preventDefault()` or `stopPropagation()`)
+
+```tsx
+import { mergeProps } from '@base-ui/react/merge-props';
+
+const merged = mergeProps<'button'>(
+  { onClick: handleA, className: 'a' },
+  { onClick: handleB, className: 'b' }
+);
+// className is 'b a', handleB runs before handleA
+```
+
+### useRender
+- **Import**: `@base-ui/react/use-render`
+- **Purpose**: Hook for enabling a `render` prop in custom components (like building your own Base UI primitives).
+- **Key parameters**:
+  - `defaultTagName`: The default element tag (e.g., `'button'`)
+  - `render`: The render prop value
+  - `props`: Props to spread on the element
+  - `ref`: Refs to merge onto the element
+  - `state`: State object passed to render callback
+- **Types**:
+  - `useRender.ComponentProps<'tag'>`: External props (includes `render` prop)
+  - `useRender.ElementProps<'tag'>`: Internal element props
+
+```tsx
+import { useRender } from '@base-ui/react/use-render';
+import { mergeProps } from '@base-ui/react/merge-props';
+
+interface ButtonProps extends useRender.ComponentProps<'button'> {}
+
+function Button({ render, ...props }: ButtonProps) {
+  const defaultProps: useRender.ElementProps<'button'> = {
+    className: styles.Button,
+    type: 'button',
+  };
+
+  return useRender({
+    defaultTagName: 'button',
+    render,
+    props: mergeProps<'button'>(defaultProps, props),
+  });
+}
+```
+
+### Direction Provider
+- **Import**: `@base-ui/react/direction-provider`
+- **Purpose**: Enables RTL behavior for Base UI components.
+
+```tsx
+import { DirectionProvider } from '@base-ui/react/direction-provider';
+
+<DirectionProvider direction="rtl">
+  {/* RTL components */}
+</DirectionProvider>
+```
+
 ## Breaking Changes (Beta -> Stable)
 
 | Version | Component | Change |

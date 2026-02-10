@@ -7,7 +7,7 @@ description: Base UI expert for building Origin components. Provides the full co
 
 Origin uses `@base-ui/react` v1.1.0 (Jan 15, 2026).
 
-> Auto-refreshed: 2026-02-09 | Sources: base-ui.com/llms.txt, base-ui.com/react/overview/releases.md
+> Auto-refreshed: 2026-02-10 | Sources: base-ui.com/llms.txt, base-ui.com/react/overview/releases.md
 
 ## Quick Decision: Does Base UI Have It?
 
@@ -37,7 +37,7 @@ Origin uses `@base-ui/react` v1.1.0 (Jan 15, 2026).
 | Preview Card | `preview-card` | Not yet |
 | Progress | `progress` | Yes |
 | Radio | `radio` | Yes |
-| Scroll Area | `scroll-area` | Yes |
+| Scroll Area | `scroll-area` | Not yet |
 | Select | `select` | Yes |
 | Separator | `separator` | Yes |
 | Slider | `slider` | Not yet |
