@@ -5,7 +5,7 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background-color: var(--surface-scrim);
+  background-color: var(--surface-inverted-backdrop);
   transition: opacity 150ms ease;
 
   &[data-starting-style],

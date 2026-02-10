@@ -300,7 +300,8 @@
   --surface-active: rgba(42, 42, 37, 0.04);
   --surface-inverted: #1A1A1A;
   --surface-inverted-hover: rgba(255, 255, 255, 0.04);
-  --surface-scrim: rgba(248, 248, 247, 0.80);
+  --surface-inverted-backdrop: rgba(248, 248, 247, 0.80);
+  --surface-backdrop: rgba(38, 38, 35, 0.10);
   --surface-purple: #FAF8FC;
   --surface-purple-strong: #754EA2;
   --surface-blue: #EEF7FF;
@@ -363,7 +364,8 @@
   --surface-active: rgba(243, 243, 245, 0.04);
   --surface-inverted: #F8F8F7;
   --surface-inverted-hover: rgba(0, 0, 0, 0.04);
-  --surface-scrim: rgba(28, 28, 27, 0.80);
+  --surface-inverted-backdrop: rgba(28, 28, 27, 0.80);
+  --surface-backdrop: rgba(29, 29, 28, 0.70);
   --surface-purple: #754EA2;
   --surface-purple-strong: #8A62BB;
   --surface-blue: #0072DB;
@@ -426,7 +428,8 @@
     --surface-active: rgba(243, 243, 245, 0.04);
     --surface-inverted: #F8F8F7;
     --surface-inverted-hover: rgba(0, 0, 0, 0.04);
-    --surface-scrim: rgba(28, 28, 27, 0.80);
+    --surface-inverted-backdrop: rgba(28, 28, 27, 0.80);
+    --surface-backdrop: rgba(29, 29, 28, 0.70);
     --surface-purple: #754EA2;
     --surface-purple-strong: #8A62BB;
     --surface-blue: #0072DB;
