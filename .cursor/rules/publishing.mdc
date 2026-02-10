@@ -33,5 +33,5 @@ gh release create vX.Y.Z --title "vX.Y.Z" --generate-notes
 In Grid, update to the new version:
 
 ```bash
-npm install @jaymantri/origin@latest
+npm install @lightsparkdev/origin@latest
 ```

@@ -78,20 +78,20 @@ All ~100 icons from the Figma design system are available.
 Add `.npmrc` to your project root:
 
 ```
-@jaymantri:registry=https://npm.pkg.github.com
+@lightsparkdev:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
 ```
 
 Install:
 
 ```bash
-npm install @jaymantri/origin
+npm install @lightsparkdev/origin
 ```
 
 Or for local development:
 
 ```json
-{ "dependencies": { "@jaymantri/origin": "file:../origin" } }
+{ "dependencies": { "@lightsparkdev/origin": "file:../origin" } }
 ```
 
 ### Next.js Configuration
@@ -102,7 +102,7 @@ import type { NextConfig } from "next";
 import * as sass from "sass";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@jaymantri/origin'],
+  transpilePackages: ['@lightsparkdev/origin'],
   sassOptions: {
     importers: [new sass.NodePackageImporter()],
   },
@@ -114,7 +114,7 @@ export default nextConfig;
 ### Usage
 
 ```tsx
-import { Button, Input, Field } from '@jaymantri/origin';
+import { Button, Input, Field } from '@lightsparkdev/origin';
 ```
 
 ### Token Imports (SCSS)
@@ -123,14 +123,14 @@ Use `pkg:` prefix to import tokens from the package:
 
 ```scss
 // globals.scss
-@use 'pkg:@jaymantri/origin/tokens/variables';
-@use 'pkg:@jaymantri/origin/tokens/fonts';
-@use 'pkg:@jaymantri/origin/tokens/typography';
-@use 'pkg:@jaymantri/origin/tokens/effects';
-@use 'pkg:@jaymantri/origin/tokens/reset';
+@use 'pkg:@lightsparkdev/origin/tokens/variables';
+@use 'pkg:@lightsparkdev/origin/tokens/fonts';
+@use 'pkg:@lightsparkdev/origin/tokens/typography';
+@use 'pkg:@lightsparkdev/origin/tokens/effects';
+@use 'pkg:@lightsparkdev/origin/tokens/reset';
 
 // In component SCSS
-@use 'pkg:@jaymantri/origin/tokens/text-styles' as *;
+@use 'pkg:@lightsparkdev/origin/tokens/text-styles' as *;
 ```
 
 For full setup details, see [Using Origin in Your App](docs/using-origin-in-your-app.md).

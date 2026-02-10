@@ -7,7 +7,7 @@
 Create `.npmrc` in your project root:
 
 ```
-@jaymantri:registry=https://npm.pkg.github.com
+@lightsparkdev:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${NPM_TOKEN}
 ```
 
@@ -16,13 +16,13 @@ Set the `NPM_TOKEN` environment variable with a GitHub Personal Access Token tha
 ### 2. Install the Package
 
 ```bash
-npm install @jaymantri/origin
+npm install @lightsparkdev/origin
 ```
 
 For local development alongside Origin:
 
 ```json
-{ "dependencies": { "@jaymantri/origin": "file:../origin" } }
+{ "dependencies": { "@lightsparkdev/origin": "file:../origin" } }
 ```
 
 ### 3. Configure Next.js
@@ -33,7 +33,7 @@ import type { NextConfig } from "next";
 import * as sass from "sass";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@jaymantri/origin'],
+  transpilePackages: ['@lightsparkdev/origin'],
   sassOptions: {
     // Enable pkg: imports for SCSS from node_modules
     importers: [new sass.NodePackageImporter()],
@@ -52,11 +52,11 @@ Font files must be served from the consuming app's public folder.
 ### 5. Configure `globals.scss`
 
 ```scss
-@use 'pkg:@jaymantri/origin/tokens/variables';
-@use 'pkg:@jaymantri/origin/tokens/fonts';
-@use 'pkg:@jaymantri/origin/tokens/typography';
-@use 'pkg:@jaymantri/origin/tokens/effects';
-@use 'pkg:@jaymantri/origin/tokens/reset';
+@use 'pkg:@lightsparkdev/origin/tokens/variables';
+@use 'pkg:@lightsparkdev/origin/tokens/fonts';
+@use 'pkg:@lightsparkdev/origin/tokens/typography';
+@use 'pkg:@lightsparkdev/origin/tokens/effects';
+@use 'pkg:@lightsparkdev/origin/tokens/reset';
 
 body {
   margin: 0;
@@ -77,7 +77,7 @@ The `_reset.scss` file includes:
 ## Component Usage
 
 ```tsx
-import { Button, Input, Field, CentralIcon } from '@jaymantri/origin';
+import { Button, Input, Field, CentralIcon } from '@lightsparkdev/origin';
 
 <Button variant="filled">Click me</Button>
 <Field>
@@ -99,7 +99,7 @@ Use the `pkg:` prefix for mixins. CSS variables are globally available:
 
 ```scss
 // component.module.scss
-@use 'pkg:@jaymantri/origin/tokens/text-styles' as *;
+@use 'pkg:@lightsparkdev/origin/tokens/text-styles' as *;
 
 .title {
   @include headline-sm;
@@ -121,7 +121,7 @@ If you need app-specific tokens or mixins, create them in a local `src/tokens/` 
 
 // component.module.scss
 @use '../tokens/forms' as *;  // local
-@use 'pkg:@jaymantri/origin/tokens/text-styles' as *;  // from Origin
+@use 'pkg:@lightsparkdev/origin/tokens/text-styles' as *;  // from Origin
 ```
 
 ## Sync
@@ -129,5 +129,5 @@ If you need app-specific tokens or mixins, create them in a local `src/tokens/` 
 Tokens are imported directly from the package — no manual copying needed. When Origin publishes a new version:
 
 ```bash
-npm install @jaymantri/origin@latest
+npm install @lightsparkdev/origin@latest
 ```
