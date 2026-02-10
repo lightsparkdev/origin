@@ -7,7 +7,7 @@ description: Base UI expert for building Origin components. Provides the full co
 
 Origin uses `@base-ui/react` v1.1.0 (Jan 15, 2026).
 
-> Auto-refreshed: 2026-02-09 | Sources: base-ui.com/llms.txt, base-ui.com/react/overview/releases.md
+> Auto-refreshed: 2026-02-10 | Sources: base-ui.com/llms.txt, base-ui.com/react/overview/releases.md
 
 ## Quick Decision: Does Base UI Have It?
 
@@ -108,6 +108,10 @@ Base UI exposes state via data attributes, not classes:
 | `data-starting-style` | Entry animation state |
 | `data-ending-style` | Exit animation state |
 | `data-popup-side` | Which side popup is on |
+| `data-highlighted` | Item is keyboard-focused |
+| `data-checked` | Checkbox/Switch/Radio is on |
+| `data-unchecked` | Checkbox/Switch/Radio is off |
+| `data-active` | Tab is active |
 
 ### Field Integration
 
@@ -136,42 +140,48 @@ No manual `aria-labelledby` or `htmlFor` needed.
 Most Base UI components use the compound pattern with dot notation:
 `Dialog.Root`, `Dialog.Trigger`, `Dialog.Portal`, `Dialog.Backdrop`, `Dialog.Content`, etc.
 
+### Event Customization (v1.0+)
+
+All change handlers receive `(value, eventDetails)`:
+
+```tsx
+onOpenChange={(open, eventDetails) => {
+  // eventDetails.reason - why it changed
+  // eventDetails.event - DOM event
+  // eventDetails.cancel() - prevent state change
+  // eventDetails.allowPropagation() - allow event bubbling
+}}
+```
+
 ## Utilities
 
 | Utility | Import | Purpose |
 |---------|--------|---------|
-| `CSP Provider` | `@base-ui/react/csp-provider` | A CSP provider component that applies a nonce to inline <style> and <script> tag |
-| `Direction Provider` | `@base-ui/react/direction-provider` | A direction provider component that enables RTL behavior for Base UI components. |
-| `mergeProps` | `@base-ui/react/mergeprops` | A utility to merge multiple sets of React props, handling event handlers, classN |
-| `useRender` | `@base-ui/react/userender` | Hook for enabling a render prop in custom components. |
+| `mergeProps` | `@base-ui/react/merge-props` | Merge multiple prop sets, handling events/className/style |
+| `useRender` | `@base-ui/react/use-render` | Enable render prop in custom components |
+| `CSP Provider` | `@base-ui/react/csp-provider` | Apply nonce to inline styles/scripts |
+| `Direction Provider` | `@base-ui/react/direction-provider` | Enable RTL behavior |
 
 ## Recent Changes
 
 ### v1.1.0 (Jan 15, 2026)
 
-  - Fix `onOpenChangeComplete(true)` timing ([#3558](https://github.com/mui/base-ui/pull/3558))
-  - Fix touch `openMethod` when tapping outside element bounds on Safari ([#3541](https://github.com/mui/base-ui/pull/3541))
-  - Fix visually hidden input styles across form components ([#3606](https://github.com/mui/base-ui/pull/3606))
-  - Fix click and drags outside a nested popup component from closing its parents ([#3571](https://github.com/mui/base-ui/pull/3571))
-  - Fix forwarded ref types ([#3638](https://github.com/mui/base-ui/pull/3638))
-  - Fix detached trigger remounting ([#3724](https://github.com/mui/base-ui/pull/3724))
-  - Include `ref` in `BaseUIComponentProps` ([#2813](https://github.com/mui/base-ui/pull/2813))
-  - Remove duplicated `disabled` prop ([#3650](https://github.com/mui/base-ui/pull/3650))
+- Add `loopFocus` prop to Autocomplete and Combobox
+- Add `placeholder` prop to `Select.Value` and `Combobox.Value`
+- Add `value` prop to Switch for form submission
+- Add `actionsRef` prop to Field and Form for programmatic validation
+- Add `nativeLabel` prop to `Field.Label`
+- Add `mergeProps` utility (now public)
+- Fix `onOpenChangeComplete(true)` timing
+- Fix forwarded ref types
+- Fix visually hidden input styles across form components
+- Fix click-and-drags outside nested popups from closing parents
 
 ### v1.0.0 (Dec 11, 2025)
 
-  - **Breaking change:** Rename packages to use the @base-ui org.<br />
-  - Respect `itemToStringValue` for `onFormSubmit` ([#3441](https://github.com/mui/base-ui/pull/3441))
-  - Add `null` as an option for the value prop ([#3488](https://github.com/mui/base-ui/pull/3488))
-  - Fix submenu opens with 0 delay ([#3459](https://github.com/mui/base-ui/pull/3459))
-  - Fix focus not returning to trigger on <kbd>Esc</kbd> while pointer rests on popup ([#3482](https://github.com/mui/base-ui/pull/3482))
-  - Fix always `null` open method ([#3486](https://github.com/mui/base-ui/pull/3486))
-  - Allow side axis fallback for submenus by default ([#3470](https://github.com/mui/base-ui/pull/3470))
-  - Fix mount transitions on `Positioner` in Firefox ([#3424](https://github.com/mui/base-ui/pull/3424))
-
-### v1.0.0-rc.2 (Dec 11, 2025)
-
-
+- **Breaking change:** Rename packages `@base-ui-components/react` -> `@base-ui/react`
+- Add `null` as option for Select/Combobox value prop
+- Fix submenu delay and focus issues
 
 ## Additional Resources
 
