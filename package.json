@@ -1,6 +1,6 @@
 {
   "name": "@lightsparkdev/origin",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": false,
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "repository": {
@@ -37,7 +37,7 @@
     "figma:styles": "npx tsx tools/figma-styles/fetch-styles.ts",
     "figma:node": "npx tsx tools/figma-styles/fetch-node-css.ts",
     "check:baseui": "node scripts/check-baseui-version.js",
-    "postinstall": "node scripts/patch-playwright-ct.js"
+    "patch:playwright": "node scripts/patch-playwright-ct.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",
