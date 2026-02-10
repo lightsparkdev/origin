@@ -5,7 +5,7 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  background-color: var(--surface-scrim);
+  background-color: var(--surface-inverted-backdrop);
   transition: opacity 200ms ease-out;
 
   &[data-open] {
@@ -33,7 +33,7 @@
   max-width: calc(100vw - var(--spacing-2xl));
   overflow: clip;
   background-color: var(--surface-elevated);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-secondary);
   border-radius: var(--corner-radius-md);
   box-shadow: var(--shadow-lg);
   transition: opacity 200ms ease-out, transform 200ms ease-out;
