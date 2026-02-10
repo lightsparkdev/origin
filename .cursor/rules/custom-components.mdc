@@ -13,7 +13,7 @@ Use when Base UI doesn't have the component.
 ## Before Building
 
 1. Deep Figma analysis — follow `figma-analysis.mdc`
-2. Check Base UI expert skill: `.cursor/skills/base-ui-expert/SKILL.md` (confirm no match)
+2. Check Base UI docs: https://base-ui.com/llms.txt (confirm no match)
 3. Study WAI-ARIA APG for the pattern
 4. **Write tests first** — define expected behavior before implementation
 
