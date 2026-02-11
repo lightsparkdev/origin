@@ -91,18 +91,16 @@ export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
 
 export interface PanelProps extends BaseAccordion.Panel.Props {}
 
-/**
- * Accordion panel - content container that animates open/closed.
- * Padding is applied directly to the panel.
- */
 export const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
-  function Panel({ className, ...props }, ref) {
+  function Panel({ className, children, ...props }, ref) {
     return (
       <BaseAccordion.Panel
         ref={ref}
         className={clsx(styles.panel, className)}
         {...props}
-      />
+      >
+        <div className={styles.panelContent}>{children}</div>
+      </BaseAccordion.Panel>
     );
   }
 );
