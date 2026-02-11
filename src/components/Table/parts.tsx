@@ -9,18 +9,23 @@ import { CentralIcon } from '../Icon';
 // Root
 // ============================================================================
 
+export type TableSize = 'default' | 'compact';
+
 export interface RootProps extends React.TableHTMLAttributes<HTMLTableElement> {
   /** Whether any rows are selected (shows all checkboxes when true) */
   hasSelection?: boolean;
+  /** Table density — compact reduces row heights for higher information density */
+  size?: TableSize;
 }
 
 export const Root = React.forwardRef<HTMLTableElement, RootProps>(
-  function Root({ className, hasSelection, ...props }, ref) {
+  function Root({ className, hasSelection, size = 'default', ...props }, ref) {
     return (
       <table
         ref={ref}
         className={clsx(styles.root, className)}
         data-has-selection={hasSelection || undefined}
+        data-size={size !== 'default' ? size : undefined}
         {...props}
       />
     );
@@ -38,7 +43,7 @@ export const Header = React.forwardRef<HTMLTableSectionElement, HeaderProps>(
     return (
       <thead
         ref={ref}
-        className={clsx(styles.header, className)}
+        className={className}
         {...props}
       />
     );
@@ -56,7 +61,7 @@ export const HeaderRow = React.forwardRef<HTMLTableRowElement, HeaderRowProps>(
     return (
       <tr
         ref={ref}
-        className={clsx(styles.headerRow, className)}
+        className={className}
         {...props}
       />
     );
@@ -80,6 +85,8 @@ export interface HeaderCellProps extends React.ThHTMLAttributes<HTMLTableCellEle
   onSort?: (event: React.MouseEvent | React.KeyboardEvent) => void;
   /** Whether column is resizable */
   resizable?: boolean;
+  /** Leading slot content (e.g. checkbox) */
+  leading?: React.ReactNode;
 }
 
 export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps>(
@@ -91,7 +98,8 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
       sortable = false,
       sortDirection,
       onSort,
-      resizable = false,
+      resizable: _resizable = false,
+      leading,
       children,
       ...props
     },
@@ -104,15 +112,26 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
       }
     };
 
+    const sortIcon = sortable ? (
+      <span className={styles.sortIcon} aria-hidden="true">
+        {sortDirection === 'asc' ? (
+          <CentralIcon name="IconChevronTopSmall" size={12} />
+        ) : sortDirection === 'desc' ? (
+          <CentralIcon name="IconChevronDownSmall" size={12} />
+        ) : (
+          <CentralIcon name="IconChevronGrabberVertical" size={12} />
+        )}
+      </span>
+    ) : null;
+
     return (
       <th
         ref={ref}
         className={clsx(
           styles.headerCell,
-          styles[`headerCell--${variant}`],
-          styles[`headerCell--${align}`],
+          variant !== 'default' && styles[`headerCell--${variant}`],
+          align !== 'left' && styles[`headerCell--${align}`],
           sortable && styles['headerCell--sortable'],
-          resizable && styles['headerCell--resizable'],
           className
         )}
         data-align={align}
@@ -121,40 +140,24 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
         tabIndex={sortable ? 0 : undefined}
         onClick={sortable ? onSort : undefined}
         onKeyDown={sortable ? handleKeyDown : undefined}
-        role={sortable ? 'button' : undefined}
         aria-sort={
           sortDirection === 'asc'
             ? 'ascending'
             : sortDirection === 'desc'
             ? 'descending'
+            : sortable
+            ? 'none'
             : undefined
         }
         {...props}
       >
         <span className={styles.headerCellContent}>
-          {sortable && align === 'right' && (
-            <span className={styles.sortIcon} aria-hidden="true">
-              {sortDirection === 'asc' ? (
-                <CentralIcon name="IconChevronTopSmall" size={12} />
-              ) : sortDirection === 'desc' ? (
-                <CentralIcon name="IconChevronDownSmall" size={12} />
-              ) : (
-                <CentralIcon name="IconChevronGrabberVertical" size={12} />
-              )}
-            </span>
+          {leading && (
+            <span className={styles.headerCellLeading}>{leading}</span>
           )}
-          {children}
-          {sortable && align !== 'right' && (
-            <span className={styles.sortIcon} aria-hidden="true">
-              {sortDirection === 'asc' ? (
-                <CentralIcon name="IconChevronTopSmall" size={12} />
-              ) : sortDirection === 'desc' ? (
-                <CentralIcon name="IconChevronDownSmall" size={12} />
-              ) : (
-                <CentralIcon name="IconChevronGrabberVertical" size={12} />
-              )}
-            </span>
-          )}
+          {align === 'right' && sortIcon}
+          <span className={styles.headerCellLabel}>{children}</span>
+          {align !== 'right' && sortIcon}
         </span>
       </th>
     );
@@ -172,7 +175,7 @@ export const Body = React.forwardRef<HTMLTableSectionElement, BodyProps>(
     return (
       <tbody
         ref={ref}
-        className={clsx(styles.body, className)}
+        className={className}
         {...props}
       />
     );
@@ -184,7 +187,7 @@ export const Body = React.forwardRef<HTMLTableSectionElement, BodyProps>(
 // ============================================================================
 
 export interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  /** Whether row is selected */
+  /** Whether row is selected — sets data-selected for external styling/tests. No internal visual change per design spec (checkbox indicates selection). */
   selected?: boolean;
   /** Whether row is the last row (no bottom border) */
   last?: boolean;
@@ -197,7 +200,6 @@ export const Row = React.forwardRef<HTMLTableRowElement, RowProps>(
         ref={ref}
         className={clsx(
           styles.row,
-          selected && styles.rowSelected,
           last && styles['row--last'],
           className
         )}
@@ -214,11 +216,15 @@ export const Row = React.forwardRef<HTMLTableRowElement, RowProps>(
 
 export interface CellProps extends React.TdHTMLAttributes<HTMLTableCellElement> {
   /** Cell variant */
-  variant?: 'default' | 'checkbox' | 'action';
+  variant?: 'default' | 'checkbox';
   /** Text alignment */
   align?: 'left' | 'right';
   /** Whether cell is in loading state */
   loading?: boolean;
+  /** Leading slot content (e.g. checkbox, avatar) */
+  leading?: React.ReactNode;
+  /** Trailing slot content (e.g. action button) */
+  trailing?: React.ReactNode;
 }
 
 export const Cell = React.forwardRef<HTMLTableCellElement, CellProps>(
@@ -228,19 +234,22 @@ export const Cell = React.forwardRef<HTMLTableCellElement, CellProps>(
       variant = 'default',
       align = 'left',
       loading = false,
+      leading,
+      trailing,
       children,
       ...props
     },
     ref
   ) {
+    const hasSlots = leading != null || trailing != null;
+
     return (
       <td
         ref={ref}
         className={clsx(
           styles.cell,
-          styles[`cell--${variant}`],
-          styles[`cell--${align}`],
-          loading && styles['cell--loading'],
+          variant !== 'default' && styles[`cell--${variant}`],
+          align !== 'left' && styles[`cell--${align}`],
           className
         )}
         data-align={align}
@@ -249,6 +258,16 @@ export const Cell = React.forwardRef<HTMLTableCellElement, CellProps>(
       >
         {loading ? (
           <span className={styles.skeleton} />
+        ) : hasSlots ? (
+          <span className={styles.cellLayout}>
+            {leading && (
+              <span className={styles.cellSlot}>{leading}</span>
+            )}
+            <span className={styles.cellLayoutContent}>{children}</span>
+            {trailing && (
+              <span className={styles.cellSlot}>{trailing}</span>
+            )}
+          </span>
         ) : (
           children
         )}
@@ -280,7 +299,7 @@ export const CellContent = React.forwardRef<HTMLDivElement, CellContentProps>(
     return (
       <div ref={ref} className={clsx(styles.cellContent, className)} {...props}>
         <span className={styles.cellLabel}>
-          {label}
+          <span className={styles.cellLabelText}>{label}</span>
           {indicator && <span className={styles.cellIndicator} />}
           {badge}
         </span>
@@ -308,7 +327,7 @@ export const ResizeHandle = React.forwardRef<HTMLDivElement, ResizeHandleProps>(
         ref={ref}
         className={clsx(
           styles.resizeHandle,
-          isResizing && styles['resizeHandle--active'],
+          isResizing && styles['resizeHandle--resizing'],
           className
         )}
         data-resizing={isResizing || undefined}
