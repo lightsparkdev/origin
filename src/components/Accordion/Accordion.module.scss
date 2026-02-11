@@ -70,9 +70,6 @@
   width: 100%;
   height: var(--accordion-panel-height);
   overflow: hidden;
-  padding-bottom: var(--spacing-sm);
-  @include body;
-  color: var(--text-primary);
   transition: height 200ms ease-out;
 
   &[data-starting-style],
@@ -83,4 +80,10 @@
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
+}
+
+.panelContent {
+  padding-bottom: var(--spacing-sm);
+  @include body;
+  color: var(--text-primary);
 }
