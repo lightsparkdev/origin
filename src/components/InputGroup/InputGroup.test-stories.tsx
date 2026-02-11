@@ -77,22 +77,48 @@ export function LeadingAndTrailing() {
   );
 }
 
-// Sunken (attached) addon
-export function SunkenAddon() {
+// Cap (attached edge block)
+export function CapAddon() {
   return (
     <InputGroup.Root>
-      <InputGroup.Addon sunken>https://</InputGroup.Addon>
+      <InputGroup.Cap>https://</InputGroup.Cap>
       <InputGroup.Input placeholder="example.com" />
     </InputGroup.Root>
   );
 }
 
-// Trailing sunken addon
-export function TrailingSunkenAddon() {
+// Trailing cap
+export function TrailingCap() {
   return (
     <InputGroup.Root>
       <InputGroup.Input placeholder="0.00" />
-      <InputGroup.Addon sunken>USD</InputGroup.Addon>
+      <InputGroup.Cap>USD</InputGroup.Cap>
+    </InputGroup.Root>
+  );
+}
+
+// Cap with button inside
+export function CapWithButton() {
+  return (
+    <InputGroup.Root>
+      <InputGroup.Input placeholder="Enter value..." />
+      <InputGroup.Cap>
+        <InputGroup.Button>Copy</InputGroup.Button>
+      </InputGroup.Cap>
+    </InputGroup.Root>
+  );
+}
+
+// Cap with icon button inside
+export function CapWithIconButton() {
+  return (
+    <InputGroup.Root>
+      <InputGroup.Cap>
+        <InputGroup.Button aria-label="Search">
+          <SearchIcon />
+        </InputGroup.Button>
+      </InputGroup.Cap>
+      <InputGroup.Input placeholder="Search..." />
     </InputGroup.Root>
   );
 }
@@ -302,6 +328,16 @@ export function ConformanceText(props: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <InputGroup.Root>
       <InputGroup.Text data-testid="test-root" {...props}>$</InputGroup.Text>
+      <InputGroup.Input placeholder="Test" />
+    </InputGroup.Root>
+  );
+}
+
+// Conformance: Cap forwards props
+export function ConformanceCap(props: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <InputGroup.Root>
+      <InputGroup.Cap data-testid="test-root" {...props}>https://</InputGroup.Cap>
       <InputGroup.Input placeholder="Test" />
     </InputGroup.Root>
   );

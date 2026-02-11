@@ -18,6 +18,7 @@ export { InputGroup } from './components/InputGroup';
 export type {
   InputGroupRootProps,
   InputGroupAddonProps,
+  InputGroupCapProps,
   InputGroupInputProps,
   InputGroupButtonProps,
   InputGroupSelectTriggerProps,

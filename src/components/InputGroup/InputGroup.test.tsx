@@ -4,8 +4,10 @@ import {
   Default,
   TrailingAddon,
   LeadingAndTrailing,
-  SunkenAddon,
-  TrailingSunkenAddon,
+  CapAddon,
+  TrailingCap,
+  CapWithButton,
+  CapWithIconButton,
   WithText,
   WithButton,
   WithOutlineButton,
@@ -25,6 +27,7 @@ import {
   ConformanceButton,
   ConformanceSelectTrigger,
   ConformanceText,
+  ConformanceCap,
 } from './InputGroup.test-stories';
 
 const axeConfig = {
@@ -72,6 +75,18 @@ test.describe('InputGroup', () => {
       const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
       expect(results.violations).toEqual([]);
     });
+
+    test('cap with button has no violations', async ({ mount, page }) => {
+      await mount(<CapWithButton />);
+      const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
+      expect(results.violations).toEqual([]);
+    });
+
+    test('cap with icon button has no violations', async ({ mount, page }) => {
+      await mount(<CapWithIconButton />);
+      const results = await new AxeBuilder({ page }).options(axeConfig).analyze();
+      expect(results.violations).toEqual([]);
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -105,18 +120,34 @@ test.describe('InputGroup', () => {
       await expect(addons).toHaveCount(2);
     });
 
-    test('renders sunken addon', async ({ mount, page }) => {
-      await mount(<SunkenAddon />);
-      const addon = page.locator('[data-input-group-addon][data-sunken]');
-      await expect(addon).toBeVisible();
-      await expect(addon).toContainText('https://');
+    test('renders cap', async ({ mount, page }) => {
+      await mount(<CapAddon />);
+      const cap = page.locator('[data-input-group-cap]');
+      await expect(cap).toBeVisible();
+      await expect(cap).toContainText('https://');
     });
 
-    test('renders trailing sunken addon', async ({ mount, page }) => {
-      await mount(<TrailingSunkenAddon />);
-      const addon = page.locator('[data-input-group-addon][data-sunken]');
-      await expect(addon).toBeVisible();
-      await expect(addon).toContainText('USD');
+    test('renders trailing cap', async ({ mount, page }) => {
+      await mount(<TrailingCap />);
+      const cap = page.locator('[data-input-group-cap]');
+      await expect(cap).toBeVisible();
+      await expect(cap).toContainText('USD');
+    });
+
+    test('renders cap with button', async ({ mount, page }) => {
+      await mount(<CapWithButton />);
+      const cap = page.locator('[data-input-group-cap]');
+      await expect(cap).toBeVisible();
+      const button = cap.getByRole('button', { name: 'Copy' });
+      await expect(button).toBeVisible();
+    });
+
+    test('renders cap with icon button', async ({ mount, page }) => {
+      await mount(<CapWithIconButton />);
+      const cap = page.locator('[data-input-group-cap]');
+      await expect(cap).toBeVisible();
+      const button = cap.getByRole('button', { name: 'Search' });
+      await expect(button).toBeVisible();
     });
 
     test('renders text part', async ({ mount, page }) => {
@@ -225,6 +256,18 @@ test.describe('InputGroup', () => {
       await mount(<WithButton />);
       const input = page.getByPlaceholder('Search...');
       const button = page.getByRole('button', { name: 'Search' });
+
+      await page.keyboard.press('Tab');
+      await expect(input).toBeFocused();
+
+      await page.keyboard.press('Tab');
+      await expect(button).toBeFocused();
+    });
+
+    test('Tab moves from input to button inside cap', async ({ mount, page }) => {
+      await mount(<CapWithButton />);
+      const input = page.getByPlaceholder('Enter value...');
+      const button = page.getByRole('button', { name: 'Copy' });
 
       await page.keyboard.press('Tab');
       await expect(input).toBeFocused();
@@ -344,10 +387,10 @@ test.describe('InputGroup', () => {
       expect(parseFloat(opacity)).toBeLessThan(1);
     });
 
-    test('sunken addon has background', async ({ mount, page }) => {
-      await mount(<SunkenAddon />);
-      const addon = page.locator('[data-input-group-addon][data-sunken]');
-      const bg = await addon.evaluate((el) =>
+    test('cap has background', async ({ mount, page }) => {
+      await mount(<CapAddon />);
+      const cap = page.locator('[data-input-group-cap]');
+      const bg = await cap.evaluate((el) =>
         getComputedStyle(el).backgroundColor
       );
       // Should have a visible background (not transparent)
@@ -473,6 +516,18 @@ test.describe('InputGroup', () => {
 
       test('merges className', async ({ mount, page }) => {
         await mount(<ConformanceText className="custom-class" />);
+        await expect(page.getByTestId('test-root')).toHaveClass(/custom-class/);
+      });
+    });
+
+    test.describe('Cap', () => {
+      test('forwards props', async ({ mount, page }) => {
+        await mount(<ConformanceCap data-custom="custom-value" />);
+        await expect(page.getByTestId('test-root')).toHaveAttribute('data-custom', 'custom-value');
+      });
+
+      test('merges className', async ({ mount, page }) => {
+        await mount(<ConformanceCap className="custom-class" />);
         await expect(page.getByTestId('test-root')).toHaveClass(/custom-class/);
       });
     });

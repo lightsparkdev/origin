@@ -29,7 +29,8 @@
 
 .popup {
   position: fixed;
-  top: 50%;
+  // 38% optical center -- feels slightly above midpoint like Linear/Vercel
+  top: 38%;
   left: 50%;
   z-index: 100;
   display: flex;
