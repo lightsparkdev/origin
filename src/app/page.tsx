@@ -2034,8 +2034,41 @@ export default function Home() {
         </InputGroup.Root>
 
         <InputGroup.Root>
-          <InputGroup.Addon sunken>https://</InputGroup.Addon>
+          <InputGroup.Cap>https://</InputGroup.Cap>
           <InputGroup.Input placeholder="example.com" />
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Input placeholder="Enter value..." />
+          <InputGroup.Cap>
+            <InputGroup.Button>Copy</InputGroup.Button>
+          </InputGroup.Cap>
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Cap>
+            <InputGroup.Button aria-label="Search">
+              <CentralIcon name="IconMagnifyingGlass2" size={16} />
+            </InputGroup.Button>
+          </InputGroup.Cap>
+          <InputGroup.Input placeholder="Search..." />
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Cap>https://</InputGroup.Cap>
+          <InputGroup.Input placeholder="your-domain.com" />
+          <InputGroup.Cap>
+            <InputGroup.Button>Go</InputGroup.Button>
+          </InputGroup.Cap>
+        </InputGroup.Root>
+
+        <InputGroup.Root>
+          <InputGroup.Input defaultValue="sk_live_abc123..." />
+          <InputGroup.Cap>
+            <InputGroup.Button aria-label="Copy to clipboard">
+              <CentralIcon name="IconClipboard2" size={16} />
+            </InputGroup.Button>
+          </InputGroup.Cap>
         </InputGroup.Root>
 
         <InputGroup.Root>

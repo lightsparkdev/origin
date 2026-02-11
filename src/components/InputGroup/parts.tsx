@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import { CentralIcon } from '../Icon';
 import styles from './InputGroup.module.scss';
 
-// Context to share disabled/invalid state across parts
 interface InputGroupContextValue {
   disabled?: boolean;
   invalid?: boolean;
@@ -24,7 +23,6 @@ function useInputGroupContext() {
   return context;
 }
 
-// Root - container for the entire input group
 export interface RootProps extends React.HTMLAttributes<HTMLDivElement> {
   disabled?: boolean;
   invalid?: boolean;
@@ -58,35 +56,29 @@ if (process.env.NODE_ENV !== 'production') {
   Root.displayName = 'InputGroup';
 }
 
-// Addon - icon/text slot with optional sunken background.
-// Defaults to aria-hidden="true" for decorative addons (icons, separators).
-// Override with aria-hidden={undefined} when the addon contains semantically
-// meaningful text not repeated in the label or description (e.g. currency codes).
-export interface AddonProps extends React.HTMLAttributes<HTMLSpanElement> {
-  sunken?: boolean;
-}
+// aria-hidden="true" by default for decorative addons (icons, separators).
+// Override with aria-hidden={undefined} for meaningful text (e.g. currency codes).
+export interface AddonProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
 export const Addon = React.forwardRef<HTMLSpanElement, AddonProps>(
-  function Addon({ className, sunken = false, 'aria-hidden': ariaHidden = 'true', onClick, ...props }, ref) {
+  function Addon({ className, 'aria-hidden': ariaHidden = 'true', onClick, ...props }, ref) {
     const { disabled } = useInputGroupContext();
 
     const handleClick = React.useCallback(
       (e: React.MouseEvent<HTMLSpanElement>) => {
         onClick?.(e);
-        // Skip focus transfer when disabled, sunken, or a button inside was clicked
-        if (disabled || sunken || (e.target as HTMLElement).closest('button')) return;
+        if (disabled || (e.target as HTMLElement).closest('button')) return;
         const input = e.currentTarget.parentElement?.querySelector('input');
         input?.focus();
       },
-      [onClick, disabled, sunken]
+      [onClick, disabled]
     );
 
     return (
       <span
         ref={ref}
-        className={clsx(styles.addon, sunken && styles.sunken, className)}
+        className={clsx(styles.addon, className)}
         data-input-group-addon=""
-        data-sunken={sunken ? '' : undefined}
         aria-hidden={ariaHidden}
         onClick={handleClick}
         {...props}
@@ -99,7 +91,47 @@ if (process.env.NODE_ENV !== 'production') {
   Addon.displayName = 'InputGroup.Addon';
 }
 
-// Input - wraps Base UI Input for Field integration (borderless, flex)
+// aria-hidden auto-detected: skipped when cap wraps interactive children (buttons).
+// Override with aria-hidden={undefined} or aria-hidden="true" to force.
+export interface CapProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const Cap = React.forwardRef<HTMLDivElement, CapProps>(
+  function Cap({ className, 'aria-hidden': ariaHidden, onClick, children, ...props }, ref) {
+    const hasInteractiveContent = React.Children.toArray(children).some(
+      (child) => React.isValidElement(child) && (child.type === Button || (child.props as Record<string, unknown>)?.role === 'button')
+    );
+    const resolvedAriaHidden = ariaHidden !== undefined ? ariaHidden : (hasInteractiveContent ? undefined : 'true');
+    const { disabled } = useInputGroupContext();
+
+    const handleClick = React.useCallback(
+      (e: React.MouseEvent<HTMLDivElement>) => {
+        onClick?.(e);
+        if (disabled || (e.target as HTMLElement).closest('button')) return;
+        const input = e.currentTarget.parentElement?.querySelector('input');
+        input?.focus();
+      },
+      [onClick, disabled]
+    );
+
+    return (
+      <div
+        ref={ref}
+        className={clsx(styles.cap, className)}
+        data-input-group-cap=""
+        aria-hidden={resolvedAriaHidden}
+        onClick={handleClick}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+if (process.env.NODE_ENV !== 'production') {
+  Cap.displayName = 'InputGroup.Cap';
+}
+
 export interface InputProps extends Omit<BaseInput.Props, 'size'> {}
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -124,10 +156,7 @@ if (process.env.NODE_ENV !== 'production') {
   Input.displayName = 'InputGroup.Input';
 }
 
-// Button - compact inline action button.
-// Intentionally extends native button props (not BaseButton.Props) to restrict
-// the API surface to plain HTML semantics. Base UI extras like `render` are
-// not exposed.
+// Extends native button props, not BaseButton.Props, to restrict API surface.
 export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   variant?: 'ghost' | 'outline';
 }
@@ -158,8 +187,6 @@ if (process.env.NODE_ENV !== 'production') {
   Button.displayName = 'InputGroup.Button';
 }
 
-// SelectTrigger - compact inline select-like trigger (label + chevron).
-// Renders a button that can be wired to open a popover/menu.
 export interface SelectTriggerProps extends React.ComponentPropsWithoutRef<'button'> {
   variant?: 'ghost' | 'outline';
   invalid?: boolean;
@@ -201,7 +228,6 @@ if (process.env.NODE_ENV !== 'production') {
   SelectTrigger.displayName = 'InputGroup.SelectTrigger';
 }
 
-// Text - static text span (secondary color, e.g. currency symbols)
 export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
 export const Text = React.forwardRef<HTMLSpanElement, TextProps>(

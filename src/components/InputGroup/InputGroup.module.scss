@@ -12,9 +12,7 @@
   background: transparent;
   border: var(--stroke-sm) solid var(--border-tertiary);
   border-radius: var(--corner-radius-sm);
-  // overflow: hidden clips sunken addon corners cleanly within the border-radius.
-  // PhoneInput uses overflow: visible for dropdown positioning -- InputGroup has
-  // no popover children so hidden is safe here.
+  // PhoneInput uses overflow: visible for dropdown positioning; safe here.
   overflow: hidden;
   gap: var(--_gap);
   padding: 0 var(--spacing-sm);
@@ -43,10 +41,7 @@
     cursor: not-allowed;
   }
 
-  // Reduce edge padding when button/trigger sits at an edge.
-  // Intentional non-token value: 5px matches the vertical centering gap
-  // ((36px height - 2px border - 24px button) / 2 = 5px) so the button
-  // has equal visual spacing on all sides.
+  // 5px = (36px height - 2px border - 24px button) / 2
   &:has(> .button:last-child),
   &:has(> .selectTrigger:last-child) {
     padding-right: 5px;
@@ -57,9 +52,7 @@
     padding-left: 5px;
   }
 
-  // No edge padding when sunken addon sits at an edge;
-  // input needs its own padding on the side adjacent to the sunken addon
-  &:has(> .sunken:first-child) {
+  &:has(> .cap:first-child) {
     padding-left: 0;
 
     > .input {
@@ -67,7 +60,7 @@
     }
   }
 
-  &:has(> .sunken:last-child) {
+  &:has(> .cap:last-child) {
     padding-right: 0;
 
     > .input {
@@ -85,26 +78,44 @@
   cursor: text;
 }
 
-.sunken {
+.cap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--surface-sunken);
   padding: var(--spacing-none) var(--spacing-sm);
   @include input;
   color: var(--text-secondary);
   border-right: var(--stroke-sm) solid var(--border-tertiary);
   align-self: stretch;
-  cursor: default;
+  cursor: text;
+  flex-shrink: 0;
 
-  // Cancel the gap on the inner side -- the border is the visual separator
+  // Negative margin cancels the gap; border is the visual separator
   &:first-child {
     margin-right: calc(-1 * var(--_gap));
   }
 
-  // When sunken addon is last child, border goes on the left instead
   &:last-child {
     border-right: none;
     border-left: var(--stroke-sm) solid var(--border-tertiary);
     margin-left: calc(-1 * var(--_gap));
     margin-right: 0;
+  }
+
+  > .button {
+    height: 100%;
+    padding: var(--spacing-none) var(--spacing-sm);
+    border-radius: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    @include btn;
+  }
+
+  &:has(> .button:only-child) {
+    padding: 0;
+    background: transparent;
   }
 }
 
@@ -138,7 +149,7 @@
   height: 24px;
   min-width: 24px;
   padding: var(--spacing-none) var(--spacing-xs);
-  // Intentional non-token value: 3px nests optically inside the container's 6px radius
+  // 3px nests optically inside the container's 6px radius
   border-radius: 3px;
   color: var(--text-primary);
   @include label-sm;
@@ -168,7 +179,7 @@
   height: 24px;
   max-width: 240px;
   padding: var(--spacing-none) var(--spacing-2xs);
-  // Intentional non-token value: 3px nests optically inside the container's 6px radius
+  // 3px nests optically inside the container's 6px radius
   border-radius: 3px;
   @include label-sm;
   color: var(--text-primary);

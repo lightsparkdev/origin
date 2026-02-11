@@ -137,23 +137,53 @@ export const WithOutlineSelectTrigger: StoryObj = {
   ),
 };
 
-export const SunkenAddon: StoryObj = {
+export const Cap: StoryObj = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
-        <InputGroup.Addon sunken>https://</InputGroup.Addon>
+        <InputGroup.Cap>https://</InputGroup.Cap>
         <InputGroup.Input placeholder="example.com" />
       </InputGroup.Root>
     </div>
   ),
 };
 
-export const TrailingSunkenAddon: StoryObj = {
+export const TrailingCap: StoryObj = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
         <InputGroup.Input placeholder="0.00" />
-        <InputGroup.Addon sunken>USD</InputGroup.Addon>
+        <InputGroup.Cap>USD</InputGroup.Cap>
+      </InputGroup.Root>
+    </div>
+  ),
+};
+
+export const CapWithButton: StoryObj = {
+  name: 'Cap with Button',
+  render: () => (
+    <div style={{ width: 300 }}>
+      <InputGroup.Root>
+        <InputGroup.Input placeholder="Enter value..." />
+        <InputGroup.Cap>
+          <InputGroup.Button>Copy</InputGroup.Button>
+        </InputGroup.Cap>
+      </InputGroup.Root>
+    </div>
+  ),
+};
+
+export const CapWithIconButton: StoryObj = {
+  name: 'Cap with Icon Button',
+  render: () => (
+    <div style={{ width: 300 }}>
+      <InputGroup.Root>
+        <InputGroup.Cap>
+          <InputGroup.Button aria-label="Search">
+            <SearchIcon />
+          </InputGroup.Button>
+        </InputGroup.Cap>
+        <InputGroup.Input placeholder="Search..." />
       </InputGroup.Root>
     </div>
   ),
@@ -257,9 +287,9 @@ export const URLInput: StoryObj = {
   render: () => (
     <div style={{ width: 360 }}>
       <InputGroup.Root>
-        <InputGroup.Addon sunken>https://</InputGroup.Addon>
+        <InputGroup.Cap>https://</InputGroup.Cap>
         <InputGroup.Input placeholder="your-domain.com" />
-        <InputGroup.Addon sunken>/path</InputGroup.Addon>
+        <InputGroup.Cap>/path</InputGroup.Cap>
       </InputGroup.Root>
     </div>
   ),
@@ -272,7 +302,7 @@ export const CurrencyInput: StoryObj = {
       <InputGroup.Root>
         <InputGroup.Text>$</InputGroup.Text>
         <InputGroup.Input placeholder="0.00" type="number" />
-        <InputGroup.Addon sunken>USD</InputGroup.Addon>
+        <InputGroup.Cap>USD</InputGroup.Cap>
       </InputGroup.Root>
     </div>
   ),
@@ -335,11 +365,23 @@ export const AllVariants: StoryObj = {
 
       <div>
         <span style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
-          Sunken addon
+          Cap
         </span>
         <InputGroup.Root>
-          <InputGroup.Addon sunken>https://</InputGroup.Addon>
+          <InputGroup.Cap>https://</InputGroup.Cap>
           <InputGroup.Input placeholder="example.com" />
+        </InputGroup.Root>
+      </div>
+
+      <div>
+        <span style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4, display: 'block' }}>
+          Cap with button
+        </span>
+        <InputGroup.Root>
+          <InputGroup.Input placeholder="Enter value..." />
+          <InputGroup.Cap>
+            <InputGroup.Button>Copy</InputGroup.Button>
+          </InputGroup.Cap>
         </InputGroup.Root>
       </div>
 
