@@ -8,30 +8,30 @@
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
+
+  // Compact density overrides
+  &[data-size='compact'] {
+    .headerCell {
+      height: 32px;
+    }
+
+    .cell {
+      height: 36px;
+    }
+  }
 }
 
 // ============================================================================
 // Header
 // ============================================================================
 
-.header {
-  // No specific styles needed, inherits from table
-}
-
-.headerRow {
-  // No specific styles needed
-}
-
 .headerCell {
   @include label-sm;
   height: 40px;
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--spacing-md);
   text-align: left;
   color: var(--text-secondary);
   border-bottom: var(--stroke-xs) solid var(--border-tertiary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   font-weight: normal;
   vertical-align: middle;
   position: relative;
@@ -42,19 +42,12 @@
     padding: 0 var(--spacing-sm);
   }
 
-  // Right alignment
-  &--right {
-    text-align: right;
-  }
-
   // Sortable header
   &--sortable {
     cursor: pointer;
     user-select: none;
 
     &:hover {
-      color: var(--text-secondary);
-
       .sortIcon {
         opacity: 1;
       }
@@ -67,20 +60,30 @@
     }
   }
 
-  // Resizable header
-  &--resizable {
-    position: relative;
-  }
 }
 
 .headerCellContent {
   display: flex;
   align-items: center;
   gap: var(--spacing-3xs);
+  overflow: hidden;
 
   .headerCell--right & {
     justify-content: flex-end;
   }
+}
+
+.headerCellLeading {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.headerCellLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .sortIcon {
@@ -106,10 +109,6 @@
 // Body
 // ============================================================================
 
-.body {
-  // No specific styles needed
-}
-
 .row {
   &:hover {
     background-color: var(--surface-hover);
@@ -122,11 +121,6 @@
   }
 }
 
-// Selected rows have no background per Figma spec - only the checkbox indicates selection
-.rowSelected {
-  // No background color
-}
-
 // ============================================================================
 // Cell
 // ============================================================================
@@ -134,7 +128,7 @@
 .cell {
   @include body;
   height: 48px;
-  padding: 0 var(--spacing-lg);
+  padding: 0 var(--spacing-md);
   text-align: left;
   color: var(--text-primary);
   border-bottom: var(--stroke-xs) solid var(--border-tertiary);
@@ -147,23 +141,31 @@
     padding: 0 var(--spacing-sm);
   }
 
-  // Action column (kebab menu)
-  &--action {
-    width: 48px;
-    padding: 0 var(--spacing-xs);
-    text-align: center;
-  }
-
   // Right alignment
   &--right {
     text-align: right;
   }
+}
 
-  // Loading state
-  &--loading {
-    // Hide actual content when loading
-    color: transparent;
-  }
+// ============================================================================
+// Cell Layout (with leading/trailing slots)
+// ============================================================================
+
+.cellLayout {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.cellLayoutContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.cellSlot {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 // ============================================================================
@@ -183,9 +185,15 @@
   align-items: center;
   gap: var(--spacing-3xs);
   color: var(--text-primary);
-  white-space: nowrap;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.cellLabelText {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .cellDescription {
@@ -250,7 +258,7 @@
   transition: background-color 150ms ease;
 
   &:hover,
-  &--active {
+  &--resizing {
     background-color: var(--border-secondary);
   }
 

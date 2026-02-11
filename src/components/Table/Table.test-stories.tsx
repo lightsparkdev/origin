@@ -477,6 +477,148 @@ export function SortableAlignedTable() {
 }
 
 /**
+ * Table with compact density
+ */
+export function CompactTable() {
+  const table = useReactTable({
+    data: sampleData,
+    columns: basicColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <Table.Root size="compact">
+      <Table.Header>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Table.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <Table.HeaderCell key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </Table.HeaderCell>
+            ))}
+          </Table.HeaderRow>
+        ))}
+      </Table.Header>
+      <Table.Body>
+        {table.getRowModel().rows.map((row) => (
+          <Table.Row key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <Table.Cell key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Table.Cell>
+            ))}
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table.Root>
+  );
+}
+
+/**
+ * Table with leading and trailing cell slots
+ */
+export function SlotsTable() {
+  const StatusDot = ({ status }: { status: string }) => (
+    <span
+      style={{
+        width: 8,
+        height: 8,
+        borderRadius: '50%',
+        backgroundColor: status === 'active' ? 'var(--icon-success)' : 'var(--icon-tertiary)',
+      }}
+    />
+  );
+
+  const ActionButton = () => (
+    <button
+      style={{
+        width: 32,
+        height: 32,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        borderRadius: 'var(--corner-radius-sm)',
+        color: 'var(--icon-tertiary)',
+      }}
+      aria-label="More actions"
+    >
+      ···
+    </button>
+  );
+
+  const slotColumns = [
+    columnHelper.accessor('name', {
+      header: 'Name',
+      cell: (info) => (
+        <Table.CellContent
+          label={info.getValue()}
+          description={info.row.original.email}
+        />
+      ),
+    }),
+    columnHelper.accessor('role', {
+      header: 'Role',
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('status', {
+      header: 'Status',
+      cell: (info) => info.getValue(),
+      meta: { hasStatusDot: true },
+    }),
+  ];
+
+  const table = useReactTable({
+    data: sampleData,
+    columns: slotColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <Table.Root>
+      <Table.Header>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Table.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <Table.HeaderCell key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </Table.HeaderCell>
+            ))}
+          </Table.HeaderRow>
+        ))}
+      </Table.Header>
+      <Table.Body>
+        {table.getRowModel().rows.map((row, rowIndex) => (
+          <Table.Row key={row.id} last={rowIndex === table.getRowModel().rows.length - 1}>
+            {row.getVisibleCells().map((cell) => (
+              <Table.Cell
+                key={cell.id}
+                leading={
+                  cell.column.id === 'status' ? (
+                    <StatusDot status={cell.row.original.status} />
+                  ) : undefined
+                }
+                trailing={
+                  cell.column.id === 'name' ? <ActionButton /> : undefined
+                }
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Table.Cell>
+            ))}
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table.Root>
+  );
+}
+
+/**
  * Table with cell description (secondary text)
  */
 export function DescriptionTable() {

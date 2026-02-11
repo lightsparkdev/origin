@@ -6,6 +6,8 @@ import {
   AlignedTable,
   LoadingTable,
   ResizableTable,
+  CompactTable,
+  SlotsTable,
   DescriptionTable,
 } from './Table.test-stories';
 
@@ -74,6 +76,28 @@ export const Resizable: Story = {
     docs: {
       description: {
         story: 'Drag column borders to resize.',
+      },
+    },
+  },
+};
+
+export const Compact: Story = {
+  render: () => <CompactTable />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compact density with shorter row heights (header 32px, cell 36px).',
+      },
+    },
+  },
+};
+
+export const WithSlots: Story = {
+  render: () => <SlotsTable />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Cells with leading and trailing slots for icons, status dots, and action buttons.',
       },
     },
   },

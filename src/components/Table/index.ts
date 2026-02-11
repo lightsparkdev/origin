@@ -13,6 +13,7 @@ export {
 } from './parts';
 
 export type {
+  TableSize,
   RootProps,
   HeaderProps,
   HeaderRowProps,
