@@ -98,7 +98,7 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
       sortable = false,
       sortDirection,
       onSort,
-      resizable = false,
+      resizable: _resizable = false,
       leading,
       children,
       ...props
