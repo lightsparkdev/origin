@@ -43,6 +43,7 @@ import { Textarea } from '@/components/Textarea';
 import { TextareaGroup } from '@/components/TextareaGroup';
 import { Tabs } from '@/components/Tabs';
 import { Table } from '@/components/Table';
+import * as Chart from '@/components/Chart';
 import {
   useReactTable,
   getCoreRowModel,
@@ -3495,6 +3496,80 @@ export default function Home() {
           The legend above is visually hidden but accessible
           to screen readers. Inspect the fieldset to verify.
         </span>
+      </div>
+
+      <h2 style={{ marginBottom: '1rem' }}>Chart Component</h2>
+
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
+        {/* Sparkline */}
+        <div style={{ width: 388 }}>
+          <Chart.Line
+            data={[
+              { date: 'Aug 10', value: 180 },
+              { date: 'Aug 11', value: 185 },
+              { date: 'Aug 12', value: 182 },
+              { date: 'Aug 13', value: 188 },
+              { date: 'Aug 14', value: 190 },
+              { date: 'Aug 15', value: 195 },
+              { date: 'Aug 16', value: 200 },
+              { date: 'Aug 17', value: 210 },
+              { date: 'Aug 18', value: 205 },
+              { date: 'Aug 19', value: 215 },
+              { date: 'Aug 20', value: 220 },
+              { date: 'Aug 21', value: 223 },
+            ]}
+            dataKey="value"
+            height={170}
+            fadeLeft
+          />
+        </div>
+
+        {/* Full chart */}
+        <div style={{ width: 500 }}>
+          <Chart.Line
+            data={[
+              { date: 'Mon', incoming: 120, outgoing: 80 },
+              { date: 'Tue', incoming: 150, outgoing: 95 },
+              { date: 'Wed', incoming: 140, outgoing: 110 },
+              { date: 'Thu', incoming: 180, outgoing: 100 },
+              { date: 'Fri', incoming: 160, outgoing: 130 },
+              { date: 'Sat', incoming: 200, outgoing: 120 },
+              { date: 'Sun', incoming: 190, outgoing: 140 },
+            ]}
+            series={[
+              { key: 'incoming', label: 'Incoming' },
+              { key: 'outgoing', label: 'Outgoing' },
+            ]}
+            xKey="date"
+            height={250}
+            grid
+            tooltip
+          />
+        </div>
+
+        {/* Full chart with fadeLeft */}
+        <div style={{ width: 500 }}>
+          <Chart.Line
+            data={[
+              { date: 'Mon', incoming: 120, outgoing: 80 },
+              { date: 'Tue', incoming: 150, outgoing: 95 },
+              { date: 'Wed', incoming: 140, outgoing: 110 },
+              { date: 'Thu', incoming: 180, outgoing: 100 },
+              { date: 'Fri', incoming: 160, outgoing: 130 },
+              { date: 'Sat', incoming: 200, outgoing: 120 },
+              { date: 'Sun', incoming: 190, outgoing: 140 },
+            ]}
+            series={[
+              { key: 'incoming', label: 'Incoming' },
+              { key: 'outgoing', label: 'Outgoing' },
+            ]}
+            xKey="date"
+            height={250}
+            grid
+            tooltip
+            fadeLeft={60}
+          />
+        </div>
       </div>
     </main>
   );

@@ -54,6 +54,10 @@ export type {
   PopoverDescriptionProps,
 } from './components/Popover';
 
+// Chart
+export * as Chart from './components/Chart';
+export type { LineChartProps as ChartLineProps, Series as ChartSeries } from './components/Chart';
+
 // Simple components (direct exports)
 export { ActionBar, ActionBarLabel, ActionBarActions } from './components/ActionBar';
 export type { ActionBarProps, ActionBarLabelProps, ActionBarActionsProps } from './components/ActionBar';
