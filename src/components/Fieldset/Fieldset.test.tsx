@@ -23,7 +23,7 @@ test.describe('Fieldset', () => {
     await expect(component.getByText('Optional phone number.')).toBeVisible();
   });
 
-  test('horizontal orientation renders fields in a row', async ({ mount, page }) => {
+  test('horizontal orientation renders fields in a row', async ({ mount }) => {
     const component = await mount(<HorizontalFieldset />);
 
     await expect(component.getByText('Address')).toBeVisible();

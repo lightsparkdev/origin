@@ -3336,7 +3336,7 @@ export default function Home() {
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '128px' }}>
         <Button>
-          <CentralIcon name="IconTrash" size={16} />
+          <CentralIcon name="IconTrashCanSimple" size={16} />
           <VisuallyHidden>Delete item</VisuallyHidden>
         </Button>
         <span className="body-sm" style={{ color: 'var(--text-tertiary)' }}>
