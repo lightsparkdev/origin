@@ -1,6 +1,6 @@
 {
   "name": "@lightsparkdev/origin",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "private": false,
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "repository": {
@@ -49,7 +49,8 @@
     "ajv": "^8.17.1",
     "clsx": "^2.1.1",
     "match-sorter": "^8.2.0",
-    "motion": "^12.23.26"
+    "motion": "^12.23.26",
+    "recharts": "^3.7.0"
   },
   "peerDependencies": {
     "next": ">=14",
