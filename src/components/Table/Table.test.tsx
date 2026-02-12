@@ -6,6 +6,8 @@ import {
   SortableAlignedTable,
   LoadingTable,
   DescriptionTable,
+  FooterTable,
+  CompactFooterTable,
 } from './Table.test-stories';
 
 test.describe('Table', () => {
@@ -96,6 +98,29 @@ test.describe('Table', () => {
       // Check name and email are visible
       await expect(component.locator('text=Alice Johnson')).toBeVisible();
       await expect(component.locator('text=alice@example.com')).toBeVisible();
+    });
+  });
+
+  test.describe('Footer', () => {
+    test('renders footer content', async ({ mount }) => {
+      const component = await mount(<FooterTable />);
+
+      await expect(component.locator('text=Showing 1–5 of 20')).toBeVisible();
+    });
+
+    test('footer supports navigation role and aria-label', async ({ mount }) => {
+      const component = await mount(<FooterTable />);
+
+      const footer = component.locator('[role="navigation"]');
+      await expect(footer).toBeVisible();
+      await expect(footer).toHaveAttribute('aria-label', 'Table pagination');
+    });
+
+    test('compact footer renders at reduced height', async ({ mount }) => {
+      const component = await mount(<CompactFooterTable />);
+
+      const footer = component.locator('[role="navigation"]');
+      await expect(footer).toHaveAttribute('data-size', 'compact');
     });
   });
 

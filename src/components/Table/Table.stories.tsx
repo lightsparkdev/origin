@@ -9,6 +9,8 @@ import {
   CompactTable,
   SlotsTable,
   DescriptionTable,
+  FooterTable,
+  CompactFooterTable,
 } from './Table.test-stories';
 
 const meta: Meta = {
@@ -109,6 +111,28 @@ export const WithDescription: Story = {
     docs: {
       description: {
         story: 'Cells with primary label and secondary description text.',
+      },
+    },
+  },
+};
+
+export const WithFooter: Story = {
+  render: () => <FooterTable />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Table with an inline footer for pagination or summary content.',
+      },
+    },
+  },
+};
+
+export const CompactWithFooter: Story = {
+  render: () => <CompactFooterTable />,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Compact density table with a compact footer.',
       },
     },
   },

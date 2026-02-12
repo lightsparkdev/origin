@@ -619,6 +619,100 @@ export function SlotsTable() {
 }
 
 /**
+ * Table with footer (e.g., pagination)
+ */
+export function FooterTable() {
+  const table = useReactTable({
+    data: sampleData,
+    columns: basicColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <div>
+      <Table.Root>
+        <Table.Header>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Table.HeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Table.HeaderCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.HeaderCell>
+              ))}
+            </Table.HeaderRow>
+          ))}
+        </Table.Header>
+        <Table.Body>
+          {table.getRowModel().rows.map((row, rowIndex) => (
+            <Table.Row key={row.id} last={rowIndex === table.getRowModel().rows.length - 1}>
+              {row.getVisibleCells().map((cell) => (
+                <Table.Cell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+      <Table.Footer role="navigation" aria-label="Table pagination">
+        <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
+          Showing 1–5 of 20
+        </span>
+      </Table.Footer>
+    </div>
+  );
+}
+
+/**
+ * Compact table with footer
+ */
+export function CompactFooterTable() {
+  const table = useReactTable({
+    data: sampleData,
+    columns: basicColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <div>
+      <Table.Root size="compact">
+        <Table.Header>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Table.HeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Table.HeaderCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.HeaderCell>
+              ))}
+            </Table.HeaderRow>
+          ))}
+        </Table.Header>
+        <Table.Body>
+          {table.getRowModel().rows.map((row, rowIndex) => (
+            <Table.Row key={row.id} last={rowIndex === table.getRowModel().rows.length - 1}>
+              {row.getVisibleCells().map((cell) => (
+                <Table.Cell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+      <Table.Footer size="compact" role="navigation" aria-label="Table pagination">
+        <span style={{ color: 'var(--text-secondary)', fontSize: 13 }}>
+          Showing 1–5 of 20
+        </span>
+      </Table.Footer>
+    </div>
+  );
+}
+
+/**
  * Table with cell description (secondary text)
  */
 export function DescriptionTable() {
