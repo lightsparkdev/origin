@@ -55,8 +55,6 @@ import {
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 import { Logo } from '@/components/Logo';
-import { VisuallyHidden } from '@/components/VisuallyHidden';
-
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
