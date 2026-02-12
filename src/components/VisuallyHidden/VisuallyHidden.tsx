@@ -37,13 +37,13 @@ const hiddenStyles: React.CSSProperties = {
  * </Fieldset.Legend>
  * ```
  */
-export const VisuallyHidden = React.forwardRef<HTMLSpanElement, VisuallyHiddenProps>(
+export const VisuallyHidden = React.forwardRef<HTMLElement, VisuallyHiddenProps>(
   function VisuallyHidden(props, forwardedRef) {
     const { as: Component = 'span', ...rest } = props;
 
     return (
       <Component
-        ref={forwardedRef}
+        ref={forwardedRef as React.Ref<never>}
         style={hiddenStyles}
         {...rest}
       />
