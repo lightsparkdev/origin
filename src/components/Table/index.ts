@@ -8,6 +8,7 @@ export {
   Row,
   Cell,
   CellContent,
+  Footer,
   ResizeHandle,
   CheckboxWrapper,
 } from './parts';
@@ -22,6 +23,7 @@ export type {
   RowProps,
   CellProps,
   CellContentProps,
+  FooterProps,
   ResizeHandleProps,
   CheckboxWrapperProps,
 } from './parts';

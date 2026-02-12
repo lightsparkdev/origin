@@ -213,6 +213,23 @@
 }
 
 // ============================================================================
+// Footer
+// ============================================================================
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 40px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-top: var(--stroke-xs) solid var(--border-tertiary);
+
+  &[data-size='compact'] {
+    height: 32px;
+  }
+}
+
+// ============================================================================
 // Skeleton (loading state)
 // ============================================================================
 

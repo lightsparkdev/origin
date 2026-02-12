@@ -312,6 +312,37 @@ export const CellContent = React.forwardRef<HTMLDivElement, CellContentProps>(
 );
 
 // ============================================================================
+// Footer
+// ============================================================================
+
+/**
+ * Container for content below the table (e.g., pagination, bulk actions, totals).
+ *
+ * Renders outside the `<table>` element, so wrap both `Table.Root` and
+ * `Table.Footer` in a shared parent `<div>`.
+ *
+ * When used for pagination, add `role="navigation"` and an `aria-label`
+ * for screen readers.
+ */
+export interface FooterProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Table density — should match `Table.Root`'s `size` for consistent heights */
+  size?: TableSize;
+}
+
+export const Footer = React.forwardRef<HTMLDivElement, FooterProps>(
+  function Footer({ className, size = 'default', ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        className={clsx(styles.footer, className)}
+        data-size={size !== 'default' ? size : undefined}
+        {...props}
+      />
+    );
+  }
+);
+
+// ============================================================================
 // ResizeHandle
 // ============================================================================
 
@@ -368,6 +399,7 @@ export const Table = {
   Row,
   Cell,
   CellContent,
+  Footer,
   ResizeHandle,
   CheckboxWrapper,
 };
