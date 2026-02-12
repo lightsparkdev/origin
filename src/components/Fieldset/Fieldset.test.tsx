@@ -31,16 +31,14 @@ test.describe('Fieldset', () => {
     await expect(component.getByPlaceholder('Enter state')).toBeVisible();
     await expect(component.getByPlaceholder('Enter zip')).toBeVisible();
 
-    // The fields wrapper should use flex-direction: row
-    const fieldsWrapper = component.locator('fieldset > div').first();
+    const fieldsWrapper = component.locator('[data-orientation="horizontal"]');
     await expect(fieldsWrapper).toHaveCSS('flex-direction', 'row');
   });
 
   test('vertical orientation renders fields in a column', async ({ mount }) => {
     const component = await mount(<BasicFieldset />);
 
-    // The fields wrapper should use flex-direction: column
-    const fieldsWrapper = component.locator('fieldset > div').first();
+    const fieldsWrapper = component.locator('[data-orientation="vertical"]');
     await expect(fieldsWrapper).toHaveCSS('flex-direction', 'column');
   });
 
