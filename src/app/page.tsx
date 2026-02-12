@@ -55,8 +55,6 @@ import {
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 import { Logo } from '@/components/Logo';
-import { VisuallyHidden } from '@/components/VisuallyHidden';
-
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
@@ -3336,9 +3334,7 @@ export default function Home() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', width: 320 }}>
         <Fieldset.Root>
-          <Fieldset.Legend>
-            <VisuallyHidden>Transaction limits</VisuallyHidden>
-          </Fieldset.Legend>
+          <Fieldset.Legend visuallyHidden>Transaction limits</Fieldset.Legend>
           <Field.Root name="min">
             <Field.Label>Minimum amount</Field.Label>
             <Input placeholder="1.00" />

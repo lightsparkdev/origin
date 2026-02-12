@@ -43,16 +43,22 @@ export const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootPr
   }
 );
 
-export interface FieldsetLegendProps extends BaseFieldset.Legend.Props {}
+export interface FieldsetLegendProps extends BaseFieldset.Legend.Props {
+  /** Visually hides the legend while keeping it accessible to screen readers. */
+  visuallyHidden?: boolean;
+}
 
 export const FieldsetLegend = React.forwardRef<HTMLDivElement, FieldsetLegendProps>(
   function FieldsetLegend(props, ref) {
-    const { className, ...other } = props;
+    const { className, visuallyHidden, ...other } = props;
 
     return (
       <BaseFieldset.Legend
         ref={ref}
-        className={clsx(styles.legend, className)}
+        className={clsx(
+          visuallyHidden ? styles.legendHidden : styles.legend,
+          className,
+        )}
         {...other}
       />
     );
