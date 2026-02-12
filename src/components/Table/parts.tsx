@@ -16,16 +16,19 @@ export interface RootProps extends React.TableHTMLAttributes<HTMLTableElement> {
   hasSelection?: boolean;
   /** Table density — compact reduces row heights for higher information density */
   size?: TableSize;
+  /** Whether rows are clickable — shows hover state when true (default: true) */
+  clickable?: boolean;
 }
 
 export const Root = React.forwardRef<HTMLTableElement, RootProps>(
-  function Root({ className, hasSelection, size = 'default', ...props }, ref) {
+  function Root({ className, hasSelection, size = 'default', clickable = true, ...props }, ref) {
     return (
       <table
         ref={ref}
         className={clsx(styles.root, className)}
         data-has-selection={hasSelection || undefined}
         data-size={size !== 'default' ? size : undefined}
+        data-clickable={clickable || undefined}
         {...props}
       />
     );

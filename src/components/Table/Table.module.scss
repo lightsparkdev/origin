@@ -110,7 +110,7 @@
 // ============================================================================
 
 .row {
-  &:hover {
+  .root[data-clickable] &:hover {
     background-color: var(--surface-hover);
   }
 

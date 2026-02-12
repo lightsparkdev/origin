@@ -49,8 +49,7 @@
     "ajv": "^8.17.1",
     "clsx": "^2.1.1",
     "match-sorter": "^8.2.0",
-    "motion": "^12.23.26",
-    "recharts": "^3.7.0"
+    "motion": "^12.23.26"
   },
   "peerDependencies": {
     "next": ">=14",
