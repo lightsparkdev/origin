@@ -17,6 +17,9 @@
 // Import CSS reset (box-sizing, form elements, icon system)
 @use '../tokens/reset';
 
+// Import utility classes (visually-hidden, etc.)
+@use '../tokens/utilities';
+
 body {
   margin: 0;
   font-family: var(--font-family-sans, 'Suisse Intl', system-ui, sans-serif);

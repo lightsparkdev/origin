@@ -5,18 +5,39 @@ import { Fieldset as BaseFieldset } from '@base-ui/react/fieldset';
 import clsx from 'clsx';
 import styles from './Fieldset.module.scss';
 
-export interface FieldsetRootProps extends BaseFieldset.Root.Props {}
+export interface FieldsetRootProps extends BaseFieldset.Root.Props {
+  /** Layout direction for child fields. @default 'vertical' */
+  orientation?: 'horizontal' | 'vertical';
+}
 
 export const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootProps>(
   function FieldsetRoot(props, ref) {
-    const { className, ...other } = props;
+    const { className, orientation = 'vertical', children, ...other } = props;
+
+    // Separate legend from field children so we can wrap
+    // the fields in a layout container for orientation control.
+    const legend: React.ReactNode[] = [];
+    const fields: React.ReactNode[] = [];
+
+    React.Children.forEach(children, (child) => {
+      if (React.isValidElement(child) && child.type === FieldsetLegend) {
+        legend.push(child);
+      } else {
+        fields.push(child);
+      }
+    });
 
     return (
       <BaseFieldset.Root
         ref={ref}
         className={clsx(styles.root, className)}
         {...other}
-      />
+      >
+        {legend}
+        <div className={styles[orientation]}>
+          {fields}
+        </div>
+      </BaseFieldset.Root>
     );
   }
 );

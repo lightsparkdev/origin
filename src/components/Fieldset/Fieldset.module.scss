@@ -12,6 +12,26 @@
   margin: 0;
 }
 
+// Orientation — applied to the inner fields wrapper.
+// Legend always sits above; only the fields direction changes.
+
+.vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-xs);
+
+  > * {
+    flex: 1 0 0;
+    min-width: 0;
+  }
+}
+
 .legend {
   @include label;
 

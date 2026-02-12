@@ -95,6 +95,9 @@ export type { SwitchProps } from './components/Switch';
 
 export { Textarea, type TextareaProps } from './components/Textarea';
 
+export { VisuallyHidden } from './components/VisuallyHidden';
+export type { VisuallyHiddenProps } from './components/VisuallyHidden';
+
 export { TextareaGroup } from './components/TextareaGroup';
 export type {
   TextareaGroupRootProps,

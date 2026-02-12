@@ -55,6 +55,7 @@ import {
 import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 import { Logo } from '@/components/Logo';
+import { VisuallyHidden } from '@/components/VisuallyHidden';
 
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
@@ -2229,20 +2230,39 @@ export default function Home() {
       
       <h2 style={{ marginBottom: '1rem' }}>Fieldset Component</h2>
       
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', width: '256px' }}>
-        <Fieldset.Root>
-          <Fieldset.Legend>Personal Information</Fieldset.Legend>
-          <Field.Root name="firstName">
-            <Field.Label>First Name</Field.Label>
-            <Input placeholder="Enter first name" />
-            <Field.Description>Your legal first name.</Field.Description>
-          </Field.Root>
-          <Field.Root name="lastName">
-            <Field.Label>Last Name</Field.Label>
-            <Input placeholder="Enter last name" />
-            <Field.Description>Your legal last name.</Field.Description>
-          </Field.Root>
-        </Fieldset.Root>
+      <div style={{ display: 'flex', gap: '3rem', marginBottom: '128px' }}>
+        <div style={{ width: 320 }}>
+          <Fieldset.Root>
+            <Fieldset.Legend>Vertical (default)</Fieldset.Legend>
+            <Field.Root name="firstName">
+              <Field.Label>First Name</Field.Label>
+              <Input placeholder="Enter first name" />
+              <Field.Description>Your legal first name.</Field.Description>
+            </Field.Root>
+            <Field.Root name="lastName">
+              <Field.Label>Last Name</Field.Label>
+              <Input placeholder="Enter last name" />
+              <Field.Description>Your legal last name.</Field.Description>
+            </Field.Root>
+          </Fieldset.Root>
+        </div>
+        <div style={{ width: 480 }}>
+          <Fieldset.Root orientation="horizontal">
+            <Fieldset.Legend>Horizontal</Fieldset.Legend>
+            <Field.Root name="city">
+              <Field.Label>City</Field.Label>
+              <Input placeholder="City" />
+            </Field.Root>
+            <Field.Root name="state">
+              <Field.Label>State</Field.Label>
+              <Input placeholder="State" />
+            </Field.Root>
+            <Field.Root name="zip">
+              <Field.Label>Zip</Field.Label>
+              <Input placeholder="Zip" />
+            </Field.Root>
+          </Fieldset.Root>
+        </div>
       </div>
       
       <h2 style={{ marginBottom: '1rem' }}>Form Component</h2>
@@ -3311,6 +3331,18 @@ export default function Home() {
           </Tooltip.Root>
         </div>
       </Tooltip.Provider>
+
+      <h2 style={{ marginBottom: '1rem' }}>VisuallyHidden</h2>
+
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '128px' }}>
+        <Button>
+          <CentralIcon name="IconTrash" size={16} />
+          <VisuallyHidden>Delete item</VisuallyHidden>
+        </Button>
+        <span className="body-sm" style={{ color: 'var(--text-tertiary)' }}>
+          Inspect the button above — it contains visually-hidden text for screen readers.
+        </span>
+      </div>
     </main>
   );
 }
