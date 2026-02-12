@@ -3334,13 +3334,23 @@ export default function Home() {
 
       <h2 style={{ marginBottom: '1rem' }}>VisuallyHidden</h2>
 
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '128px' }}>
-        <Button>
-          <CentralIcon name="IconTrashCanSimple" size={16} />
-          <VisuallyHidden>Delete item</VisuallyHidden>
-        </Button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px', width: 320 }}>
+        <Fieldset.Root>
+          <Fieldset.Legend>
+            <VisuallyHidden>Transaction limits</VisuallyHidden>
+          </Fieldset.Legend>
+          <Field.Root name="min">
+            <Field.Label>Minimum amount</Field.Label>
+            <Input placeholder="1.00" />
+          </Field.Root>
+          <Field.Root name="max">
+            <Field.Label>Maximum amount</Field.Label>
+            <Input placeholder="10,000.00" />
+          </Field.Root>
+        </Fieldset.Root>
         <span className="body-sm" style={{ color: 'var(--text-tertiary)' }}>
-          Inspect the button above — it contains visually-hidden text for screen readers.
+          The legend above is visually hidden but accessible
+          to screen readers. Inspect the fieldset to verify.
         </span>
       </div>
     </main>
