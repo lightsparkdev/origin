@@ -59,6 +59,21 @@ export function HorizontalFieldset() {
   );
 }
 
+export function NoLegendFieldset() {
+  return (
+    <Fieldset.Root>
+      <Field.Root name="min">
+        <Field.Label>Minimum</Field.Label>
+        <Input placeholder="Enter minimum" />
+      </Field.Root>
+      <Field.Root name="max">
+        <Field.Label>Maximum</Field.Label>
+        <Input placeholder="Enter maximum" />
+      </Field.Root>
+    </Fieldset.Root>
+  );
+}
+
 export function DisabledFieldset() {
   return (
     <Fieldset.Root disabled>

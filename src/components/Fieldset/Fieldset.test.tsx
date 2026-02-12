@@ -3,6 +3,7 @@ import {
   BasicFieldset,
   FieldsetWithDescription,
   HorizontalFieldset,
+  NoLegendFieldset,
   DisabledFieldset,
 } from './Fieldset.test-stories';
 
@@ -37,6 +38,16 @@ test.describe('Fieldset', () => {
 
   test('vertical orientation renders fields in a column', async ({ mount }) => {
     const component = await mount(<BasicFieldset />);
+
+    const fieldsWrapper = component.locator('[data-orientation="vertical"]');
+    await expect(fieldsWrapper).toHaveCSS('flex-direction', 'column');
+  });
+
+  test('renders without a legend', async ({ mount }) => {
+    const component = await mount(<NoLegendFieldset />);
+
+    await expect(component.getByPlaceholder('Enter minimum')).toBeVisible();
+    await expect(component.getByPlaceholder('Enter maximum')).toBeVisible();
 
     const fieldsWrapper = component.locator('[data-orientation="vertical"]');
     await expect(fieldsWrapper).toHaveCSS('flex-direction', 'column');

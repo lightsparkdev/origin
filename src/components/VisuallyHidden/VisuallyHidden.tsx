@@ -3,16 +3,30 @@
 import * as React from 'react';
 
 export interface VisuallyHiddenProps
-  extends React.ComponentPropsWithoutRef<'span'> {
+  extends Omit<React.ComponentPropsWithoutRef<'span'>, 'style'> {
   /**
    * The element type to render.
    * @default 'span'
    */
-  as?: React.ElementType;
+  as?: 'span' | 'div' | 'legend' | 'label' | 'p';
 }
+
+const hiddenStyles: React.CSSProperties = {
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: 0,
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0, 0, 0, 0)',
+  clipPath: 'inset(50%)',
+  whiteSpace: 'nowrap',
+  borderWidth: 0,
+};
 
 /**
  * Hides content visually while keeping it accessible to screen readers.
+ * Uses inline styles so hiding works even if stylesheets fail to load.
  *
  * Use for accessible labels, legends, skip links, and live-region text
  * that shouldn't be visible on screen.
@@ -25,23 +39,12 @@ export interface VisuallyHiddenProps
  */
 export const VisuallyHidden = React.forwardRef<HTMLSpanElement, VisuallyHiddenProps>(
   function VisuallyHidden(props, forwardedRef) {
-    const { as: Component = 'span', style, ...rest } = props;
+    const { as: Component = 'span', ...rest } = props;
 
     return (
       <Component
         ref={forwardedRef}
-        style={{
-          position: 'absolute',
-          width: '1px',
-          height: '1px',
-          padding: 0,
-          margin: '-1px',
-          overflow: 'hidden',
-          clip: 'rect(0, 0, 0, 0)',
-          whiteSpace: 'nowrap',
-          border: 0,
-          ...style,
-        }}
+        style={hiddenStyles}
         {...rest}
       />
     );

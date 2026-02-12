@@ -30,6 +30,7 @@ export const FieldsetRoot = React.forwardRef<HTMLFieldSetElement, FieldsetRootPr
     return (
       <BaseFieldset.Root
         ref={ref}
+        data-orientation={orientation}
         className={clsx(styles.root, className)}
         {...other}
       >
