@@ -4,6 +4,7 @@ import {
   FieldsetWithDescription,
   HorizontalFieldset,
   NoLegendFieldset,
+  HiddenLegendFieldset,
   DisabledFieldset,
 } from './Fieldset.test-stories';
 
@@ -51,6 +52,19 @@ test.describe('Fieldset', () => {
 
     const fieldsWrapper = component.locator('[data-orientation="vertical"]');
     await expect(fieldsWrapper).toHaveCSS('flex-direction', 'column');
+  });
+
+  test('visually hides legend while keeping it accessible', async ({ mount }) => {
+    const component = await mount(<HiddenLegendFieldset />);
+
+    // Legend text exists in the DOM but is not visually visible
+    const legend = component.getByText('Transaction limits');
+    await expect(legend).toBeAttached();
+    await expect(legend).not.toBeVisible();
+
+    // Fields still render correctly
+    await expect(component.getByPlaceholder('1.00')).toBeVisible();
+    await expect(component.getByPlaceholder('10,000.00')).toBeVisible();
   });
 
   test('disables all children when disabled', async ({ mount }) => {

@@ -14,6 +14,7 @@ export { ContextMenu } from './components/ContextMenu';
 export { Dialog } from './components/Dialog';
 export { Field } from './components/Field';
 export { Fieldset } from './components/Fieldset';
+export type { FieldsetRootProps, FieldsetLegendProps } from './components/Fieldset';
 export { InputGroup } from './components/InputGroup';
 export type {
   InputGroupRootProps,

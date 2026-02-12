@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5902-4405
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   display: flex;
@@ -39,4 +40,8 @@
   align-items: center;
   padding-inline: var(--spacing-3xs);
   color: var(--text-primary);
+}
+
+.legendHidden {
+  @include visually-hidden;
 }

@@ -74,6 +74,22 @@ export function NoLegendFieldset() {
   );
 }
 
+export function HiddenLegendFieldset() {
+  return (
+    <Fieldset.Root orientation="horizontal">
+      <Fieldset.Legend visuallyHidden>Transaction limits</Fieldset.Legend>
+      <Field.Root name="min">
+        <Field.Label>Minimum</Field.Label>
+        <Input placeholder="1.00" />
+      </Field.Root>
+      <Field.Root name="max">
+        <Field.Label>Maximum</Field.Label>
+        <Input placeholder="10,000.00" />
+      </Field.Root>
+    </Fieldset.Root>
+  );
+}
+
 export function DisabledFieldset() {
   return (
     <Fieldset.Root disabled>
