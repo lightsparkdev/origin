@@ -57,10 +57,13 @@ test.describe('Fieldset', () => {
   test('visually hides legend while keeping it accessible', async ({ mount }) => {
     const component = await mount(<HiddenLegendFieldset />);
 
-    // Legend text exists in the DOM but is not visually visible
+    // Legend is in the DOM and visually hidden via clip + 1px sizing
     const legend = component.getByText('Transaction limits');
     await expect(legend).toBeAttached();
-    await expect(legend).not.toBeVisible();
+    await expect(legend).toHaveCSS('position', 'absolute');
+    await expect(legend).toHaveCSS('width', '1px');
+    await expect(legend).toHaveCSS('height', '1px');
+    await expect(legend).toHaveCSS('overflow', 'hidden');
 
     // Fields still render correctly
     await expect(component.getByPlaceholder('1.00')).toBeVisible();
