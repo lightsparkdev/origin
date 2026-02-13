@@ -1,6 +1,6 @@
 {
   "name": "@lightsparkdev/origin",
-  "version": "0.7.10",
+  "version": "0.7.11",
   "private": false,
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "repository": {
