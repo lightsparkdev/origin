@@ -3378,7 +3378,7 @@ export default function Home() {
                   </Popover.Title>
                   <Popover.Close render={
                     <Button variant="ghost" size="compact" iconOnly style={{ marginRight: 'calc(var(--spacing-xs) * -1)', marginTop: 'calc(var(--spacing-3xs) * -1)' }}>
-                      <CentralIcon name="IconX" size={16} />
+                      <CentralIcon name="IconCrossSmall" size={16} />
                     </Button>
                   } />
                 </div>
