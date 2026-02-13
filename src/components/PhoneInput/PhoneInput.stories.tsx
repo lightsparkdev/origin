@@ -60,9 +60,9 @@ function PhoneInputExample({
             <PhoneInput.CountryValue>
               {(country: Country) => (
                 <>
-                  <PhoneInput.CountryValueFlag>
+                  <PhoneInput.CountryFlag>
                     <img src={getFlagUrl(country.code)} alt="" />
-                  </PhoneInput.CountryValueFlag>
+                  </PhoneInput.CountryFlag>
                   <span>{country.dialCode}</span>
                 </>
               )}
@@ -70,25 +70,19 @@ function PhoneInputExample({
             <PhoneInput.CountryIcon />
           </PhoneInput.CountryTrigger>
 
-          <PhoneInput.CountryPortal>
-            <PhoneInput.CountryPositioner>
-              <PhoneInput.CountryPopup>
-                <PhoneInput.CountryList>
-                  {exampleCountries.map((country) => (
-                    <PhoneInput.CountryItem key={country.code} value={country}>
-                      <PhoneInput.CountryItemFlag>
-                        <img src={getFlagUrl(country.code)} alt="" />
-                      </PhoneInput.CountryItemFlag>
-                      <PhoneInput.CountryItemText>
-                        {country.name} ({country.dialCode})
-                      </PhoneInput.CountryItemText>
-                      <PhoneInput.CountryItemIndicator />
-                    </PhoneInput.CountryItem>
-                  ))}
-                </PhoneInput.CountryList>
-              </PhoneInput.CountryPopup>
-            </PhoneInput.CountryPositioner>
-          </PhoneInput.CountryPortal>
+          <PhoneInput.CountryListbox>
+            {exampleCountries.map((country) => (
+              <PhoneInput.CountryItem key={country.code} value={country}>
+                <PhoneInput.CountryFlag>
+                  <img src={getFlagUrl(country.code)} alt="" />
+                </PhoneInput.CountryFlag>
+                <PhoneInput.CountryItemText>
+                  {country.name} ({country.dialCode})
+                </PhoneInput.CountryItemText>
+                <PhoneInput.CountryItemIndicator />
+              </PhoneInput.CountryItem>
+            ))}
+          </PhoneInput.CountryListbox>
         </PhoneInput.CountrySelect>
 
         <PhoneInput.Input
@@ -139,9 +133,9 @@ function ControlledExample() {
             <PhoneInput.CountryValue>
               {(country: Country) => (
                 <>
-                  <PhoneInput.CountryValueFlag>
+                  <PhoneInput.CountryFlag>
                     <img src={getFlagUrl(country.code)} alt="" />
-                  </PhoneInput.CountryValueFlag>
+                  </PhoneInput.CountryFlag>
                   <span>{country.dialCode}</span>
                 </>
               )}
@@ -149,25 +143,19 @@ function ControlledExample() {
             <PhoneInput.CountryIcon />
           </PhoneInput.CountryTrigger>
 
-          <PhoneInput.CountryPortal>
-            <PhoneInput.CountryPositioner>
-              <PhoneInput.CountryPopup>
-                <PhoneInput.CountryList>
-                  {exampleCountries.map((country) => (
-                    <PhoneInput.CountryItem key={country.code} value={country}>
-                      <PhoneInput.CountryItemFlag>
-                        <img src={getFlagUrl(country.code)} alt="" />
-                      </PhoneInput.CountryItemFlag>
-                      <PhoneInput.CountryItemText>
-                        {country.name} ({country.dialCode})
-                      </PhoneInput.CountryItemText>
-                      <PhoneInput.CountryItemIndicator />
-                    </PhoneInput.CountryItem>
-                  ))}
-                </PhoneInput.CountryList>
-              </PhoneInput.CountryPopup>
-            </PhoneInput.CountryPositioner>
-          </PhoneInput.CountryPortal>
+          <PhoneInput.CountryListbox>
+            {exampleCountries.map((country) => (
+              <PhoneInput.CountryItem key={country.code} value={country}>
+                <PhoneInput.CountryFlag>
+                  <img src={getFlagUrl(country.code)} alt="" />
+                </PhoneInput.CountryFlag>
+                <PhoneInput.CountryItemText>
+                  {country.name} ({country.dialCode})
+                </PhoneInput.CountryItemText>
+                <PhoneInput.CountryItemIndicator />
+              </PhoneInput.CountryItem>
+            ))}
+          </PhoneInput.CountryListbox>
         </PhoneInput.CountrySelect>
 
         <PhoneInput.Input
@@ -213,9 +201,9 @@ function WithFieldExample() {
               <PhoneInput.CountryValue>
                 {(country: Country) => (
                   <>
-                    <PhoneInput.CountryValueFlag>
+                    <PhoneInput.CountryFlag>
                       <img src={getFlagUrl(country.code)} alt="" />
-                    </PhoneInput.CountryValueFlag>
+                    </PhoneInput.CountryFlag>
                     <span>{country.dialCode}</span>
                   </>
                 )}
@@ -223,25 +211,19 @@ function WithFieldExample() {
               <PhoneInput.CountryIcon />
             </PhoneInput.CountryTrigger>
 
-            <PhoneInput.CountryPortal>
-              <PhoneInput.CountryPositioner>
-                <PhoneInput.CountryPopup>
-                  <PhoneInput.CountryList>
-                    {exampleCountries.map((country) => (
-                      <PhoneInput.CountryItem key={country.code} value={country}>
-                        <PhoneInput.CountryItemFlag>
-                          <img src={getFlagUrl(country.code)} alt="" />
-                        </PhoneInput.CountryItemFlag>
-                        <PhoneInput.CountryItemText>
-                          {country.name} ({country.dialCode})
-                        </PhoneInput.CountryItemText>
-                        <PhoneInput.CountryItemIndicator />
-                      </PhoneInput.CountryItem>
-                    ))}
-                  </PhoneInput.CountryList>
-                </PhoneInput.CountryPopup>
-              </PhoneInput.CountryPositioner>
-            </PhoneInput.CountryPortal>
+            <PhoneInput.CountryListbox>
+              {exampleCountries.map((country) => (
+                <PhoneInput.CountryItem key={country.code} value={country}>
+                  <PhoneInput.CountryFlag>
+                    <img src={getFlagUrl(country.code)} alt="" />
+                  </PhoneInput.CountryFlag>
+                  <PhoneInput.CountryItemText>
+                    {country.name} ({country.dialCode})
+                  </PhoneInput.CountryItemText>
+                  <PhoneInput.CountryItemIndicator />
+                </PhoneInput.CountryItem>
+              ))}
+            </PhoneInput.CountryListbox>
           </PhoneInput.CountrySelect>
 
           <PhoneInput.Input
