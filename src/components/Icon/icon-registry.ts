@@ -46,6 +46,7 @@ import { IconCircleCheck } from '@central-icons-react/round-outlined-radius-0-st
 import { IconCircleInfo } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCircleInfo';
 import { IconCirclePlus } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCirclePlus';
 import { IconCircleX } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconCircleX';
+import { IconHeart2 as IconHeart2Filled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconHeart2';
 import { IconClipboard2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconClipboard2';
 import { IconClock } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconClock';
 import { IconCrossLarge } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCrossLarge';
@@ -196,6 +197,7 @@ export const ICON_REGISTRY = {
   IconFullScreen,
   IconGlobe2,
   IconHeart2,
+  IconHeart2Filled,
   IconHome,
   IconImport2,
   IconInitiatives,

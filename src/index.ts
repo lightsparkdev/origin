@@ -108,6 +108,9 @@ export { Shortcut, type ShortcutProps } from './components/Shortcut';
 export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
 
+export { Toggle, ToggleGroup } from './components/Toggle';
+export type { ToggleProps, ToggleGroupProps } from './components/Toggle';
+
 export { Textarea, type TextareaProps } from './components/Textarea';
 
 export { VisuallyHidden } from './components/VisuallyHidden';

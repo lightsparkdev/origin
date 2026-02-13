@@ -56,6 +56,7 @@ import { Toast, ToastVariant } from '@/components/Toast';
 import { Tooltip } from '@/components/Tooltip';
 import { Popover } from '@/components/Popover';
 import { Logo } from '@/components/Logo';
+import { Toggle, ToggleGroup } from '@/components/Toggle';
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
@@ -3425,6 +3426,71 @@ export default function Home() {
             </Popover.Positioner>
           </Popover.Portal>
         </Popover.Root>
+      </div>
+
+      <h2 style={{ marginBottom: '1rem' }}>Toggle</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', marginBottom: 'var(--spacing-3xl)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <span className="label-sm" style={{ color: 'var(--text-tertiary)' }}>Standalone</span>
+          <div style={{ display: 'flex', gap: 'var(--spacing-xs)', alignItems: 'center' }}>
+            <Toggle
+              aria-label="Favorite"
+              render={(props, state) => (
+                <button type="button" {...props}>
+                  <CentralIcon name={state.pressed ? 'IconHeart2Filled' : 'IconHeart2'} size={16} />
+                  <span style={{ padding: '0 var(--spacing-3xs)' }}>Favorite</span>
+                </button>
+              )}
+            />
+            <Toggle
+              aria-label="Favorite"
+              render={(props, state) => (
+                <button type="button" {...props}>
+                  <CentralIcon name={state.pressed ? 'IconHeart2Filled' : 'IconHeart2'} size={16} />
+                </button>
+              )}
+            />
+            <Toggle disabled aria-label="Favorite">
+              <CentralIcon name="IconHeart2" size={16} />
+              <span style={{ padding: '0 var(--spacing-3xs)' }}>Disabled</span>
+            </Toggle>
+            <Toggle defaultPressed disabled aria-label="Locked on">
+              <CentralIcon name="IconHeart2Filled" size={16} />
+              <span style={{ padding: '0 var(--spacing-3xs)' }}>Locked</span>
+            </Toggle>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <span className="label-sm" style={{ color: 'var(--text-tertiary)' }}>Toggle Group (single select)</span>
+          <ToggleGroup defaultValue={['left']} aria-label="Text alignment">
+            <Toggle value="left" aria-label="Align left">
+              <CentralIcon name="IconLayoutLeft" size={16} />
+            </Toggle>
+            <Toggle value="center" aria-label="Align center">
+              <CentralIcon name="IconLayoutColumn" size={16} />
+            </Toggle>
+            <Toggle value="right" aria-label="Align right">
+              <CentralIcon name="IconLayoutRight" size={16} />
+            </Toggle>
+          </ToggleGroup>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)' }}>
+          <span className="label-sm" style={{ color: 'var(--text-tertiary)' }}>Toggle Group (multiple)</span>
+          <ToggleGroup multiple aria-label="Text formatting">
+            <Toggle value="bold" aria-label="Bold">
+              <span style={{ padding: '0 var(--spacing-3xs)', fontWeight: 700 }}>B</span>
+            </Toggle>
+            <Toggle value="italic" aria-label="Italic">
+              <span style={{ padding: '0 var(--spacing-3xs)', fontStyle: 'italic' }}>I</span>
+            </Toggle>
+            <Toggle value="underline" aria-label="Underline">
+              <span style={{ padding: '0 var(--spacing-3xs)', textDecoration: 'underline' }}>U</span>
+            </Toggle>
+          </ToggleGroup>
+        </div>
       </div>
 
       <h2 style={{ marginBottom: '1rem' }}>VisuallyHidden</h2>
