@@ -147,7 +147,7 @@
   }
 
   .size32 & {
-    @include label;
+    @include label-sm;
     color: var(--text-surface);
   }
 
