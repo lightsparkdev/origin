@@ -48,3 +48,20 @@
 .legendHidden {
   @include visually-hidden;
 }
+
+// Wraps fields + error when a group error is present.
+// Uses tighter spacing (--spacing-md) between fields and error.
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.error {
+  @include body-sm;
+
+  display: flex;
+  align-items: center;
+  padding-inline: var(--spacing-3xs);
+  color: var(--text-critical);
+}
