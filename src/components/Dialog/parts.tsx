@@ -96,7 +96,7 @@ export const CloseButton = React.forwardRef<HTMLButtonElement, CloseButtonProps>
         aria-label={ariaLabel || 'Close'}
         {...props}
       >
-        <CentralIcon name="IconX" size={20} />
+        <CentralIcon name="IconCrossSmall" size={20} />
       </BaseDialog.Close>
     );
   }
