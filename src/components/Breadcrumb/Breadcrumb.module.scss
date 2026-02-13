@@ -1,4 +1,5 @@
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   // Navigation container - no visual styling needed
@@ -49,7 +50,7 @@
   &:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px var(--input-focus);
-    border-radius: var(--corner-radius-xs);
+    @include smooth-corners(var(--corner-radius-xs));
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -71,7 +72,7 @@
   background: none;
   color: var(--text-secondary);
   cursor: pointer;
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   transition: color 150ms ease;
 
   &:hover {

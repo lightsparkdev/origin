@@ -13,7 +13,7 @@
   box-sizing: border-box;
   padding-inline: var(--spacing-sm);
   border: var(--stroke-sm) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   color: var(--text-primary);
   outline: none;
   transition:
@@ -54,7 +54,7 @@
   overflow: hidden;
   background: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
   transform-origin: var(--transform-origin);
@@ -97,7 +97,7 @@
   align-items: center;
   height: 36px;
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   cursor: pointer;
   outline: 0;
   user-select: none;

@@ -1,5 +1,7 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=6358-2839
 
+@use '../../tokens/mixins' as *;
+
 .positioner {
   z-index: 1000;
 }
@@ -7,7 +9,7 @@
 .popup {
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   overflow: clip;
   opacity: 0;

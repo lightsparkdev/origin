@@ -1,16 +1,13 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=5484-446
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   display: flex;
   flex-direction: column;
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   overflow: clip;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 }
 
 .content {

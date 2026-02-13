@@ -36,14 +36,25 @@
   border: 0;
 }
 
-/// iOS-style corner smoothing (continuous corners)
+/// Corner smoothing (continuous corners)
 /// @param {String} $radius - The border-radius value
-@mixin smooth-corners($radius) {
+/// @param {String} $level ['default'] - Smoothing level (reserved for future use):
+///   'default' = squircle (~60% Figma smoothing, iOS-style)
+///   'full'    = superellipse(3) (~100% Figma smoothing)
+///
+/// Currently outputs border-radius only. When corner-shape reaches ~90%
+/// browser support (Safari is actively implementing), uncomment the
+/// @supports block below to enable native continuous corners.
+@mixin smooth-corners($radius, $level: 'default') {
   border-radius: $radius;
 
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
+  // @supports (corner-shape: squircle) {
+  //   @if $level == 'full' {
+  //     corner-shape: superellipse(3);
+  //   } @else {
+  //     corner-shape: squircle;
+  //   }
+  // }
 }
 
 /// Surface with hover overlay (preserves base color)

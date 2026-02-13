@@ -79,12 +79,8 @@
   padding-right: var(--spacing-3xl);
   @include surface-with-hover(var(--surface-secondary));
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   overflow: hidden;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 
   &:focus-visible {
     box-shadow: var(--input-focus);

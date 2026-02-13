@@ -1,4 +1,5 @@
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 // ============================================================================
 // Root
@@ -56,7 +57,7 @@
     &:focus-visible {
       outline: none;
       box-shadow: 0 0 0 2px var(--input-focus);
-      border-radius: var(--corner-radius-xs);
+      @include smooth-corners(var(--corner-radius-xs));
     }
   }
 
@@ -207,7 +208,7 @@
 .cellIndicator {
   width: 8px;
   height: 8px;
-  border-radius: var(--corner-radius-2xs);
+  @include smooth-corners(var(--corner-radius-2xs));
   background-color: var(--icon-primary);
   flex-shrink: 0;
 }
@@ -238,7 +239,7 @@
   width: 100%;
   height: 16px;
   background-color: var(--surface-secondary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   animation: skeleton-pulse 1.5s ease-in-out infinite;
 }
 

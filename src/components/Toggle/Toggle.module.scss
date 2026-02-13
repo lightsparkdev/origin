@@ -1,6 +1,7 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=5545-24438
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .toggle {
   display: inline-flex;
@@ -10,7 +11,7 @@
   min-width: 32px;
   padding: 0 var(--spacing-xs);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   background-color: var(--surface-primary);
   box-shadow: var(--shadow-sm);
   color: var(--text-primary);
@@ -54,7 +55,7 @@
 .toggleGroup {
   display: inline-flex;
   width: fit-content;
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   box-shadow: var(--shadow-sm);
 
   & > .toggle {

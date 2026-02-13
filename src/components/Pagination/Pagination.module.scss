@@ -23,7 +23,7 @@
 // Button group container - provides the joined appearance
 .navigation {
   display: flex;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-sm);
   overflow: hidden;
 }

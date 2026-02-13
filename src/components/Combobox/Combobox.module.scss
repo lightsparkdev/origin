@@ -14,7 +14,7 @@
   padding: var(--spacing-2xs) calc(var(--spacing-xs) + 20px) var(--spacing-2xs) var(--spacing-sm);
   background: transparent;
   border: var(--stroke-sm) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   transition:
     border-color 150ms ease,
     box-shadow 150ms ease;
@@ -96,7 +96,7 @@
   padding: 0;
   background: transparent;
   border: none;
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   color: var(--icon-secondary);
   cursor: pointer;
   transition: color 150ms ease;
@@ -138,7 +138,7 @@
   padding: 0;
   background: transparent;
   border: none;
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   color: var(--text-primary);
   cursor: pointer;
   transition: opacity 150ms ease;
@@ -174,7 +174,7 @@
   overflow: hidden;
   background: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
   transform-origin: var(--transform-origin);
@@ -217,7 +217,7 @@
   align-items: center;
   height: 36px;
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   cursor: pointer;
   outline: 0;
   user-select: none;
@@ -275,7 +275,7 @@
 .itemIndicatorDot {
   width: 8px;
   height: 8px;
-  border-radius: var(--corner-radius-2xs);
+  @include smooth-corners(var(--corner-radius-2xs));
   background: var(--icon-primary);
 }
 

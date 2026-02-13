@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6113-1667
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 // Root - base styles (no card surface for simple variant)
 .root {
@@ -12,7 +13,7 @@
 .structured {
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-xl);
+  @include smooth-corners(var(--corner-radius-xl));
   overflow: clip;
 }
 
@@ -49,7 +50,7 @@
   padding: 0;
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-sm);
   color: var(--text-primary);
   cursor: pointer;

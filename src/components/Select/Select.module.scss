@@ -11,7 +11,7 @@
   padding-inline-start: var(--spacing-sm);
   padding-inline-end: var(--spacing-xs);
   border: var(--stroke-sm) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   color: var(--text-primary);
   cursor: pointer;
   outline: none;
@@ -48,7 +48,7 @@
   gap: var(--spacing-none);
   padding: var(--spacing-2xs);
   border: none;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   background: transparent;
   color: var(--text-primary);
   transition: background-color 150ms ease;
@@ -164,7 +164,7 @@
   justify-content: center;
   padding: var(--spacing-xs) var(--spacing-2xs);
   border: var(--stroke-xs) solid transparent;
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   color: var(--icon-secondary);
   cursor: pointer;
   pointer-events: auto;
@@ -202,7 +202,7 @@
 .popup {
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
   overflow: hidden;
@@ -239,7 +239,7 @@
   gap: var(--spacing-2xs);
   height: 36px;
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   color: var(--text-primary);
   cursor: pointer;
   outline: none;
@@ -281,7 +281,7 @@
   width: 8px;
   height: 8px;
   background-color: var(--icon-primary);
-  border-radius: var(--corner-radius-2xs);
+  @include smooth-corners(var(--corner-radius-2xs));
 }
 
 .itemText {

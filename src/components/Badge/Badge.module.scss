@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2355-1102
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   @include label-sm;
@@ -9,11 +10,7 @@
   justify-content: center;
   height: 20px;
   padding: var(--spacing-4xs) var(--spacing-2xs);
-  border-radius: var(--corner-radius-xs);
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
+  @include smooth-corners(var(--corner-radius-xs));
 }
 
 .gray {

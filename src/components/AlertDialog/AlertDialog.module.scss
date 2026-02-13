@@ -1,5 +1,6 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=6239-931
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .backdrop {
   position: fixed;
@@ -35,13 +36,9 @@
   overflow: clip;
   background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-secondary);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   box-shadow: var(--shadow-lg);
   transition: opacity 200ms ease-out, transform 200ms ease-out;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 
   &[data-open] {
     opacity: 1;
