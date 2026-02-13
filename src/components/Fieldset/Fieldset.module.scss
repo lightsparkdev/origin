@@ -8,6 +8,9 @@
   flex-direction: column;
   gap: var(--spacing-xl);
   width: 100%;
+  // Override the UA default (min-inline-size: min-content) so the
+  // fieldset respects its specified width inside flex containers.
+  min-inline-size: 0;
   border: none;
   padding: 0;
   margin: 0;
