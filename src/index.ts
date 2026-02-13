@@ -39,6 +39,20 @@ export { Table } from './components/Table';
 export { Tabs } from './components/Tabs';
 export { Toast } from './components/Toast';
 export { Tooltip } from './components/Tooltip';
+export { Popover } from './components/Popover';
+export type {
+  PopoverRootProps,
+  PopoverTriggerProps,
+  PopoverPortalProps,
+  PopoverPositionerProps,
+  PopoverPopupProps,
+  PopoverBackdropProps,
+  PopoverViewportProps,
+  PopoverArrowProps,
+  PopoverCloseProps,
+  PopoverTitleProps,
+  PopoverDescriptionProps,
+} from './components/Popover';
 
 // Simple components (direct exports)
 export { ActionBar, ActionBarLabel, ActionBarActions } from './components/ActionBar';
