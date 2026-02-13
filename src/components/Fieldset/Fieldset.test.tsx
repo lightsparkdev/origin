@@ -5,6 +5,8 @@ import {
   HorizontalFieldset,
   NoLegendFieldset,
   HiddenLegendFieldset,
+  ErrorFieldset,
+  HorizontalErrorFieldset,
   DisabledFieldset,
 } from './Fieldset.test-stories';
 
@@ -66,6 +68,35 @@ test.describe('Fieldset', () => {
     await expect(legend).toHaveCSS('overflow', 'hidden');
 
     // Fields still render correctly
+    await expect(component.getByPlaceholder('1.00')).toBeVisible();
+    await expect(component.getByPlaceholder('10,000.00')).toBeVisible();
+  });
+
+  test('renders group error message', async ({ mount }) => {
+    const component = await mount(<ErrorFieldset />);
+
+    const error = component.getByText('Minimum must be less than maximum');
+    await expect(error).toBeVisible();
+
+    // Error uses critical color token
+    await expect(error).toHaveCSS('color', 'rgb(204, 9, 9)'); // --text-critical: #CC0909
+
+    // Fields still render
+    await expect(component.getByPlaceholder('1.00')).toBeVisible();
+    await expect(component.getByPlaceholder('10,000.00')).toBeVisible();
+  });
+
+  test('renders group error in horizontal orientation', async ({ mount }) => {
+    const component = await mount(<HorizontalErrorFieldset />);
+
+    const error = component.getByText('Minimum must be less than maximum');
+    await expect(error).toBeVisible();
+
+    // Fields are still horizontal
+    const fieldsWrapper = component.locator('[data-orientation="horizontal"]');
+    await expect(fieldsWrapper).toHaveCSS('flex-direction', 'row');
+
+    // Error is below the fields, not inside the row
     await expect(component.getByPlaceholder('1.00')).toBeVisible();
     await expect(component.getByPlaceholder('10,000.00')).toBeVisible();
   });

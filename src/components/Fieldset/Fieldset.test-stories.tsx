@@ -90,6 +90,40 @@ export function HiddenLegendFieldset() {
   );
 }
 
+export function ErrorFieldset() {
+  return (
+    <Fieldset.Root>
+      <Fieldset.Legend>Transaction limits</Fieldset.Legend>
+      <Field.Root name="min">
+        <Field.Label>Minimum</Field.Label>
+        <Input placeholder="1.00" />
+      </Field.Root>
+      <Field.Root name="max">
+        <Field.Label>Maximum</Field.Label>
+        <Input placeholder="10,000.00" />
+      </Field.Root>
+      <Fieldset.Error>Minimum must be less than maximum</Fieldset.Error>
+    </Fieldset.Root>
+  );
+}
+
+export function HorizontalErrorFieldset() {
+  return (
+    <Fieldset.Root orientation="horizontal">
+      <Fieldset.Legend>Transaction limits</Fieldset.Legend>
+      <Field.Root name="min">
+        <Field.Label>Minimum</Field.Label>
+        <Input placeholder="1.00" />
+      </Field.Root>
+      <Field.Root name="max">
+        <Field.Label>Maximum</Field.Label>
+        <Input placeholder="10,000.00" />
+      </Field.Root>
+      <Fieldset.Error>Minimum must be less than maximum</Fieldset.Error>
+    </Fieldset.Root>
+  );
+}
+
 export function DisabledFieldset() {
   return (
     <Fieldset.Root disabled>
