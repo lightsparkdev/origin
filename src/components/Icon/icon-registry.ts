@@ -49,6 +49,7 @@ import { IconCircleX } from '@central-icons-react/round-filled-radius-3-stroke-1
 import { IconHeart2 as IconHeart2Filled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconHeart2';
 import { IconClipboard2 } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconClipboard2';
 import { IconClock } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconClock';
+import { IconCmdBox } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCmdBox';
 import { IconCrossLarge } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCrossLarge';
 import { IconCrossSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCrossSmall';
 import { IconCryptoWallet } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconCryptoWallet';
@@ -188,6 +189,7 @@ export const ICON_REGISTRY = {
   IconCircleX,
   IconClipboard2,
   IconClock,
+  IconCmdBox,
   IconCrossLarge,
   IconCrossSmall,
   IconCryptoWallet,
