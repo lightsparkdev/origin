@@ -1,5 +1,6 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=2061-1327
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   position: relative;
@@ -10,6 +11,7 @@
   flex-shrink: 0;
   user-select: none;
   vertical-align: middle;
+  border: var(--stroke-xs) solid var(--border-tertiary);
 }
 
 // Sizes
@@ -44,33 +46,30 @@
 }
 
 // Variants - Shape
+// Avatar uses 100% corner smoothing ('full') in Figma
 .squircle {
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
-
   &.size16 {
-    border-radius: 5px;
+    @include smooth-corners(5px, 'full');
   }
 
   &.size20 {
-    border-radius: var(--corner-radius-sm);
+    @include smooth-corners(var(--corner-radius-sm), 'full');
   }
 
   &.size24 {
-    border-radius: var(--corner-radius-md);
+    @include smooth-corners(7px, 'full');
   }
 
   &.size32 {
-    border-radius: 10px;
+    @include smooth-corners(10px, 'full');
   }
 
   &.size40 {
-    border-radius: 11px;
+    @include smooth-corners(11px, 'full');
   }
 
   &.size48 {
-    border-radius: 13px;
+    @include smooth-corners(13px, 'full');
   }
 }
 
@@ -137,7 +136,7 @@
   }
 
   .size20 & {
-    @include label-xs;
+    @include label-sm;
     color: var(--text-surface);
   }
 
@@ -152,7 +151,7 @@
   }
 
   .size40 & {
-    @include label-lg;
+    @include label;
     color: var(--text-surface);
   }
 

@@ -1,11 +1,12 @@
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
   padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   width: 100%;
   box-sizing: border-box;
 

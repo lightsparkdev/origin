@@ -1,6 +1,7 @@
 // https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2348-283
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .backdrop {
   position: fixed;
@@ -30,7 +31,7 @@
   max-height: min(420px, 70vh);
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   box-shadow: var(--shadow-lg);
   overflow: hidden;
   outline: none;
@@ -118,7 +119,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--spacing-sm);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   color: var(--text-primary);
   cursor: pointer;
   user-select: none;

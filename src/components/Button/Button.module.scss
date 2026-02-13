@@ -1,11 +1,13 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=2053-951
 
+@use '../../tokens/mixins' as *;
+
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   cursor: pointer;
   font-family: var(--font-family-sans);
   font-weight: var(--font-weight-book);

@@ -1,5 +1,6 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=5166-20742
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   display: flex;
@@ -14,7 +15,7 @@
   gap: var(--spacing-2xs);
   align-items: flex-start;
   overflow: clip;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
 }
 
 .list.default {
@@ -38,7 +39,7 @@
   height: var(--active-tab-height);
   background: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   box-shadow: var(--shadow-sm);
   transition: top, left, width, height;
   transition-duration: 200ms;
@@ -60,7 +61,7 @@
   height: 32px;
   padding: 0 var(--spacing-md);
   border: var(--stroke-xs) solid transparent;
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   background: transparent;
   cursor: pointer;
   @include label;
@@ -104,7 +105,7 @@
   padding: var(--spacing-4xl) 0;
   overflow: clip;
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
 
   &[data-hidden] {
     display: none;

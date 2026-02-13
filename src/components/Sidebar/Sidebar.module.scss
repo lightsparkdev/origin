@@ -1,6 +1,7 @@
 // https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6144-3042
 
 @use '../../tokens/text-styles';
+@use '../../tokens/mixins' as *;
 
 .root {
   display: flex;
@@ -127,7 +128,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   transition: background-color 150ms ease;
 
   [data-collapsed='false'] & {
@@ -185,7 +186,7 @@
   justify-content: center;
   width: var(--sidebar-item-size, 36px);
   height: var(--sidebar-item-size, 36px);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   color: var(--icon-secondary);
   transition: background-color 150ms ease, color 150ms ease;
 
@@ -278,7 +279,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   transition: background-color 150ms ease;
 
   &:focus-visible {
@@ -321,7 +322,7 @@
 .drilldownItem {
   display: flex;
   align-items: center;
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
 
   &[data-disabled='true'] {
     opacity: 0.5;
@@ -367,7 +368,7 @@
   flex: 1;
   min-width: 0;
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
 
   [data-collapsed='true'] & {
     justify-content: center;
@@ -388,7 +389,7 @@
   width: 24px;
   height: 24px;
   margin-right: var(--spacing-2xs);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   color: var(--icon-secondary);
   transition: background-color 150ms ease, color 150ms ease;
 
@@ -414,7 +415,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-3xs) var(--spacing-xs) var(--spacing-xs);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   transition: background-color 150ms ease;
 
   [data-collapsed='false'] & {

@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2660-419
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   display: inline-flex;
@@ -16,12 +17,8 @@
   min-width: 20px;
   height: 20px;
   padding-inline: var(--spacing-3xs);
-  border-radius: var(--corner-radius-2xs);
+  @include smooth-corners(var(--corner-radius-2xs));
   background-color: var(--surface-secondary);
   color: var(--text-secondary);
   font-feature-settings: 'salt' 1;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 }

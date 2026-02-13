@@ -1,5 +1,6 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=6053-2197
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   min-width: max-content;
@@ -26,7 +27,7 @@
   justify-content: center;
   height: 36px;
   padding-inline: var(--spacing-sm);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   color: var(--text-primary);
   text-decoration: none;
   user-select: none;
@@ -74,7 +75,7 @@
   height: 36px;
   padding-inline: var(--spacing-sm);
   border: var(--stroke-xs) solid transparent;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   background-color: transparent;
   color: var(--text-primary);
   font-family: inherit;
@@ -123,7 +124,7 @@
   height: 36px;
   padding: 0;
   border: var(--stroke-xs) solid transparent;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   background-color: transparent;
   color: var(--text-primary);
   cursor: pointer;
@@ -172,7 +173,7 @@
   height: 36px;
   padding-inline: var(--spacing-2xs);
   border: var(--stroke-xs) solid transparent;
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   background-color: transparent;
   color: var(--text-primary);
   font-family: inherit;
@@ -309,7 +310,7 @@
   flex-direction: column;
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
   overflow: hidden;
@@ -410,7 +411,7 @@
   gap: var(--spacing-xs);
   height: 36px;
   padding: var(--spacing-xs);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   color: var(--text-primary);
   cursor: pointer;
   outline: none;

@@ -79,12 +79,8 @@
   padding-right: var(--spacing-3xl);
   @include surface-with-hover(var(--surface-secondary));
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   overflow: hidden;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 
   &:focus-visible {
     box-shadow: var(--input-focus);
@@ -105,7 +101,7 @@
   height: 16px;
   margin: var(--spacing-4xs) 0;
   border: var(--stroke-sm) solid var(--border-secondary);
-  border-radius: var(--corner-radius-xs);
+  @include smooth-corners(var(--corner-radius-xs));
   background-color: var(--surface-primary);
   transition: background-color 150ms ease, border-color 150ms ease;
 

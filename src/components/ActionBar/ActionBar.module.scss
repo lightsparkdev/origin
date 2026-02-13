@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=3029-317
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .root {
   display: inline-flex;
@@ -11,12 +12,8 @@
   padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-md); // 8px 8px 8px 16px
   background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: 10px;
+  @include smooth-corners(10px);
   box-shadow: var(--shadow-lg);
-
-  @supports (corner-shape: superellipse) {
-    corner-shape: superellipse;
-  }
 }
 
 .label {

@@ -1,6 +1,7 @@
 // Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=2238-366
 
 @use '../../tokens/text-styles' as *;
+@use '../../tokens/mixins' as *;
 
 .viewport {
   position: fixed;
@@ -23,14 +24,10 @@
   padding: var(--spacing-md);
   background-color: var(--surface-primary);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   box-shadow: var(--shadow-lg);
   outline: none;
   transition: opacity 200ms ease, transform 200ms ease;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
@@ -58,18 +55,14 @@
   flex-shrink: 0;
   width: 24px;
   height: 24px;
-  border-radius: var(--corner-radius-md);
+  @include smooth-corners(var(--corner-radius-md));
   overflow: hidden;
-
-  @supports (corner-shape: squircle) {
-    corner-shape: squircle;
-  }
 }
 
 .indicator {
   width: 8px;
   height: 8px;
-  border-radius: var(--corner-radius-2xs);
+  @include smooth-corners(var(--corner-radius-2xs));
 }
 
 .icon-info {

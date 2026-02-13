@@ -1,5 +1,7 @@
 // Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=5592-4906
 
+@use '../../tokens/mixins' as *;
+
 .root {
   display: inline-flex;
   align-items: stretch;
@@ -53,7 +55,7 @@
 // negative margin so adjacent buttons don't double up.
 
 .outline {
-  border-radius: var(--corner-radius-sm);
+  @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-sm);
 
   // Collapse adjacent borders horizontally
