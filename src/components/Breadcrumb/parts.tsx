@@ -183,7 +183,7 @@ export const BreadcrumbEllipsis = React.forwardRef<HTMLButtonElement, Breadcrumb
         onClick={handleClick}
         {...elementProps}
       >
-        <CentralIcon name="IconDotGrid1x3Horizontal" size={16} />
+        <CentralIcon name="IconDotGrid1x3HorizontalTight" size={16} />
       </button>
     );
   }
