@@ -129,13 +129,13 @@ export function CountryValue<Value>({
   );
 }
 
-// CountryValueFlag - wrapper for flag in trigger (18px)
-export interface CountryValueFlagProps extends React.HTMLAttributes<HTMLSpanElement> {}
+// CountryFlag - flag wrapper (auto-sizes: 18px in trigger, 22px in items via CSS)
+export interface CountryFlagProps extends React.HTMLAttributes<HTMLSpanElement> {}
 
-export const CountryValueFlag = React.forwardRef<HTMLSpanElement, CountryValueFlagProps>(
-  function CountryValueFlag({ className, ...props }, ref) {
+export const CountryFlag = React.forwardRef<HTMLSpanElement, CountryFlagProps>(
+  function CountryFlag({ className, ...props }, ref) {
     return (
-      <span ref={ref} className={clsx(styles.valueFlag, className)} {...props} />
+      <span ref={ref} className={clsx(styles.flag, className)} {...props} />
     );
   }
 );
@@ -159,64 +159,45 @@ export const CountryIcon = React.forwardRef<HTMLSpanElement, CountryIconProps>(
   }
 );
 
-// CountryPortal
-export interface CountryPortalProps extends BaseSelect.Portal.Props {}
-
-export function CountryPortal(props: CountryPortalProps) {
-  return <BaseSelect.Portal {...props} />;
+// CountryListbox - merged Portal + Positioner + Popup + List
+export interface CountryListboxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'children'> {
+  children: React.ReactNode;
+  /** Offset from the anchor element */
+  sideOffset?: number;
+  /** Side to position the popup */
+  side?: 'bottom' | 'top';
+  /** Alignment relative to the anchor */
+  align?: 'start' | 'center' | 'end';
 }
 
-// CountryPositioner - positions popup below root (following Combobox anchor pattern)
-export interface CountryPositionerProps extends BaseSelect.Positioner.Props {}
-
-export const CountryPositioner = React.forwardRef<HTMLDivElement, CountryPositionerProps>(
-  function CountryPositioner({ className, sideOffset = 6, side = 'bottom', align = 'start', anchor, ...props }, ref) {
+export const CountryListbox = React.forwardRef<HTMLDivElement, CountryListboxProps>(
+  function CountryListbox({ className, children, sideOffset = 6, side = 'bottom', align = 'start', ...props }, ref) {
     const anchorRef = React.useContext(AnchorContext);
 
     return (
-      <BaseSelect.Positioner
-        ref={ref}
-        className={clsx(styles.positioner, className)}
-        sideOffset={sideOffset}
-        side={side}
-        align={align}
-        // CRITICAL: Must be false for side/align props to work with custom anchor
-        alignItemWithTrigger={false}
-        // Use Root as anchor for proper width (following Combobox pattern)
-        anchor={anchor ?? anchorRef}
-        {...props}
-      />
-    );
-  }
-);
-
-// CountryPopup
-export interface CountryPopupProps extends BaseSelect.Popup.Props {}
-
-export const CountryPopup = React.forwardRef<HTMLDivElement, CountryPopupProps>(
-  function CountryPopup({ className, ...props }, ref) {
-    return (
-      <BaseSelect.Popup
-        ref={ref}
-        className={clsx(styles.popup, className)}
-        data-phone-input-popup=""
-        {...props}
-      />
-    );
-  }
-);
-
-// CountryList
-export interface CountryListProps extends BaseSelect.List.Props {}
-
-export const CountryList = React.forwardRef<HTMLDivElement, CountryListProps>(
-  function CountryList({ className, ...props }, ref) {
-    return (
-      <BaseSelect.List
-        ref={ref}
-        className={clsx(styles.list, className)}
-        {...props}
-      />
+      <BaseSelect.Portal>
+        <BaseSelect.Positioner
+          className={styles.positioner}
+          sideOffset={sideOffset}
+          side={side}
+          align={align}
+          alignItemWithTrigger={false}
+          anchor={anchorRef}
+        >
+          <BaseSelect.Popup
+            className={styles.popup}
+            data-phone-input-popup=""
+          >
+            <BaseSelect.List
+              ref={ref}
+              className={clsx(styles.list, className)}
+              {...props}
+            >
+              {children}
+            </BaseSelect.List>
+          </BaseSelect.Popup>
+        </BaseSelect.Positioner>
+      </BaseSelect.Portal>
     );
   }
 );
@@ -232,17 +213,6 @@ export const CountryItem = React.forwardRef<HTMLDivElement, CountryItemProps>(
         className={clsx(styles.item, className)}
         {...props}
       />
-    );
-  }
-);
-
-// CountryItemFlag - wrapper for flag in item (24px)
-export interface CountryItemFlagProps extends React.HTMLAttributes<HTMLSpanElement> {}
-
-export const CountryItemFlag = React.forwardRef<HTMLSpanElement, CountryItemFlagProps>(
-  function CountryItemFlag({ className, ...props }, ref) {
-    return (
-      <span ref={ref} className={clsx(styles.itemFlag, className)} {...props} />
     );
   }
 );
