@@ -22,4 +22,5 @@ export type {
   SeparatorProps as ComboboxSeparatorProps,
   EmptyProps as ComboboxEmptyProps,
   ValueProps as ComboboxValueProps,
+  useFilteredItems as useComboboxFilteredItems,
 } from './parts';

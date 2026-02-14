@@ -103,3 +103,4 @@ export const CloseButton = React.forwardRef<HTMLButtonElement, CloseButtonProps>
 );
 
 export const createHandle = BaseDialog.createHandle;
+export type Handle<Payload = never> = BaseDialog.Handle<Payload>;

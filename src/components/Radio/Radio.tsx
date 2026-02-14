@@ -86,7 +86,7 @@ export interface RadioItemProps {
   children?: React.ReactNode;
 }
 
-export const RadioItem = React.forwardRef<HTMLButtonElement, RadioItemProps>(
+export const RadioItem = React.forwardRef<HTMLSpanElement, RadioItemProps>(
   function RadioItem(props, ref) {
     const { value, disabled = false, label, description, className, children, ...other } = props;
     const { variant } = useRadioGroupContext();

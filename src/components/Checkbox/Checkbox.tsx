@@ -98,7 +98,7 @@ const defaultIndeterminateIcon = <CentralIcon name="IconMinusSmall" size={12} />
  * A single checkbox item. Can be used standalone or within a Checkbox.Group.
  * When inside a Group, it inherits the group's variant unless explicitly overridden.
  */
-export const CheckboxItem = React.forwardRef<HTMLElement, CheckboxItemProps>(
+export const CheckboxItem = React.forwardRef<HTMLSpanElement, CheckboxItemProps>(
   function CheckboxItem(props, ref) {
     const {
       value,

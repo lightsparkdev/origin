@@ -7,8 +7,8 @@
  *
  * Zero drift from Base UI patterns.
  *
- * @baseui-version 1.0.0-rc.0
- * @synced 2026-01-09
+ * @baseui-version 1.2.0
+ * @synced 2026-02-11
  *
  * To check for updates: npm run check:baseui
  * To sync: Compare files below with node_modules/@base-ui/react/esm/utils/
@@ -164,8 +164,10 @@ export const REASONS = {
   inputClear: 'input-clear',
   inputBlur: 'input-blur',
   inputPaste: 'input-paste',
+  inputPress: 'input-press',
   focusOut: 'focus-out',
   escapeKey: 'escape-key',
+  closeWatcher: 'close-watcher',
   listNavigation: 'list-navigation',
   keyboard: 'keyboard',
   pointer: 'pointer',
@@ -176,6 +178,7 @@ export const REASONS = {
   siblingOpen: 'sibling-open',
   disabled: 'disabled',
   imperativeAction: 'imperative-action',
+  swipe: 'swipe',
   windowResize: 'window-resize',
 } as const;
 

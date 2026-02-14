@@ -193,6 +193,24 @@ export const RadioItemIndicator = React.forwardRef<HTMLSpanElement, RadioItemInd
 );
 
 // ============================================================================
+// LinkItem - Renders as <a>, semantically correct for navigation links in menus
+// ============================================================================
+
+export interface LinkItemProps extends BaseMenu.LinkItem.Props {}
+
+export const LinkItem = React.forwardRef<Element, LinkItemProps>(
+  function LinkItem({ className, ...props }, ref) {
+    return (
+      <BaseMenu.LinkItem
+        ref={ref}
+        className={clsx(styles.item, className)}
+        {...props}
+      />
+    );
+  }
+);
+
+// ============================================================================
 // Separator
 // ============================================================================
 

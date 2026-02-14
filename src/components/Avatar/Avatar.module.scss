@@ -110,15 +110,20 @@
   background-color: var(--surface-strong);
 }
 
-// Image
+// Image - fades in when loaded via Base UI transition attributes
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: inherit;
+  transition: opacity 200ms ease;
+
+  &[data-starting-style] {
+    opacity: 0;
+  }
 }
 
-// Fallback (initials)
+// Fallback (initials) - fades out when image loads via Base UI transition attributes
 .fallback {
   display: flex;
   align-items: center;
@@ -128,6 +133,11 @@
   color: var(--text-surface);
   text-align: center;
   font-weight: var(--font-weight-book);
+  transition: opacity 200ms ease;
+
+  &[data-ending-style] {
+    opacity: 0;
+  }
 
   // Typography scales with avatar size
   .size16 & {

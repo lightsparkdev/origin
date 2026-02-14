@@ -101,7 +101,7 @@ export const Content = React.forwardRef<HTMLDivElement, ContentProps>(
 // Title
 export interface TitleProps extends BaseToast.Title.Props {}
 
-export const Title = React.forwardRef<HTMLDivElement, TitleProps>(
+export const Title = React.forwardRef<HTMLHeadingElement, TitleProps>(
   function Title(props, ref) {
     const { className, ...other } = props;
 
@@ -118,7 +118,7 @@ export const Title = React.forwardRef<HTMLDivElement, TitleProps>(
 // Description
 export interface DescriptionProps extends BaseToast.Description.Props {}
 
-export const Description = React.forwardRef<HTMLDivElement, DescriptionProps>(
+export const Description = React.forwardRef<HTMLParagraphElement, DescriptionProps>(
   function Description(props, ref) {
     const { className, ...other } = props;
 
