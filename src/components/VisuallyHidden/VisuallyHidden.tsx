@@ -8,7 +8,7 @@ export interface VisuallyHiddenProps
    * The element type to render.
    * @default 'span'
    */
-  as?: 'span' | 'div' | 'legend' | 'label' | 'p';
+  as?: 'span' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'legend' | 'label' | 'p' | 'caption';
 }
 
 const hiddenStyles: React.CSSProperties = {
