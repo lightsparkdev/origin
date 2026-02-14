@@ -17,3 +17,5 @@ export type {
   CloseProps as DialogCloseProps,
   CloseButtonProps as DialogCloseButtonProps,
 } from './parts';
+
+export type { Handle as DialogHandle } from './parts';

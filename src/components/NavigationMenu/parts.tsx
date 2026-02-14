@@ -34,7 +34,7 @@ export interface ListProps extends BaseNavigationMenu.List.Props {
   className?: string;
 }
 
-export const List = React.forwardRef<HTMLDivElement, ListProps>(
+export const List = React.forwardRef<HTMLUListElement, ListProps>(
   function List(props, forwardedRef) {
     const { className, ...listProps } = props;
     return (
@@ -55,7 +55,7 @@ export interface ItemProps extends BaseNavigationMenu.Item.Props {
   className?: string;
 }
 
-export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
+export const Item = React.forwardRef<HTMLLIElement, ItemProps>(
   function Item(props, forwardedRef) {
     const { className, ...itemProps } = props;
     return (
@@ -97,7 +97,7 @@ export interface IconProps extends BaseNavigationMenu.Icon.Props {
   className?: string;
 }
 
-export const Icon = React.forwardRef<HTMLDivElement, IconProps>(
+export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
   function Icon(props, forwardedRef) {
     const { className, ...iconProps } = props;
     return (

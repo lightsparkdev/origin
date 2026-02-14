@@ -586,6 +586,15 @@ export const ChipRemove = React.forwardRef<HTMLButtonElement, ChipRemoveProps>(
  */
 export const useFilter = BaseCombobox.useFilter;
 
+/**
+ * Returns the internally filtered items from a Combobox.Root.
+ * Must be called within a Combobox.Root context.
+ *
+ * Useful when you need access to the current filtered item list
+ * for custom rendering logic (e.g., empty states, counts).
+ */
+export const useFilteredItems = BaseCombobox.useFilteredItems;
+
 // Legacy exports for backwards compatibility
 /** @deprecated Use InputWrapper instead */
 export const Control = InputWrapper;
