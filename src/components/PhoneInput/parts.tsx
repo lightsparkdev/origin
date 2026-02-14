@@ -168,14 +168,21 @@ export interface CountryListboxProps extends Omit<React.HTMLAttributes<HTMLDivEl
   side?: 'bottom' | 'top';
   /** Alignment relative to the anchor */
   align?: 'start' | 'center' | 'end';
+  /**
+   * A container element to portal the listbox into.
+   * By default, portals to document body. Pass a ref to a parent
+   * element (e.g., a Dialog.Popup) to render inside that container
+   * and inherit its stacking context.
+   */
+  container?: HTMLElement | React.RefObject<HTMLElement | null> | null;
 }
 
 export const CountryListbox = React.forwardRef<HTMLDivElement, CountryListboxProps>(
-  function CountryListbox({ className, children, sideOffset = 6, side = 'bottom', align = 'start', ...props }, ref) {
+  function CountryListbox({ className, children, sideOffset = 6, side = 'bottom', align = 'start', container, ...props }, ref) {
     const anchorRef = React.useContext(AnchorContext);
 
     return (
-      <BaseSelect.Portal>
+      <BaseSelect.Portal container={container}>
         <BaseSelect.Positioner
           className={styles.positioner}
           sideOffset={sideOffset}

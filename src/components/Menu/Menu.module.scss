@@ -6,6 +6,7 @@
 // Example: <Menu.Trigger render={<Button variant="secondary" />}>Actions</Menu.Trigger>
 
 .positioner {
+  z-index: 1000;
   outline: 0;
 }
 
