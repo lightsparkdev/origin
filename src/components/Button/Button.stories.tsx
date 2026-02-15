@@ -33,7 +33,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['default', 'compact'],
+      options: ['default', 'compact', 'dense'],
     },
     loading: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -89,6 +89,7 @@ export const Link: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <Button size="dense">Dense</Button>
       <Button size="compact">Compact</Button>
       <Button size="default">Default</Button>
     </div>
@@ -134,6 +135,7 @@ export const WithBothIcons: Story = {
 export const IconOnly: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <Button iconOnly size="dense" aria-label="Add" leadingIcon={<PlusIcon />} />
       <Button iconOnly size="compact" aria-label="Add" leadingIcon={<PlusIcon />} />
       <Button iconOnly size="default" aria-label="Add" leadingIcon={<PlusIcon />} />
     </div>
@@ -173,6 +175,14 @@ export const AllVariants: Story = {
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Button size="dense" variant="filled">Dense Filled</Button>
+        <Button size="dense" variant="secondary">Dense Secondary</Button>
+        <Button size="dense" variant="outline">Dense Outline</Button>
+        <Button size="dense" variant="ghost">Dense Ghost</Button>
+        <Button size="dense" variant="critical">Dense Critical</Button>
+        <Button size="dense" variant="link">Dense Link</Button>
+      </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <Button size="compact" variant="filled">Compact Filled</Button>
         <Button size="compact" variant="secondary">Compact Secondary</Button>

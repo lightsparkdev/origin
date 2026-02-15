@@ -1768,6 +1768,7 @@ export default function Home() {
       
       {/* Sizes */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
+        <Button size="dense">Dense</Button>
         <Button size="compact">Compact</Button>
         <Button size="default">Default</Button>
       </div>
@@ -1786,6 +1787,7 @@ export default function Home() {
       
       {/* Icon Only */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
+        <Button size="dense" iconOnly leadingIcon={<CentralIcon name="IconPlusSmall" size={16} />} aria-label="Add" />
         <Button size="compact" iconOnly leadingIcon={<CentralIcon name="IconPlusSmall" size={16} />} aria-label="Add" />
         <Button size="default" iconOnly leadingIcon={<CentralIcon name="IconPlusSmall" size={16} />} aria-label="Add" />
       </div>
