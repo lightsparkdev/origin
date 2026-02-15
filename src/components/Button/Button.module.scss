@@ -28,6 +28,18 @@
   }
 }
 
+.dense {
+  height: 24px;
+  padding: 0 var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  line-height: var(--font-leading-12);
+
+  &.iconOnly {
+    width: 24px;
+    padding: 0;
+  }
+}
+
 .compact {
   height: 32px;
   padding: 0 var(--spacing-xs);
@@ -191,6 +203,14 @@
   }
 
   &.compact {
+    height: auto;
+    padding: 0;
+    font-size: var(--font-size-xs);
+    line-height: var(--font-leading-18);
+  }
+
+  // Dense link inherits compact link styling (no dense link in Figma spec)
+  &.dense {
     height: auto;
     padding: 0;
     font-size: var(--font-size-xs);

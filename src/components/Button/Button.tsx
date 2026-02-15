@@ -8,7 +8,7 @@ import styles from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'filled' | 'secondary' | 'outline' | 'ghost' | 'critical' | 'link';
-  size?: 'default' | 'compact';
+  size?: 'default' | 'compact' | 'dense';
   loading?: boolean;
   loadingIndicator?: React.ReactNode;
   leadingIcon?: React.ReactNode;
