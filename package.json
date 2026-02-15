@@ -46,9 +46,7 @@
     "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.83",
     "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.83",
     "@tanstack/react-table": "^8.21.3",
-    "ajv": "^8.17.1",
     "clsx": "^2.1.1",
-    "match-sorter": "^8.2.0",
     "motion": "^12.23.26"
   },
   "peerDependencies": {
@@ -81,6 +79,7 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "jsdom": "^27.4.0",
+    "match-sorter": "^8.2.0",
     "next": "^16.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
