@@ -345,7 +345,7 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
     'data-active': active || undefined,
     'data-disabled': disabled || undefined,
     disabled: render ? undefined : disabled,
-    role: isInTree ? ('treeitem' as const) : ('menuitem' as const),
+    role: render ? undefined : (isInTree ? ('treeitem' as const) : ('menuitem' as const)),
     'aria-current': active ? ('page' as const) : undefined,
     ...props,
   };

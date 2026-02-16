@@ -47,11 +47,11 @@ export const WithIcons: Story = {
               Cut
             </Menu.Item>
             <Menu.Item>
-              <CentralIcon name="IconCopy" size={16} />
+              <CentralIcon name="IconSquareBehindSquare1" size={16} />
               Copy
             </Menu.Item>
             <Menu.Item>
-              <CentralIcon name="IconClipboard" size={16} />
+              <CentralIcon name="IconClipboard2" size={16} />
               Paste
             </Menu.Item>
             <Menu.Separator />

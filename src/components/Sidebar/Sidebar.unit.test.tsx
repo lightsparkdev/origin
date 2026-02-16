@@ -201,6 +201,23 @@ describe('TreeContext', () => {
       expect(item).toBeInTheDocument();
     });
 
+    it('Item with render does not force role', () => {
+      render(
+        <Sidebar.Root>
+          <Sidebar.Content>
+            <Sidebar.Menu>
+              <Sidebar.Item render={<a href="/home" data-testid="link" />}>
+                Home
+              </Sidebar.Item>
+            </Sidebar.Menu>
+          </Sidebar.Content>
+        </Sidebar.Root>
+      );
+
+      const link = screen.getByTestId('link');
+      expect(link).not.toHaveAttribute('role');
+    });
+
     it('SubmenuItem uses role="menuitem" inside Menu', () => {
       render(
         <Sidebar.Root>

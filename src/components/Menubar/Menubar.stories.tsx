@@ -90,7 +90,7 @@ export const WithShortcuts: Story = {
             <Menu.Popup>
               <Menu.Item style={{ justifyContent: 'space-between' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <CentralIcon name="IconFile" size={16} />
+                  <CentralIcon name="IconFileBend" size={16} />
                   New
                 </span>
                 <Shortcut keys={['⌘', 'N']} />
@@ -128,14 +128,14 @@ export const WithShortcuts: Story = {
               </Menu.Item>
               <Menu.Item style={{ justifyContent: 'space-between' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <CentralIcon name="IconCopy" size={16} />
+                  <CentralIcon name="IconSquareBehindSquare1" size={16} />
                   Copy
                 </span>
                 <Shortcut keys={['⌘', 'C']} />
               </Menu.Item>
               <Menu.Item style={{ justifyContent: 'space-between' }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <CentralIcon name="IconClipboard" size={16} />
+                  <CentralIcon name="IconClipboard2" size={16} />
                   Paste
                 </span>
                 <Shortcut keys={['⌘', 'V']} />

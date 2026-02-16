@@ -23,26 +23,26 @@ type Story = StoryObj<typeof Command.Root>;
 
 // Sample data
 const basicItems: CommandItem[] = [
-  { id: '1', label: 'Copy', icon: <CentralIcon name="IconCopy" size={16} /> },
-  { id: '2', label: 'Paste', icon: <CentralIcon name="IconClipboard" size={16} /> },
-  { id: '3', label: 'Cut', icon: <CentralIcon name="IconScissors" size={16} /> },
+  { id: '1', label: 'Copy', icon: <CentralIcon name="IconSquareBehindSquare1" size={16} /> },
+  { id: '2', label: 'Paste', icon: <CentralIcon name="IconClipboard2" size={16} /> },
+  { id: '3', label: 'Cut', icon: <CentralIcon name="IconCrossSmall" size={16} /> },
 ];
 
 const groupedItems: CommandGroup[] = [
   {
     label: 'Suggestions',
     items: [
-      { id: '1', label: 'Calendar', icon: <CentralIcon name="IconCalendar" size={16} /> },
-      { id: '2', label: 'Search', icon: <CentralIcon name="IconSearch" size={16} /> },
-      { id: '3', label: 'Calculator', icon: <CentralIcon name="IconCalculator" size={16} /> },
+      { id: '1', label: 'Calendar', icon: <CentralIcon name="IconCalendarDays" size={16} /> },
+      { id: '2', label: 'Search', icon: <CentralIcon name="IconMagnifyingGlass2" size={16} /> },
+      { id: '3', label: 'Calculator', icon: <CentralIcon name="IconMagnifyingGlass2" size={16} /> },
     ],
   },
   {
     label: 'Settings',
     items: [
-      { id: '4', label: 'Profile', icon: <CentralIcon name="IconUser" size={16} /> },
-      { id: '5', label: 'Billing', icon: <CentralIcon name="IconCreditCard" size={16} /> },
-      { id: '6', label: 'Preferences', icon: <CentralIcon name="IconSettings" size={16} /> },
+      { id: '4', label: 'Profile', icon: <CentralIcon name="IconUserDuo" size={16} /> },
+      { id: '5', label: 'Billing', icon: <CentralIcon name="IconWallet1" size={16} /> },
+      { id: '6', label: 'Preferences', icon: <CentralIcon name="IconSettingsGear1" size={16} /> },
     ],
   },
 ];
@@ -81,19 +81,19 @@ export const WithShortcuts: Story = {
           {
             id: '1',
             label: 'Copy',
-            icon: <CentralIcon name="IconCopy" size={16} />,
+            icon: <CentralIcon name="IconSquareBehindSquare1" size={16} />,
             shortcut: <Shortcut keys={['⌘', 'C']} />,
           },
           {
             id: '2',
             label: 'Paste',
-            icon: <CentralIcon name="IconClipboard" size={16} />,
+            icon: <CentralIcon name="IconClipboard2" size={16} />,
             shortcut: <Shortcut keys={['⌘', 'V']} />,
           },
           {
             id: '3',
             label: 'Cut',
-            icon: <CentralIcon name="IconScissors" size={16} />,
+            icon: <CentralIcon name="IconCrossSmall" size={16} />,
             shortcut: <Shortcut keys={['⌘', 'X']} />,
           },
         ],
@@ -166,19 +166,19 @@ export const WithKeywords: Story = {
       {
         id: '1',
         label: 'Copy',
-        icon: <CentralIcon name="IconCopy" size={16} />,
+        icon: <CentralIcon name="IconSquareBehindSquare1" size={16} />,
         keywords: ['duplicate', 'clone'],
       },
       {
         id: '2',
         label: 'Paste',
-        icon: <CentralIcon name="IconClipboard" size={16} />,
+        icon: <CentralIcon name="IconClipboard2" size={16} />,
         keywords: ['insert'],
       },
       {
         id: '3',
         label: 'Cut',
-        icon: <CentralIcon name="IconScissors" size={16} />,
+        icon: <CentralIcon name="IconCrossSmall" size={16} />,
         keywords: ['remove', 'delete'],
       },
     ];
@@ -305,14 +305,14 @@ function RaycastStyleComponent() {
         {
           id: '4',
           label: 'Clipboard History',
-          icon: <CentralIcon name="IconCopy" size={16} />,
+          icon: <CentralIcon name="IconSquareBehindSquare1" size={16} />,
           shortcut: <Shortcut keys={['⌘', '⇧', 'C']} />,
           keywords: ['clipboard', 'paste'],
         },
         {
           id: '5',
           label: 'System Preferences',
-          icon: <CentralIcon name="IconSettings" size={16} />,
+          icon: <CentralIcon name="IconSettingsGear1" size={16} />,
           shortcut: <Shortcut keys={['⌘', ',']} />,
           keywords: ['settings', 'preferences'],
         },

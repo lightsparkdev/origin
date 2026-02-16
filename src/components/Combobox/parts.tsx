@@ -243,7 +243,7 @@ export interface ItemProps extends BaseCombobox.Item.Props {
  *
  * With icons:
  * ```tsx
- * <Combobox.Item value="apple" trailingIcon={<CentralIcon name="IconGlobus" size={16} />}>
+ * <Combobox.Item value="apple" trailingIcon={<CentralIcon name="IconGlobe2" size={16} />}>
  *   <Combobox.ItemIndicator />
  *   <Combobox.ItemText>Apple</Combobox.ItemText>
  * </Combobox.Item>

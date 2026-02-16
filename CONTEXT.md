@@ -75,12 +75,12 @@ Outputs to `src/tokens/_variables.scss`.
 
 ### 3. Icon System (`src/components/Icon/`)
 
-Complete icon registry with all ~100 icons from the Figma design system.
+Complete icon registry with all ~200 icons from the Figma design system.
 
 **Key files:**
 - `CentralIcon.tsx` — Main component
 - `icon-registry.ts` — Complete registry (all icons, no sync needed)
-- Global CSS applies `vector-effect: non-scaling-stroke` for consistent 1.5px strokes
+- Strokes scale proportionally with icon size via the library's `size` prop
 
 **Usage:**
 ```tsx
@@ -90,8 +90,7 @@ import { CentralIcon } from '@/components/Icon';
 <CentralIcon name="IconChevronDown" size={16} color="var(--text-secondary)" />
 ```
 
-**Packages (copied from origin v1, requires license for fresh install):**
-- `@central-icons-react/round-outlined-radius-0-stroke-1.5`
+**Packages (requires license for fresh install):**
 - `@central-icons-react/round-outlined-radius-3-stroke-1.5`
 - `@central-icons-react/round-filled-radius-3-stroke-1.5`
 
