@@ -171,7 +171,7 @@ describe('mergeRenderProps', () => {
 
 describe('TreeContext', () => {
   describe('role assignment', () => {
-    it('Item uses role="menuitem" inside Menu', () => {
+    it('Item does not hardcode role', () => {
       render(
         <Sidebar.Root>
           <Sidebar.Content>
@@ -182,43 +182,11 @@ describe('TreeContext', () => {
         </Sidebar.Root>
       );
 
-      const item = screen.getByRole('menuitem', { name: 'Dashboard' });
-      expect(item).toBeInTheDocument();
+      const item = screen.getByRole('button', { name: 'Dashboard' });
+      expect(item).not.toHaveAttribute('role');
     });
 
-    it('Item uses role="treeitem" inside Tree', () => {
-      render(
-        <Sidebar.Root>
-          <Sidebar.Content>
-            <Sidebar.Tree label="Files">
-              <Sidebar.Item>README.md</Sidebar.Item>
-            </Sidebar.Tree>
-          </Sidebar.Content>
-        </Sidebar.Root>
-      );
-
-      const item = screen.getByRole('treeitem', { name: 'README.md' });
-      expect(item).toBeInTheDocument();
-    });
-
-    it('Item with render does not force role', () => {
-      render(
-        <Sidebar.Root>
-          <Sidebar.Content>
-            <Sidebar.Menu>
-              <Sidebar.Item render={<a href="/home" data-testid="link" />}>
-                Home
-              </Sidebar.Item>
-            </Sidebar.Menu>
-          </Sidebar.Content>
-        </Sidebar.Root>
-      );
-
-      const link = screen.getByTestId('link');
-      expect(link).not.toHaveAttribute('role');
-    });
-
-    it('SubmenuItem uses role="menuitem" inside Menu', () => {
+    it('SubmenuItem does not hardcode role', () => {
       render(
         <Sidebar.Root>
           <Sidebar.Content>
@@ -231,28 +199,11 @@ describe('TreeContext', () => {
         </Sidebar.Root>
       );
 
-      const item = screen.getByRole('menuitem', { name: 'Profile' });
-      expect(item).toBeInTheDocument();
+      const item = screen.getByRole('button', { name: 'Profile' });
+      expect(item).not.toHaveAttribute('role');
     });
 
-    it('SubmenuItem uses role="treeitem" inside Tree', () => {
-      render(
-        <Sidebar.Root>
-          <Sidebar.Content>
-            <Sidebar.Tree label="Files">
-              <Sidebar.TreeItem label="src" defaultOpen>
-                <Sidebar.SubmenuItem>index.ts</Sidebar.SubmenuItem>
-              </Sidebar.TreeItem>
-            </Sidebar.Tree>
-          </Sidebar.Content>
-        </Sidebar.Root>
-      );
-
-      const item = screen.getByRole('treeitem', { name: 'index.ts' });
-      expect(item).toBeInTheDocument();
-    });
-
-    it('TreeItem uses role="menuitem" inside Menu', () => {
+    it('TreeItem does not hardcode role', () => {
       render(
         <Sidebar.Root>
           <Sidebar.Content>
@@ -265,25 +216,8 @@ describe('TreeContext', () => {
         </Sidebar.Root>
       );
 
-      const item = screen.getByRole('menuitem', { name: 'Nested' });
-      expect(item).toBeInTheDocument();
-    });
-
-    it('TreeItem uses role="treeitem" inside Tree', () => {
-      render(
-        <Sidebar.Root>
-          <Sidebar.Content>
-            <Sidebar.Tree label="Files">
-              <Sidebar.TreeItem label="src">
-                <Sidebar.SubmenuItem>index.ts</Sidebar.SubmenuItem>
-              </Sidebar.TreeItem>
-            </Sidebar.Tree>
-          </Sidebar.Content>
-        </Sidebar.Root>
-      );
-
-      const item = screen.getByRole('treeitem', { name: 'src' });
-      expect(item).toBeInTheDocument();
+      const item = screen.getByRole('button', { name: 'Nested' });
+      expect(item).not.toHaveAttribute('role');
     });
   });
 
@@ -480,7 +414,7 @@ describe('Controlled/Uncontrolled state', () => {
 
       expect(screen.queryByTestId('submenu-item')).not.toBeInTheDocument();
 
-      const button = screen.getByRole('menuitem', { name: 'Settings' });
+      const button = screen.getByRole('button', { name: 'Settings' });
       fireEvent.click(button);
 
       expect(onOpenChange).toHaveBeenCalledWith(true);
@@ -511,7 +445,7 @@ describe('Controlled/Uncontrolled state', () => {
 
       expect(screen.queryByTestId('child')).not.toBeInTheDocument();
 
-      const button = screen.getByRole('menuitem', { name: 'Folder' });
+      const button = screen.getByRole('button', { name: 'Folder' });
       fireEvent.click(button);
 
       expect(onOpenChange).toHaveBeenCalledWith(true);
@@ -606,7 +540,7 @@ describe('Accessibility', () => {
         </Sidebar.Root>
       );
 
-      const button = screen.getByRole('menuitem', { name: 'Settings' });
+      const button = screen.getByRole('button', { name: 'Settings' });
       expect(button).toHaveAttribute('aria-expanded', 'false');
 
       fireEvent.click(button);
@@ -626,7 +560,7 @@ describe('Accessibility', () => {
         </Sidebar.Root>
       );
 
-      const button = screen.getByRole('menuitem', { name: 'Settings' });
+      const button = screen.getByRole('button', { name: 'Settings' });
       const submenuId = button.getAttribute('aria-controls');
       expect(submenuId).toBeTruthy();
 
@@ -648,7 +582,7 @@ describe('Accessibility', () => {
         </Sidebar.Root>
       );
 
-      const item = screen.getByRole('menuitem', { name: 'Dashboard' });
+      const item = screen.getByRole('button', { name: 'Dashboard' });
       expect(item).toHaveAttribute('aria-current', 'page');
     });
 
@@ -663,7 +597,7 @@ describe('Accessibility', () => {
         </Sidebar.Root>
       );
 
-      const item = screen.getByRole('menuitem', { name: 'Dashboard' });
+      const item = screen.getByRole('button', { name: 'Dashboard' });
       expect(item).not.toHaveAttribute('aria-current');
     });
   });

@@ -337,7 +337,6 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
   ref
 ) {
   const { collapsed } = useSidebar();
-  const isInTree = React.useContext(TreeContext);
 
   const itemProps = {
     ref,
@@ -345,7 +344,6 @@ export const Item = React.forwardRef<HTMLButtonElement, ItemProps>(function Item
     'data-active': active || undefined,
     'data-disabled': disabled || undefined,
     disabled: render ? undefined : disabled,
-    role: render ? undefined : (isInTree ? ('treeitem' as const) : ('menuitem' as const)),
     'aria-current': active ? ('page' as const) : undefined,
     ...props,
   };
@@ -422,7 +420,6 @@ export const ExpandableItem = React.forwardRef<HTMLDivElement, ExpandableItemPro
       'data-disabled': disabled || undefined,
       disabled: render ? undefined : disabled,
       onClick: handleToggle,
-      role: 'menuitem' as const,
       'aria-expanded': collapsed ? undefined : isOpen,
       'aria-controls': collapsed ? undefined : submenuId,
     };
@@ -466,15 +463,12 @@ export interface SubmenuItemProps extends React.ComponentPropsWithoutRef<'button
 
 export const SubmenuItem = React.forwardRef<HTMLButtonElement, SubmenuItemProps>(
   function SubmenuItem({ icon, active = false, disabled = false, render, className, children, ...props }, ref) {
-    const isInTree = React.useContext(TreeContext);
-
     const itemProps = {
       ref,
       className: clsx(styles.submenuItem, className),
       'data-active': active || undefined,
       'data-disabled': disabled || undefined,
       disabled: render ? undefined : disabled,
-      role: isInTree ? ('treeitem' as const) : ('menuitem' as const),
       'aria-current': active ? ('page' as const) : undefined,
       ...props,
     };
@@ -519,7 +513,6 @@ export const DrilldownItem = React.forwardRef<HTMLDivElement, DrilldownItemProps
       className: styles.drilldownMain,
       disabled: render ? undefined : disabled,
       onClick,
-      role: 'menuitem' as const,
       'aria-current': active ? ('page' as const) : undefined,
     };
 
@@ -590,7 +583,6 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
     ref
   ) {
     const { collapsed } = useSidebar();
-    const isInTree = React.useContext(TreeContext);
     const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
     const isControlled = controlledOpen !== undefined;
     const isOpen = isControlled ? controlledOpen : internalOpen;
@@ -613,7 +605,6 @@ export const TreeItem = React.forwardRef<HTMLDivElement, TreeItemProps>(
       'data-disabled': disabled || undefined,
       disabled: render ? undefined : disabled,
       onClick: handleToggle,
-      role: isInTree ? ('treeitem' as const) : ('menuitem' as const),
       'aria-expanded': collapsed ? undefined : isOpen,
       'aria-controls': collapsed ? undefined : treeId,
     };
