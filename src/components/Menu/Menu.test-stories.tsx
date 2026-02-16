@@ -35,11 +35,11 @@ export function MenuWithIcons() {
               Cut
             </Menu.Item>
             <Menu.Item>
-              <CentralIcon name="IconCopy" size={16} />
+              <CentralIcon name="IconSquareBehindSquare1" size={16} />
               Copy
             </Menu.Item>
             <Menu.Item>
-              <CentralIcon name="IconClipboard" size={16} />
+              <CentralIcon name="IconClipboard2" size={16} />
               Paste
             </Menu.Item>
           </Menu.Popup>
@@ -65,14 +65,14 @@ export function MenuWithShortcuts() {
             </Menu.Item>
             <Menu.Item style={{ justifyContent: 'space-between' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <CentralIcon name="IconCopy" size={16} />
+                <CentralIcon name="IconSquareBehindSquare1" size={16} />
                 Copy
               </span>
               <Shortcut keys={['⌘', 'C']} />
             </Menu.Item>
             <Menu.Item style={{ justifyContent: 'space-between' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <CentralIcon name="IconClipboard" size={16} />
+                <CentralIcon name="IconClipboard2" size={16} />
                 Paste
               </span>
               <Shortcut keys={['⌘', 'V']} />

@@ -159,7 +159,8 @@
     }
   }
 
-  &[data-active='true'] {
+  &[data-active='true'],
+  &[data-popup-open] {
     .itemLabel {
       color: var(--text-primary);
     }
@@ -169,7 +170,12 @@
     }
   }
 
-  &[data-active='true']:hover:not(:disabled):not([data-disabled='true']) {
+  &[data-popup-open] {
+    background-color: var(--surface-hover);
+  }
+
+  &[data-active='true']:hover:not(:disabled):not([data-disabled='true']),
+  &[data-popup-open]:hover:not(:disabled):not([data-disabled='true']) {
     background-color: var(--surface-hover);
   }
 

@@ -32,22 +32,20 @@ test.describe('Item', () => {
     test('renders with leading element', async ({ mount, page }) => {
       await mount(<ItemWithLeading />);
       await expect(page.getByText('Settings')).toBeVisible();
-      // Leading slot renders the icon
-      await expect(page.locator('.central-icon-absolute-stroke')).toBeVisible();
+      await expect(page.locator('svg')).toBeVisible();
     });
 
     test('renders with trailing element', async ({ mount, page }) => {
       await mount(<ItemWithTrailing />);
       await expect(page.getByText('Settings')).toBeVisible();
-      await expect(page.locator('.central-icon-absolute-stroke')).toBeVisible();
+      await expect(page.locator('svg')).toBeVisible();
     });
 
     test('renders with both leading and trailing', async ({ mount, page }) => {
       await mount(<ItemWithBothSlots />);
       await expect(page.getByText('Settings')).toBeVisible();
       await expect(page.getByText('Manage your preferences')).toBeVisible();
-      // Should have 2 icons
-      await expect(page.locator('.central-icon-absolute-stroke')).toHaveCount(2);
+      await expect(page.locator('svg')).toHaveCount(2);
     });
   });
 

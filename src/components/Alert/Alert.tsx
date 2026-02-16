@@ -3,6 +3,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { CentralIcon } from '../Icon';
+import type { CentralIconName } from '../Icon';
 import styles from './Alert.module.scss';
 
 export interface AlertProps {
@@ -18,7 +19,7 @@ export interface AlertProps {
   className?: string;
 }
 
-const DEFAULT_ICONS: Record<string, string> = {
+const DEFAULT_ICONS: Record<string, CentralIconName> = {
   default: 'IconCircleX',
   critical: 'IconCircleX',
 };
@@ -44,7 +45,7 @@ export const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
         const iconName = DEFAULT_ICONS[variant];
         return (
           <div className={styles.iconWrapper}>
-            <CentralIcon name={iconName as any} size={16} />
+            <CentralIcon name={iconName} size={16} />
           </div>
         );
       }
