@@ -2,7 +2,7 @@
  * Central Icon Wrapper - Complete Icon Registry
  * 
  * All icons from the Figma design system are available.
- * Uses vector-effect: non-scaling-stroke for consistent 1.5px strokes at any size.
+ * Strokes scale proportionally with icon size via the library's `size` prop.
  */
 
 import React from 'react';
@@ -23,13 +23,10 @@ export interface CentralIconProps {
 }
 
 /**
- * Central Icon component with absolute stroke width
+ * Central Icon component
  * 
- * Features:
- * - ✅ All Figma icons available
- * - ✅ Absolute stroke width (1.5px at any size)
- * - ✅ Tree-shaking friendly
- * - ✅ TypeScript autocomplete for icon names
+ * Renders icons from the Central Icons registry. Strokes scale
+ * proportionally with size — a 1.5px stroke at 24px becomes ~1px at 16px.
  */
 export const CentralIcon: React.FC<CentralIconProps> = ({
   name,
@@ -49,7 +46,7 @@ export const CentralIcon: React.FC<CentralIconProps> = ({
     <IconComponent
       size={size}
       color={color}
-      className={`${className || ''} central-icon-absolute-stroke`}
+      className={className}
       style={style}
     />
   );
