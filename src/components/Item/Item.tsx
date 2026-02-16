@@ -57,7 +57,6 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
       onClick: isInteractive && onClick ? handleClick : undefined,
       onKeyDown: isInteractive && onClick ? handleKeyDown : undefined,
       tabIndex: isInteractive && onClick ? 0 : undefined,
-      role: isInteractive && onClick ? 'button' : undefined,
       ...elementProps,
     };
 
@@ -88,7 +87,14 @@ export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
       return React.cloneElement(render, itemProps, content);
     }
 
-    return <div {...itemProps}>{content}</div>;
+    return (
+      <div
+        role={isInteractive && onClick ? 'button' : undefined}
+        {...itemProps}
+      >
+        {content}
+      </div>
+    );
   }
 );
 
