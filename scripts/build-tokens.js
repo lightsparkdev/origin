@@ -77,6 +77,7 @@ function needsPxUnits(tokenName) {
     'stroke/',
     'font/size',
     'font/leading',
+    'font/tracking',
     'max-width/',
     'screens/',
   ];
