@@ -276,12 +276,12 @@ test.describe('Chart tooltip', () => {
 
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
 
-    // Active dots (circles) should be visible
-    const circles = page.locator('[data-testid="chart"] svg circle');
-    const count = await circles.count();
+    // Active dots (rects) should be visible
+    const dots = page.locator('[data-testid="chart"] svg rect[width="8"]');
+    const count = await dots.count();
     expect(count).toBe(2); // Two series
     for (let i = 0; i < count; i++) {
-      const display = await circles.nth(i).evaluate(
+      const display = await dots.nth(i).evaluate(
         (el) => (el as SVGElement).style.display,
       );
       expect(display).not.toBe('none');
