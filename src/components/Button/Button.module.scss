@@ -3,6 +3,8 @@
 @use '../../tokens/mixins' as *;
 
 .button {
+  --button-icon-size: 16px;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,10 +31,13 @@
 }
 
 .dense {
+  --button-icon-size: 12px;
+
   height: 24px;
   padding: 0 var(--spacing-2xs);
   font-size: var(--font-size-xs);
   line-height: var(--font-leading-12);
+  @include smooth-corners(var(--corner-radius-xs));
 
   &.iconOnly {
     width: 24px;
@@ -255,6 +260,18 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+
+  svg {
+    width: var(--button-icon-size);
+    height: var(--button-icon-size);
+  }
+}
+
+.iconOnly .content {
+  svg {
+    width: var(--button-icon-size);
+    height: var(--button-icon-size);
+  }
 }
 
 .label {
