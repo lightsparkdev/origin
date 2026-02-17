@@ -13,6 +13,9 @@ import {
   NoAnimation,
   CustomStrokeWidth,
   WithFormatters,
+  SimpleTooltip,
+  DetailedTooltipExplicit,
+  CustomTooltip,
 } from './Chart.test-stories';
 
 const axeConfig = {
@@ -85,16 +88,17 @@ test.describe('Chart rendering', () => {
     expect(height).toBe('170');
   });
 
-  test('renders a path element per series', async ({ mount, page }) => {
+  test('renders two path elements per series (active + inactive)', async ({ mount, page }) => {
     await mount(<FullChart />);
     const paths = page.locator('[data-testid="chart"] svg path');
-    await expect(paths).toHaveCount(2);
+    // 2 series x 2 (active color + inactive/tertiary) = 4
+    await expect(paths).toHaveCount(4);
   });
 
-  test('sparkline renders a single path', async ({ mount, page }) => {
+  test('sparkline renders two paths (active + inactive)', async ({ mount, page }) => {
     await mount(<Sparkline />);
     const paths = page.locator('[data-testid="chart"] svg path');
-    await expect(paths).toHaveCount(1);
+    await expect(paths).toHaveCount(2);
   });
 
   test('empty data renders container but no SVG paths', async ({
@@ -118,7 +122,8 @@ test.describe('Chart rendering', () => {
     const svg = page.locator('[data-testid="chart"] svg');
     await expect(svg).toBeVisible();
     const paths = page.locator('[data-testid="chart"] svg path');
-    await expect(paths).toHaveCount(1);
+    // 1 series x 2 (active + inactive) = 2
+    await expect(paths).toHaveCount(2);
   });
 });
 
@@ -132,7 +137,7 @@ test.describe('Chart curve types', () => {
     page,
   }) => {
     await mount(<Sparkline />);
-    const path = page.locator('[data-testid="chart"] svg path');
+    const path = page.locator('[data-testid="chart"] svg path').first();
     const d = await path.getAttribute('d');
     expect(d).toContain('C');
   });
@@ -142,7 +147,7 @@ test.describe('Chart curve types', () => {
     page,
   }) => {
     await mount(<LinearCurve />);
-    const path = page.locator('[data-testid="chart"] svg path');
+    const path = page.locator('[data-testid="chart"] svg path').first();
     const d = await path.getAttribute('d');
     expect(d).toContain('L');
     expect(d).not.toContain('C');
@@ -300,6 +305,74 @@ test.describe('Chart tooltip', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Tooltip variants
+// ---------------------------------------------------------------------------
+
+test.describe('Chart tooltip variants', () => {
+  test('tooltip="simple" shows only x-label, no series rows', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<SimpleTooltip />);
+    const svg = page.locator('[data-testid="chart"] svg');
+    const box = await svg.boundingBox();
+    if (!box) throw new Error('SVG not visible');
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+
+    const tooltip = page.locator('[data-testid="chart"] > div');
+    await expect(tooltip).toBeVisible({ timeout: 2000 });
+
+    const text = await tooltip.textContent();
+    // Should contain a date label (one of the x values)
+    expect(text).toBeTruthy();
+    // Should NOT contain series indicator dots or value rows
+    const indicators = tooltip.locator('span');
+    await expect(indicators).toHaveCount(0);
+  });
+
+  test('tooltip="detailed" renders series rows (same as boolean true)', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<DetailedTooltipExplicit />);
+    const svg = page.locator('[data-testid="chart"] svg');
+    const box = await svg.boundingBox();
+    if (!box) throw new Error('SVG not visible');
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+
+    const tooltip = page.locator('[data-testid="chart"] > div');
+    await expect(tooltip).toBeVisible({ timeout: 2000 });
+    await expect(
+      tooltip.getByText('Incoming'),
+    ).toBeVisible();
+    await expect(
+      tooltip.getByText('Outgoing'),
+    ).toBeVisible();
+  });
+
+  test('tooltip render function receives datum and renders custom content', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<CustomTooltip />);
+    const svg = page.locator('[data-testid="chart"] svg');
+    const box = await svg.boundingBox();
+    if (!box) throw new Error('SVG not visible');
+
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+
+    const tooltip = page.locator('[data-testid="chart"] > div');
+    await expect(tooltip).toBeVisible({ timeout: 2000 });
+    const custom = page.locator('[data-testid="custom-tooltip-content"]');
+    await expect(custom).toBeVisible({ timeout: 2000 });
+    const text = await custom.textContent();
+    expect(text).toContain('Custom:');
+  });
+});
+
+// ---------------------------------------------------------------------------
 // fadeLeft
 // ---------------------------------------------------------------------------
 
@@ -339,7 +412,7 @@ test.describe('Chart props', () => {
     page,
   }) => {
     await mount(<SparklineWithColor />);
-    const path = page.locator('[data-testid="chart"] svg path');
+    const path = page.locator('[data-testid="chart"] svg path').first();
     const stroke = await path.getAttribute('stroke');
     expect(stroke).toBe('rgb(0, 0, 255)');
   });
@@ -349,7 +422,7 @@ test.describe('Chart props', () => {
     page,
   }) => {
     await mount(<CustomStrokeWidth />);
-    const path = page.locator('[data-testid="chart"] svg path');
+    const path = page.locator('[data-testid="chart"] svg path').first();
     const sw = await path.getAttribute('stroke-width');
     expect(sw).toBe('4');
   });
@@ -359,7 +432,7 @@ test.describe('Chart props', () => {
     page,
   }) => {
     await mount(<NoAnimation />);
-    const path = page.locator('[data-testid="chart"] svg path');
+    const path = page.locator('[data-testid="chart"] svg path').first();
     const cls = await path.getAttribute('class');
     // Should not have the lineAnimate class
     expect(cls ?? '').not.toContain('lineAnimate');
@@ -370,7 +443,7 @@ test.describe('Chart props', () => {
     page,
   }) => {
     await mount(<Sparkline />);
-    const path = page.locator('[data-testid="chart"] svg path');
+    const path = page.locator('[data-testid="chart"] svg path').first();
     const cls = await path.getAttribute('class');
     // CSS modules mangles the name, but it should have some class
     expect(cls).toBeTruthy();
