@@ -1,3 +1,4 @@
+import * as React from 'react';
 import * as Chart from './';
 
 const SAMPLE_DATA = [
@@ -168,6 +169,55 @@ export function WithFormatters() {
       tooltip
       formatValue={(v) => `$${v}`}
       formatYLabel={(v) => `$${v}`}
+      data-testid="chart"
+    />
+  );
+}
+
+export function SimpleTooltip() {
+  return (
+    <Chart.Line
+      data={SAMPLE_DATA}
+      dataKey="value"
+      xKey="date"
+      height={250}
+      grid
+      tooltip="simple"
+      data-testid="chart"
+    />
+  );
+}
+
+export function DetailedTooltipExplicit() {
+  return (
+    <Chart.Line
+      data={MULTI_SERIES_DATA}
+      series={[
+        { key: 'incoming', label: 'Incoming' },
+        { key: 'outgoing', label: 'Outgoing' },
+      ]}
+      xKey="date"
+      height={250}
+      grid
+      tooltip="detailed"
+      data-testid="chart"
+    />
+  );
+}
+
+export function CustomTooltip() {
+  return (
+    <Chart.Line
+      data={SAMPLE_DATA}
+      dataKey="value"
+      xKey="date"
+      height={250}
+      grid
+      tooltip={(datum) => (
+        <div data-testid="custom-tooltip-content">
+          Custom: {String(datum.date)}
+        </div>
+      )}
       data-testid="chart"
     />
   );

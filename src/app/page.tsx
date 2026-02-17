@@ -3524,6 +3524,31 @@ export default function Home() {
           />
         </div>
 
+        {/* Single-series with simple tooltip */}
+        <div style={{ width: 388 }}>
+          <Chart.Line
+            data={[
+              { date: 'Aug 10', value: 180 },
+              { date: 'Aug 11', value: 185 },
+              { date: 'Aug 12', value: 182 },
+              { date: 'Aug 13', value: 188 },
+              { date: 'Aug 14', value: 190 },
+              { date: 'Aug 15', value: 195 },
+              { date: 'Aug 16', value: 200 },
+              { date: 'Aug 17', value: 210 },
+              { date: 'Aug 18', value: 205 },
+              { date: 'Aug 19', value: 215 },
+              { date: 'Aug 20', value: 220 },
+              { date: 'Aug 21', value: 223 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={250}
+            grid
+            tooltip="simple"
+          />
+        </div>
+
         {/* Full chart */}
         <div style={{ width: 500 }}>
           <Chart.Line
@@ -3568,6 +3593,89 @@ export default function Home() {
             grid
             tooltip
             fadeLeft={60}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Tooltip Variants</h3>
+
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
+        {/* Simple: timestamp only */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            tooltip=&quot;simple&quot;
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Aug 10', value: 180 },
+              { date: 'Aug 11', value: 185 },
+              { date: 'Aug 12', value: 182 },
+              { date: 'Aug 13', value: 188 },
+              { date: 'Aug 14', value: 190 },
+              { date: 'Aug 15', value: 195 },
+              { date: 'Aug 16', value: 200 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            tooltip="simple"
+          />
+        </div>
+
+        {/* Detailed (default): series rows */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            tooltip=&quot;detailed&quot; (or true)
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Mon', incoming: 120, outgoing: 80 },
+              { date: 'Tue', incoming: 150, outgoing: 95 },
+              { date: 'Wed', incoming: 140, outgoing: 110 },
+              { date: 'Thu', incoming: 180, outgoing: 100 },
+              { date: 'Fri', incoming: 160, outgoing: 130 },
+            ]}
+            series={[
+              { key: 'incoming', label: 'Incoming' },
+              { key: 'outgoing', label: 'Outgoing' },
+            ]}
+            xKey="date"
+            height={200}
+            grid
+            tooltip="detailed"
+          />
+        </div>
+
+        {/* Custom render function */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            tooltip=&#123;renderFn&#125;
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Aug 10', value: 180 },
+              { date: 'Aug 11', value: 185 },
+              { date: 'Aug 12', value: 182 },
+              { date: 'Aug 13', value: 188 },
+              { date: 'Aug 14', value: 190 },
+              { date: 'Aug 15', value: 195 },
+              { date: 'Aug 16', value: 200 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            tooltip={(datum) => (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
+                  {String(datum.date)}
+                </span>
+                <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--text-primary)' }}>
+                  ${Number(datum.value).toLocaleString()}
+                </span>
+              </div>
+            )}
           />
         </div>
       </div>

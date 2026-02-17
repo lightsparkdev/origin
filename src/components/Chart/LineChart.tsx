@@ -24,6 +24,15 @@ export interface Series {
   color?: string;
 }
 
+export type TooltipProp =
+  | boolean
+  | 'simple'
+  | 'detailed'
+  | ((
+      datum: Record<string, unknown>,
+      series: Array<Required<Series>>,
+    ) => React.ReactNode);
+
 export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: Record<string, unknown>[];
   dataKey?: string;
@@ -31,7 +40,14 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   xKey?: string;
   height?: number;
   grid?: boolean;
-  tooltip?: boolean;
+  /**
+   * Controls the hover tooltip.
+   * - `false` / omitted: no tooltip
+   * - `true` / `"detailed"`: full tooltip with x-label, series dots, names, and values
+   * - `"simple"`: timestamp-only tooltip (just the formatted x-label)
+   * - `(datum, series) => ReactNode`: custom render function; the chart handles positioning
+   */
+  tooltip?: TooltipProp;
   curve?: 'monotone' | 'linear';
   strokeWidth?: number;
   /** Stroke color shorthand for single-series charts using `dataKey`. */
@@ -44,6 +60,14 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   fadeLeft?: boolean | number;
   /** Accessible label for the chart SVG. */
   ariaLabel?: string;
+  /**
+   * Called when the hovered data point changes during scrub interaction.
+   * Receives `null` when the pointer leaves the chart.
+   */
+  onActiveChange?: (
+    index: number | null,
+    datum: Record<string, unknown> | null,
+  ) => void;
   formatValue?: (value: number) => string;
   formatXLabel?: (value: unknown) => string;
   formatYLabel?: (value: number) => string;
@@ -101,13 +125,14 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       xKey,
       height = 300,
       grid = false,
-      tooltip: showTooltip = false,
+      tooltip: tooltipProp,
       curve = 'monotone',
-      strokeWidth = 2,
+      strokeWidth = 1.5,
       color,
       animate = true,
       fadeLeft,
       ariaLabel,
+      onActiveChange,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -118,6 +143,18 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
   ) {
     const { width, attachRef } = useResizeWidth();
     const uid = React.useId().replace(/:/g, '');
+
+    // Resolve tooltip mode from the polymorphic prop
+    const tooltipMode: 'off' | 'simple' | 'detailed' | 'custom' = !tooltipProp
+      ? 'off'
+      : tooltipProp === true || tooltipProp === 'detailed'
+        ? 'detailed'
+        : tooltipProp === 'simple'
+          ? 'simple'
+          : 'custom';
+    const showTooltip = tooltipMode !== 'off';
+    const tooltipRender =
+      typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
     // Merge the ResizeObserver callback ref with the forwarded ref
     const mergedRef = React.useCallback(
@@ -169,6 +206,8 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       fadeLeft === true ? 40 : typeof fadeLeft === 'number' ? fadeLeft : 0;
     const hasFade = fadeWidth > 0 && plotWidth > 0;
     const fadeMaskId = hasFade ? `${uid}-fade` : undefined;
+    const clipActiveId = `${uid}-clip-active`;
+    const clipInactiveId = `${uid}-clip-inactive`;
 
     // Y domain with nice ticks
     const { yMin, yMax, yTicks } = React.useMemo(() => {
@@ -268,12 +307,14 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       interpolatorsRef.current = interpolators;
     }, [interpolators]);
 
-    // Hover system: cursor line, dots, and tooltip position update via
-    // direct DOM manipulation for smooth 1:1 mouse tracking. Only
-    // activeIndex (for tooltip content) triggers a React re-render.
+    // Hover system: cursor line, dots, clip masks, and tooltip position
+    // update via direct DOM manipulation for smooth 1:1 mouse tracking.
+    // Only activeIndex (for tooltip content) triggers a React re-render.
     const cursorRef = React.useRef<SVGLineElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
-    const dotRefs = React.useRef<(SVGCircleElement | null)[]>([]);
+    const dotRefs = React.useRef<(SVGRectElement | null)[]>([]);
+    const clipLeftRef = React.useRef<SVGRectElement>(null);
+    const clipRightRef = React.useRef<SVGRectElement>(null);
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
     // Trim stale dot refs when series count shrinks
@@ -285,6 +326,21 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     React.useEffect(() => {
       setActiveIndex(null);
     }, [data]);
+
+    // Notify consumer when the active data point changes
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
+    React.useEffect(() => {
+      onActiveChangeRef.current?.(
+        activeIndex,
+        activeIndex !== null && activeIndex < data.length
+          ? data[activeIndex]
+          : null,
+      );
+    }, [activeIndex, data]);
 
     // Shared hover logic: update cursor, dots, tooltip, and activeIndex
     // from a client-x coordinate. Called by both mouse and touch handlers.
@@ -303,13 +359,24 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           cursor.style.display = '';
         }
 
+        // Direct DOM: split line color at cursor position
+        const clipL = clipLeftRef.current;
+        if (clipL) {
+          clipL.setAttribute('width', String(clampedX));
+        }
+        const clipR = clipRightRef.current;
+        if (clipR) {
+          clipR.setAttribute('x', String(clampedX));
+          clipR.setAttribute('width', String(plotWidth - clampedX + PAD_RIGHT));
+        }
+
         // Direct DOM: slide dots along curves
         const interps = interpolatorsRef.current;
         dotRefs.current.forEach((dot, i) => {
           if (dot && interps[i]) {
             const cy = interps[i](clampedX);
-            dot.setAttribute('cx', String(clampedX));
-            dot.setAttribute('cy', String(cy));
+            dot.setAttribute('x', String(clampedX - 4));
+            dot.setAttribute('y', String(cy - 4));
             dot.style.display = '';
           }
         });
@@ -346,8 +413,16 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       });
       const tip = tooltipRef.current;
       if (tip) tip.style.display = 'none';
+      // Reset clip masks: active paths cover full width, inactive hidden
+      const clipL = clipLeftRef.current;
+      if (clipL) clipL.setAttribute('width', String(plotWidth + PAD_RIGHT));
+      const clipR = clipRightRef.current;
+      if (clipR) {
+        clipR.setAttribute('x', String(plotWidth + PAD_RIGHT));
+        clipR.setAttribute('width', '0');
+      }
       setActiveIndex(null);
-    }, []);
+    }, [plotWidth]);
 
     // Mouse handlers
     const handleMouseMove = React.useCallback(
@@ -414,37 +489,59 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
-              {hasFade && (
-                <defs>
-                  <linearGradient
-                    id={`${fadeMaskId}-grad`}
-                    gradientUnits="userSpaceOnUse"
-                    x1={0}
-                    y1={0}
-                    x2={fadeWidth}
-                    y2={0}
-                  >
-                    <stop offset="0" stopColor="white" stopOpacity={0} />
-                    <stop offset="1" stopColor="white" stopOpacity={1} />
-                  </linearGradient>
-                  <mask id={fadeMaskId}>
-                    <rect
-                      x={0}
-                      y={-PAD_TOP}
-                      width={fadeWidth}
-                      height={height}
-                      fill={`url(#${fadeMaskId}-grad)`}
-                    />
-                    <rect
-                      x={fadeWidth}
-                      y={-PAD_TOP}
-                      width={plotWidth - fadeWidth + PAD_RIGHT}
-                      height={height}
-                      fill="white"
-                    />
-                  </mask>
-                </defs>
-              )}
+              <defs>
+                {hasFade && (
+                  <>
+                    <linearGradient
+                      id={`${fadeMaskId}-grad`}
+                      gradientUnits="userSpaceOnUse"
+                      x1={0}
+                      y1={0}
+                      x2={fadeWidth}
+                      y2={0}
+                    >
+                      <stop offset="0" stopColor="white" stopOpacity={0} />
+                      <stop offset="1" stopColor="white" stopOpacity={1} />
+                    </linearGradient>
+                    <mask id={fadeMaskId}>
+                      <rect
+                        x={0}
+                        y={-PAD_TOP}
+                        width={fadeWidth}
+                        height={height}
+                        fill={`url(#${fadeMaskId}-grad)`}
+                      />
+                      <rect
+                        x={fadeWidth}
+                        y={-PAD_TOP}
+                        width={plotWidth - fadeWidth + PAD_RIGHT}
+                        height={height}
+                        fill="white"
+                      />
+                    </mask>
+                  </>
+                )}
+
+                {/* Clip paths for scrub color split */}
+                <clipPath id={clipActiveId}>
+                  <rect
+                    ref={clipLeftRef}
+                    x={0}
+                    y={-PAD_TOP}
+                    width={plotWidth + PAD_RIGHT}
+                    height={height}
+                  />
+                </clipPath>
+                <clipPath id={clipInactiveId}>
+                  <rect
+                    ref={clipRightRef}
+                    x={plotWidth + PAD_RIGHT}
+                    y={-PAD_TOP}
+                    width={0}
+                    height={height}
+                  />
+                </clipPath>
+              </defs>
 
               <g transform={`translate(${padLeft},${PAD_TOP})`}>
                 {/* Grid lines */}
@@ -460,21 +557,38 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                     />
                   ))}
 
-                {/* Line paths (masked when fadeLeft is enabled) */}
+                {/* Line paths (dual: active color clipped left, tertiary clipped right) */}
                 <g mask={fadeMaskId ? `url(#${fadeMaskId})` : undefined}>
-                  {paths.map((d, i) => (
-                    <path
-                      key={series[i].key}
-                      d={d}
-                      pathLength={1}
-                      fill="none"
-                      stroke={series[i].color}
-                      strokeWidth={strokeWidth}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className={clsx(animate && styles.lineAnimate)}
-                    />
-                  ))}
+                  {/* Active portion: series color, clipped to left of cursor */}
+                  <g clipPath={`url(#${clipActiveId})`}>
+                    {paths.map((d, i) => (
+                      <path
+                        key={series[i].key}
+                        d={d}
+                        pathLength={1}
+                        fill="none"
+                        stroke={series[i].color}
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={clsx(animate && styles.lineAnimate)}
+                      />
+                    ))}
+                  </g>
+                  {/* Inactive portion: muted color, clipped to right of cursor */}
+                  <g clipPath={`url(#${clipInactiveId})`}>
+                    {paths.map((d, i) => (
+                      <path
+                        key={`${series[i].key}-inactive`}
+                        d={d}
+                        fill="none"
+                        stroke="var(--border-tertiary)"
+                        strokeWidth={strokeWidth}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    ))}
+                  </g>
                 </g>
 
                 {/* Cursor line (always mounted, visibility toggled via ref) */}
@@ -490,17 +604,17 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
                 {/* Active dots (always mounted, positioned via ref) */}
                 {series.map((s, i) => (
-                  <circle
+                  <rect
                     key={s.key}
                     ref={(el) => {
                       dotRefs.current[i] = el;
                     }}
-                    cx={0}
-                    cy={0}
-                    r={4}
-                    fill="var(--surface-base)"
-                    stroke={s.color}
-                    strokeWidth={2}
+                    x={0}
+                    y={0}
+                    width={8}
+                    height={8}
+                    rx={2}
+                    fill={s.color}
                     className={styles.activeDot}
                     style={{ display: 'none' }}
                   />
@@ -546,7 +660,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
             {showTooltip && (
               <div
                 ref={tooltipRef}
-                className={styles.tooltip}
+                className={clsx(styles.tooltip, tooltipMode === 'simple' && styles.tooltipSimple)}
                 style={{
                   position: 'absolute',
                   top: PAD_TOP,
@@ -555,36 +669,48 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                   display: 'none',
                 }}
               >
-                {activeIndex !== null && activeIndex < data.length && (
-                  <>
-                    {xKey && (
+                {activeIndex !== null &&
+                  activeIndex < data.length &&
+                  (tooltipMode === 'custom' && tooltipRender ? (
+                    tooltipRender(data[activeIndex], series)
+                  ) : tooltipMode === 'simple' ? (
+                    xKey && (
                       <p className={styles.tooltipLabel}>
                         {formatXLabel
                           ? formatXLabel(data[activeIndex][xKey])
                           : String(data[activeIndex][xKey] ?? '')}
                       </p>
-                    )}
-                    <div className={styles.tooltipItems}>
-                      {series.map((s) => {
-                        const v = Number(data[activeIndex][s.key]);
-                        return (
-                          <div key={s.key} className={styles.tooltipItem}>
-                            <span
-                              className={styles.tooltipIndicator}
-                              style={{ backgroundColor: s.color }}
-                            />
-                            <span className={styles.tooltipName}>
-                              {s.label}
-                            </span>
-                            <span className={styles.tooltipValue}>
-                              {isNaN(v) ? '--' : fmtValue(v)}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </>
-                )}
+                    )
+                  ) : (
+                    <>
+                      {xKey && (
+                        <p className={styles.tooltipLabel}>
+                          {formatXLabel
+                            ? formatXLabel(data[activeIndex][xKey])
+                            : String(data[activeIndex][xKey] ?? '')}
+                        </p>
+                      )}
+                      <div className={styles.tooltipItems}>
+                        {series.map((s) => {
+                          const v = Number(data[activeIndex][s.key]);
+                          return (
+                            <div key={s.key} className={styles.tooltipItem}>
+                              <span
+                                className={styles.tooltipIndicator}
+                                style={{ backgroundColor: s.color }}
+                              />
+                              <span className={styles.tooltipName}>
+                                {s.label}
+                              </span>
+                              <span className={styles.tooltipValue}>
+                                {isNaN(v) ? '--' : fmtValue(v)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </>
+                  ))}
               </div>
             )}
           </>
