@@ -136,6 +136,8 @@
   border-bottom: var(--stroke-xs) solid var(--border-tertiary);
   vertical-align: middle;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   // Checkbox column - narrower padding
   &--checkbox {
