@@ -79,7 +79,7 @@
   display: flex;
   align-items: center;
   height: var(--spacing-2xl);
-  padding-inline: var(--spacing-xs);
+  padding-inline: var(--sidebar-group-label-padding-inline, var(--spacing-md));
   color: var(--text-secondary);
 }
 
