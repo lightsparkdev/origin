@@ -111,8 +111,6 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
     ref,
   ) {
     const { width, attachRef } = useResizeWidth();
-    const uid = React.useId().replace(/:/g, '');
-
     const tooltipMode = resolveTooltipMode(tooltipProp);
     const showTooltip = tooltipMode !== 'off';
     const tooltipRender =

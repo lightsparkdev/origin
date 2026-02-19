@@ -27,7 +27,7 @@ export function ChartWrapper({
   series,
   children,
   className,
-  activeIndex,
+  activeIndex: _activeIndex,
   ariaLiveContent,
 }: ChartWrapperProps) {
   if (loading) {
