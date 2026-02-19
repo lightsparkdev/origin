@@ -86,10 +86,6 @@ export function WithSubmenu() {
           </NavigationMenu.Portal>
           <NavigationMenu.Content>
             <NavigationMenu.PopupItem>Dashboard</NavigationMenu.PopupItem>
-            <NavigationMenu.SubmenuTrigger>
-              More Options
-              <CentralIcon name="IconChevronRightSmall" size={16} />
-            </NavigationMenu.SubmenuTrigger>
           </NavigationMenu.Content>
         </NavigationMenu.Item>
       </NavigationMenu.List>

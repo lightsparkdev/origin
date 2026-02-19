@@ -13,7 +13,6 @@ export const Default: StoryObj = {
   render: () => (
     <Tabs.Root defaultValue="account">
       <Tabs.List>
-        <Tabs.Indicator />
         <Tabs.Tab value="account">Account</Tabs.Tab>
         <Tabs.Tab value="password">Password</Tabs.Tab>
         <Tabs.Tab value="settings">Settings</Tabs.Tab>
@@ -35,7 +34,6 @@ export const Minimal: StoryObj = {
   render: () => (
     <Tabs.Root defaultValue="tab1">
       <Tabs.List variant="minimal">
-        <Tabs.Indicator />
         <Tabs.Tab value="tab1">Overview</Tabs.Tab>
         <Tabs.Tab value="tab2">Details</Tabs.Tab>
         <Tabs.Tab value="tab3">History</Tabs.Tab>
@@ -57,7 +55,6 @@ export const WithDisabled: StoryObj = {
   render: () => (
     <Tabs.Root defaultValue="active">
       <Tabs.List>
-        <Tabs.Indicator />
         <Tabs.Tab value="active">Active</Tabs.Tab>
         <Tabs.Tab value="disabled" disabled>Disabled</Tabs.Tab>
         <Tabs.Tab value="another">Another</Tabs.Tab>
@@ -86,7 +83,6 @@ export const Controlled: StoryObj = {
         </div>
         <Tabs.Root value={value} onValueChange={setValue}>
           <Tabs.List>
-            <Tabs.Indicator />
             <Tabs.Tab value="first">First</Tabs.Tab>
             <Tabs.Tab value="second">Second</Tabs.Tab>
             <Tabs.Tab value="third">Third</Tabs.Tab>
