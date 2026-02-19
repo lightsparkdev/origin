@@ -17,7 +17,8 @@
 .gridLine {
   stroke: var(--text-primary);
   stroke-opacity: 0.06;
-  stroke-width: var(--stroke-sm);
+  stroke-width: 1;
+  stroke-dasharray: 1 3;
 }
 
 // Lines
@@ -42,8 +43,9 @@
 // Cursor + active dots
 
 .cursorLine {
-  stroke: var(--border-tertiary);
-  stroke-width: var(--stroke-sm);
+  stroke: var(--text-primary);
+  stroke-opacity: 0.1;
+  stroke-width: 1;
   pointer-events: none;
 }
 
@@ -56,7 +58,8 @@
 .axisLabel {
   @include label-chart;
 
-  fill: var(--text-secondary);
+  fill: var(--text-primary);
+  fill-opacity: 0.4;
 }
 
 // Tooltip
@@ -124,6 +127,18 @@
   color: var(--text-primary);
   margin-inline-start: auto;
   font-variant-numeric: tabular-nums;
+}
+
+// Reference lines
+
+.referenceLine {
+  pointer-events: none;
+}
+
+.referenceLineLabel {
+  @include label-chart;
+
+  pointer-events: none;
 }
 
 %tooltipInlineBase {

@@ -221,6 +221,33 @@ export function monotoneInterpolator(points: Point[]): CurveInterpolator {
   };
 }
 
+export interface StackedBand {
+  key: string;
+  baseline: number[];
+  topline: number[];
+}
+
+export function stackData(
+  data: Record<string, unknown>[],
+  keys: string[],
+): StackedBand[] {
+  const result: StackedBand[] = [];
+  const cumulative = new Array(data.length).fill(0);
+
+  for (const key of keys) {
+    const baseline = [...cumulative];
+    const topline: number[] = [];
+    for (let i = 0; i < data.length; i++) {
+      const v = Number(data[i][key]) || 0;
+      cumulative[i] += v;
+      topline.push(cumulative[i]);
+    }
+    result.push({ key, baseline, topline });
+  }
+
+  return result;
+}
+
 export function linearInterpolator(points: Point[]): CurveInterpolator {
   if (points.length === 0) return () => 0;
   if (points.length === 1) return () => points[0].y;

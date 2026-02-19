@@ -3702,6 +3702,125 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>New Chart Variants</h3>
+
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        {/* Area fill */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            fill (area mode)
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Mon', value: 120 },
+              { date: 'Tue', value: 150 },
+              { date: 'Wed', value: 140 },
+              { date: 'Thu', value: 180 },
+              { date: 'Fri', value: 160 },
+              { date: 'Sat', value: 200 },
+              { date: 'Sun', value: 190 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            fill
+            tooltip="compact"
+          />
+        </div>
+
+        {/* Sparkline */}
+        <div style={{ width: 200 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Chart.Sparkline
+          </p>
+          <Chart.Sparkline
+            data={[
+              { v: 10 }, { v: 15 }, { v: 12 }, { v: 18 },
+              { v: 14 }, { v: 22 }, { v: 19 }, { v: 25 },
+            ]}
+            dataKey="v"
+            color="var(--surface-blue-strong)"
+          />
+        </div>
+
+        {/* Dashed series */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Dashed + dotted series
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Jan', actual: 100, projected: 110, target: 130 },
+              { date: 'Feb', actual: 120, projected: 125, target: 130 },
+              { date: 'Mar', actual: 115, projected: 140, target: 130 },
+              { date: 'Apr', actual: 140, projected: 155, target: 130 },
+              { date: 'May', actual: 160, projected: 170, target: 130 },
+            ]}
+            series={[
+              { key: 'actual', label: 'Actual' },
+              { key: 'projected', label: 'Projected', style: 'dashed' },
+              { key: 'target', label: 'Target', style: 'dotted', color: 'var(--text-tertiary)' },
+            ]}
+            xKey="date"
+            height={200}
+            grid
+            tooltip
+          />
+        </div>
+
+        {/* Reference lines */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Reference lines
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Mon', value: 85 },
+              { date: 'Tue', value: 92 },
+              { date: 'Wed', value: 78 },
+              { date: 'Thu', value: 95 },
+              { date: 'Fri', value: 88 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            tooltip
+            referenceLines={[
+              { value: 90, label: 'Target' },
+              { value: 75, label: 'Minimum' },
+            ]}
+          />
+        </div>
+
+        {/* Stacked area */}
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Chart.StackedArea
+          </p>
+          <Chart.StackedArea
+            data={[
+              { month: 'Jan', payments: 400, transfers: 200, fees: 50 },
+              { month: 'Feb', payments: 450, transfers: 250, fees: 60 },
+              { month: 'Mar', payments: 420, transfers: 280, fees: 55 },
+              { month: 'Apr', payments: 500, transfers: 300, fees: 70 },
+              { month: 'May', payments: 480, transfers: 320, fees: 65 },
+              { month: 'Jun', payments: 550, transfers: 350, fees: 80 },
+            ]}
+            series={[
+              { key: 'payments', label: 'Payments', color: 'var(--surface-blue-strong)' },
+              { key: 'transfers', label: 'Transfers', color: 'var(--surface-purple-strong)' },
+              { key: 'fees', label: 'Fees', color: 'var(--surface-green-strong)' },
+            ]}
+            xKey="month"
+            height={250}
+            grid
+            tooltip
+          />
+        </div>
+      </div>
     </main>
   );
 }
