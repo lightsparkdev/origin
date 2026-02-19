@@ -15,6 +15,7 @@ import {
   PAD_LEFT_AXIS,
   resolveSeries,
 } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -39,6 +40,20 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   formatValue?: (value: number) => string;
   formatXLabel?: (value: unknown) => string;
   formatYLabel?: (value: number) => string;
+  /** Fixed Y-axis domain. Overrides auto-computed domain from data. */
+  yDomain?: [number, number];
+  /** Show legend below chart. */
+  legend?: boolean;
+  /** Show loading skeleton. */
+  loading?: boolean;
+  /** Content to display when data is empty. */
+  empty?: React.ReactNode;
+  /** Click handler called with the active data index and datum. */
+  onClickDatum?: (index: number, datum: Record<string, unknown>) => void;
+  /** Control bar mount animation. Defaults to `true`. */
+  animate?: boolean;
+  /** Per-data-point color override. Return a CSS color string to override `series.color`, or `undefined` to keep the default. */
+  getBarColor?: (datum: Record<string, unknown>, index: number, seriesKey: string) => string | undefined;
 }
 
 const GROUP_GAP = 0.12;
@@ -62,6 +77,13 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       formatValue,
       formatXLabel,
       formatYLabel,
+      yDomain,
+      legend,
+      loading,
+      empty,
+      onClickDatum,
+      animate = true,
+      getBarColor,
       className,
       ...props
     },
@@ -105,6 +127,10 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
 
     // Y domain
     const { yMin, yMax, yTicks } = React.useMemo(() => {
+      if (yDomain) {
+        const result = niceTicks(yDomain[0], yDomain[1], 5);
+        return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
+      }
       let max = -Infinity;
       if (stacked) {
         for (let i = 0; i < data.length; i++) {
@@ -130,7 +156,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       if (max === -Infinity) max = 1;
       const result = niceTicks(0, max, 5);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [data, series, stacked, referenceLines]);
+    }, [data, series, stacked, referenceLines, yDomain]);
 
     // Bar geometry
     const slotWidth = data.length > 0 ? plotWidth / data.length : 0;
@@ -202,13 +228,41 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       return `Bar chart with ${data.length} data points showing ${names}.`;
     }, [series, data.length]);
 
+    const ariaLiveContent = React.useMemo(() => {
+      if (activeIndex === null || activeIndex >= data.length) return '';
+      const d = data[activeIndex];
+      const parts: string[] = [];
+      if (xKey) parts.push(String(d[xKey] ?? ''));
+      series.forEach((s) => {
+        const v = Number(d[s.key]);
+        parts.push(`${s.label}: ${isNaN(v) ? 'no data' : fmtValue(v)}`);
+      });
+      return parts.join(', ');
+    }, [activeIndex, data, series, xKey, fmtValue]);
+
+    const handleClick = React.useCallback(() => {
+      if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
+        onClickDatum(activeIndex, data[activeIndex]);
+      }
+    }, [onClickDatum, activeIndex, data]);
+
     return (
-      <div
-        ref={mergedRef}
-        className={clsx(styles.root, className)}
-        style={{ height }}
-        {...props}
+      <ChartWrapper
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        legend={legend}
+        series={series}
+        activeIndex={activeIndex}
+        ariaLiveContent={showTooltip ? ariaLiveContent : undefined}
       >
+        <div
+          ref={mergedRef}
+          className={clsx(styles.root, className)}
+          style={{ height }}
+          {...props}
+        >
         {ready && (
           <>
             <svg
@@ -217,8 +271,10 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
               width={width}
               height={height}
               className={styles.svg}
+              tabIndex={0}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
+              onClick={onClickDatum ? handleClick : undefined}
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
@@ -278,6 +334,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                           const barH = (v / (yMax - yMin)) * plotHeight;
                           cumY += v;
                           const barY = linearScale(cumY, yMin, yMax, plotHeight, 0);
+                          const fill = getBarColor?.(d, di, s.key) ?? s.color;
                           return (
                             <rect
                               key={s.key}
@@ -285,9 +342,9 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                               y={barY}
                               width={barWidth}
                               height={Math.max(0, barH)}
-                              fill={s.color}
-                              className={styles.barAnimate}
-                              style={{ animationDelay: `${delay}ms` }}
+                              fill={fill}
+                              className={animate ? styles.barAnimate : undefined}
+                              style={animate ? { animationDelay: `${delay}ms` } : undefined}
                             />
                           );
                         })}
@@ -302,6 +359,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                         const barH = (v / (yMax - yMin)) * plotHeight;
                         const barY = plotHeight - barH;
                         const barX = slotX + si * (barWidth + BAR_GAP);
+                        const fill = getBarColor?.(d, di, s.key) ?? s.color;
                         return (
                           <rect
                             key={s.key}
@@ -309,9 +367,9 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                             y={barY}
                             width={barWidth}
                             height={Math.max(0, barH)}
-                            fill={s.color}
-                            className={styles.barAnimate}
-                            style={{ animationDelay: `${delay}ms` }}
+                            fill={fill}
+                            className={animate ? styles.barAnimate : undefined}
+                            style={animate ? { animationDelay: `${delay}ms` } : undefined}
                           />
                         );
                       })}
@@ -396,6 +454,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

@@ -1,9 +1,13 @@
 import * as React from 'react';
 
 export interface Series {
+  /** Data key in the data object for this series. */
   key: string;
+  /** Display name in tooltips and legends. Defaults to `key`. */
   label?: string;
+  /** Series color. Uses the default palette if omitted. */
   color?: string;
+  /** Line stroke style. Only applies to line-based charts. */
   style?: 'solid' | 'dashed' | 'dotted';
 }
 
@@ -15,9 +19,14 @@ export type ResolvedSeries = {
 };
 
 export interface ReferenceLine {
+  /** Y-axis value for horizontal reference lines, or x-axis index for vertical. */
   value: number;
+  /** Label text rendered at the line edge. */
   label?: string;
+  /** Line color. Defaults to text-primary at 15% opacity. */
   color?: string;
+  /** Render as a vertical line at this x-axis data index. */
+  axis?: 'x' | 'y';
 }
 
 export type TooltipProp =
@@ -72,6 +81,11 @@ export function resolveSeries(
     return [
       { key: dataKey, label: dataKey, color: color ?? SERIES_COLORS[0], style: 'solid' },
     ];
+  }
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn(
+      'Chart: No series to render. Pass `dataKey` for a single series or `series` for multiple.',
+    );
   }
   return [];
 }

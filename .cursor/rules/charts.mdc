@@ -15,7 +15,7 @@ globs:
 | `Chart.Sparkline` | Compact inline chart — no axes, no interaction |
 | `Chart.StackedArea` | Stacked cumulative area bands |
 | `Chart.Bar` | Grouped or stacked bar chart |
-| `Chart.Pie` | Pie or donut chart (via `donut` prop) |
+| `Chart.Pie` | Donut chart with legend sidebar |
 | `Chart.Composed` | Mixed bar + line with dual Y-axes |
 
 ## Color Strategy

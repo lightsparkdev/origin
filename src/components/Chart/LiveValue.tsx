@@ -89,6 +89,9 @@ export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
       <span
         ref={mergedRef}
         className={clsx(styles.liveValue, className)}
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
         {...props}
       >
         {fmt(value)}

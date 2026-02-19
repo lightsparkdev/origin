@@ -100,6 +100,7 @@ export const Sparkline = React.forwardRef<HTMLDivElement, SparklineProps>(
         strokeWidth={1.25}
         animate={false}
         interactive={false}
+        dataKey={props.dataKey ?? 'value'}
         {...props}
       />
     );

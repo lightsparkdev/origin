@@ -25,6 +25,7 @@ import {
   PAD_LEFT_AXIS,
   resolveTooltipMode,
 } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface ComposedSeries extends Series {
@@ -53,10 +54,23 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   curve?: 'monotone' | 'linear';
   /** Reference lines on the left Y axis. */
   referenceLines?: ReferenceLine[];
+  /** Show legend below chart. */
+  legend?: boolean;
+  /** Show loading skeleton. */
+  loading?: boolean;
+  /** Content when data is empty. */
+  empty?: React.ReactNode;
+  /** Control animation. */
+  animate?: boolean;
   ariaLabel?: string;
   onActiveChange?: (
     index: number | null,
     datum: Record<string, unknown> | null,
+  ) => void;
+  /** Called when a data point is clicked. */
+  onClickDatum?: (
+    index: number,
+    datum: Record<string, unknown>,
   ) => void;
   formatValue?: (value: number) => string;
   formatXLabel?: (value: unknown) => string;
@@ -80,8 +94,13 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       tooltip: tooltipProp,
       curve = 'monotone',
       referenceLines,
+      legend,
+      loading,
+      empty,
+      animate = true,
       ariaLabel,
       onActiveChange,
+      onClickDatum,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -249,13 +268,45 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
 
     const ready = width > 0;
 
+    const handleClick = React.useCallback(() => {
+      if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
+      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, scrub.activeIndex, data]);
+
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
       const names = series.map((s) => s.label).join(', ');
       return `Composed chart with ${data.length} data points showing ${names}.`;
     }, [series, data.length]);
 
+    const ariaLiveContent = React.useMemo(() => {
+      if (scrub.activeIndex === null || scrub.activeIndex >= data.length) return '';
+      const d = data[scrub.activeIndex];
+      const parts: string[] = [];
+      if (xKey) parts.push(String(d[xKey] ?? ''));
+      series.forEach((s) => {
+        const v = Number(d[s.key]);
+        parts.push(`${s.label}: ${isNaN(v) ? 'no data' : fmtValue(v)}`);
+      });
+      return parts.join(', ');
+    }, [scrub.activeIndex, data, series, xKey, fmtValue]);
+
+    const wrapperSeries = React.useMemo<ResolvedSeries[]>(
+      () => series.map((s) => ({ key: s.key, label: s.label, color: s.color, style: s.style })),
+      [series],
+    );
+
     return (
+      <ChartWrapper
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        legend={legend}
+        series={wrapperSeries}
+        activeIndex={scrub.activeIndex}
+        ariaLiveContent={ariaLiveContent}
+      >
       <div
         ref={mergedRef}
         className={clsx(styles.root, className)}
@@ -267,6 +318,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
             <svg
               role="img"
               aria-label={ariaLabel ?? svgDesc ?? 'Composed chart'}
+              tabIndex={0}
               width={width}
               height={height}
               className={styles.svg}
@@ -276,6 +328,8 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
               onTouchMove={scrub.handleTouchMove}
               onTouchEnd={scrub.hideHover}
               onTouchCancel={scrub.hideHover}
+              onKeyDown={scrub.handleKeyDown}
+              onClick={onClickDatum ? handleClick : undefined}
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
@@ -330,8 +384,8 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                             width={barWidth}
                             height={Math.max(0, barH)}
                             fill={s.color}
-                            className={styles.barAnimate}
-                            style={{ animationDelay: `${delay}ms` }}
+                            className={clsx(animate && styles.barAnimate)}
+                            style={animate ? { animationDelay: `${delay}ms` } : undefined}
                           />
                         );
                       })}
@@ -347,14 +401,14 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                     <path
                       key={s.key}
                       d={d}
-                      pathLength={!isDashed ? 1 : undefined}
+                      pathLength={animate && !isDashed ? 1 : undefined}
                       fill="none"
                       stroke={s.color}
                       strokeWidth={isDashed ? 1 : 2}
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeDasharray={DASH_PATTERNS[s.style]}
-                      className={clsx(!isDashed && styles.lineAnimate)}
+                      className={clsx(animate && !isDashed && styles.lineAnimate)}
                     />
                   );
                 })}
@@ -457,6 +511,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

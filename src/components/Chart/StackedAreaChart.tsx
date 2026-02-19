@@ -25,6 +25,7 @@ import {
   resolveTooltipMode,
   resolveSeries,
 } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -38,10 +39,25 @@ export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'d
   fillOpacity?: number;
   /** Horizontal reference lines at specific y-values. */
   referenceLines?: ReferenceLine[];
+  /** Fixed Y-axis domain. When omitted, auto-scales from stacked totals. */
+  yDomain?: [number, number];
+  /** Show a legend below the chart for multi-series. */
+  legend?: boolean;
+  /** Show a loading skeleton. */
+  loading?: boolean;
+  /** Content to show when data is empty. `true` for default message. */
+  empty?: React.ReactNode;
+  /** Control animation. Currently a no-op — provided for API consistency with other chart types. */
+  animate?: boolean;
   ariaLabel?: string;
   onActiveChange?: (
     index: number | null,
     datum: Record<string, unknown> | null,
+  ) => void;
+  /** Called when a data point is clicked. */
+  onClickDatum?: (
+    index: number,
+    datum: Record<string, unknown>,
   ) => void;
   formatValue?: (value: number) => string;
   formatXLabel?: (value: unknown) => string;
@@ -60,8 +76,14 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       curve = 'monotone',
       fillOpacity = 0.4,
       referenceLines,
+      yDomain: yDomainProp,
+      legend,
+      loading,
+      empty,
+      animate: _animate,
       ariaLabel,
       onActiveChange,
+      onClickDatum,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -105,8 +127,11 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       [data, series],
     );
 
-    // Y domain from stacked totals
     const { yMin, yMax, yTicks } = React.useMemo(() => {
+      if (yDomainProp) {
+        const result = niceTicks(yDomainProp[0], yDomainProp[1], 5);
+        return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
+      }
       let max = -Infinity;
       for (const band of stacked) {
         for (const v of band.topline) {
@@ -121,7 +146,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       if (max === -Infinity) max = 1;
       const result = niceTicks(0, max, 5);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [stacked, referenceLines]);
+    }, [stacked, referenceLines, yDomainProp]);
 
     // Compute pixel points for top edge of each band (for interpolators and line paths)
     const bandTopPoints = React.useMemo(() => {
@@ -229,13 +254,37 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
 
     const ready = width > 0;
 
+    const handleClick = React.useCallback(() => {
+      if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
+      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, scrub.activeIndex, data]);
+
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
       const names = series.map((s) => s.label).join(', ');
       return `Stacked area chart with ${data.length} data points showing ${names}.`;
     }, [series, data.length]);
 
+    const ariaLiveContent = React.useMemo(() => {
+      if (scrub.activeIndex === null || scrub.activeIndex >= data.length) return '';
+      const d = data[scrub.activeIndex];
+      const parts: string[] = [];
+      if (xKey) parts.push(String(d[xKey] ?? ''));
+      for (const s of series) parts.push(`${s.label}: ${fmtValue(Number(d[s.key]))}`);
+      return parts.join(', ');
+    }, [scrub.activeIndex, data, series, xKey, fmtValue]);
+
     return (
+      <ChartWrapper
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        legend={legend}
+        series={series}
+        activeIndex={scrub.activeIndex}
+        ariaLiveContent={ariaLiveContent}
+      >
       <div
         ref={mergedRef}
         className={clsx(styles.root, className)}
@@ -247,6 +296,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
             <svg
               role="img"
               aria-label={ariaLabel ?? svgDesc ?? 'Stacked area chart'}
+              tabIndex={0}
               width={width}
               height={height}
               className={styles.svg}
@@ -256,6 +306,8 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
               onTouchMove={scrub.handleTouchMove}
               onTouchEnd={scrub.hideHover}
               onTouchCancel={scrub.hideHover}
+              onKeyDown={scrub.handleKeyDown}
+              onClick={onClickDatum ? handleClick : undefined}
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
@@ -395,6 +447,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

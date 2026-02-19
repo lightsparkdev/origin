@@ -27,16 +27,23 @@ import {
   resolveTooltipMode,
   resolveSeries,
 } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export type { Series, TooltipProp, ReferenceLine };
 
 export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
+  /** Array of data objects. Each object should contain keys matching `dataKey` or `series[].key`. */
   data: Record<string, unknown>[];
+  /** Data key for single-series charts. Pass this OR `series`, not both. */
   dataKey?: string;
+  /** Series configuration for multi-series charts. */
   series?: Series[];
+  /** Key in data objects for x-axis labels. When omitted, no x-axis is shown. */
   xKey?: string;
+  /** Chart height in pixels. */
   height?: number;
+  /** Show grid lines and y-axis labels. */
   grid?: boolean;
   /**
    * Controls the hover tooltip.
@@ -47,33 +54,47 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
    * - `(datum, series) => ReactNode`: custom render function
    */
   tooltip?: TooltipProp;
+  /** Curve interpolation. */
   curve?: 'monotone' | 'linear';
+  /** Line stroke width in pixels. */
   strokeWidth?: number;
   /** Stroke color shorthand for single-series charts using `dataKey`. */
   color?: string;
+  /** Animate line drawing on mount. */
   animate?: boolean;
-  /**
-   * Enable area fill under the line.
-   * `true` for 0.2 default opacity, or a number for custom opacity.
-   */
+  /** Enable area fill under the line. `true` for 0.12 opacity, or a number for custom. */
   fill?: boolean | number;
-  /**
-   * Fade line paths to transparent on the left edge.
-   * `true` for 40 px default, or a number for a custom fade width in pixels.
-   */
+  /** Fade line paths to transparent on the left edge. `true` for 40px, or a custom width. */
   fadeLeft?: boolean | number;
-  /** Horizontal reference lines at specific y-values. */
+  /** Reference lines at specific values. Supports horizontal (y) and vertical (x) lines. */
   referenceLines?: ReferenceLine[];
+  /** Fixed Y-axis domain. When omitted, auto-scales from data. */
+  yDomain?: [number, number];
+  /** Show a legend below the chart for multi-series. */
+  legend?: boolean;
+  /** Show a loading skeleton. */
+  loading?: boolean;
+  /** Content to show when data is empty. `true` for default message. */
+  empty?: React.ReactNode;
   /** Accessible label for the chart SVG. */
   ariaLabel?: string;
-  /** Disables scrub interaction, cursor, dots, and tooltip. Used by Sparkline. */
+  /** Disables scrub interaction, cursor, dots, and tooltip. */
   interactive?: boolean;
+  /** Called when the hovered data point changes. Receives `null` on leave. */
   onActiveChange?: (
     index: number | null,
     datum: Record<string, unknown> | null,
   ) => void;
+  /** Called when a data point is clicked. */
+  onClickDatum?: (
+    index: number,
+    datum: Record<string, unknown>,
+  ) => void;
+  /** Format values in tooltips. */
   formatValue?: (value: number) => string;
+  /** Format x-axis labels. */
   formatXLabel?: (value: unknown) => string;
+  /** Format y-axis labels. */
   formatYLabel?: (value: number) => string;
 }
 
@@ -94,9 +115,14 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       fill: fillProp,
       fadeLeft,
       referenceLines,
+      yDomain: yDomainProp,
+      legend,
+      loading,
+      empty,
       ariaLabel,
       interactive = true,
       onActiveChange,
+      onClickDatum,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -155,8 +181,12 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     const clipActiveId = `${uid}-clip-active`;
     const clipInactiveId = `${uid}-clip-inactive`;
 
-    // Y domain with nice ticks (include reference lines in domain)
+    // Y domain with nice ticks
     const { yMin, yMax, yTicks } = React.useMemo(() => {
+      if (yDomainProp) {
+        const result = niceTicks(yDomainProp[0], yDomainProp[1], 5);
+        return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
+      }
       let min = Infinity;
       let max = -Infinity;
       for (const s of series) {
@@ -170,8 +200,10 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       }
       if (referenceLines) {
         for (const rl of referenceLines) {
-          if (rl.value < min) min = rl.value;
-          if (rl.value > max) max = rl.value;
+          if (rl.axis !== 'x') {
+            if (rl.value < min) min = rl.value;
+            if (rl.value > max) max = rl.value;
+          }
         }
       }
       if (min === Infinity) {
@@ -179,7 +211,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       }
       const result = niceTicks(min, max, 5);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [data, series, referenceLines]);
+    }, [data, series, referenceLines, yDomainProp]);
 
     // Compute pixel points for each series
     const seriesPoints = React.useMemo(() => {
@@ -282,34 +314,67 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     const ready = width > 0;
 
+    const handleClick = React.useCallback(() => {
+      if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
+      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, scrub.activeIndex, data]);
+
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
       const names = series.map((s) => s.label).join(', ');
-      return `Line chart with ${data.length} data points showing ${names}.`;
-    }, [series, data.length]);
+      const first = xKey ? String(data[0][xKey] ?? '') : '';
+      const last = xKey ? String(data[data.length - 1][xKey] ?? '') : '';
+      const range = first && last ? ` from ${first} to ${last}` : '';
+      return `Line chart with ${data.length} data points showing ${names}${range}.`;
+    }, [series, data, xKey]);
+
+    const ariaLiveContent = React.useMemo(() => {
+      if (scrub.activeIndex === null || scrub.activeIndex >= data.length) return '';
+      const d = data[scrub.activeIndex];
+      const parts: string[] = [];
+      if (xKey) parts.push(String(d[xKey] ?? ''));
+      series.forEach((s) => {
+        const v = Number(d[s.key]);
+        parts.push(`${s.label}: ${isNaN(v) ? 'no data' : fmtValue(v)}`);
+      });
+      return parts.join(', ');
+    }, [scrub.activeIndex, data, series, xKey, fmtValue]);
 
     return (
-      <div
-        ref={mergedRef}
-        className={clsx(styles.root, className)}
-        style={{ height }}
-        {...props}
+      <ChartWrapper
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        legend={legend}
+        series={series}
+        activeIndex={scrub.activeIndex}
+        ariaLiveContent={interactive ? ariaLiveContent : undefined}
       >
-        {ready && (
-          <>
-            <svg
-              role="img"
-              aria-label={ariaLabel ?? svgDesc ?? 'Line chart'}
-              width={width}
-              height={height}
-              className={styles.svg}
-              onMouseMove={interactive ? scrub.handleMouseMove : undefined}
-              onMouseLeave={interactive ? scrub.hideHover : undefined}
-              onTouchStart={interactive ? scrub.handleTouchStart : undefined}
-              onTouchMove={interactive ? scrub.handleTouchMove : undefined}
-              onTouchEnd={interactive ? scrub.hideHover : undefined}
-              onTouchCancel={interactive ? scrub.hideHover : undefined}
-            >
+        <div
+          ref={mergedRef}
+          className={clsx(styles.root, className)}
+          style={{ height }}
+          {...props}
+        >
+          {ready && (
+            <>
+              <svg
+                role="img"
+                aria-label={ariaLabel ?? svgDesc ?? 'Line chart'}
+                tabIndex={interactive ? 0 : undefined}
+                width={width}
+                height={height}
+                className={styles.svg}
+                onMouseMove={interactive ? scrub.handleMouseMove : undefined}
+                onMouseLeave={interactive ? scrub.hideHover : undefined}
+                onTouchStart={interactive ? scrub.handleTouchStart : undefined}
+                onTouchMove={interactive ? scrub.handleTouchMove : undefined}
+                onTouchEnd={interactive ? scrub.hideHover : undefined}
+                onTouchCancel={interactive ? scrub.hideHover : undefined}
+                onKeyDown={interactive ? scrub.handleKeyDown : undefined}
+                onClick={onClickDatum ? handleClick : undefined}
+              >
               {svgDesc && <desc>{svgDesc}</desc>}
 
               <defs>
@@ -362,24 +427,26 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {
-                  const ry = linearScale(rl.value, yMin, yMax, plotHeight, 0);
                   const rlColor = rl.color ?? 'var(--text-primary)';
+                  if (rl.axis === 'x') {
+                    const idx = Math.round(rl.value);
+                    if (idx < 0 || idx >= data.length) return null;
+                    const rx = data.length === 1 ? plotWidth / 2 : (idx / (data.length - 1)) * plotWidth;
+                    return (
+                      <g key={`ref-${i}`} className={styles.referenceLine}>
+                        <line x1={rx} y1={0} x2={rx} y2={plotHeight} stroke={rlColor} strokeOpacity={0.15} strokeWidth={1} strokeDasharray="4 4" />
+                        {rl.label && (
+                          <text x={rx + 4} y={8} className={styles.referenceLineLabel} fill={rlColor} fillOpacity={0.45}>{rl.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const ry = linearScale(rl.value, yMin, yMax, plotHeight, 0);
                   return (
                     <g key={`ref-${i}`} className={styles.referenceLine}>
-                      <line
-                        x1={0} y1={ry} x2={plotWidth} y2={ry}
-                        stroke={rlColor} strokeOpacity={0.15} strokeWidth={1}
-                        strokeDasharray="4 4"
-                      />
+                      <line x1={0} y1={ry} x2={plotWidth} y2={ry} stroke={rlColor} strokeOpacity={0.15} strokeWidth={1} strokeDasharray="4 4" />
                       {rl.label && (
-                        <text
-                          x={plotWidth} y={ry - 5}
-                          textAnchor="end"
-                          className={styles.referenceLineLabel}
-                          fill={rlColor} fillOpacity={0.45}
-                        >
-                          {rl.label}
-                        </text>
+                        <text x={plotWidth} y={ry - 5} textAnchor="end" className={styles.referenceLineLabel} fill={rlColor} fillOpacity={0.45}>{rl.label}</text>
                       )}
                     </g>
                   );
@@ -583,6 +650,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

@@ -3848,10 +3848,9 @@ export default function Home() {
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Pie / Donut</h3>
+      <h3 style={{ marginBottom: '0.75rem' }}>Donut</h3>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Donut with legend</p>
           <Chart.Pie
             data={[
               { name: 'Payments', value: 4200, color: 'var(--color-blue-700)' },
@@ -3860,17 +3859,15 @@ export default function Home() {
               { name: 'Refunds', value: 320, color: 'var(--color-blue-100)' },
             ]}
             height={200}
-            donut
           />
         </div>
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Pie</p>
           <Chart.Pie
             data={[
-              { name: 'USD', value: 58 },
-              { name: 'EUR', value: 22 },
-              { name: 'GBP', value: 12 },
-              { name: 'Other', value: 8 },
+              { name: 'USD', value: 58, color: 'var(--color-blue-700)' },
+              { name: 'EUR', value: 22, color: 'var(--color-blue-500)' },
+              { name: 'GBP', value: 12, color: 'var(--color-blue-300)' },
+              { name: 'Other', value: 8, color: 'var(--color-blue-100)' },
             ]}
             height={200}
           />

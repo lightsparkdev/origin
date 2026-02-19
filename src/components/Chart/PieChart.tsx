@@ -4,6 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { useResizeWidth } from './hooks';
 import { SERIES_COLORS } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface PieSegment {
@@ -15,12 +16,23 @@ export interface PieSegment {
 export interface PieChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: PieSegment[];
   height?: number;
-  /** Render as a donut chart with an inner radius ratio (0-1). `true` defaults to 0.6. */
-  donut?: boolean | number;
+  /** Inner radius ratio (0-1). Defaults to 0.65. */
+  innerRadius?: number;
   /** Show a legend sidebar. */
   legend?: boolean;
-  /** Show tooltip on hover. */
-  tooltip?: boolean;
+  /**
+   * Show tooltip on hover. Pass `true` for the default center label,
+   * or a render function to display custom content in the donut center.
+   */
+  tooltip?: boolean | ((segment: PieSegment, percentage: number) => React.ReactNode);
+  /** Show a loading skeleton. */
+  loading?: boolean;
+  /** Content rendered when `data` is empty. */
+  empty?: React.ReactNode;
+  /** Called when the active (hovered) segment changes. */
+  onActiveChange?: (index: number | null, segment: PieSegment | null) => void;
+  /** Called when a segment is clicked. */
+  onClickDatum?: (index: number, segment: PieSegment) => void;
   ariaLabel?: string;
   formatValue?: (value: number) => string;
 }
@@ -74,9 +86,13 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
     {
       data,
       height = 240,
-      donut: donutProp = false,
+      innerRadius: innerRadiusProp = 0.65,
       legend = true,
-      tooltip: tooltipEnabled = true,
+      tooltip: tooltipProp = true,
+      loading,
+      empty,
+      onActiveChange,
+      onClickDatum,
       ariaLabel,
       formatValue,
       className,
@@ -84,6 +100,9 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
     },
     ref,
   ) {
+    const tooltipEnabled = !!tooltipProp;
+    const customTooltip = typeof tooltipProp === 'function' ? tooltipProp : null;
+
     const { width, attachRef } = useResizeWidth();
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
@@ -96,7 +115,13 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
       [ref, attachRef],
     );
 
-    const innerRatio = donutProp === true ? 0.65 : typeof donutProp === 'number' ? donutProp : 0;
+    React.useEffect(() => {
+      if (!onActiveChange) return;
+      const segment = activeIndex !== null ? data[activeIndex] ?? null : null;
+      onActiveChange(activeIndex, segment);
+    }, [activeIndex, onActiveChange, data]);
+
+    const innerRatio = innerRadiusProp;
 
     const total = React.useMemo(
       () => data.reduce((sum, d) => sum + Math.max(0, d.value), 0),
@@ -138,8 +163,26 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
 
     const svgDesc = React.useMemo(() => {
       if (data.length === 0) return undefined;
-      return `${donutProp ? 'Donut' : 'Pie'} chart with ${data.length} segments.`;
-    }, [data.length, donutProp]);
+      return `Donut chart with ${data.length} segments.`;
+    }, [data.length]);
+
+    const activeSeg = activeIndex !== null ? segments[activeIndex] : null;
+
+    const centerContent = React.useMemo(() => {
+      if (!tooltipEnabled || !activeSeg) return null;
+      if (customTooltip) {
+        return customTooltip(
+          { name: activeSeg.name, value: activeSeg.value, color: activeSeg.color },
+          activeSeg.percentage,
+        );
+      }
+      return null;
+    }, [tooltipEnabled, activeSeg, customTooltip]);
+
+    const ariaLiveText =
+      activeSeg && tooltipEnabled
+        ? `${activeSeg.name}: ${fmtValue(activeSeg.value)} (${activeSeg.percentage.toFixed(0)}%)`
+        : undefined;
 
     return (
       <div
@@ -148,83 +191,116 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
         style={{ height }}
         {...props}
       >
-        {ready && (
-          <>
-            <svg
-              role="img"
-              aria-label={ariaLabel ?? svgDesc ?? 'Pie chart'}
-              width={svgSize}
-              height={svgSize}
-              className={styles.svg}
-            >
-              {svgDesc && <desc>{svgDesc}</desc>}
+        <ChartWrapper
+          loading={loading}
+          empty={empty}
+          dataLength={data.length}
+          height={height}
+          className={clsx(styles.pieRoot, className)}
+        >
+          {ready && (
+            <>
+              <svg
+                role="img"
+                aria-label={ariaLabel ?? svgDesc ?? 'Pie chart'}
+                width={svgSize}
+                height={svgSize}
+                className={styles.svg}
+              >
+                {svgDesc && <desc>{svgDesc}</desc>}
 
-              {segments.map((seg, i) => {
-                const midAngle = (seg.startAngle + seg.endAngle) / 2;
-                const tx = activeIndex === i ? Math.cos(midAngle) * 4 : 0;
-                const ty = activeIndex === i ? Math.sin(midAngle) * 4 : 0;
-                return (
-                  <path
-                    key={i}
-                    d={arcPath(cx, cy, outerR, innerR, seg.startAngle, seg.endAngle)}
-                    fill={seg.color}
-                    fillOpacity={1}
-                    stroke="var(--surface-primary)"
-                    strokeWidth={1.5}
-                    transform={`translate(${tx}, ${ty})`}
-                    onMouseEnter={() => setActiveIndex(i)}
-                    onMouseLeave={() => setActiveIndex(null)}
-                    className={styles.pieSegment}
-                    style={{
-                      cursor: 'pointer',
-                      transition: 'transform 200ms cubic-bezier(0.33, 1, 0.68, 1)',
-                      animationDelay: `${i * 60}ms`,
-                    }}
-                  />
-                );
-              })}
+                {segments.map((seg, i) => {
+                  const midAngle = (seg.startAngle + seg.endAngle) / 2;
+                  const tx = activeIndex === i ? Math.cos(midAngle) * 4 : 0;
+                  const ty = activeIndex === i ? Math.sin(midAngle) * 4 : 0;
+                  return (
+                    <path
+                      key={i}
+                      d={arcPath(cx, cy, outerR, innerR, seg.startAngle, seg.endAngle)}
+                      fill={seg.color}
+                      fillOpacity={1}
+                      stroke="var(--surface-primary)"
+                      strokeWidth={1.5}
+                      transform={`translate(${tx}, ${ty})`}
+                      onMouseEnter={() => setActiveIndex(i)}
+                      onMouseLeave={() => setActiveIndex(null)}
+                      onClick={() => onClickDatum?.(i, data[i])}
+                      className={styles.pieSegment}
+                      style={{
+                        cursor: 'pointer',
+                        transition: 'transform 200ms cubic-bezier(0.33, 1, 0.68, 1)',
+                        animationDelay: `${i * 60}ms`,
+                      }}
+                    />
+                  );
+                })}
 
-              {donutProp && activeIndex !== null && tooltipEnabled && segments[activeIndex] && (
-                <g>
-                  <text
-                    x={cx} y={cy - 6}
-                    textAnchor="middle"
-                    dominantBaseline="auto"
-                    className={styles.pieCenter}
-                  >
-                    {fmtValue(segments[activeIndex].value)}
-                  </text>
-                  <text
-                    x={cx} y={cy + 10}
-                    textAnchor="middle"
-                    dominantBaseline="auto"
-                    className={styles.pieCenterLabel}
-                  >
-                    {segments[activeIndex].name}
-                  </text>
-                </g>
+                {activeIndex !== null && tooltipEnabled && activeSeg && !customTooltip && (
+                  <g>
+                    <text
+                      x={cx} y={cy - 6}
+                      textAnchor="middle"
+                      dominantBaseline="auto"
+                      className={styles.pieCenter}
+                    >
+                      {fmtValue(activeSeg.value)}
+                    </text>
+                    <text
+                      x={cx} y={cy + 10}
+                      textAnchor="middle"
+                      dominantBaseline="auto"
+                      className={styles.pieCenterLabel}
+                    >
+                      {activeSeg.name}
+                    </text>
+                  </g>
+                )}
+
+                {activeIndex !== null && customTooltip && centerContent && (
+                  <foreignObject x={cx - innerR} y={cy - innerR} width={innerR * 2} height={innerR * 2}>
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {centerContent}
+                    </div>
+                  </foreignObject>
+                )}
+              </svg>
+
+              {legend && (
+                <div className={styles.pieLegend} role="list">
+                  {segments.map((seg, i) => (
+                    <div
+                      key={i}
+                      className={styles.pieLegendItem}
+                      role="listitem"
+                      tabIndex={0}
+                      onMouseEnter={() => setActiveIndex(i)}
+                      onMouseLeave={() => setActiveIndex(null)}
+                      onFocus={() => setActiveIndex(i)}
+                      onBlur={() => setActiveIndex(null)}
+                    >
+                      <span className={styles.pieLegendDot} style={{ backgroundColor: seg.color }} />
+                      <span className={styles.pieLegendName}>{seg.name}</span>
+                      <span className={styles.pieLegendValue}>{seg.percentage.toFixed(0)}%</span>
+                    </div>
+                  ))}
+                </div>
               )}
-            </svg>
 
-            {legend && (
-              <div className={styles.pieLegend}>
-                {segments.map((seg, i) => (
-                  <div
-                    key={i}
-                    className={styles.pieLegendItem}
-                    onMouseEnter={() => setActiveIndex(i)}
-                    onMouseLeave={() => setActiveIndex(null)}
-                    style={undefined}
-                  >
-                    <span className={styles.pieLegendDot} style={{ backgroundColor: seg.color }} />
-                    <span className={styles.pieLegendName}>{seg.name}</span>
-                    <span className={styles.pieLegendValue}>{seg.percentage.toFixed(0)}%</span>
-                  </div>
-                ))}
+              <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+                {ariaLiveText}
               </div>
-            )}
-          </>
-        )}
+            </>
+          )}
+        </ChartWrapper>
       </div>
     );
   },

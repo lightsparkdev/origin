@@ -175,6 +175,79 @@ export function useChartScrub(opts: ChartScrubOptions) {
     [updateHover],
   );
 
+  const positionAtIndex = React.useCallback(
+    (index: number) => {
+      if (dataLength === 0 || plotWidth <= 0) return;
+      const step = dataLength === 1 ? plotWidth : plotWidth / (dataLength - 1);
+      const x = index * step;
+
+      const cursor = cursorRef.current;
+      if (cursor) {
+        cursor.setAttribute('x1', String(x));
+        cursor.setAttribute('x2', String(x));
+        cursor.style.display = '';
+      }
+
+      const clipL = clipLeftRef.current;
+      if (clipL) clipL.setAttribute('width', String(x));
+      const clipR = clipRightRef.current;
+      if (clipR) {
+        clipR.setAttribute('x', String(x));
+        clipR.setAttribute('width', String(plotWidth - x + PAD_RIGHT));
+      }
+
+      const interps = interpolatorsRef.current;
+      dotRefs.current.forEach((dot, i) => {
+        if (dot && interps[i]) {
+          const dotY = interps[i](x);
+          dot.setAttribute('cx', String(x));
+          dot.setAttribute('cy', String(dotY));
+          dot.style.display = '';
+        }
+      });
+
+      const tip = tooltipRef.current;
+      if (tip) {
+        const absX = padLeft + x;
+        if (tooltipMode === 'compact') {
+          tip.style.display = '';
+          const tipW = tip.offsetWidth;
+          const centered = absX - tipW / 2 + 6;
+          const left = Math.max(padLeft, Math.min(padLeft + plotWidth - tipW, centered));
+          tip.style.left = `${left}px`;
+          tip.style.transform = 'none';
+        } else {
+          const isLeftHalf = x <= plotWidth / 2;
+          tip.style.left = `${absX}px`;
+          tip.style.transform = isLeftHalf
+            ? `translateX(${TOOLTIP_GAP}px)`
+            : `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
+          tip.style.display = '';
+        }
+      }
+    },
+    [dataLength, plotWidth, padLeft, tooltipMode],
+  );
+
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<SVGSVGElement>) => {
+      if (dataLength === 0) return;
+      let next = activeIndex ?? -1;
+      switch (e.key) {
+        case 'ArrowRight': case 'ArrowDown': next = Math.min(dataLength - 1, next + 1); break;
+        case 'ArrowLeft': case 'ArrowUp': next = Math.max(0, next - 1); break;
+        case 'Home': next = 0; break;
+        case 'End': next = dataLength - 1; break;
+        case 'Escape': hideHover(); return;
+        default: return;
+      }
+      e.preventDefault();
+      setActiveIndex(next);
+      positionAtIndex(next);
+    },
+    [dataLength, activeIndex, hideHover, positionAtIndex],
+  );
+
   return {
     cursorRef,
     tooltipRef,
@@ -185,6 +258,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
     handleMouseMove,
     handleTouchStart,
     handleTouchMove,
+    handleKeyDown,
     hideHover,
   };
 }
