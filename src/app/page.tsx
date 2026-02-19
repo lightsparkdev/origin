@@ -3897,6 +3897,35 @@ export default function Home() {
         </div>
       </div>
 
+      <h3 style={{ marginBottom: '0.75rem' }}>Composed (Bar + Line, Dual Y-Axes)</h3>
+
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Revenue bars + conversion rate line
+          </p>
+          <Chart.Composed
+            data={[
+              { month: 'Jan', revenue: 4200, rate: 3.2 },
+              { month: 'Feb', revenue: 5100, rate: 3.8 },
+              { month: 'Mar', revenue: 4800, rate: 3.5 },
+              { month: 'Apr', revenue: 6200, rate: 4.1 },
+              { month: 'May', revenue: 5800, rate: 3.9 },
+              { month: 'Jun', revenue: 7100, rate: 4.5 },
+            ]}
+            series={[
+              { key: 'revenue', label: 'Revenue', type: 'bar', color: 'var(--color-blue-300)' },
+              { key: 'rate', label: 'Conversion %', type: 'line', axis: 'right', color: 'var(--text-primary)' },
+            ]}
+            xKey="month"
+            height={250}
+            grid
+            tooltip
+            formatYLabelRight={(v) => `${v}%`}
+          />
+        </div>
+      </div>
+
       <h3 style={{ marginBottom: '0.75rem' }}>Pie / Donut Charts</h3>
 
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>

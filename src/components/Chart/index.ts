@@ -12,3 +12,6 @@ export type { BarChartProps } from './BarChart';
 
 export { Pie } from './PieChart';
 export type { PieChartProps, PieSegment } from './PieChart';
+
+export { Composed } from './ComposedChart';
+export type { ComposedChartProps, ComposedSeries } from './ComposedChart';

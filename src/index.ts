@@ -65,6 +65,8 @@ export type {
   BarChartProps as ChartBarProps,
   PieChartProps as ChartPieProps,
   PieSegment as ChartPieSegment,
+  ComposedChartProps as ChartComposedProps,
+  ComposedSeries as ChartComposedSeries,
 } from './components/Chart';
 
 // Simple components (direct exports)
