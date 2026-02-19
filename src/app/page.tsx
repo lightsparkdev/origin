@@ -1472,6 +1472,23 @@ function TableExamples() {
   );
 }
 
+function LiveValueDemo() {
+  const [value, setValue] = React.useState(12847);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setValue((v) => v + Math.floor(Math.random() * 5) + 1);
+    }, 800);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <Chart.LiveValue
+      value={value}
+      formatValue={(v) => `$${Math.round(v).toLocaleString()}`}
+      style={{ fontSize: 32, fontWeight: 500 }}
+    />
+  );
+}
+
 function LiveDemo() {
   const [data, setData] = React.useState<{ time: number; value: number }[]>([]);
   const [value, setValue] = React.useState(100);
@@ -3673,6 +3690,32 @@ export default function Home() {
         <div style={{ width: 500 }}>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Streaming data (random walk)</p>
           <LiveDemo />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Live Primitives</h3>
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
+        <div>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>LiveValue</p>
+          <LiveValueDemo />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>active</p>
+            <Chart.LiveDot status="active" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>processing</p>
+            <Chart.LiveDot status="processing" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>idle</p>
+            <Chart.LiveDot status="idle" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>error</p>
+            <Chart.LiveDot status="error" />
+          </div>
         </div>
       </div>
 

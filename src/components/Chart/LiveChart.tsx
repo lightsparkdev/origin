@@ -509,22 +509,21 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           ctx.fillStyle = `rgb(${r},${g},${b})`;
           ctx.fill();
 
-          // Tooltip text
+          // Tooltip text — tracks horizontally with crosshair
           const fmtVal = cfg.formatValue ?? ((v: number) => v.toFixed(2));
           const fmtTime = cfg.formatTime ?? formatDefaultTime;
           const label = `${fmtVal(hoverVal)}  ·  ${fmtTime(hoverTime)}`;
           ctx.globalAlpha = opacity;
           ctx.font = '12px "Suisse Intl Mono", "SF Mono", Menlo, monospace';
-          ctx.textAlign = 'left';
           ctx.textBaseline = 'top';
 
-          // Outline for readability
-          ctx.strokeStyle = 'rgba(255,255,255,0.9)';
-          ctx.lineWidth = 3;
-          ctx.lineJoin = 'round';
-          ctx.strokeText(label, padLeft + 4, PAD.top + 2);
+          const labelWidth = ctx.measureText(label).width;
+          const labelX = Math.max(padLeft + 4, Math.min(padLeft + chartW - labelWidth - 4, clampedX - labelWidth / 2));
+          const labelY = PAD.top + 2;
+
+          ctx.textAlign = 'left';
           ctx.fillStyle = 'rgb(26,26,26)';
-          ctx.fillText(label, padLeft + 4, PAD.top + 2);
+          ctx.fillText(label, labelX, labelY);
 
           cfg.onHover?.({ time: hoverTime, value: hoverVal, x: clampedX, y: hoverY });
         }

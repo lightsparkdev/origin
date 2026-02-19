@@ -18,3 +18,9 @@ export type { ComposedChartProps, ComposedSeries } from './ComposedChart';
 
 export { Live } from './LiveChart';
 export type { LiveChartProps, LivePoint } from './LiveChart';
+
+export { LiveValue } from './LiveValue';
+export type { LiveValueProps } from './LiveValue';
+
+export { LiveDot } from './LiveDot';
+export type { LiveDotProps } from './LiveDot';
