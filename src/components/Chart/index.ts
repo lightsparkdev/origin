@@ -16,6 +16,12 @@ export type { PieChartProps, PieSegment } from './PieChart';
 export { Composed } from './ComposedChart';
 export type { ComposedChartProps, ComposedSeries } from './ComposedChart';
 
+export { Gauge } from './GaugeChart';
+export type { GaugeChartProps, GaugeThreshold } from './GaugeChart';
+
+export { BarList } from './BarList';
+export type { BarListProps, BarListItem } from './BarList';
+
 export { Live } from './LiveChart';
 export type { LiveChartProps, LivePoint } from './LiveChart';
 

@@ -3866,6 +3866,39 @@ export default function Home() {
         </div>
       </div>
 
+      <h3 style={{ marginBottom: '0.75rem' }}>Gauge</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 320 }}>
+          <Chart.Gauge
+            value={0.32}
+            min={0}
+            max={1}
+            thresholds={[
+              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great' },
+              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work' },
+              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor' },
+            ]}
+            markerLabel="P75"
+            formatValue={(v) => `${v.toFixed(2)}s`}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>BarList</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 400 }}>
+          <Chart.BarList
+            data={[
+              { name: '/', value: 2340, displayValue: '0.28s' },
+              { name: '/pricing', value: 326, displayValue: '0.34s' },
+              { name: '/blog', value: 148, displayValue: '0.31s' },
+              { name: '/docs', value: 89, displayValue: '0.42s' },
+              { name: '/about', value: 45, displayValue: '0.25s' },
+            ]}
+          />
+        </div>
+      </div>
+
       <h3 style={{ marginBottom: '0.75rem' }}>Donut</h3>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
         <div style={{ width: 388 }}>

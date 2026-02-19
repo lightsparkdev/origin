@@ -387,6 +387,166 @@
   border: 0;
 }
 
+// Gauge
+
+.gauge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.gaugeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gaugeValue {
+  @include label-xl;
+
+  font-variant-numeric: tabular-nums;
+}
+
+.gaugeBadge {
+  @include label-sm;
+
+  padding: var(--spacing-4xs) var(--spacing-xs);
+  border: 1px solid;
+  border-radius: var(--corner-radius-round);
+}
+
+.gaugeTrack {
+  display: flex;
+  height: 8px;
+  border-radius: var(--corner-radius-round);
+  overflow: hidden;
+  position: relative;
+}
+
+.gaugeSegment {
+  height: 100%;
+  transition: opacity 150ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.gaugeMarker {
+  position: absolute;
+  top: -2px;
+  width: 2px;
+  height: 12px;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+  transform: translateX(-50%);
+}
+
+.gaugeMarkerLabel {
+  @include label-chart;
+
+  position: relative;
+  font-size: 11px;
+  color: var(--text-secondary);
+  transform: translateX(-50%);
+  display: inline-block;
+  margin-top: var(--spacing-4xs);
+}
+
+// BarList
+
+.barList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3xs);
+}
+
+.barListRow {
+  position: relative;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.barListRowClickable {
+  cursor: pointer;
+
+  &:hover .barListBar {
+    opacity: 0.8;
+  }
+}
+
+.barListBar {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--corner-radius-xs);
+  transition: opacity 150ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.barListContent {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-3xs) var(--spacing-xs);
+  gap: var(--spacing-sm);
+}
+
+.barListName {
+  @include body-sm;
+
+  color: var(--text-primary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.barListLink {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.barListValue {
+  @include tooltip-chart;
+
+  color: var(--text-primary);
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.barListEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  color: var(--text-tertiary);
+
+  @include label-chart;
+
+  font-size: 12px;
+}
+
+.barListSkeleton {
+  height: 32px;
+  background-color: var(--surface-secondary);
+  border-radius: var(--corner-radius-xs);
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 // Inline tooltip variants
 
 %tooltipInlineBase {
