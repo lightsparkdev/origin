@@ -27,7 +27,6 @@
 .trigger {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--spacing-xs);
   width: 100%;
   padding: var(--spacing-md) 0;
@@ -35,8 +34,6 @@
   border: none;
   cursor: pointer;
   text-align: left;
-  @include label;
-  color: var(--text-primary);
 
   &:focus-visible {
     outline: 2px solid var(--input-focus);
@@ -44,8 +41,14 @@
   }
 }
 
+.title {
+  flex: 1;
+  @include label;
+  color: var(--text-primary);
+}
+
 @media (hover: hover) {
-  .trigger:hover {
+  .trigger:hover .title {
     text-decoration: underline;
   }
 }
@@ -82,7 +85,7 @@
   }
 }
 
-.panelContent {
+.content {
   padding-bottom: var(--spacing-sm);
   @include body;
   color: var(--text-primary);

@@ -7,6 +7,5 @@ export type {
   ItemProps as AccordionItemProps,
   HeaderProps as AccordionHeaderProps,
   TriggerProps as AccordionTriggerProps,
-  IconProps as AccordionIconProps,
   PanelProps as AccordionPanelProps,
 } from './parts';

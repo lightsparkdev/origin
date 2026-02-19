@@ -50,41 +50,17 @@ export const Header = React.forwardRef<HTMLHeadingElement, HeaderProps>(
 
 export interface TriggerProps extends BaseAccordion.Trigger.Props {}
 
-/**
- * Accordion trigger - renders children directly for full composition control.
- * Use with Accordion.Icon for the chevron indicator.
- * 
- * @example
- * ```tsx
- * <Accordion.Trigger>
- *   What is Base UI?
- *   <Accordion.Icon />
- * </Accordion.Trigger>
- * ```
- */
 export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
-  function Trigger({ className, ...props }, ref) {
+  function Trigger({ className, children, ...props }, ref) {
     return (
       <BaseAccordion.Trigger
         ref={ref}
         className={clsx(styles.trigger, className)}
         {...props}
-      />
-    );
-  }
-);
-
-export interface IconProps extends React.HTMLAttributes<HTMLSpanElement> {}
-
-/**
- * Chevron icon for accordion triggers. Rotates when item is open.
- */
-export const Icon = React.forwardRef<HTMLSpanElement, IconProps>(
-  function Icon({ className, ...props }, ref) {
-    return (
-      <span ref={ref} className={clsx(styles.icon, className)} {...props}>
-        <CentralIcon name="IconChevronDownSmall" size={24} />
-      </span>
+      >
+        <span className={styles.title}>{children}</span>
+        <CentralIcon name="IconChevronDownSmall" size={24} className={styles.icon} />
+      </BaseAccordion.Trigger>
     );
   }
 );
@@ -99,9 +75,8 @@ export const Panel = React.forwardRef<HTMLDivElement, PanelProps>(
         className={clsx(styles.panel, className)}
         {...props}
       >
-        <div className={styles.panelContent}>{children}</div>
+        <div className={styles.content}>{children}</div>
       </BaseAccordion.Panel>
     );
   }
 );
-
