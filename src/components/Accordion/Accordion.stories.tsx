@@ -16,7 +16,7 @@ export const Default: StoryObj = {
         <Accordion.Header>
           <Accordion.Trigger>
             What is Base UI?
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>
@@ -27,7 +27,7 @@ export const Default: StoryObj = {
         <Accordion.Header>
           <Accordion.Trigger>
             How does it work?
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>
@@ -38,7 +38,7 @@ export const Default: StoryObj = {
         <Accordion.Header>
           <Accordion.Trigger>
             Is it accessible?
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>
@@ -56,7 +56,7 @@ export const Multiple: StoryObj = {
         <Accordion.Header>
           <Accordion.Trigger>
             First
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>Multiple items can be open.</Accordion.Panel>
@@ -65,7 +65,7 @@ export const Multiple: StoryObj = {
         <Accordion.Header>
           <Accordion.Trigger>
             Second
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>This stays open when others open.</Accordion.Panel>
@@ -88,7 +88,7 @@ export const Controlled: StoryObj = {
             <Accordion.Header>
               <Accordion.Trigger>
                 Controlled Item 1
-                <Accordion.Icon />
+      
               </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Panel>Content for item 1.</Accordion.Panel>
@@ -97,7 +97,7 @@ export const Controlled: StoryObj = {
             <Accordion.Header>
               <Accordion.Trigger>
                 Controlled Item 2
-                <Accordion.Icon />
+      
               </Accordion.Trigger>
             </Accordion.Header>
             <Accordion.Panel>Content for item 2.</Accordion.Panel>

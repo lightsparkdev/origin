@@ -7,7 +7,7 @@ export const TestAccordion = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           First Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>First panel content</Accordion.Panel>
@@ -16,7 +16,7 @@ export const TestAccordion = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           Second Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>Second panel content</Accordion.Panel>
@@ -30,7 +30,7 @@ export const TestAccordionMultiple = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           First Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>First panel content</Accordion.Panel>
@@ -39,7 +39,7 @@ export const TestAccordionMultiple = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           Second Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>Second panel content</Accordion.Panel>
@@ -53,7 +53,7 @@ export const TestAccordionDisabled = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           Disabled Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>Should not open</Accordion.Panel>
@@ -67,7 +67,7 @@ export const TestAccordionDefaultValue = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           First Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>First panel content</Accordion.Panel>
@@ -76,7 +76,7 @@ export const TestAccordionDefaultValue = () => (
       <Accordion.Header>
         <Accordion.Trigger>
           Second Item
-          <Accordion.Icon />
+
         </Accordion.Trigger>
       </Accordion.Header>
       <Accordion.Panel>Second panel content</Accordion.Panel>
@@ -98,7 +98,7 @@ export const TestAccordionControlled = ({ onChange }: { onChange?: (value: strin
         <Accordion.Header>
           <Accordion.Trigger>
             First Item
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>First panel content</Accordion.Panel>
@@ -107,7 +107,7 @@ export const TestAccordionControlled = ({ onChange }: { onChange?: (value: strin
         <Accordion.Header>
           <Accordion.Trigger>
             Second Item
-            <Accordion.Icon />
+  
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Panel>Second panel content</Accordion.Panel>

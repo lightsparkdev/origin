@@ -102,7 +102,7 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         const textarea = textareaRef.current;
         if (!textarea) return;
 
-        let delta = 0;
+        let delta: number;
         if (e.key === 'ArrowDown') delta = KEYBOARD_STEP;
         else if (e.key === 'ArrowUp') delta = -KEYBOARD_STEP;
         else return;
