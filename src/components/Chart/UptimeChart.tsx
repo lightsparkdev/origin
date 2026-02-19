@@ -20,6 +20,8 @@ export interface UptimeChartProps extends React.ComponentPropsWithoutRef<'div'> 
   colors?: Partial<Record<UptimePoint['status'], string>>;
   /** Accessible label. */
   ariaLabel?: string;
+  /** Show tooltip label on hover. Defaults to true. */
+  tooltip?: boolean;
   /** Called when a bar is hovered. */
   onHover?: (point: UptimePoint | null, index: number | null) => void;
 }
@@ -38,6 +40,7 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
       barHeight = 32,
       colors: colorsProp,
       ariaLabel,
+      tooltip: showTooltip = true,
       onHover,
       className,
       ...props
@@ -82,7 +85,7 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
             />
           ))}
         </div>
-        <div className={styles.uptimeTooltip} style={{ visibility: activeIndex !== null && data[activeIndex]?.label ? 'visible' : 'hidden' }}>
+        {showTooltip && <div className={styles.uptimeTooltip} style={{ visibility: activeIndex !== null && data[activeIndex]?.label ? 'visible' : 'hidden' }}>
           {activeIndex !== null && data[activeIndex]?.label && (
             <>
               <span
@@ -96,7 +99,7 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
           {(activeIndex === null || !data[activeIndex]?.label) && (
             <span className={styles.uptimeLabel}>&nbsp;</span>
           )}
-        </div>
+        </div>}
       </div>
     );
   },
