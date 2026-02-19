@@ -3867,18 +3867,50 @@ export default function Home() {
       </div>
 
       <h3 style={{ marginBottom: '0.75rem' }}>Gauge</h3>
-      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-        <div style={{ width: 320 }}>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Default</p>
           <Chart.Gauge
             value={0.32}
             min={0}
             max={1}
             thresholds={[
+              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great', badge: 'green' },
+              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work', badge: 'yellow' },
+              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor', badge: 'red' },
+            ]}
+            markerLabel="P75"
+            formatValue={(v) => `${v.toFixed(2)}s`}
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Compact</p>
+          <Chart.Gauge
+            value={0.32}
+            min={0}
+            max={1}
+            variant="compact"
+            thresholds={[
+              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great', badge: 'green' },
+              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work', badge: 'yellow' },
+              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor', badge: 'red' },
+            ]}
+            markerLabel="P75"
+            formatValue={(v) => `${v.toFixed(2)}s`}
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Minimal</p>
+          <Chart.Gauge
+            value={0.32}
+            min={0}
+            max={1}
+            variant="minimal"
+            thresholds={[
               { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great' },
               { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work' },
               { upTo: 1, color: 'var(--color-red-500)', label: 'Poor' },
             ]}
-            markerLabel="P75"
             formatValue={(v) => `${v.toFixed(2)}s`}
           />
         </div>

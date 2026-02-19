@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { Badge, type BadgeVariant } from '../Badge';
 import styles from './Chart.module.scss';
 
 export interface GaugeThreshold {
@@ -11,6 +12,8 @@ export interface GaugeThreshold {
   color: string;
   /** Optional label for this zone (e.g., "Great", "Needs work"). */
   label?: string;
+  /** Badge variant to use when this zone is active. Maps to Origin's Badge component. */
+  badge?: BadgeVariant;
 }
 
 export interface GaugeChartProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -20,12 +23,14 @@ export interface GaugeChartProps extends React.ComponentPropsWithoutRef<'div'> {
   min?: number;
   /** Maximum value. */
   max?: number;
-  /** Threshold zones rendered as colored segments on the track. */
+  /** Threshold zones. */
   thresholds: GaugeThreshold[];
-  /** Label for the marker (e.g., "P75"). Rendered below the marker. */
+  /** Label for the marker (e.g., "P75"). */
   markerLabel?: string;
   /** Format the displayed value. */
   formatValue?: (value: number) => string;
+  /** Visual density. */
+  variant?: 'default' | 'compact' | 'minimal';
   /** Accessible label. */
   ariaLabel?: string;
 }
@@ -39,6 +44,7 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
       thresholds,
       markerLabel,
       formatValue,
+      variant = 'default',
       ariaLabel,
       className,
       ...props
@@ -57,7 +63,12 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
     return (
       <div
         ref={ref}
-        className={clsx(styles.gauge, className)}
+        className={clsx(
+          styles.gauge,
+          variant === 'compact' && styles.gaugeCompact,
+          variant === 'minimal' && styles.gaugeMinimal,
+          className,
+        )}
         role="meter"
         aria-valuenow={value}
         aria-valuemin={min}
@@ -65,47 +76,67 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
         aria-label={ariaLabel ?? 'Gauge'}
         {...props}
       >
+        {/* Header */}
         <div className={styles.gaugeHeader}>
-          <span className={styles.gaugeValue} style={{ color: activeThreshold?.color }}>
+          <span className={styles.gaugeValue}>
             {fmtValue}
           </span>
-          {activeThreshold?.label && (
-            <span className={styles.gaugeBadge} style={{ color: activeThreshold.color, borderColor: activeThreshold.color }}>
+          {variant === 'default' && activeThreshold?.label && (
+            <Badge variant={activeThreshold.badge ?? 'gray'}>
               {activeThreshold.label}
-            </span>
+            </Badge>
+          )}
+          {variant === 'compact' && activeThreshold?.label && (
+            <Badge variant={activeThreshold.badge ?? 'gray'}>
+              {activeThreshold.label}
+            </Badge>
           )}
         </div>
 
-        <div className={styles.gaugeTrack}>
-          {thresholds.map((t, i) => {
-            const prevUpTo = i === 0 ? min : thresholds[i - 1].upTo;
-            const segStart = (prevUpTo - min) / range;
-            const segEnd = i === thresholds.length - 1 ? 1 : (t.upTo - min) / range;
-            const segWidth = segEnd - segStart;
-            const isActive = value >= prevUpTo && (i === thresholds.length - 1 || value < t.upTo);
-            return (
+        {/* Track + marker container */}
+        <div className={styles.gaugeTrackWrap}>
+          <div className={styles.gaugeTrack}>
+            {variant === 'default' ? (
+              thresholds.map((t, i) => {
+                const prevUpTo = i === 0 ? min : thresholds[i - 1].upTo;
+                const segStart = (prevUpTo - min) / range;
+                const segEnd = i === thresholds.length - 1 ? 1 : (t.upTo - min) / range;
+                const segWidth = segEnd - segStart;
+                const isActive = value >= prevUpTo && (i === thresholds.length - 1 || value < t.upTo);
+                return (
+                  <div
+                    key={i}
+                    className={styles.gaugeSegment}
+                    style={{
+                      flex: segWidth,
+                      backgroundColor: isActive ? t.color : 'var(--surface-secondary)',
+                    }}
+                  />
+                );
+              })
+            ) : (
               <div
-                key={i}
-                className={styles.gaugeSegment}
+                className={styles.gaugeFill}
                 style={{
-                  flex: segWidth,
-                  backgroundColor: t.color,
-                  opacity: isActive ? 1 : 0.2,
+                  width: `${pct * 100}%`,
+                  backgroundColor: activeThreshold?.color,
                 }}
               />
-            );
-          })}
-          <div
-            className={styles.gaugeMarker}
-            style={{ left: `${pct * 100}%` }}
-          />
-        </div>
-
-        {markerLabel && (
-          <div className={styles.gaugeMarkerLabel} style={{ left: `${pct * 100}%` }}>
-            {markerLabel}
+            )}
           </div>
-        )}
+
+          {variant !== 'minimal' && (
+            <div
+              className={styles.gaugeMarkerWrap}
+              style={{ left: `${pct * 100}%` }}
+            >
+              <div className={styles.gaugeMarker} />
+              {markerLabel && (
+                <span className={styles.gaugeMarkerLabel}>{markerLabel}</span>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     );
   },

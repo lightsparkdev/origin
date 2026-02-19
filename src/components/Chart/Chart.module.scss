@@ -407,50 +407,99 @@
   font-variant-numeric: tabular-nums;
 }
 
-.gaugeBadge {
-  @include label-sm;
-
-  padding: var(--spacing-4xs) var(--spacing-xs);
-  border: 1px solid;
-  border-radius: var(--corner-radius-round);
+.gaugeTrackWrap {
+  position: relative;
+  padding-top: 10px;
+  padding-bottom: 24px;
 }
 
 .gaugeTrack {
   display: flex;
+  gap: 4px;
   height: 8px;
-  border-radius: var(--corner-radius-round);
   overflow: hidden;
   position: relative;
+  background: var(--surface-primary);
 }
 
 .gaugeSegment {
   height: 100%;
-  transition: opacity 150ms ease;
+}
+
+.gaugeFill {
+  position: absolute;
+  inset: 0;
+  right: auto;
+  border-radius: inherit;
+  transition: width 400ms cubic-bezier(0.33, 1, 0.68, 1),
+              background-color 200ms ease;
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
-.gaugeMarker {
+.gaugeMarkerWrap {
   position: absolute;
-  top: -2px;
-  width: 2px;
-  height: 12px;
-  background-color: var(--text-primary);
-  border-radius: 1px;
+  top: 0;
+  bottom: 0;
   transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gaugeMarker {
+  width: 2px;
+  background-color: var(--border-primary);
+  flex: 1;
 }
 
 .gaugeMarkerLabel {
   @include label-chart;
 
-  position: relative;
   font-size: 11px;
-  color: var(--text-secondary);
-  transform: translateX(-50%);
-  display: inline-block;
+  color: var(--text-primary);
   margin-top: var(--spacing-4xs);
+  flex-shrink: 0;
+}
+
+// Gauge: compact variant
+.gaugeCompact {
+  gap: var(--spacing-2xs);
+
+  .gaugeValue {
+    @include label;
+
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+
+  .gaugeTrack {
+    height: 4px;
+  }
+
+  .gaugeMarker {
+    height: 8px;
+    top: -2px;
+    width: 1px;
+  }
+}
+
+// Gauge: minimal variant
+.gaugeMinimal {
+  gap: var(--spacing-3xs);
+
+  .gaugeValue {
+    @include tooltip-chart;
+
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+
+  .gaugeTrack {
+    height: 2px;
+  }
 }
 
 // BarList
@@ -500,7 +549,9 @@
 .barListName {
   @include body-sm;
 
-  color: var(--text-primary);
+  color: var(--bar-list-name-color, var(--text-primary));
+  font-size: var(--bar-list-name-size, inherit);
+  font-weight: var(--bar-list-name-weight, inherit);
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -519,7 +570,9 @@
 .barListValue {
   @include tooltip-chart;
 
-  color: var(--text-primary);
+  color: var(--bar-list-value-color, var(--text-primary));
+  font-size: var(--bar-list-value-size, inherit);
+  font-weight: var(--bar-list-value-weight, inherit);
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
