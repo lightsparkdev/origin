@@ -3624,23 +3624,31 @@ export default function Home() {
       <h3 style={{ marginBottom: '0.75rem' }}>Sparkline</h3>
       <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '2rem' }}>
         <div style={{ width: 160 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Line</p>
           <Chart.Sparkline
             data={[{ v: 10 }, { v: 15 }, { v: 12 }, { v: 18 }, { v: 14 }, { v: 22 }, { v: 19 }, { v: 25 }]}
             dataKey="v"
           />
         </div>
         <div style={{ width: 160 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Line</p>
           <Chart.Sparkline
             data={[{ v: 25 }, { v: 22 }, { v: 24 }, { v: 18 }, { v: 20 }, { v: 15 }, { v: 12 }, { v: 10 }]}
             dataKey="v"
             color="var(--color-blue-500)"
           />
         </div>
-        <div style={{ width: 160 }}>
+        <div style={{ width: 300 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Bar</p>
           <Chart.Sparkline
-            data={[{ v: 10 }, { v: 12 }, { v: 11 }, { v: 14 }, { v: 13 }, { v: 16 }, { v: 15 }, { v: 18 }]}
+            variant="bar"
+            data={[
+              { v: 12 }, { v: 18 }, { v: 15 }, { v: 22 }, { v: 20 }, { v: 14 }, { v: 25 }, { v: 19 },
+              { v: 16 }, { v: 21 }, { v: 13 }, { v: 24 }, { v: 17 }, { v: 23 }, { v: 11 }, { v: 20 },
+              { v: 18 }, { v: 26 }, { v: 15 }, { v: 22 }, { v: 19 }, { v: 14 }, { v: 21 }, { v: 16 },
+            ]}
             dataKey="v"
-            color="var(--color-green-500)"
+            color="var(--color-blue-400)"
           />
         </div>
       </div>
