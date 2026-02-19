@@ -54,6 +54,8 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   animate?: boolean;
   /** Per-data-point color override. Return a CSS color string to override `series.color`, or `undefined` to keep the default. */
   getBarColor?: (datum: Record<string, unknown>, index: number, seriesKey: string) => string | undefined;
+  /** Bar orientation. Horizontal swaps axes — categories on Y, values on X. */
+  orientation?: 'vertical' | 'horizontal';
 }
 
 const GROUP_GAP = 0.12;
@@ -84,6 +86,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       onClickDatum,
       animate = true,
       getBarColor,
+      orientation = 'vertical',
       className,
       ...props
     },
@@ -118,14 +121,17 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       [seriesProp, dataKey, color],
     );
 
-    const showXAxis = Boolean(xKey);
-    const showYAxis = grid;
-    const padBottom = showXAxis ? PAD_BOTTOM_AXIS : 0;
-    const padLeft = showYAxis ? PAD_LEFT_AXIS : 0;
-    const plotWidth = Math.max(0, width - padLeft - PAD_RIGHT);
+    const isHorizontal = orientation === 'horizontal';
+    const showCategoryAxis = Boolean(xKey);
+    const showValueAxis = grid;
+
+    const padBottom = !isHorizontal && showCategoryAxis ? PAD_BOTTOM_AXIS : 0;
+    const padLeft = isHorizontal ? (showCategoryAxis ? 60 : 12) : (showValueAxis ? PAD_LEFT_AXIS : 0);
+    const padRight = isHorizontal && showValueAxis ? 40 : PAD_RIGHT;
+    const plotWidth = Math.max(0, width - padLeft - padRight);
     const plotHeight = Math.max(0, height - PAD_TOP - padBottom);
 
-    // Y domain
+    // Value domain
     const { yMin, yMax, yTicks } = React.useMemo(() => {
       if (yDomain) {
         const result = niceTicks(yDomain[0], yDomain[1], 5);
@@ -158,21 +164,24 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
     }, [data, series, stacked, referenceLines, yDomain]);
 
-    // Bar geometry
-    const slotWidth = data.length > 0 ? plotWidth / data.length : 0;
-    const groupWidth = slotWidth * (1 - GROUP_GAP);
-    const barWidth = stacked
-      ? groupWidth
-      : Math.max(1, (groupWidth - BAR_GAP * (series.length - 1)) / series.length);
+    // Bar geometry — slot is along the category axis, bar extends along the value axis
+    const categoryLength = isHorizontal ? plotHeight : plotWidth;
+    const slotSize = data.length > 0 ? categoryLength / data.length : 0;
+    const groupSize = slotSize * (1 - GROUP_GAP);
+    const barThickness = stacked
+      ? groupSize
+      : Math.max(1, (groupSize - BAR_GAP * (series.length - 1)) / series.length);
 
-    // Y axis labels
-    const yLabels = React.useMemo(() => {
-      if (!showYAxis || plotHeight <= 0) return [];
+    // Value axis labels
+    const valueLabels = React.useMemo(() => {
+      if (!showValueAxis) return [];
+      const axisLength = isHorizontal ? plotWidth : plotHeight;
+      if (axisLength <= 0) return [];
       return yTicks.map((v) => ({
-        y: linearScale(v, yMin, yMax, plotHeight, 0),
+        pos: linearScale(v, yMin, yMax, isHorizontal ? 0 : axisLength, isHorizontal ? axisLength : 0),
         text: formatYLabel ? formatYLabel(v) : String(v),
       }));
-    }, [showYAxis, yTicks, yMin, yMax, plotHeight, formatYLabel]);
+    }, [showValueAxis, yTicks, yMin, yMax, plotHeight, plotWidth, formatYLabel, isHorizontal]);
 
     // Hover
     const onActiveChangeRef = React.useRef(onActiveChange);
@@ -189,24 +198,34 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
 
     const handleMouseMove = React.useCallback(
       (e: React.MouseEvent<SVGSVGElement>) => {
-        if (data.length === 0 || plotWidth <= 0) return;
+        if (data.length === 0 || categoryLength <= 0) return;
         const rect = e.currentTarget.getBoundingClientRect();
-        const rawX = e.clientX - rect.left - padLeft;
-        const idx = Math.max(0, Math.min(data.length - 1, Math.floor(rawX / slotWidth)));
+        const raw = isHorizontal
+          ? e.clientY - rect.top - PAD_TOP
+          : e.clientX - rect.left - padLeft;
+        const idx = Math.max(0, Math.min(data.length - 1, Math.floor(raw / slotSize)));
         setActiveIndex((prev) => (prev === idx ? prev : idx));
 
         const tip = tooltipRef.current;
         if (tip) {
-          const absX = padLeft + (idx + 0.5) * slotWidth;
-          const isLeftHalf = rawX <= plotWidth / 2;
-          tip.style.left = `${absX}px`;
-          tip.style.transform = isLeftHalf
-            ? 'translateX(12px)'
-            : 'translateX(calc(-100% - 12px))';
+          if (isHorizontal) {
+            const absY = PAD_TOP + (idx + 0.5) * slotSize;
+            tip.style.top = `${absY}px`;
+            tip.style.left = `${padLeft + plotWidth + 8}px`;
+            tip.style.transform = 'none';
+          } else {
+            const absX = padLeft + (idx + 0.5) * slotSize;
+            const isLeftHalf = raw <= categoryLength / 2;
+            tip.style.left = `${absX}px`;
+            tip.style.top = `${PAD_TOP}px`;
+            tip.style.transform = isLeftHalf
+              ? 'translateX(12px)'
+              : 'translateX(calc(-100% - 12px))';
+          }
           tip.style.display = '';
         }
       },
-      [data.length, plotWidth, padLeft, slotWidth],
+      [data.length, categoryLength, padLeft, slotSize, isHorizontal, plotWidth],
     );
 
     const handleMouseLeave = React.useCallback(() => {
@@ -279,73 +298,90 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
               {svgDesc && <desc>{svgDesc}</desc>}
 
               <g transform={`translate(${padLeft},${PAD_TOP})`}>
+                {/* Grid lines along value axis */}
                 {grid &&
-                  yLabels.map(({ y }, i) => (
-                    <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
-                  ))}
+                  valueLabels.map(({ pos }, i) =>
+                    isHorizontal ? (
+                      <line key={i} x1={pos} y1={0} x2={pos} y2={plotHeight} className={styles.gridLine} />
+                    ) : (
+                      <line key={i} x1={0} y1={pos} x2={plotWidth} y2={pos} className={styles.gridLine} />
+                    ),
+                  )}
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {
-                  const ry = linearScale(rl.value, yMin, yMax, plotHeight, 0);
                   const rlColor = rl.color ?? 'var(--text-primary)';
+                  if (isHorizontal) {
+                    const rx = linearScale(rl.value, yMin, yMax, 0, plotWidth);
+                    return (
+                      <g key={`ref-${i}`} className={styles.referenceLine}>
+                        <line x1={rx} y1={0} x2={rx} y2={plotHeight} stroke={rlColor} strokeOpacity={0.15} strokeWidth={1} strokeDasharray="4 4" />
+                        {rl.label && (
+                          <text x={rx + 4} y={8} className={styles.referenceLineLabel} fill={rlColor} fillOpacity={0.45}>{rl.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const ry = linearScale(rl.value, yMin, yMax, plotHeight, 0);
                   return (
                     <g key={`ref-${i}`} className={styles.referenceLine}>
-                      <line
-                        x1={0} y1={ry} x2={plotWidth} y2={ry}
-                        stroke={rlColor} strokeOpacity={0.15} strokeWidth={1}
-                        strokeDasharray="4 4"
-                      />
+                      <line x1={0} y1={ry} x2={plotWidth} y2={ry} stroke={rlColor} strokeOpacity={0.15} strokeWidth={1} strokeDasharray="4 4" />
                       {rl.label && (
-                        <text
-                          x={plotWidth} y={ry - 5} textAnchor="end"
-                          className={styles.referenceLineLabel}
-                          fill={rlColor} fillOpacity={0.45}
-                        >
-                          {rl.label}
-                        </text>
+                        <text x={plotWidth} y={ry - 5} textAnchor="end" className={styles.referenceLineLabel} fill={rlColor} fillOpacity={0.45}>{rl.label}</text>
                       )}
                     </g>
                   );
                 })}
 
-                {/* Hover highlight column */}
+                {/* Hover highlight */}
                 {activeIndex !== null && (
-                  <rect
-                    x={activeIndex * slotWidth + (slotWidth - groupWidth) / 2}
-                    y={0}
-                    width={groupWidth}
-                    height={plotHeight}
-                    fill="var(--text-primary)"
-                    fillOpacity={0.03}
-                  />
+                  isHorizontal ? (
+                    <rect
+                      x={0}
+                      y={activeIndex * slotSize + (slotSize - groupSize) / 2}
+                      width={plotWidth}
+                      height={groupSize}
+                      fill="var(--text-primary)"
+                      fillOpacity={0.03}
+                    />
+                  ) : (
+                    <rect
+                      x={activeIndex * slotSize + (slotSize - groupSize) / 2}
+                      y={0}
+                      width={groupSize}
+                      height={plotHeight}
+                      fill="var(--text-primary)"
+                      fillOpacity={0.03}
+                    />
+                  )
                 )}
 
                 {/* Bars */}
                 {data.map((d, di) => {
-                  const slotX = di * slotWidth + (slotWidth - groupWidth) / 2;
+                  const slotStart = di * slotSize + (slotSize - groupSize) / 2;
                   const delay = Math.min(di * 40, 400);
 
                   if (stacked) {
-                    let cumY = 0;
+                    let cum = 0;
                     return (
                       <g key={di}>
-                        {series.map((s, si) => {
+                        {series.map((s) => {
                           const v = Number(d[s.key]) || 0;
+                          cum += v;
+                          const barFill = getBarColor?.(d, di, s.key) ?? s.color;
+                          if (isHorizontal) {
+                            const barW = (v / (yMax - yMin)) * plotWidth;
+                            const barX = linearScale(cum - v, yMin, yMax, 0, plotWidth);
+                            return (
+                              <rect key={s.key} x={barX} y={slotStart} width={Math.max(0, barW)} height={barThickness} fill={barFill}
+                                className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
+                            );
+                          }
                           const barH = (v / (yMax - yMin)) * plotHeight;
-                          cumY += v;
-                          const barY = linearScale(cumY, yMin, yMax, plotHeight, 0);
-                          const fill = getBarColor?.(d, di, s.key) ?? s.color;
+                          const barY = linearScale(cum, yMin, yMax, plotHeight, 0);
                           return (
-                            <rect
-                              key={s.key}
-                              x={slotX}
-                              y={barY}
-                              width={barWidth}
-                              height={Math.max(0, barH)}
-                              fill={fill}
-                              className={animate ? styles.barAnimate : undefined}
-                              style={animate ? { animationDelay: `${delay}ms` } : undefined}
-                            />
+                            <rect key={s.key} x={slotStart} y={barY} width={barThickness} height={Math.max(0, barH)} fill={barFill}
+                              className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                           );
                         })}
                       </g>
@@ -356,49 +392,48 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                     <g key={di}>
                       {series.map((s, si) => {
                         const v = Number(d[s.key]) || 0;
+                        const barFill = getBarColor?.(d, di, s.key) ?? s.color;
+                        const barOffset = slotStart + si * (barThickness + BAR_GAP);
+                        if (isHorizontal) {
+                          const barW = (v / (yMax - yMin)) * plotWidth;
+                          return (
+                            <rect key={s.key} x={0} y={barOffset} width={Math.max(0, barW)} height={barThickness} fill={barFill}
+                              className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
+                          );
+                        }
                         const barH = (v / (yMax - yMin)) * plotHeight;
                         const barY = plotHeight - barH;
-                        const barX = slotX + si * (barWidth + BAR_GAP);
-                        const fill = getBarColor?.(d, di, s.key) ?? s.color;
                         return (
-                          <rect
-                            key={s.key}
-                            x={barX}
-                            y={barY}
-                            width={barWidth}
-                            height={Math.max(0, barH)}
-                            fill={fill}
-                            className={animate ? styles.barAnimate : undefined}
-                            style={animate ? { animationDelay: `${delay}ms` } : undefined}
-                          />
+                          <rect key={s.key} x={barOffset} y={barY} width={barThickness} height={Math.max(0, barH)} fill={barFill}
+                            className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                         );
                       })}
                     </g>
                   );
                 })}
 
+                {/* Value axis labels */}
+                {valueLabels.map(({ pos, text }, i) =>
+                  isHorizontal ? (
+                    <text key={i} x={pos} y={plotHeight + 20} className={styles.axisLabel} textAnchor="middle" dominantBaseline="auto">{text}</text>
+                  ) : (
+                    <text key={i} x={-8} y={pos} className={styles.axisLabel} textAnchor="end" dominantBaseline="middle">{text}</text>
+                  ),
+                )}
 
-                {/* Y axis labels */}
-                {yLabels.map(({ y, text }, i) => (
-                  <text key={i} x={-8} y={y} className={styles.axisLabel} textAnchor="end" dominantBaseline="middle">
-                    {text}
-                  </text>
-                ))}
-
-                {/* X axis labels */}
+                {/* Category axis labels */}
                 {xKey &&
-                  data.map((d, i) => (
-                    <text
-                      key={i}
-                      x={(i + 0.5) * slotWidth}
-                      y={plotHeight + 20}
-                      className={styles.axisLabel}
-                      textAnchor="middle"
-                      dominantBaseline="auto"
-                    >
-                      {formatXLabel ? formatXLabel(d[xKey]) : String(d[xKey] ?? '')}
-                    </text>
-                  ))}
+                  data.map((d, i) =>
+                    isHorizontal ? (
+                      <text key={i} x={-8} y={(i + 0.5) * slotSize} className={styles.axisLabel} textAnchor="end" dominantBaseline="middle">
+                        {formatXLabel ? formatXLabel(d[xKey]) : String(d[xKey] ?? '')}
+                      </text>
+                    ) : (
+                      <text key={i} x={(i + 0.5) * slotSize} y={plotHeight + 20} className={styles.axisLabel} textAnchor="middle" dominantBaseline="auto">
+                        {formatXLabel ? formatXLabel(d[xKey]) : String(d[xKey] ?? '')}
+                      </text>
+                    ),
+                  )}
               </g>
             </svg>
 

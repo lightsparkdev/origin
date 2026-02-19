@@ -3813,6 +3813,24 @@ export default function Home() {
           />
         </div>
         <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Horizontal</p>
+          <Chart.Bar
+            data={[
+              { country: 'US', volume: 4200 },
+              { country: 'UK', volume: 2800 },
+              { country: 'EU', volume: 3100 },
+              { country: 'JP', volume: 1500 },
+              { country: 'BR', volume: 900 },
+            ]}
+            dataKey="volume"
+            xKey="country"
+            height={220}
+            grid
+            tooltip
+            orientation="horizontal"
+          />
+        </div>
+        <div style={{ width: 388 }}>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Single series + reference</p>
           <Chart.Bar
             data={[

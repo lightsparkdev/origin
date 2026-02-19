@@ -163,7 +163,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       }
     }
 
-    const fillOpacity = fillProp === true ? 0.12 : typeof fillProp === 'number' ? fillProp : 0.08;
+    const fillOpacity = fillProp === true ? 0.08 : typeof fillProp === 'number' ? fillProp : 0.06;
 
     // Chart area geometry
     const showXAxis = Boolean(xKey);
