@@ -2,41 +2,46 @@
  * Complete Icon Registry
  * 
  * All icons from the Figma design system.
- * Icons use the round-outlined-radius-3-stroke-1.5 variant by default.
+ * Icons use round-outlined-radius-3-stroke-1.5 by default.
+ * Arrows and chevrons use round-outlined-radius-0-stroke-1.5 for sharp directional elements.
  */
 
-// Arrows & Chevrons
-import { IconArrow } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrow';
+// Pure directional arrows (radius-0 for sharp geometric precision)
+import { IconArrow } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrow';
+import { IconArrowDown } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowDown';
+import { IconArrowDownLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowDownLeft';
+import { IconArrowDownRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowDownRight';
+import { IconArrowLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowLeft';
+import { IconArrowRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowRight';
+import { IconArrowUp } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowUp';
+import { IconArrowUpLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowUpLeft';
+import { IconArrowUpRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowUpRight';
+import { IconRedirectArrow } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconRedirectArrow';
+
+// Pure directional chevrons (radius-0 for sharp geometric precision)
+import { IconChevronBottom } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronBottom';
+import { IconChevronDownSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronDownSmall';
+import { IconChevronGrabberVertical } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronGrabberVertical';
+import { IconChevronLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronLeft';
+import { IconChevronLeftSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronLeftSmall';
+import { IconChevronRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronRight';
+import { IconChevronRightSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronRightSmall';
+import { IconChevronTop } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronTop';
+import { IconChevronTopSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronTopSmall';
+
+// Compound arrow variants (radius-3, have structural shapes)
 import { IconArrowBoxRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowBoxRight';
-import { IconArrowDown } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDown';
-import { IconArrowDownLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDownLeft';
-import { IconArrowDownRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDownRight';
 import { IconArrowDownSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDownSquare';
 import { IconArrowDownWall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDownWall';
 import { IconArrowInbox } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowInbox';
-import { IconArrowLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowLeft';
 import { IconArrowLeftSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowLeftSquare';
 import { IconArrowLoopDownLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowLoopDownLeft';
 import { IconArrowOutOfBox } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowOutOfBox';
-import { IconArrowRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowRight';
 import { IconArrowRightSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowRightSquare';
-import { IconArrowUp } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUp';
-import { IconArrowUpLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUpLeft';
-import { IconArrowUpRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUpRight';
 import { IconArrowUpSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUpSquare';
 import { IconArrowUpWall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUpWall';
 import { IconArrowsRepeat } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowsRepeat';
 import { IconArrowsRepeatCircle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowsRepeatCircle';
-import { IconChevronBottom } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronBottom';
-import { IconChevronDownSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronDownSmall';
-import { IconChevronGrabberVertical } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronGrabberVertical';
-import { IconChevronLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronLeft';
-import { IconChevronLeftSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronLeftSmall';
-import { IconChevronRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronRight';
-import { IconChevronRightSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronRightSmall';
-import { IconChevronTop } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronTop';
-import { IconChevronTopSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconChevronTopSmall';
-import { IconRedirectArrow } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRedirectArrow';
 import { IconRotate360Left } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRotate360Left';
 import { IconRotate360Right } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRotate360Right';
 
