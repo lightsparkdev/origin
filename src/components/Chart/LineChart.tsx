@@ -137,7 +137,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       }
     }
 
-    const fillOpacity = fillProp === true ? 0.15 : typeof fillProp === 'number' ? fillProp : 0.08;
+    const fillOpacity = fillProp === true ? 0.12 : typeof fillProp === 'number' ? fillProp : 0.08;
 
     // Chart area geometry
     const showXAxis = Boolean(xKey);
@@ -470,10 +470,10 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                       style={{ display: 'none' }}
                     />
                     {series.map((s, i) => (
-                      <rect
+                      <circle
                         key={s.key}
                         ref={(el) => { scrub.dotRefs.current[i] = el; }}
-                        x={0} y={0} width={8} height={8} rx={2}
+                        cx={0} cy={0} r={3}
                         fill={s.color}
                         className={styles.activeDot}
                         style={{ display: 'none' }}

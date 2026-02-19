@@ -58,7 +58,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       grid = false,
       tooltip: tooltipProp,
       curve = 'monotone',
-      fillOpacity = 0.5,
+      fillOpacity = 0.4,
       referenceLines,
       ariaLabel,
       onActiveChange,
@@ -307,7 +307,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                   )}
                   {topPaths.map((d, i) =>
                     d ? (
-                      <path key={`${series[i].key}-edge`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.6} strokeLinejoin="round" />
+                      <path key={`${series[i].key}-edge`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" />
                     ) : null,
                   )}
                 </g>
@@ -320,7 +320,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                   )}
                   {topPaths.map((d, i) =>
                     d ? (
-                      <path key={`${series[i].key}-edge-inactive`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.6} strokeLinejoin="round" />
+                      <path key={`${series[i].key}-edge-inactive`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" />
                     ) : null,
                   )}
                 </g>
@@ -333,10 +333,10 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                 />
 
                 {series.map((s, i) => (
-                  <rect
+                  <circle
                     key={s.key}
                     ref={(el) => { scrub.dotRefs.current[i] = el; }}
-                    x={0} y={0} width={8} height={8} rx={2}
+                    cx={0} cy={0} r={3}
                     fill={s.color}
                     className={styles.activeDot}
                     style={{ display: 'none' }}

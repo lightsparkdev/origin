@@ -54,7 +54,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
 
   const cursorRef = React.useRef<SVGLineElement>(null);
   const tooltipRef = React.useRef<HTMLDivElement>(null);
-  const dotRefs = React.useRef<(SVGRectElement | null)[]>([]);
+  const dotRefs = React.useRef<(SVGCircleElement | null)[]>([]);
   const clipLeftRef = React.useRef<SVGRectElement>(null);
   const clipRightRef = React.useRef<SVGRectElement>(null);
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
@@ -104,9 +104,9 @@ export function useChartScrub(opts: ChartScrubOptions) {
       const interps = interpolatorsRef.current;
       dotRefs.current.forEach((dot, i) => {
         if (dot && interps[i]) {
-          const cy = interps[i](clampedX);
-          dot.setAttribute('x', String(clampedX - 4));
-          dot.setAttribute('y', String(cy - 4));
+          const dotY = interps[i](clampedX);
+          dot.setAttribute('cx', String(clampedX));
+          dot.setAttribute('cy', String(dotY));
           dot.style.display = '';
         }
       });

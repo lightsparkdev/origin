@@ -12,7 +12,7 @@ export const Sparkline = React.forwardRef<HTMLDivElement, SparklineProps>(
       <Line
         ref={ref}
         height={40}
-        strokeWidth={1.5}
+        strokeWidth={1.25}
         animate={false}
         interactive={false}
         {...props}

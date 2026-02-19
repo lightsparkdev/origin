@@ -30,8 +30,6 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   stacked?: boolean;
   /** Stroke color shorthand for single-series charts using `dataKey`. */
   color?: string;
-  /** Corner radius on bar tops. */
-  barRadius?: number;
   /** Horizontal reference lines at specific y-values. */
   referenceLines?: ReferenceLine[];
   ariaLabel?: string;
@@ -44,8 +42,8 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   formatYLabel?: (value: number) => string;
 }
 
-const GROUP_GAP = 0.3;
-const BAR_GAP = 2;
+const GROUP_GAP = 0.12;
+const BAR_GAP = 1;
 
 export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
   function Bar(
@@ -59,7 +57,6 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       tooltip: tooltipProp,
       stacked = false,
       color,
-      barRadius = 2,
       referenceLines,
       ariaLabel,
       onActiveChange,
@@ -250,21 +247,33 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                   );
                 })}
 
+                {/* Hover highlight column */}
+                {activeIndex !== null && (
+                  <rect
+                    x={activeIndex * slotWidth + (slotWidth - groupWidth) / 2}
+                    y={0}
+                    width={groupWidth}
+                    height={plotHeight}
+                    fill="var(--text-primary)"
+                    fillOpacity={0.03}
+                  />
+                )}
+
                 {/* Bars */}
                 {data.map((d, di) => {
                   const slotX = di * slotWidth + (slotWidth - groupWidth) / 2;
-                  const isActive = activeIndex === null || activeIndex === di;
+                  const isDimmed = activeIndex !== null && activeIndex !== di;
+                  const delay = Math.min(di * 40, 400);
 
                   if (stacked) {
                     let cumY = 0;
                     return (
-                      <g key={di} opacity={isActive ? 1 : 0.4}>
+                      <g key={di} className={styles.barGroup} opacity={isDimmed ? 0.3 : 1}>
                         {series.map((s, si) => {
                           const v = Number(d[s.key]) || 0;
                           const barH = (v / (yMax - yMin)) * plotHeight;
                           cumY += v;
                           const barY = linearScale(cumY, yMin, yMax, plotHeight, 0);
-                          const isTop = si === series.length - 1;
                           return (
                             <rect
                               key={s.key}
@@ -272,8 +281,9 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                               y={barY}
                               width={barWidth}
                               height={Math.max(0, barH)}
-                              rx={isTop ? barRadius : 0}
                               fill={s.color}
+                              className={styles.barAnimate}
+                              style={{ animationDelay: `${delay}ms` }}
                             />
                           );
                         })}
@@ -282,7 +292,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                   }
 
                   return (
-                    <g key={di} opacity={isActive ? 1 : 0.4}>
+                    <g key={di} className={styles.barGroup} opacity={isDimmed ? 0.3 : 1}>
                       {series.map((s, si) => {
                         const v = Number(d[s.key]) || 0;
                         const barH = (v / (yMax - yMin)) * plotHeight;
@@ -295,8 +305,9 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                             y={barY}
                             width={barWidth}
                             height={Math.max(0, barH)}
-                            rx={barRadius}
                             fill={s.color}
+                            className={styles.barAnimate}
+                            style={{ animationDelay: `${delay}ms` }}
                           />
                         );
                       })}

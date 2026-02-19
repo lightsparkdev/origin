@@ -96,7 +96,7 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
       [ref, attachRef],
     );
 
-    const innerRatio = donutProp === true ? 0.6 : typeof donutProp === 'number' ? donutProp : 0;
+    const innerRatio = donutProp === true ? 0.65 : typeof donutProp === 'number' ? donutProp : 0;
 
     const total = React.useMemo(
       () => data.reduce((sum, d) => sum + Math.max(0, d.value), 0),
@@ -159,19 +159,30 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
-              {segments.map((seg, i) => (
-                <path
-                  key={i}
-                  d={arcPath(cx, cy, outerR, innerR, seg.startAngle, seg.endAngle)}
-                  fill={seg.color}
-                  fillOpacity={activeIndex === null || activeIndex === i ? 1 : 0.4}
-                  stroke="var(--surface-primary)"
-                  strokeWidth={1}
-                  onMouseEnter={() => setActiveIndex(i)}
-                  onMouseLeave={() => setActiveIndex(null)}
-                  style={{ cursor: 'pointer', transition: 'fill-opacity 150ms ease' }}
-                />
-              ))}
+              {segments.map((seg, i) => {
+                const midAngle = (seg.startAngle + seg.endAngle) / 2;
+                const tx = activeIndex === i ? Math.cos(midAngle) * 4 : 0;
+                const ty = activeIndex === i ? Math.sin(midAngle) * 4 : 0;
+                return (
+                  <path
+                    key={i}
+                    d={arcPath(cx, cy, outerR, innerR, seg.startAngle, seg.endAngle)}
+                    fill={seg.color}
+                    fillOpacity={activeIndex === null || activeIndex === i ? 1 : 0.35}
+                    stroke="var(--surface-primary)"
+                    strokeWidth={1.5}
+                    transform={`translate(${tx}, ${ty})`}
+                    onMouseEnter={() => setActiveIndex(i)}
+                    onMouseLeave={() => setActiveIndex(null)}
+                    className={styles.pieSegment}
+                    style={{
+                      cursor: 'pointer',
+                      transition: 'fill-opacity 150ms ease, transform 200ms cubic-bezier(0.33, 1, 0.68, 1)',
+                      animationDelay: `${i * 60}ms`,
+                    }}
+                  />
+                );
+              })}
 
               {donutProp && activeIndex !== null && tooltipEnabled && segments[activeIndex] && (
                 <g>

@@ -58,6 +58,7 @@
 .axisLabel {
   @include label-chart;
 
+  font-size: 11px;
   fill: var(--text-primary);
   fill-opacity: 0.4;
 }
@@ -68,11 +69,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-xs);
   background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
-  border-radius: var(--corner-radius-sm);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--corner-radius-xs);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   z-index: 10;
   white-space: nowrap;
 
@@ -99,7 +100,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4xs);
-  min-width: 120px;
+  min-width: 100px;
 }
 
 .tooltipItem {
@@ -109,9 +110,9 @@
 }
 
 .tooltipIndicator {
-  width: var(--spacing-xs);
-  height: var(--spacing-xs);
-  border-radius: var(--corner-radius-2xs);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
@@ -122,11 +123,10 @@
 }
 
 .tooltipValue {
-  @include body-sm;
+  @include tooltip-chart;
 
   color: var(--text-primary);
   margin-inline-start: auto;
-  font-variant-numeric: tabular-nums;
 }
 
 // Reference lines
@@ -141,16 +141,64 @@
   pointer-events: none;
 }
 
+// Bar chart
+
+.barGroup {
+  transition: opacity 150ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.barAnimate {
+  animation: bar-grow 500ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  transform-box: fill-box;
+  transform-origin: center bottom;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
 // Pie / Donut
 
 .pieRoot {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
+}
+
+.pieSegment {
+  opacity: 0;
+  animation: pie-fade-in 400ms ease both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+@keyframes pie-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .pieCenter {
-  @include label;
+  @include label-lg;
 
   fill: var(--text-primary);
   font-variant-numeric: tabular-nums;
@@ -165,7 +213,7 @@
 .pieLegend {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3xs);
+  gap: var(--spacing-2xs);
 }
 
 .pieLegendItem {
@@ -183,22 +231,21 @@
 .pieLegendDot {
   width: 8px;
   height: 8px;
-  border-radius: var(--corner-radius-2xs);
+  border-radius: 50%;
   flex-shrink: 0;
 }
 
 .pieLegendName {
-  @include body-sm;
+  @include label-sm;
 
   color: var(--text-secondary);
 }
 
 .pieLegendValue {
-  @include body-sm;
+  @include tooltip-chart;
 
   color: var(--text-primary);
   margin-inline-start: auto;
-  font-variant-numeric: tabular-nums;
 }
 
 %tooltipInlineBase {
