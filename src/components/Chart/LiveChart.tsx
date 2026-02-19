@@ -347,7 +347,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           if (next < 0.01 && target === 0) st.gridLabels.delete(key);
           else st.gridLabels.set(key, next);
         }
-        for (const [key, target] of targets) {
+        for (const [key] of targets) {
           if (!st.gridLabels.has(key)) st.gridLabels.set(key, 0.01);
         }
 

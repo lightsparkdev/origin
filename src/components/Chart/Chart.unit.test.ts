@@ -6,7 +6,7 @@
  * defensive guards, and numerical correctness.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   linearScale,
   niceTicks,
@@ -14,8 +14,11 @@ import {
   linearPath,
   monotoneInterpolator,
   linearInterpolator,
+  filerp,
+  stackData,
   type Point,
 } from './utils';
+import { resolveTooltipMode, resolveSeries, SERIES_COLORS } from './types';
 
 // ---------------------------------------------------------------------------
 // linearScale
@@ -353,5 +356,208 @@ describe('monotoneInterpolator', () => {
       { x: 50, y: 90 },
     ]);
     expect(interp(50)).toBe(10);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// resolveTooltipMode
+// ---------------------------------------------------------------------------
+
+describe('resolveTooltipMode', () => {
+  it('returns "off" for undefined', () => {
+    expect(resolveTooltipMode(undefined)).toBe('off');
+  });
+
+  it('returns "off" for false', () => {
+    expect(resolveTooltipMode(false)).toBe('off');
+  });
+
+  it('returns "detailed" for true', () => {
+    expect(resolveTooltipMode(true)).toBe('detailed');
+  });
+
+  it('returns "detailed" for "detailed"', () => {
+    expect(resolveTooltipMode('detailed')).toBe('detailed');
+  });
+
+  it('returns "simple" for "simple"', () => {
+    expect(resolveTooltipMode('simple')).toBe('simple');
+  });
+
+  it('returns "compact" for "compact"', () => {
+    expect(resolveTooltipMode('compact')).toBe('compact');
+  });
+
+  it('returns "custom" for a render function', () => {
+    const renderFn = () => null;
+    expect(resolveTooltipMode(renderFn)).toBe('custom');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// resolveSeries
+// ---------------------------------------------------------------------------
+
+describe('resolveSeries', () => {
+  it('resolves a series array with all fields', () => {
+    const result = resolveSeries(
+      [{ key: 'revenue', label: 'Revenue', color: 'red', style: 'dashed' }],
+      undefined,
+      undefined,
+    );
+    expect(result).toEqual([
+      { key: 'revenue', label: 'Revenue', color: 'red', style: 'dashed' },
+    ]);
+  });
+
+  it('fills defaults for omitted series fields', () => {
+    const result = resolveSeries([{ key: 'a' }, { key: 'b' }], undefined, undefined);
+    expect(result).toEqual([
+      { key: 'a', label: 'a', color: SERIES_COLORS[0], style: 'solid' },
+      { key: 'b', label: 'b', color: SERIES_COLORS[1], style: 'solid' },
+    ]);
+  });
+
+  it('cycles through SERIES_COLORS when index exceeds palette length', () => {
+    const series = SERIES_COLORS.map((_, i) => ({ key: `s${i}` }));
+    series.push({ key: 'extra' });
+    const result = resolveSeries(series, undefined, undefined);
+    expect(result[result.length - 1].color).toBe(SERIES_COLORS[0]);
+  });
+
+  it('falls back to dataKey when series is undefined', () => {
+    const result = resolveSeries(undefined, 'value', undefined);
+    expect(result).toEqual([
+      { key: 'value', label: 'value', color: SERIES_COLORS[0], style: 'solid' },
+    ]);
+  });
+
+  it('uses provided color with dataKey fallback', () => {
+    const result = resolveSeries(undefined, 'value', 'var(--custom)');
+    expect(result[0].color).toBe('var(--custom)');
+  });
+
+  it('prefers series over dataKey when both are provided', () => {
+    const result = resolveSeries(
+      [{ key: 'from-series' }],
+      'from-dataKey',
+      undefined,
+    );
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('from-series');
+  });
+
+  it('returns empty array and warns when neither series nor dataKey is provided', () => {
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const result = resolveSeries(undefined, undefined, undefined);
+    expect(result).toEqual([]);
+    expect(spy).toHaveBeenCalledOnce();
+    spy.mockRestore();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// filerp (frame-rate-independent lerp)
+// ---------------------------------------------------------------------------
+
+describe('filerp', () => {
+  it('returns target when speed is 1', () => {
+    expect(filerp(0, 100, 1, 16.67)).toBe(100);
+    expect(filerp(50, 200, 1, 33)).toBe(200);
+  });
+
+  it('moves toward target (not away)', () => {
+    const result = filerp(0, 100, 0.5, 16.67);
+    expect(result).toBeGreaterThan(0);
+    expect(result).toBeLessThan(100);
+
+    const resultNeg = filerp(100, 0, 0.5, 16.67);
+    expect(resultNeg).toBeLessThan(100);
+    expect(resultNeg).toBeGreaterThan(0);
+  });
+
+  it('larger dt means more progress', () => {
+    const short = filerp(0, 100, 0.5, 8);
+    const long = filerp(0, 100, 0.5, 32);
+    expect(long).toBeGreaterThan(short);
+  });
+
+  it('larger speed means more progress', () => {
+    const slow = filerp(0, 100, 0.1, 16.67);
+    const fast = filerp(0, 100, 0.9, 16.67);
+    expect(fast).toBeGreaterThan(slow);
+  });
+
+  it('returns current when speed is 0', () => {
+    expect(filerp(42, 100, 0, 16.67)).toBe(42);
+    expect(filerp(42, 100, 0, 100)).toBe(42);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// stackData
+// ---------------------------------------------------------------------------
+
+describe('stackData', () => {
+  it('correctly computes cumulative baselines and toplines', () => {
+    const data = [
+      { a: 10, b: 20, c: 30 },
+      { a: 5, b: 15, c: 25 },
+    ];
+    const result = stackData(data, ['a', 'b', 'c']);
+
+    expect(result).toHaveLength(3);
+    // First series: baseline 0, topline = values
+    expect(result[0].topline).toEqual([10, 5]);
+    // Second series: baseline = first topline, topline = cumulative
+    expect(result[1].baseline).toEqual([10, 5]);
+    expect(result[1].topline).toEqual([30, 20]);
+    // Third series
+    expect(result[2].baseline).toEqual([30, 20]);
+    expect(result[2].topline).toEqual([60, 45]);
+  });
+
+  it('first series baseline is all zeros', () => {
+    const data = [{ x: 1 }, { x: 2 }, { x: 3 }];
+    const result = stackData(data, ['x']);
+    expect(result[0].baseline).toEqual([0, 0, 0]);
+  });
+
+  it('second series baseline equals first series topline', () => {
+    const data = [
+      { a: 3, b: 7 },
+      { a: 10, b: 20 },
+    ];
+    const result = stackData(data, ['a', 'b']);
+    expect(result[1].baseline).toEqual(result[0].topline);
+  });
+
+  it('handles zero values', () => {
+    const data = [
+      { a: 0, b: 5 },
+      { a: 10, b: 0 },
+    ];
+    const result = stackData(data, ['a', 'b']);
+    expect(result[0].topline).toEqual([0, 10]);
+    expect(result[1].baseline).toEqual([0, 10]);
+    expect(result[1].topline).toEqual([5, 10]);
+  });
+
+  it('handles single-key input', () => {
+    const data = [{ v: 100 }, { v: 200 }];
+    const result = stackData(data, ['v']);
+    expect(result).toHaveLength(1);
+    expect(result[0].key).toBe('v');
+    expect(result[0].baseline).toEqual([0, 0]);
+    expect(result[0].topline).toEqual([100, 200]);
+  });
+
+  it('empty data returns empty arrays', () => {
+    const result = stackData([], ['a', 'b']);
+    expect(result).toHaveLength(2);
+    for (const band of result) {
+      expect(band.baseline).toEqual([]);
+      expect(band.topline).toEqual([]);
+    }
   });
 });
