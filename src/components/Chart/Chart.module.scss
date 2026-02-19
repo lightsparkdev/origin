@@ -141,6 +141,66 @@
   pointer-events: none;
 }
 
+// Pie / Donut
+
+.pieRoot {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.pieCenter {
+  @include label;
+
+  fill: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.pieCenterLabel {
+  @include label-chart;
+
+  fill: var(--text-secondary);
+}
+
+.pieLegend {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3xs);
+}
+
+.pieLegendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: default;
+  transition: opacity 150ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.pieLegendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--corner-radius-2xs);
+  flex-shrink: 0;
+}
+
+.pieLegendName {
+  @include body-sm;
+
+  color: var(--text-secondary);
+}
+
+.pieLegendValue {
+  @include body-sm;
+
+  color: var(--text-primary);
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+}
+
 %tooltipInlineBase {
   @include tooltip-chart;
 

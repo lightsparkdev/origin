@@ -3821,6 +3821,118 @@ export default function Home() {
           />
         </div>
       </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Bar Charts</h3>
+
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        {/* Grouped bar */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Grouped bar
+          </p>
+          <Chart.Bar
+            data={[
+              { month: 'Jan', incoming: 400, outgoing: 240 },
+              { month: 'Feb', incoming: 500, outgoing: 300 },
+              { month: 'Mar', incoming: 450, outgoing: 280 },
+              { month: 'Apr', incoming: 600, outgoing: 350 },
+              { month: 'May', incoming: 550, outgoing: 320 },
+            ]}
+            series={[
+              { key: 'incoming', label: 'Incoming' },
+              { key: 'outgoing', label: 'Outgoing' },
+            ]}
+            xKey="month"
+            height={220}
+            grid
+            tooltip
+          />
+        </div>
+
+        {/* Stacked bar */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Stacked bar
+          </p>
+          <Chart.Bar
+            data={[
+              { q: 'Q1', payments: 400, transfers: 200, fees: 50 },
+              { q: 'Q2', payments: 500, transfers: 250, fees: 60 },
+              { q: 'Q3', payments: 450, transfers: 280, fees: 55 },
+              { q: 'Q4', payments: 600, transfers: 300, fees: 70 },
+            ]}
+            series={[
+              { key: 'payments', label: 'Payments', color: 'var(--surface-blue-strong)' },
+              { key: 'transfers', label: 'Transfers', color: 'var(--surface-purple-strong)' },
+              { key: 'fees', label: 'Fees', color: 'var(--surface-green-strong)' },
+            ]}
+            xKey="q"
+            height={220}
+            grid
+            tooltip
+            stacked
+          />
+        </div>
+
+        {/* Single series bar */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Single series with reference line
+          </p>
+          <Chart.Bar
+            data={[
+              { day: 'Mon', count: 12 },
+              { day: 'Tue', count: 18 },
+              { day: 'Wed', count: 15 },
+              { day: 'Thu', count: 22 },
+              { day: 'Fri', count: 20 },
+            ]}
+            dataKey="count"
+            xKey="day"
+            height={220}
+            grid
+            tooltip
+            referenceLines={[{ value: 17, label: 'Average' }]}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Pie / Donut Charts</h3>
+
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
+        {/* Donut */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Donut with legend
+          </p>
+          <Chart.Pie
+            data={[
+              { name: 'Payments', value: 4200, color: 'var(--surface-blue-strong)' },
+              { name: 'Transfers', value: 2800, color: 'var(--surface-purple-strong)' },
+              { name: 'Fees', value: 650, color: 'var(--surface-green-strong)' },
+              { name: 'Refunds', value: 320, color: 'var(--surface-pink-strong)' },
+            ]}
+            height={200}
+            donut
+          />
+        </div>
+
+        {/* Pie */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            Pie chart
+          </p>
+          <Chart.Pie
+            data={[
+              { name: 'USD', value: 58 },
+              { name: 'EUR', value: 22 },
+              { name: 'GBP', value: 12 },
+              { name: 'Other', value: 8 },
+            ]}
+            height={200}
+          />
+        </div>
+      </div>
     </main>
   );
 }

@@ -62,6 +62,9 @@ export type {
   ReferenceLine as ChartReferenceLine,
   SparklineProps as ChartSparklineProps,
   StackedAreaChartProps as ChartStackedAreaProps,
+  BarChartProps as ChartBarProps,
+  PieChartProps as ChartPieProps,
+  PieSegment as ChartPieSegment,
 } from './components/Chart';
 
 // Simple components (direct exports)
