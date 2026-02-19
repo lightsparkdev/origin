@@ -74,7 +74,7 @@ const SparklineBar = React.forwardRef<HTMLDivElement, SparklineProps>(
                   key={i}
                   x={i * barWidth}
                   y={height - barH}
-                  width={Math.max(0, barWidth - 0.5)}
+                  width={Math.max(0, barWidth - 1)}
                   height={Math.max(0, barH)}
                   fill={barColor}
                 />
