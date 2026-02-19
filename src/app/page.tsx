@@ -3871,7 +3871,7 @@ export default function Home() {
         <div style={{ width: 500 }}>
           <Chart.Uptime
             data={Array.from({ length: 90 }, (_, i) => ({
-              status: (Math.random() > 0.05 ? 'up' : Math.random() > 0.5 ? 'degraded' : 'down') as 'up' | 'down' | 'degraded',
+              status: (i === 12 ? 'down' : i === 34 ? 'degraded' : i === 67 ? 'down' : i === 45 ? 'degraded' : 'up') as 'up' | 'down' | 'degraded',
               label: `Day ${i + 1}`,
             }))}
           />
@@ -3888,10 +3888,10 @@ export default function Home() {
             showRowLabels
             showColumnLabels
             data={Array.from({ length: 20 }, (_, ci) =>
-              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => ({
+              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, di) => ({
                 row: day,
                 col: `W${ci + 1}`,
-                value: Math.floor(Math.random() * 10),
+                value: ((ci * 7 + di * 3 + 5) % 10),
               })),
             ).flat()}
           />
@@ -3905,10 +3905,10 @@ export default function Home() {
             cellGap={1}
             color="var(--color-green-500)"
             data={Array.from({ length: 24 }, (_, ci) =>
-              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => ({
+              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, di) => ({
                 row: day,
                 col: `${ci}h`,
-                value: Math.floor(Math.random() * 20),
+                value: ((ci * 3 + di * 7 + 2) % 19),
               })),
             ).flat()}
           />
