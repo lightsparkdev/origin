@@ -3498,219 +3498,32 @@ export default function Home() {
         </span>
       </div>
 
-      <h2 style={{ marginBottom: '1rem' }}>Chart Component</h2>
+      <h2 style={{ marginBottom: '1rem' }}>Charts</h2>
 
-      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
-        {/* Sparkline */}
-        <div style={{ width: 388 }}>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-              { date: 'Aug 17', value: 210 },
-              { date: 'Aug 18', value: 205 },
-              { date: 'Aug 19', value: 215 },
-              { date: 'Aug 20', value: 220 },
-              { date: 'Aug 21', value: 223 },
-            ]}
-            dataKey="value"
-            height={170}
-            fadeLeft
-          />
-        </div>
-
-        {/* Single-series with simple tooltip */}
-        <div style={{ width: 388 }}>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-              { date: 'Aug 17', value: 210 },
-              { date: 'Aug 18', value: 205 },
-              { date: 'Aug 19', value: 215 },
-              { date: 'Aug 20', value: 220 },
-              { date: 'Aug 21', value: 223 },
-            ]}
-            dataKey="value"
-            xKey="date"
-            height={250}
-            grid
-            tooltip="simple"
-          />
-        </div>
-
-        {/* Full chart */}
-        <div style={{ width: 500 }}>
-          <Chart.Line
-            data={[
-              { date: 'Mon', incoming: 120, outgoing: 80 },
-              { date: 'Tue', incoming: 150, outgoing: 95 },
-              { date: 'Wed', incoming: 140, outgoing: 110 },
-              { date: 'Thu', incoming: 180, outgoing: 100 },
-              { date: 'Fri', incoming: 160, outgoing: 130 },
-              { date: 'Sat', incoming: 200, outgoing: 120 },
-              { date: 'Sun', incoming: 190, outgoing: 140 },
-            ]}
-            series={[
-              { key: 'incoming', label: 'Incoming' },
-              { key: 'outgoing', label: 'Outgoing' },
-            ]}
-            xKey="date"
-            height={250}
-            grid
-            tooltip
-          />
-        </div>
-
-        {/* Full chart with fadeLeft */}
-        <div style={{ width: 500 }}>
-          <Chart.Line
-            data={[
-              { date: 'Mon', incoming: 120, outgoing: 80 },
-              { date: 'Tue', incoming: 150, outgoing: 95 },
-              { date: 'Wed', incoming: 140, outgoing: 110 },
-              { date: 'Thu', incoming: 180, outgoing: 100 },
-              { date: 'Fri', incoming: 160, outgoing: 130 },
-              { date: 'Sat', incoming: 200, outgoing: 120 },
-              { date: 'Sun', incoming: 190, outgoing: 140 },
-            ]}
-            series={[
-              { key: 'incoming', label: 'Incoming' },
-              { key: 'outgoing', label: 'Outgoing' },
-            ]}
-            xKey="date"
-            height={250}
-            grid
-            tooltip
-            fadeLeft={60}
-          />
-        </div>
-      </div>
-
-      <h3 style={{ marginBottom: '0.75rem' }}>Tooltip Variants</h3>
-
-      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
-        {/* Simple: timestamp only */}
-        <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&quot;simple&quot;
-          </p>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-            ]}
-            dataKey="value"
-            xKey="date"
-            height={200}
-            grid
-            tooltip="simple"
-          />
-        </div>
-
-        {/* Compact: date + value, no labels */}
-        <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&quot;compact&quot;
-          </p>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-            ]}
-            dataKey="value"
-            xKey="date"
-            height={200}
-            grid
-            tooltip="compact"
-          />
-        </div>
-
-        {/* Detailed (default): series rows */}
-        <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&quot;detailed&quot; (or true)
-          </p>
-          <Chart.Line
-            data={[
-              { date: 'Mon', incoming: 120, outgoing: 80 },
-              { date: 'Tue', incoming: 150, outgoing: 95 },
-              { date: 'Wed', incoming: 140, outgoing: 110 },
-              { date: 'Thu', incoming: 180, outgoing: 100 },
-              { date: 'Fri', incoming: 160, outgoing: 130 },
-            ]}
-            series={[
-              { key: 'incoming', label: 'Incoming' },
-              { key: 'outgoing', label: 'Outgoing' },
-            ]}
-            xKey="date"
-            height={200}
-            grid
-            tooltip="detailed"
-          />
-        </div>
-
-        {/* Custom render function */}
-        <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&#123;renderFn&#125;
-          </p>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-            ]}
-            dataKey="value"
-            xKey="date"
-            height={200}
-            grid
-            tooltip={(datum) => (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
-                  {String(datum.date)}
-                </span>
-                <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--text-primary)' }}>
-                  ${Number(datum.value).toLocaleString()}
-                </span>
-              </div>
-            )}
-          />
-        </div>
-      </div>
-
-      <h3 style={{ marginBottom: '0.75rem' }}>New Chart Variants</h3>
-
+      <h3 style={{ marginBottom: '0.75rem' }}>Line</h3>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-        {/* Area fill */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            fill (area mode)
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Multi-series with grid</p>
+          <Chart.Line
+            data={[
+              { date: 'Mon', incoming: 120, outgoing: 80 },
+              { date: 'Tue', incoming: 150, outgoing: 95 },
+              { date: 'Wed', incoming: 140, outgoing: 110 },
+              { date: 'Thu', incoming: 180, outgoing: 100 },
+              { date: 'Fri', incoming: 160, outgoing: 130 },
+            ]}
+            series={[
+              { key: 'incoming', label: 'Incoming' },
+              { key: 'outgoing', label: 'Outgoing' },
+            ]}
+            xKey="date"
+            height={200}
+            grid
+            tooltip
+          />
+        </div>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Area fill + compact tooltip</p>
           <Chart.Line
             data={[
               { date: 'Mon', value: 120 },
@@ -3729,27 +3542,8 @@ export default function Home() {
             tooltip="compact"
           />
         </div>
-
-        {/* Sparkline */}
-        <div style={{ width: 200 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Chart.Sparkline
-          </p>
-          <Chart.Sparkline
-            data={[
-              { v: 10 }, { v: 15 }, { v: 12 }, { v: 18 },
-              { v: 14 }, { v: 22 }, { v: 19 }, { v: 25 },
-            ]}
-            dataKey="v"
-            color="var(--surface-blue-strong)"
-          />
-        </div>
-
-        {/* Dashed series */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Dashed + dotted series
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Dashed + dotted series</p>
           <Chart.Line
             data={[
               { date: 'Jan', actual: 100, projected: 110, target: 130 },
@@ -3769,12 +3563,8 @@ export default function Home() {
             tooltip
           />
         </div>
-
-        {/* Reference lines */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Reference lines
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Reference lines</p>
           <Chart.Line
             data={[
               { date: 'Mon', value: 85 },
@@ -3794,12 +3584,70 @@ export default function Home() {
             ]}
           />
         </div>
+      </div>
 
-        {/* Stacked area */}
+      <h3 style={{ marginBottom: '0.75rem' }}>Tooltip Modes</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>simple</p>
+          <Chart.Line
+            data={[
+              { d: 'Aug 10', v: 180 }, { d: 'Aug 11', v: 185 }, { d: 'Aug 12', v: 182 },
+              { d: 'Aug 13', v: 188 }, { d: 'Aug 14', v: 190 }, { d: 'Aug 15', v: 195 },
+            ]}
+            dataKey="v" xKey="d" height={160} grid tooltip="simple"
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>compact</p>
+          <Chart.Line
+            data={[
+              { d: 'Aug 10', v: 180 }, { d: 'Aug 11', v: 185 }, { d: 'Aug 12', v: 182 },
+              { d: 'Aug 13', v: 188 }, { d: 'Aug 14', v: 190 }, { d: 'Aug 15', v: 195 },
+            ]}
+            dataKey="v" xKey="d" height={160} grid tooltip="compact"
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>detailed</p>
+          <Chart.Line
+            data={[
+              { d: 'Mon', a: 120, b: 80 }, { d: 'Tue', a: 150, b: 95 },
+              { d: 'Wed', a: 140, b: 110 }, { d: 'Thu', a: 180, b: 100 },
+            ]}
+            series={[{ key: 'a', label: 'Incoming' }, { key: 'b', label: 'Outgoing' }]}
+            xKey="d" height={160} grid tooltip="detailed"
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Sparkline</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '2rem' }}>
+        <div style={{ width: 160 }}>
+          <Chart.Sparkline
+            data={[{ v: 10 }, { v: 15 }, { v: 12 }, { v: 18 }, { v: 14 }, { v: 22 }, { v: 19 }, { v: 25 }]}
+            dataKey="v"
+          />
+        </div>
+        <div style={{ width: 160 }}>
+          <Chart.Sparkline
+            data={[{ v: 25 }, { v: 22 }, { v: 24 }, { v: 18 }, { v: 20 }, { v: 15 }, { v: 12 }, { v: 10 }]}
+            dataKey="v"
+            color="var(--color-blue-500)"
+          />
+        </div>
+        <div style={{ width: 160 }}>
+          <Chart.Sparkline
+            data={[{ v: 10 }, { v: 12 }, { v: 11 }, { v: 14 }, { v: 13 }, { v: 16 }, { v: 15 }, { v: 18 }]}
+            dataKey="v"
+            color="var(--color-green-500)"
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Stacked Area</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
         <div style={{ width: 500 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Chart.StackedArea
-          </p>
           <Chart.StackedArea
             data={[
               { month: 'Jan', payments: 400, transfers: 200, fees: 50 },
@@ -3822,14 +3670,10 @@ export default function Home() {
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Bar Charts</h3>
-
+      <h3 style={{ marginBottom: '0.75rem' }}>Bar</h3>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-        {/* Grouped bar */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Grouped bar
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Grouped</p>
           <Chart.Bar
             data={[
               { month: 'Jan', incoming: 400, outgoing: 240 },
@@ -3842,18 +3686,11 @@ export default function Home() {
               { key: 'incoming', label: 'Incoming' },
               { key: 'outgoing', label: 'Outgoing' },
             ]}
-            xKey="month"
-            height={220}
-            grid
-            tooltip
+            xKey="month" height={220} grid tooltip
           />
         </div>
-
-        {/* Stacked bar */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Stacked bar
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Stacked</p>
           <Chart.Bar
             data={[
               { q: 'Q1', payments: 400, transfers: 200, fees: 50 },
@@ -3866,44 +3703,26 @@ export default function Home() {
               { key: 'transfers', label: 'Transfers', color: 'var(--color-blue-400)' },
               { key: 'fees', label: 'Fees', color: 'var(--color-blue-200)' },
             ]}
-            xKey="q"
-            height={220}
-            grid
-            tooltip
-            stacked
+            xKey="q" height={220} grid tooltip stacked
           />
         </div>
-
-        {/* Single series bar */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Single series with reference line
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Single series + reference</p>
           <Chart.Bar
             data={[
-              { day: 'Mon', count: 12 },
-              { day: 'Tue', count: 18 },
-              { day: 'Wed', count: 15 },
-              { day: 'Thu', count: 22 },
-              { day: 'Fri', count: 20 },
+              { day: 'Mon', count: 12 }, { day: 'Tue', count: 18 },
+              { day: 'Wed', count: 15 }, { day: 'Thu', count: 22 }, { day: 'Fri', count: 20 },
             ]}
-            dataKey="count"
-            xKey="day"
-            height={220}
-            grid
-            tooltip
+            dataKey="count" xKey="day" height={220} grid tooltip
             referenceLines={[{ value: 17, label: 'Average' }]}
           />
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Composed (Bar + Line, Dual Y-Axes)</h3>
-
+      <h3 style={{ marginBottom: '0.75rem' }}>Composed</h3>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
         <div style={{ width: 500 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Revenue bars + conversion rate line
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Bar + line, dual Y-axes</p>
           <Chart.Composed
             data={[
               { month: 'Jan', revenue: 4200, rate: 3.2 },
@@ -3917,23 +3736,16 @@ export default function Home() {
               { key: 'revenue', label: 'Revenue', type: 'bar', color: 'var(--color-blue-300)' },
               { key: 'rate', label: 'Conversion %', type: 'line', axis: 'right', color: 'var(--text-primary)' },
             ]}
-            xKey="month"
-            height={250}
-            grid
-            tooltip
+            xKey="month" height={250} grid tooltip
             formatYLabelRight={(v) => `${v}%`}
           />
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Pie / Donut Charts</h3>
-
+      <h3 style={{ marginBottom: '0.75rem' }}>Pie / Donut</h3>
       <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
-        {/* Donut */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Donut with legend
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Donut with legend</p>
           <Chart.Pie
             data={[
               { name: 'Payments', value: 4200, color: 'var(--color-blue-700)' },
@@ -3945,12 +3757,8 @@ export default function Home() {
             donut
           />
         </div>
-
-        {/* Pie */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            Pie chart
-          </p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Pie</p>
           <Chart.Pie
             data={[
               { name: 'USD', value: 58 },
