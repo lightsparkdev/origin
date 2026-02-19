@@ -13,7 +13,6 @@ import {
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
   PAD_LEFT_AXIS,
-  resolveTooltipMode,
   resolveSeries,
 } from './types';
 import styles from './Chart.module.scss';
@@ -72,10 +71,16 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
-    const tooltipMode = resolveTooltipMode(tooltipProp);
-    const showTooltip = tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
+    const tooltipMode = tooltipRender
+      ? 'custom' as const
+      : tooltipProp === 'detailed'
+        ? 'detailed' as const
+        : tooltipProp
+          ? 'value' as const
+          : 'off' as const;
+    const showTooltip = tooltipMode !== 'off';
 
     const mergedRef = React.useCallback(
       (node: HTMLDivElement | null) => {
@@ -262,13 +267,12 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                 {/* Bars */}
                 {data.map((d, di) => {
                   const slotX = di * slotWidth + (slotWidth - groupWidth) / 2;
-                  const isDimmed = activeIndex !== null && activeIndex !== di;
                   const delay = Math.min(di * 40, 400);
 
                   if (stacked) {
                     let cumY = 0;
                     return (
-                      <g key={di} className={styles.barGroup} opacity={isDimmed ? 0.3 : 1}>
+                      <g key={di}>
                         {series.map((s, si) => {
                           const v = Number(d[s.key]) || 0;
                           const barH = (v / (yMax - yMin)) * plotHeight;
@@ -292,7 +296,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                   }
 
                   return (
-                    <g key={di} className={styles.barGroup} opacity={isDimmed ? 0.3 : 1}>
+                    <g key={di}>
                       {series.map((s, si) => {
                         const v = Number(d[s.key]) || 0;
                         const barH = (v / (yMax - yMin)) * plotHeight;
@@ -314,6 +318,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                     </g>
                   );
                 })}
+
 
                 {/* Y axis labels */}
                 {yLabels.map(({ y, text }, i) => (
@@ -376,8 +381,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                           );
                         })}
                         {stacked && series.length > 1 && (
-                          <div className={styles.tooltipItem} style={{ borderTop: '1px solid var(--border-tertiary)', paddingTop: 4, marginTop: 2 }}>
-                            <span className={styles.tooltipIndicator} style={{ visibility: 'hidden' }} />
+                          <div className={clsx(styles.tooltipItem, styles.tooltipFooter)}>
                             <span className={styles.tooltipName}>Total</span>
                             <span className={styles.tooltipValue}>
                               {fmtValue(series.reduce((sum, s) => sum + (Number(data[activeIndex!][s.key]) || 0), 0))}

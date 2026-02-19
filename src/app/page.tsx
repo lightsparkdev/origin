@@ -3810,9 +3810,9 @@ export default function Home() {
               { month: 'Jun', payments: 550, transfers: 350, fees: 80 },
             ]}
             series={[
-              { key: 'payments', label: 'Payments', color: 'var(--surface-blue-strong)' },
-              { key: 'transfers', label: 'Transfers', color: 'var(--surface-purple-strong)' },
-              { key: 'fees', label: 'Fees', color: 'var(--surface-green-strong)' },
+              { key: 'payments', label: 'Payments', color: 'var(--color-blue-700)' },
+              { key: 'transfers', label: 'Transfers', color: 'var(--color-blue-400)' },
+              { key: 'fees', label: 'Fees', color: 'var(--color-blue-200)' },
             ]}
             xKey="month"
             height={250}
@@ -3862,9 +3862,9 @@ export default function Home() {
               { q: 'Q4', payments: 600, transfers: 300, fees: 70 },
             ]}
             series={[
-              { key: 'payments', label: 'Payments', color: 'var(--surface-blue-strong)' },
-              { key: 'transfers', label: 'Transfers', color: 'var(--surface-purple-strong)' },
-              { key: 'fees', label: 'Fees', color: 'var(--surface-green-strong)' },
+              { key: 'payments', label: 'Payments', color: 'var(--color-blue-700)' },
+              { key: 'transfers', label: 'Transfers', color: 'var(--color-blue-400)' },
+              { key: 'fees', label: 'Fees', color: 'var(--color-blue-200)' },
             ]}
             xKey="q"
             height={220}
@@ -3907,10 +3907,10 @@ export default function Home() {
           </p>
           <Chart.Pie
             data={[
-              { name: 'Payments', value: 4200, color: 'var(--surface-blue-strong)' },
-              { name: 'Transfers', value: 2800, color: 'var(--surface-purple-strong)' },
-              { name: 'Fees', value: 650, color: 'var(--surface-green-strong)' },
-              { name: 'Refunds', value: 320, color: 'var(--surface-pink-strong)' },
+              { name: 'Payments', value: 4200, color: 'var(--color-blue-700)' },
+              { name: 'Transfers', value: 2800, color: 'var(--color-blue-500)' },
+              { name: 'Fees', value: 650, color: 'var(--color-blue-300)' },
+              { name: 'Refunds', value: 320, color: 'var(--color-blue-100)' },
             ]}
             height={200}
             donut

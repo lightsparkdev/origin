@@ -168,7 +168,7 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
                     key={i}
                     d={arcPath(cx, cy, outerR, innerR, seg.startAngle, seg.endAngle)}
                     fill={seg.color}
-                    fillOpacity={activeIndex === null || activeIndex === i ? 1 : 0.35}
+                    fillOpacity={1}
                     stroke="var(--surface-primary)"
                     strokeWidth={1.5}
                     transform={`translate(${tx}, ${ty})`}
@@ -177,7 +177,7 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
                     className={styles.pieSegment}
                     style={{
                       cursor: 'pointer',
-                      transition: 'fill-opacity 150ms ease, transform 200ms cubic-bezier(0.33, 1, 0.68, 1)',
+                      transition: 'transform 200ms cubic-bezier(0.33, 1, 0.68, 1)',
                       animationDelay: `${i * 60}ms`,
                     }}
                   />
@@ -214,7 +214,7 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
                     className={styles.pieLegendItem}
                     onMouseEnter={() => setActiveIndex(i)}
                     onMouseLeave={() => setActiveIndex(null)}
-                    style={{ opacity: activeIndex === null || activeIndex === i ? 1 : 0.4 }}
+                    style={undefined}
                   >
                     <span className={styles.pieLegendDot} style={{ backgroundColor: seg.color }} />
                     <span className={styles.pieLegendName}>{seg.name}</span>

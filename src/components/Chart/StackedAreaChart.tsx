@@ -259,14 +259,6 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
-              <defs>
-                <clipPath id={`${uid}-clip-active`}>
-                  <rect ref={scrub.clipLeftRef} x={0} y={-PAD_TOP} width={plotWidth + PAD_RIGHT} height={height} />
-                </clipPath>
-                <clipPath id={`${uid}-clip-inactive`}>
-                  <rect ref={scrub.clipRightRef} x={plotWidth + PAD_RIGHT} y={-PAD_TOP} width={0} height={height} />
-                </clipPath>
-              </defs>
 
               <g transform={`translate(${padLeft},${PAD_TOP})`}>
                 {grid &&
@@ -298,32 +290,17 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                   );
                 })}
 
-                {/* Stacked area bands — rendered bottom to top, active color clipped left */}
-                <g clipPath={`url(#${uid}-clip-active)`}>
-                  {areaPaths.map((d, i) =>
-                    d ? (
-                      <path key={`${series[i].key}-area`} d={d} fill={series[i].color} fillOpacity={fillOpacity} stroke="none" />
-                    ) : null,
-                  )}
-                  {topPaths.map((d, i) =>
-                    d ? (
-                      <path key={`${series[i].key}-edge`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" />
-                    ) : null,
-                  )}
-                </g>
-                {/* Inactive muted version */}
-                <g clipPath={`url(#${uid}-clip-inactive)`} opacity={0.4}>
-                  {areaPaths.map((d, i) =>
-                    d ? (
-                      <path key={`${series[i].key}-area-inactive`} d={d} fill={series[i].color} fillOpacity={fillOpacity} stroke="none" />
-                    ) : null,
-                  )}
-                  {topPaths.map((d, i) =>
-                    d ? (
-                      <path key={`${series[i].key}-edge-inactive`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" />
-                    ) : null,
-                  )}
-                </g>
+                {/* Stacked area bands */}
+                {areaPaths.map((d, i) =>
+                  d ? (
+                    <path key={`${series[i].key}-area`} d={d} fill={series[i].color} fillOpacity={fillOpacity} stroke="none" />
+                  ) : null,
+                )}
+                {topPaths.map((d, i) =>
+                  d ? (
+                    <path key={`${series[i].key}-edge`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" />
+                  ) : null,
+                )}
 
                 <line
                   ref={scrub.cursorRef}
@@ -404,8 +381,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                             </div>
                           );
                         })}
-                        <div className={styles.tooltipItem} style={{ borderTop: '1px solid var(--border-tertiary)', paddingTop: 4, marginTop: 2 }}>
-                          <span className={styles.tooltipIndicator} style={{ visibility: 'hidden' }} />
+                        <div className={clsx(styles.tooltipItem, styles.tooltipFooter)}>
                           <span className={styles.tooltipName}>Total</span>
                           <span className={styles.tooltipValue}>
                             {fmtValue(series.reduce((sum, s) => sum + (Number(data[scrub.activeIndex!][s.key]) || 0), 0))}

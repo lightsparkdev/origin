@@ -69,7 +69,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4xs);
-  padding: var(--spacing-xs);
+  padding: var(--spacing-3xs) var(--spacing-2xs);
   background-color: var(--surface-elevated);
   border: var(--stroke-xs) solid var(--border-tertiary);
   border-radius: var(--corner-radius-xs);
@@ -90,28 +90,32 @@
 }
 
 .tooltipLabel {
-  @include body-sm;
+  @include label-chart;
 
   margin: 0;
   color: var(--text-secondary);
+  padding-bottom: var(--spacing-3xs);
+  margin-bottom: var(--spacing-4xs);
+  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+  margin-inline: calc(-1 * var(--spacing-2xs));
+  padding-inline: var(--spacing-2xs);
 }
 
 .tooltipItems {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4xs);
-  min-width: 100px;
 }
 
 .tooltipItem {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
 }
 
 .tooltipIndicator {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -129,6 +133,12 @@
   margin-inline-start: auto;
 }
 
+.tooltipFooter {
+  border-top: var(--stroke-xs) solid var(--border-tertiary);
+  margin: var(--spacing-4xs) calc(-1 * var(--spacing-2xs)) 0;
+  padding: var(--spacing-3xs) var(--spacing-2xs) 0;
+}
+
 // Reference lines
 
 .referenceLine {
@@ -143,13 +153,6 @@
 
 // Bar chart
 
-.barGroup {
-  transition: opacity 150ms ease;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
 
 .barAnimate {
   animation: bar-grow 500ms cubic-bezier(0.33, 1, 0.68, 1) both;
@@ -169,6 +172,7 @@
     transform: scaleY(1);
   }
 }
+
 
 // Pie / Donut
 
@@ -221,11 +225,6 @@
   align-items: center;
   gap: var(--spacing-xs);
   cursor: default;
-  transition: opacity 150ms ease;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
 }
 
 .pieLegendDot {
