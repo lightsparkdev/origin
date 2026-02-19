@@ -1,3 +1,8 @@
+export function filerp(current: number, target: number, speed: number, dt: number): number {
+  const factor = 1 - Math.pow(1 - speed, dt / 16.67);
+  return current + (target - current) * factor;
+}
+
 export interface Point {
   x: number;
   y: number;
@@ -219,6 +224,33 @@ export function monotoneInterpolator(points: Point[]): CurveInterpolator {
       t3 * points[seg + 1].y
     );
   };
+}
+
+export interface StackedBand {
+  key: string;
+  baseline: number[];
+  topline: number[];
+}
+
+export function stackData(
+  data: Record<string, unknown>[],
+  keys: string[],
+): StackedBand[] {
+  const result: StackedBand[] = [];
+  const cumulative = new Array(data.length).fill(0);
+
+  for (const key of keys) {
+    const baseline = [...cumulative];
+    const topline: number[] = [];
+    for (let i = 0; i < data.length; i++) {
+      const v = Number(data[i][key]) || 0;
+      cumulative[i] += v;
+      topline.push(cumulative[i]);
+    }
+    result.push({ key, baseline, topline });
+  }
+
+  return result;
 }
 
 export function linearInterpolator(points: Point[]): CurveInterpolator {

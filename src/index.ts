@@ -56,7 +56,26 @@ export type {
 
 // Chart
 export * as Chart from './components/Chart';
-export type { LineChartProps as ChartLineProps, Series as ChartSeries } from './components/Chart';
+export type {
+  LineChartProps as ChartLineProps,
+  Series as ChartSeries,
+  ReferenceLine as ChartReferenceLine,
+  SparklineProps as ChartSparklineProps,
+  StackedAreaChartProps as ChartStackedAreaProps,
+  BarChartProps as ChartBarProps,
+  PieChartProps as ChartPieProps,
+  PieSegment as ChartPieSegment,
+  ComposedChartProps as ChartComposedProps,
+  ComposedSeries as ChartComposedSeries,
+  LiveChartProps as ChartLiveProps,
+  LivePoint as ChartLivePoint,
+  LiveValueProps as ChartLiveValueProps,
+  LiveDotProps as ChartLiveDotProps,
+  GaugeChartProps as ChartGaugeProps,
+  GaugeThreshold as ChartGaugeThreshold,
+  BarListProps as ChartBarListProps,
+  BarListItem as ChartBarListItem,
+} from './components/Chart';
 
 // Simple components (direct exports)
 export { ActionBar, ActionBarLabel, ActionBarActions } from './components/ActionBar';

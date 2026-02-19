@@ -1472,6 +1472,70 @@ function TableExamples() {
   );
 }
 
+function LiveValueDemo() {
+  const [value, setValue] = React.useState(12847);
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setValue((v) => v + Math.floor(Math.random() * 5) + 1);
+    }, 800);
+    return () => clearInterval(interval);
+  }, []);
+  return (
+    <Chart.LiveValue
+      value={value}
+      formatValue={(v) => `$${Math.round(v).toLocaleString()}`}
+      style={{ fontSize: 32, fontWeight: 500 }}
+    />
+  );
+}
+
+function LiveDemo() {
+  const [data, setData] = React.useState<{ time: number; value: number }[]>([]);
+  const [value, setValue] = React.useState(100);
+  const valueRef = React.useRef(100);
+
+  React.useEffect(() => {
+    const now = Date.now() / 1000;
+    const seed: { time: number; value: number }[] = [];
+    let v = 100;
+    for (let i = 30; i >= 0; i--) {
+      v += (Math.random() - 0.5) * 4;
+      seed.push({ time: now - i, value: v });
+    }
+    valueRef.current = v;
+    setData(seed);
+    setValue(v);
+
+    const interval = setInterval(() => {
+      const t = Date.now() / 1000;
+      valueRef.current += (Math.random() - 0.5) * 3;
+      const next = valueRef.current;
+      setValue(next);
+      setData((prev) => {
+        const cutoff = t - 60;
+        const filtered = prev.filter((p) => p.time > cutoff);
+        return [...filtered, { time: t, value: next }];
+      });
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <Chart.Live
+      data={data}
+      value={value}
+      color="var(--color-blue-500)"
+      window={30}
+      height={200}
+      grid
+      fill
+      scrub
+      formatValue={(v) => v.toFixed(1)}
+    />
+  );
+}
+
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
@@ -3498,59 +3562,12 @@ export default function Home() {
         </span>
       </div>
 
-      <h2 style={{ marginBottom: '1rem' }}>Chart Component</h2>
+      <h2 style={{ marginBottom: '1rem' }}>Charts</h2>
 
-      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
-        {/* Sparkline */}
+      <h3 style={{ marginBottom: '0.75rem' }}>Line</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
         <div style={{ width: 388 }}>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-              { date: 'Aug 17', value: 210 },
-              { date: 'Aug 18', value: 205 },
-              { date: 'Aug 19', value: 215 },
-              { date: 'Aug 20', value: 220 },
-              { date: 'Aug 21', value: 223 },
-            ]}
-            dataKey="value"
-            height={170}
-            fadeLeft
-          />
-        </div>
-
-        {/* Single-series with simple tooltip */}
-        <div style={{ width: 388 }}>
-          <Chart.Line
-            data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
-              { date: 'Aug 17', value: 210 },
-              { date: 'Aug 18', value: 205 },
-              { date: 'Aug 19', value: 215 },
-              { date: 'Aug 20', value: 220 },
-              { date: 'Aug 21', value: 223 },
-            ]}
-            dataKey="value"
-            xKey="date"
-            height={250}
-            grid
-            tooltip="simple"
-          />
-        </div>
-
-        {/* Full chart */}
-        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Multi-series with grid</p>
           <Chart.Line
             data={[
               { date: 'Mon', incoming: 120, outgoing: 80 },
@@ -3558,124 +3575,417 @@ export default function Home() {
               { date: 'Wed', incoming: 140, outgoing: 110 },
               { date: 'Thu', incoming: 180, outgoing: 100 },
               { date: 'Fri', incoming: 160, outgoing: 130 },
-              { date: 'Sat', incoming: 200, outgoing: 120 },
-              { date: 'Sun', incoming: 190, outgoing: 140 },
             ]}
             series={[
               { key: 'incoming', label: 'Incoming' },
               { key: 'outgoing', label: 'Outgoing' },
             ]}
             xKey="date"
-            height={250}
+            height={200}
             grid
             tooltip
           />
         </div>
-
-        {/* Full chart with fadeLeft */}
-        <div style={{ width: 500 }}>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Area fill + compact tooltip</p>
           <Chart.Line
             data={[
-              { date: 'Mon', incoming: 120, outgoing: 80 },
-              { date: 'Tue', incoming: 150, outgoing: 95 },
-              { date: 'Wed', incoming: 140, outgoing: 110 },
-              { date: 'Thu', incoming: 180, outgoing: 100 },
-              { date: 'Fri', incoming: 160, outgoing: 130 },
-              { date: 'Sat', incoming: 200, outgoing: 120 },
-              { date: 'Sun', incoming: 190, outgoing: 140 },
+              { date: 'Mon', value: 120 },
+              { date: 'Tue', value: 150 },
+              { date: 'Wed', value: 140 },
+              { date: 'Thu', value: 180 },
+              { date: 'Fri', value: 160 },
+              { date: 'Sat', value: 200 },
+              { date: 'Sun', value: 190 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            fill
+            tooltip="compact"
+          />
+        </div>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Dashed + dotted series</p>
+          <Chart.Line
+            data={[
+              { date: 'Jan', actual: 100, projected: 110, target: 130 },
+              { date: 'Feb', actual: 120, projected: 125, target: 130 },
+              { date: 'Mar', actual: 115, projected: 140, target: 130 },
+              { date: 'Apr', actual: 140, projected: 155, target: 130 },
+              { date: 'May', actual: 160, projected: 170, target: 130 },
             ]}
             series={[
-              { key: 'incoming', label: 'Incoming' },
-              { key: 'outgoing', label: 'Outgoing' },
+              { key: 'actual', label: 'Actual' },
+              { key: 'projected', label: 'Projected', style: 'dashed' },
+              { key: 'target', label: 'Target', style: 'dotted', color: 'var(--text-tertiary)' },
             ]}
             xKey="date"
-            height={250}
+            height={200}
             grid
             tooltip
-            fadeLeft={60}
+          />
+        </div>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Reference lines</p>
+          <Chart.Line
+            data={[
+              { date: 'Mon', value: 85 },
+              { date: 'Tue', value: 92 },
+              { date: 'Wed', value: 78 },
+              { date: 'Thu', value: 95 },
+              { date: 'Fri', value: 88 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            tooltip
+            referenceLines={[
+              { value: 90, label: 'Target' },
+              { value: 75, label: 'Minimum' },
+            ]}
           />
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Tooltip Variants</h3>
-
-      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
-        {/* Simple: timestamp only */}
-        <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&quot;simple&quot;
-          </p>
+      <h3 style={{ marginBottom: '0.75rem' }}>Tooltip Modes</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>simple</p>
           <Chart.Line
             data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
+              { d: 'Aug 10', v: 180 }, { d: 'Aug 11', v: 185 }, { d: 'Aug 12', v: 182 },
+              { d: 'Aug 13', v: 188 }, { d: 'Aug 14', v: 190 }, { d: 'Aug 15', v: 195 },
             ]}
-            dataKey="value"
-            xKey="date"
-            height={200}
-            grid
-            tooltip="simple"
+            dataKey="v" xKey="d" height={160} grid tooltip="simple"
           />
         </div>
-
-        {/* Detailed (default): series rows */}
-        <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&quot;detailed&quot; (or true)
-          </p>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>compact</p>
           <Chart.Line
             data={[
-              { date: 'Mon', incoming: 120, outgoing: 80 },
-              { date: 'Tue', incoming: 150, outgoing: 95 },
-              { date: 'Wed', incoming: 140, outgoing: 110 },
-              { date: 'Thu', incoming: 180, outgoing: 100 },
-              { date: 'Fri', incoming: 160, outgoing: 130 },
+              { d: 'Aug 10', v: 180 }, { d: 'Aug 11', v: 185 }, { d: 'Aug 12', v: 182 },
+              { d: 'Aug 13', v: 188 }, { d: 'Aug 14', v: 190 }, { d: 'Aug 15', v: 195 },
+            ]}
+            dataKey="v" xKey="d" height={160} grid tooltip="compact"
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>detailed</p>
+          <Chart.Line
+            data={[
+              { d: 'Mon', a: 120, b: 80 }, { d: 'Tue', a: 150, b: 95 },
+              { d: 'Wed', a: 140, b: 110 }, { d: 'Thu', a: 180, b: 100 },
+            ]}
+            series={[{ key: 'a', label: 'Incoming' }, { key: 'b', label: 'Outgoing' }]}
+            xKey="d" height={160} grid tooltip="detailed"
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Live (Real-Time)</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Streaming data (random walk)</p>
+          <LiveDemo />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Live Primitives</h3>
+      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
+        <div>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>LiveValue</p>
+          <LiveValueDemo />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>active</p>
+            <Chart.LiveDot status="active" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>processing</p>
+            <Chart.LiveDot status="processing" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>idle</p>
+            <Chart.LiveDot status="idle" />
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>error</p>
+            <Chart.LiveDot status="error" />
+          </div>
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Sparkline</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '2rem' }}>
+        <div style={{ width: 160 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Line</p>
+          <Chart.Sparkline
+            data={[{ v: 10 }, { v: 15 }, { v: 12 }, { v: 18 }, { v: 14 }, { v: 22 }, { v: 19 }, { v: 25 }]}
+            dataKey="v"
+          />
+        </div>
+        <div style={{ width: 160 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Line</p>
+          <Chart.Sparkline
+            data={[{ v: 25 }, { v: 22 }, { v: 24 }, { v: 18 }, { v: 20 }, { v: 15 }, { v: 12 }, { v: 10 }]}
+            dataKey="v"
+            color="var(--color-blue-500)"
+          />
+        </div>
+        <div style={{ width: 300 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Bar</p>
+          <Chart.Sparkline
+            variant="bar"
+            data={[
+              { v: 12 }, { v: 18 }, { v: 15 }, { v: 22 }, { v: 20 }, { v: 14 }, { v: 25 }, { v: 19 },
+              { v: 16 }, { v: 21 }, { v: 13 }, { v: 24 }, { v: 17 }, { v: 23 }, { v: 11 }, { v: 20 },
+              { v: 18 }, { v: 26 }, { v: 15 }, { v: 22 }, { v: 19 }, { v: 14 }, { v: 21 }, { v: 16 },
+            ]}
+            dataKey="v"
+            color="var(--color-blue-400)"
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Stacked Area</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <Chart.StackedArea
+            data={[
+              { month: 'Jan', payments: 400, transfers: 200, fees: 50 },
+              { month: 'Feb', payments: 450, transfers: 250, fees: 60 },
+              { month: 'Mar', payments: 420, transfers: 280, fees: 55 },
+              { month: 'Apr', payments: 500, transfers: 300, fees: 70 },
+              { month: 'May', payments: 480, transfers: 320, fees: 65 },
+              { month: 'Jun', payments: 550, transfers: 350, fees: 80 },
+            ]}
+            series={[
+              { key: 'payments', label: 'Payments', color: 'var(--color-blue-700)' },
+              { key: 'transfers', label: 'Transfers', color: 'var(--color-blue-400)' },
+              { key: 'fees', label: 'Fees', color: 'var(--color-blue-200)' },
+            ]}
+            xKey="month"
+            height={250}
+            grid
+            tooltip
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Bar</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Grouped</p>
+          <Chart.Bar
+            data={[
+              { month: 'Jan', incoming: 400, outgoing: 240 },
+              { month: 'Feb', incoming: 500, outgoing: 300 },
+              { month: 'Mar', incoming: 450, outgoing: 280 },
+              { month: 'Apr', incoming: 600, outgoing: 350 },
+              { month: 'May', incoming: 550, outgoing: 320 },
             ]}
             series={[
               { key: 'incoming', label: 'Incoming' },
               { key: 'outgoing', label: 'Outgoing' },
             ]}
-            xKey="date"
-            height={200}
-            grid
-            tooltip="detailed"
+            xKey="month" height={220} grid tooltip
           />
         </div>
-
-        {/* Custom render function */}
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
-            tooltip=&#123;renderFn&#125;
-          </p>
-          <Chart.Line
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Stacked</p>
+          <Chart.Bar
             data={[
-              { date: 'Aug 10', value: 180 },
-              { date: 'Aug 11', value: 185 },
-              { date: 'Aug 12', value: 182 },
-              { date: 'Aug 13', value: 188 },
-              { date: 'Aug 14', value: 190 },
-              { date: 'Aug 15', value: 195 },
-              { date: 'Aug 16', value: 200 },
+              { q: 'Q1', payments: 400, transfers: 200, fees: 50 },
+              { q: 'Q2', payments: 500, transfers: 250, fees: 60 },
+              { q: 'Q3', payments: 450, transfers: 280, fees: 55 },
+              { q: 'Q4', payments: 600, transfers: 300, fees: 70 },
             ]}
-            dataKey="value"
-            xKey="date"
-            height={200}
+            series={[
+              { key: 'payments', label: 'Payments', color: 'var(--color-blue-700)' },
+              { key: 'transfers', label: 'Transfers', color: 'var(--color-blue-400)' },
+              { key: 'fees', label: 'Fees', color: 'var(--color-blue-200)' },
+            ]}
+            xKey="q" height={220} grid tooltip stacked
+          />
+        </div>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Horizontal</p>
+          <Chart.Bar
+            data={[
+              { country: 'US', volume: 4200 },
+              { country: 'UK', volume: 2800 },
+              { country: 'EU', volume: 3100 },
+              { country: 'JP', volume: 1500 },
+              { country: 'BR', volume: 900 },
+            ]}
+            dataKey="volume"
+            xKey="country"
+            height={220}
             grid
-            tooltip={(datum) => (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ fontSize: 10, color: 'var(--text-secondary)' }}>
-                  {String(datum.date)}
-                </span>
-                <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--text-primary)' }}>
-                  ${Number(datum.value).toLocaleString()}
-                </span>
-              </div>
-            )}
+            tooltip
+            orientation="horizontal"
+          />
+        </div>
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Single series + reference</p>
+          <Chart.Bar
+            data={[
+              { day: 'Mon', count: 12 }, { day: 'Tue', count: 18 },
+              { day: 'Wed', count: 15 }, { day: 'Thu', count: 22 }, { day: 'Fri', count: 20 },
+            ]}
+            dataKey="count" xKey="day" height={220} grid tooltip
+            referenceLines={[{ value: 17, label: 'Average' }]}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Composed</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Bar + line, dual Y-axes</p>
+          <Chart.Composed
+            data={[
+              { month: 'Jan', revenue: 4200, rate: 3.2 },
+              { month: 'Feb', revenue: 5100, rate: 3.8 },
+              { month: 'Mar', revenue: 4800, rate: 3.5 },
+              { month: 'Apr', revenue: 6200, rate: 4.1 },
+              { month: 'May', revenue: 5800, rate: 3.9 },
+              { month: 'Jun', revenue: 7100, rate: 4.5 },
+            ]}
+            series={[
+              { key: 'revenue', label: 'Revenue', type: 'bar', color: 'var(--color-blue-300)' },
+              { key: 'rate', label: 'Conversion %', type: 'line', axis: 'right', color: 'var(--text-primary)' },
+            ]}
+            xKey="month" height={250} grid tooltip
+            formatYLabelRight={(v) => `${v}%`}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Uptime</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <Chart.Uptime
+            data={Array.from({ length: 90 }, (_, i) => ({
+              status: (Math.random() > 0.05 ? 'up' : Math.random() > 0.5 ? 'degraded' : 'down') as 'up' | 'down' | 'degraded',
+              label: `Day ${i + 1}`,
+            }))}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Activity Grid</h3>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Weekly (with labels)</p>
+          <Chart.ActivityGrid
+            rows={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+            columns={Array.from({ length: 20 }, (_, i) => `W${i + 1}`)}
+            showRowLabels
+            showColumnLabels
+            data={Array.from({ length: 20 }, (_, ci) =>
+              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => ({
+                row: day,
+                col: `W${ci + 1}`,
+                value: Math.floor(Math.random() * 10),
+              })),
+            ).flat()}
+          />
+        </div>
+        <div>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Hourly over 7 days</p>
+          <Chart.ActivityGrid
+            rows={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+            columns={Array.from({ length: 24 }, (_, i) => `${i}h`)}
+            cellSize={10}
+            cellGap={1}
+            color="var(--color-green-500)"
+            data={Array.from({ length: 24 }, (_, ci) =>
+              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => ({
+                row: day,
+                col: `${ci}h`,
+                value: Math.floor(Math.random() * 20),
+              })),
+            ).flat()}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Gauge</h3>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Default</p>
+          <Chart.Gauge
+            value={0.32}
+            min={0}
+            max={1}
+            thresholds={[
+              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great' },
+              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work' },
+              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor' },
+            ]}
+            markerLabel="P75"
+            formatValue={(v) => `${v.toFixed(2)}s`}
+          />
+        </div>
+        <div style={{ width: 280 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Minimal</p>
+          <Chart.Gauge
+            value={0.32}
+            min={0}
+            max={1}
+            variant="minimal"
+            thresholds={[
+              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great' },
+              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work' },
+              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor' },
+            ]}
+            formatValue={(v) => `${v.toFixed(2)}s`}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>BarList</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 400 }}>
+          <Chart.BarList
+            data={[
+              { name: '/', value: 2340, displayValue: '0.28s' },
+              { name: '/pricing', value: 326, displayValue: '0.34s' },
+              { name: '/blog', value: 148, displayValue: '0.31s' },
+              { name: '/docs', value: 89, displayValue: '0.42s' },
+              { name: '/about', value: 45, displayValue: '0.25s' },
+            ]}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Donut</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
+        <div style={{ width: 388 }}>
+          <Chart.Pie
+            data={[
+              { name: 'Payments', value: 4200, color: 'var(--color-blue-700)' },
+              { name: 'Transfers', value: 2800, color: 'var(--color-blue-500)' },
+              { name: 'Fees', value: 650, color: 'var(--color-blue-300)' },
+              { name: 'Refunds', value: 320, color: 'var(--color-blue-100)' },
+            ]}
+            height={200}
+          />
+        </div>
+        <div style={{ width: 388 }}>
+          <Chart.Pie
+            data={[
+              { name: 'USD', value: 58, color: 'var(--color-blue-700)' },
+              { name: 'EUR', value: 22, color: 'var(--color-blue-500)' },
+              { name: 'GBP', value: 12, color: 'var(--color-blue-300)' },
+              { name: 'Other', value: 8, color: 'var(--color-blue-100)' },
+            ]}
+            height={200}
           />
         </div>
       </div>

@@ -12,108 +12,90 @@ import {
   monotoneInterpolator,
   linearInterpolator,
   type Point,
-  type CurveInterpolator,
 } from './utils';
+import { useResizeWidth, useChartScrub } from './hooks';
+import {
+  type Series,
+  type ResolvedSeries,
+  type TooltipProp,
+  type ReferenceLine,
+  PAD_TOP,
+  PAD_RIGHT,
+  PAD_BOTTOM_AXIS,
+  PAD_LEFT_AXIS,
+  DASH_PATTERNS,
+  resolveTooltipMode,
+  resolveSeries,
+} from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
-// Types
-
-export interface Series {
-  key: string;
-  label?: string;
-  color?: string;
-}
-
-export type TooltipProp =
-  | boolean
-  | 'simple'
-  | 'detailed'
-  | ((
-      datum: Record<string, unknown>,
-      series: Array<Required<Series>>,
-    ) => React.ReactNode);
+export type { Series, TooltipProp, ReferenceLine };
 
 export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
+  /** Array of data objects. Each object should contain keys matching `dataKey` or `series[].key`. */
   data: Record<string, unknown>[];
+  /** Data key for single-series charts. Pass this OR `series`, not both. */
   dataKey?: string;
+  /** Series configuration for multi-series charts. */
   series?: Series[];
+  /** Key in data objects for x-axis labels. When omitted, no x-axis is shown. */
   xKey?: string;
+  /** Chart height in pixels. */
   height?: number;
+  /** Show grid lines and y-axis labels. */
   grid?: boolean;
   /**
    * Controls the hover tooltip.
    * - `false` / omitted: no tooltip
    * - `true` / `"detailed"`: full tooltip with x-label, series dots, names, and values
    * - `"simple"`: timestamp-only tooltip (just the formatted x-label)
-   * - `(datum, series) => ReactNode`: custom render function; the chart handles positioning
+   * - `"compact"`: inline values with dot separators
+   * - `(datum, series) => ReactNode`: custom render function
    */
   tooltip?: TooltipProp;
+  /** Curve interpolation. */
   curve?: 'monotone' | 'linear';
+  /** Line stroke width in pixels. */
   strokeWidth?: number;
   /** Stroke color shorthand for single-series charts using `dataKey`. */
   color?: string;
+  /** Animate line drawing on mount. */
   animate?: boolean;
-  /**
-   * Fade line paths to transparent on the left edge.
-   * `true` for 40 px default, or a number for a custom fade width in pixels.
-   */
+  /** Enable area fill under the line. `true` for 0.12 opacity, or a number for custom. */
+  fill?: boolean | number;
+  /** Fade line paths to transparent on the left edge. `true` for 40px, or a custom width. */
   fadeLeft?: boolean | number;
+  /** Reference lines at specific values. Supports horizontal (y) and vertical (x) lines. */
+  referenceLines?: ReferenceLine[];
+  /** Fixed Y-axis domain. When omitted, auto-scales from data. */
+  yDomain?: [number, number];
+  /** Show a legend below the chart for multi-series. */
+  legend?: boolean;
+  /** Show a loading skeleton. */
+  loading?: boolean;
+  /** Content to show when data is empty. `true` for default message. */
+  empty?: React.ReactNode;
   /** Accessible label for the chart SVG. */
   ariaLabel?: string;
-  /**
-   * Called when the hovered data point changes during scrub interaction.
-   * Receives `null` when the pointer leaves the chart.
-   */
+  /** Disables scrub interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
+  /** Called when the hovered data point changes. Receives `null` on leave. */
   onActiveChange?: (
     index: number | null,
     datum: Record<string, unknown> | null,
   ) => void;
+  /** Called when a data point is clicked. */
+  onClickDatum?: (
+    index: number,
+    datum: Record<string, unknown>,
+  ) => void;
+  /** Format values in tooltips. */
   formatValue?: (value: number) => string;
+  /** Format x-axis labels. */
   formatXLabel?: (value: unknown) => string;
+  /** Format y-axis labels. */
   formatYLabel?: (value: number) => string;
-}
-
-// Default color palette using Origin tokens
-const SERIES_COLORS = [
-  'var(--border-primary)',
-  'var(--text-secondary)',
-  'var(--surface-blue-strong)',
-  'var(--surface-purple-strong)',
-  'var(--surface-green-strong)',
-  'var(--surface-pink-strong)',
-];
-
-// Chart geometry
-const PAD_TOP = 8;
-const PAD_RIGHT = 8;
-const PAD_BOTTOM_AXIS = 28;
-const PAD_LEFT_AXIS = 48;
-const TOOLTIP_GAP = 12;
-
-// Responsive width via callback ref + ResizeObserver.
-// Uses a callback ref to avoid timing races between useEffect
-// and the forwarded ref callback.
-function useResizeWidth() {
-  const [width, setWidth] = React.useState(0);
-  const observerRef = React.useRef<ResizeObserver | null>(null);
-
-  const attachRef = React.useCallback((node: HTMLDivElement | null) => {
-    observerRef.current?.disconnect();
-    if (node) {
-      const observer = new ResizeObserver((entries) => {
-        for (const entry of entries) setWidth(entry.contentRect.width);
-      });
-      observer.observe(node);
-      observerRef.current = observer;
-      setWidth(node.clientWidth);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    return () => observerRef.current?.disconnect();
-  }, []);
-
-  return { width, attachRef };
 }
 
 export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
@@ -127,12 +109,20 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       grid = false,
       tooltip: tooltipProp,
       curve = 'monotone',
-      strokeWidth = 1.5,
+      strokeWidth = 2,
       color,
       animate = true,
+      fill: fillProp,
       fadeLeft,
+      referenceLines,
+      yDomain: yDomainProp,
+      legend,
+      loading,
+      empty,
       ariaLabel,
+      interactive = true,
       onActiveChange,
+      onClickDatum,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -144,19 +134,11 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     const { width, attachRef } = useResizeWidth();
     const uid = React.useId().replace(/:/g, '');
 
-    // Resolve tooltip mode from the polymorphic prop
-    const tooltipMode: 'off' | 'simple' | 'detailed' | 'custom' = !tooltipProp
-      ? 'off'
-      : tooltipProp === true || tooltipProp === 'detailed'
-        ? 'detailed'
-        : tooltipProp === 'simple'
-          ? 'simple'
-          : 'custom';
-    const showTooltip = tooltipMode !== 'off';
+    const tooltipMode = resolveTooltipMode(tooltipProp);
+    const showTooltip = interactive && tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    // Merge the ResizeObserver callback ref with the forwarded ref
     const mergedRef = React.useCallback(
       (node: HTMLDivElement | null) => {
         attachRef(node);
@@ -166,22 +148,10 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       [ref, attachRef],
     );
 
-    // Resolve series
-    const series = React.useMemo<Array<Required<Series>>>(() => {
-      if (seriesProp) {
-        return seriesProp.map((s, i) => ({
-          key: s.key,
-          label: s.label ?? s.key,
-          color: s.color ?? SERIES_COLORS[i % SERIES_COLORS.length],
-        }));
-      }
-      if (dataKey) {
-        return [
-          { key: dataKey, label: dataKey, color: color ?? SERIES_COLORS[0] },
-        ];
-      }
-      return [];
-    }, [seriesProp, dataKey, color]);
+    const series = React.useMemo<ResolvedSeries[]>(
+      () => resolveSeries(seriesProp, dataKey, color),
+      [seriesProp, dataKey, color],
+    );
 
     if (process.env.NODE_ENV !== 'production') {
       if (color && seriesProp) {
@@ -192,6 +162,8 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
         );
       }
     }
+
+    const fillOpacity = fillProp === true ? 0.08 : typeof fillProp === 'number' ? fillProp : 0.06;
 
     // Chart area geometry
     const showXAxis = Boolean(xKey);
@@ -211,6 +183,10 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     // Y domain with nice ticks
     const { yMin, yMax, yTicks } = React.useMemo(() => {
+      if (yDomainProp) {
+        const result = niceTicks(yDomainProp[0], yDomainProp[1], 5);
+        return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
+      }
       let min = Infinity;
       let max = -Infinity;
       for (const s of series) {
@@ -222,17 +198,24 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           }
         }
       }
+      if (referenceLines) {
+        for (const rl of referenceLines) {
+          if (rl.axis !== 'x') {
+            if (rl.value < min) min = rl.value;
+            if (rl.value > max) max = rl.value;
+          }
+        }
+      }
       if (min === Infinity) {
         return { yMin: 0, yMax: 1, yTicks: [0, 1] };
       }
       const result = niceTicks(min, max, 5);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [data, series]);
+    }, [data, series, referenceLines, yDomainProp]);
 
     // Compute pixel points for each series
     const seriesPoints = React.useMemo(() => {
       if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0) return [];
-
       return series.map((s) => {
         const points: Point[] = [];
         for (let i = 0; i < data.length; i++) {
@@ -255,12 +238,20 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       return seriesPoints.map((pts) => build(pts));
     }, [seriesPoints, curve]);
 
-    // X axis labels (smart spacing to avoid overlap)
+    // Area paths
+    const areaPaths = React.useMemo(() => {
+      return seriesPoints.map((pts, i) => {
+        if (pts.length === 0) return '';
+        const firstX = pts[0].x;
+        const lastX = pts[pts.length - 1].x;
+        return `${paths[i]} L ${lastX},${plotHeight} L ${firstX},${plotHeight} Z`;
+      });
+    }, [seriesPoints, paths, plotHeight]);
+
+    // X axis labels
     const xLabels = React.useMemo(() => {
       if (!xKey || data.length === 0 || plotWidth <= 0) return [];
-
       const maxLabels = Math.max(2, Math.floor(plotWidth / 60));
-
       let indices: number[];
       if (data.length <= maxLabels) {
         indices = data.map((_, i) => i);
@@ -272,7 +263,6 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
         }
         indices.push(data.length - 1);
       }
-
       return indices.map((i) => {
         const x =
           data.length === 1
@@ -293,163 +283,29 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       }));
     }, [showYAxis, yTicks, yMin, yMax, plotHeight, formatYLabel]);
 
-    // Curve interpolators: evaluate y at any screen x (for smooth dot tracking)
-    const interpolators = React.useMemo<CurveInterpolator[]>(() => {
+    // Curve interpolators
+    const interpolators = React.useMemo(() => {
       const build =
         curve === 'monotone' ? monotoneInterpolator : linearInterpolator;
       return seriesPoints.map((pts) => build(pts));
     }, [seriesPoints, curve]);
 
-    // Keep interpolators in a ref so the mousemove handler always has
-    // the latest without re-creating the callback.
     const interpolatorsRef = React.useRef(interpolators);
     React.useLayoutEffect(() => {
       interpolatorsRef.current = interpolators;
     }, [interpolators]);
 
-    // Hover system: cursor line, dots, clip masks, and tooltip position
-    // update via direct DOM manipulation for smooth 1:1 mouse tracking.
-    // Only activeIndex (for tooltip content) triggers a React re-render.
-    const cursorRef = React.useRef<SVGLineElement>(null);
-    const tooltipRef = React.useRef<HTMLDivElement>(null);
-    const dotRefs = React.useRef<(SVGRectElement | null)[]>([]);
-    const clipLeftRef = React.useRef<SVGRectElement>(null);
-    const clipRightRef = React.useRef<SVGRectElement>(null);
-    const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
-
-    // Trim stale dot refs when series count shrinks
-    React.useEffect(() => {
-      dotRefs.current.length = series.length;
-    }, [series.length]);
-
-    // Reset activeIndex when data changes to prevent out-of-bounds access
-    React.useEffect(() => {
-      setActiveIndex(null);
-    }, [data]);
-
-    // Notify consumer when the active data point changes
-    const onActiveChangeRef = React.useRef(onActiveChange);
-    React.useLayoutEffect(() => {
-      onActiveChangeRef.current = onActiveChange;
-    }, [onActiveChange]);
-
-    React.useEffect(() => {
-      onActiveChangeRef.current?.(
-        activeIndex,
-        activeIndex !== null && activeIndex < data.length
-          ? data[activeIndex]
-          : null,
-      );
-    }, [activeIndex, data]);
-
-    // Shared hover logic: update cursor, dots, tooltip, and activeIndex
-    // from a client-x coordinate. Called by both mouse and touch handlers.
-    const updateHover = React.useCallback(
-      (clientX: number, svgEl: SVGSVGElement) => {
-        if (data.length === 0 || plotWidth <= 0) return;
-        const rect = svgEl.getBoundingClientRect();
-        const rawX = clientX - rect.left - padLeft;
-        const clampedX = Math.max(0, Math.min(plotWidth, rawX));
-
-        // Direct DOM: move cursor line
-        const cursor = cursorRef.current;
-        if (cursor) {
-          cursor.setAttribute('x1', String(clampedX));
-          cursor.setAttribute('x2', String(clampedX));
-          cursor.style.display = '';
-        }
-
-        // Direct DOM: split line color at cursor position
-        const clipL = clipLeftRef.current;
-        if (clipL) {
-          clipL.setAttribute('width', String(clampedX));
-        }
-        const clipR = clipRightRef.current;
-        if (clipR) {
-          clipR.setAttribute('x', String(clampedX));
-          clipR.setAttribute('width', String(plotWidth - clampedX + PAD_RIGHT));
-        }
-
-        // Direct DOM: slide dots along curves
-        const interps = interpolatorsRef.current;
-        dotRefs.current.forEach((dot, i) => {
-          if (dot && interps[i]) {
-            const cy = interps[i](clampedX);
-            dot.setAttribute('x', String(clampedX - 4));
-            dot.setAttribute('y', String(cy - 4));
-            dot.style.display = '';
-          }
-        });
-
-        // Direct DOM: move tooltip
-        const tip = tooltipRef.current;
-        if (tip) {
-          const absX = padLeft + clampedX;
-          const isLeftHalf = clampedX <= plotWidth / 2;
-          tip.style.left = `${absX}px`;
-          tip.style.transform = isLeftHalf
-            ? `translateX(${TOOLTIP_GAP}px)`
-            : `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
-          tip.style.display = '';
-        }
-
-        // React state: only update when nearest index actually changes
-        const step =
-          data.length === 1 ? plotWidth : plotWidth / (data.length - 1);
-        const index = Math.max(
-          0,
-          Math.min(data.length - 1, Math.round(rawX / step)),
-        );
-        setActiveIndex((prev) => (prev === index ? prev : index));
-      },
-      [data.length, plotWidth, padLeft],
-    );
-
-    const hideHover = React.useCallback(() => {
-      const cursor = cursorRef.current;
-      if (cursor) cursor.style.display = 'none';
-      dotRefs.current.forEach((dot) => {
-        if (dot) dot.style.display = 'none';
-      });
-      const tip = tooltipRef.current;
-      if (tip) tip.style.display = 'none';
-      // Reset clip masks: active paths cover full width, inactive hidden
-      const clipL = clipLeftRef.current;
-      if (clipL) clipL.setAttribute('width', String(plotWidth + PAD_RIGHT));
-      const clipR = clipRightRef.current;
-      if (clipR) {
-        clipR.setAttribute('x', String(plotWidth + PAD_RIGHT));
-        clipR.setAttribute('width', '0');
-      }
-      setActiveIndex(null);
-    }, [plotWidth]);
-
-    // Mouse handlers
-    const handleMouseMove = React.useCallback(
-      (e: React.MouseEvent<SVGSVGElement>) => {
-        updateHover(e.clientX, e.currentTarget);
-      },
-      [updateHover],
-    );
-
-    // Touch handlers (passive -- no preventDefault so page scroll isn't blocked)
-    const handleTouchStart = React.useCallback(
-      (e: React.TouchEvent<SVGSVGElement>) => {
-        if (e.touches.length > 0) {
-          updateHover(e.touches[0].clientX, e.currentTarget);
-        }
-      },
-      [updateHover],
-    );
-
-    const handleTouchMove = React.useCallback(
-      (e: React.TouchEvent<SVGSVGElement>) => {
-        if (e.touches.length > 0) {
-          updateHover(e.touches[0].clientX, e.currentTarget);
-        }
-      },
-      [updateHover],
-    );
+    // Scrub interaction
+    const scrub = useChartScrub({
+      dataLength: data.length,
+      seriesCount: series.length,
+      plotWidth,
+      padLeft,
+      tooltipMode: interactive ? tooltipMode : 'off',
+      interpolatorsRef,
+      data,
+      onActiveChange,
+    });
 
     const fmtValue = React.useCallback(
       (v: number) => (formatValue ? formatValue(v) : String(v)),
@@ -458,35 +314,67 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     const ready = width > 0;
 
-    // Build accessible description from data
+    const handleClick = React.useCallback(() => {
+      if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
+      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, scrub.activeIndex, data]);
+
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
       const names = series.map((s) => s.label).join(', ');
-      return `Line chart with ${data.length} data points showing ${names}.`;
-    }, [series, data.length]);
+      const first = xKey ? String(data[0][xKey] ?? '') : '';
+      const last = xKey ? String(data[data.length - 1][xKey] ?? '') : '';
+      const range = first && last ? ` from ${first} to ${last}` : '';
+      return `Line chart with ${data.length} data points showing ${names}${range}.`;
+    }, [series, data, xKey]);
+
+    const ariaLiveContent = React.useMemo(() => {
+      if (scrub.activeIndex === null || scrub.activeIndex >= data.length) return '';
+      const d = data[scrub.activeIndex];
+      const parts: string[] = [];
+      if (xKey) parts.push(String(d[xKey] ?? ''));
+      series.forEach((s) => {
+        const v = Number(d[s.key]);
+        parts.push(`${s.label}: ${isNaN(v) ? 'no data' : fmtValue(v)}`);
+      });
+      return parts.join(', ');
+    }, [scrub.activeIndex, data, series, xKey, fmtValue]);
 
     return (
-      <div
-        ref={mergedRef}
-        className={clsx(styles.root, className)}
-        style={{ height }}
-        {...props}
+      <ChartWrapper
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        legend={legend}
+        series={series}
+        activeIndex={scrub.activeIndex}
+        ariaLiveContent={interactive ? ariaLiveContent : undefined}
       >
-        {ready && (
-          <>
-            <svg
-              role="img"
-              aria-label={ariaLabel ?? svgDesc ?? 'Line chart'}
-              width={width}
-              height={height}
-              className={styles.svg}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={hideHover}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={hideHover}
-              onTouchCancel={hideHover}
-            >
+        <div
+          ref={mergedRef}
+          className={clsx(styles.root, className)}
+          style={{ height }}
+          {...props}
+        >
+          {ready && (
+            <>
+              <svg
+                role="img"
+                aria-label={ariaLabel ?? svgDesc ?? 'Line chart'}
+                tabIndex={interactive ? 0 : undefined}
+                width={width}
+                height={height}
+                className={styles.svg}
+                onMouseMove={interactive ? scrub.handleMouseMove : undefined}
+                onMouseLeave={interactive ? scrub.hideHover : undefined}
+                onTouchStart={interactive ? scrub.handleTouchStart : undefined}
+                onTouchMove={interactive ? scrub.handleTouchMove : undefined}
+                onTouchEnd={interactive ? scrub.hideHover : undefined}
+                onTouchCancel={interactive ? scrub.hideHover : undefined}
+                onKeyDown={interactive ? scrub.handleKeyDown : undefined}
+                onClick={onClickDatum ? handleClick : undefined}
+              >
               {svgDesc && <desc>{svgDesc}</desc>}
 
               <defs>
@@ -495,159 +383,185 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                     <linearGradient
                       id={`${fadeMaskId}-grad`}
                       gradientUnits="userSpaceOnUse"
-                      x1={0}
-                      y1={0}
-                      x2={fadeWidth}
-                      y2={0}
+                      x1={0} y1={0} x2={fadeWidth} y2={0}
                     >
                       <stop offset="0" stopColor="white" stopOpacity={0} />
                       <stop offset="1" stopColor="white" stopOpacity={1} />
                     </linearGradient>
                     <mask id={fadeMaskId}>
-                      <rect
-                        x={0}
-                        y={-PAD_TOP}
-                        width={fadeWidth}
-                        height={height}
-                        fill={`url(#${fadeMaskId}-grad)`}
-                      />
-                      <rect
-                        x={fadeWidth}
-                        y={-PAD_TOP}
-                        width={plotWidth - fadeWidth + PAD_RIGHT}
-                        height={height}
-                        fill="white"
-                      />
+                      <rect x={0} y={-PAD_TOP} width={fadeWidth} height={height} fill={`url(#${fadeMaskId}-grad)`} />
+                      <rect x={fadeWidth} y={-PAD_TOP} width={plotWidth - fadeWidth + PAD_RIGHT} height={height} fill="white" />
                     </mask>
                   </>
                 )}
 
-                {/* Clip paths for scrub color split */}
-                <clipPath id={clipActiveId}>
-                  <rect
-                    ref={clipLeftRef}
-                    x={0}
-                    y={-PAD_TOP}
-                    width={plotWidth + PAD_RIGHT}
-                    height={height}
-                  />
-                </clipPath>
-                <clipPath id={clipInactiveId}>
-                  <rect
-                    ref={clipRightRef}
-                    x={plotWidth + PAD_RIGHT}
-                    y={-PAD_TOP}
-                    width={0}
-                    height={height}
-                  />
-                </clipPath>
+                {interactive && (
+                  <>
+                    <clipPath id={clipActiveId}>
+                      <rect ref={scrub.clipLeftRef} x={0} y={-PAD_TOP} width={plotWidth + PAD_RIGHT} height={height} />
+                    </clipPath>
+                    <clipPath id={clipInactiveId}>
+                      <rect ref={scrub.clipRightRef} x={plotWidth + PAD_RIGHT} y={-PAD_TOP} width={0} height={height} />
+                    </clipPath>
+                  </>
+                )}
+
+                {series.map((s, i) => (
+                  <linearGradient
+                    key={`${uid}-fill-${i}`}
+                    id={`${uid}-fill-${i}`}
+                    gradientUnits="userSpaceOnUse"
+                    x1={0} y1={0} x2={0} y2={plotHeight}
+                  >
+                    <stop offset="0" stopColor={s.color} stopOpacity={fillOpacity} />
+                    <stop offset="1" stopColor={s.color} stopOpacity={0} />
+                  </linearGradient>
+                ))}
               </defs>
 
               <g transform={`translate(${padLeft},${PAD_TOP})`}>
-                {/* Grid lines */}
                 {grid &&
                   yLabels.map(({ y }, i) => (
-                    <line
-                      key={i}
-                      x1={0}
-                      y1={y}
-                      x2={plotWidth}
-                      y2={y}
-                      className={styles.gridLine}
-                    />
+                    <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
                   ))}
 
-                {/* Line paths (dual: active color clipped left, tertiary clipped right) */}
+                {/* Reference lines */}
+                {referenceLines?.map((rl, i) => {
+                  const rlColor = rl.color ?? 'var(--text-primary)';
+                  if (rl.axis === 'x') {
+                    const idx = Math.round(rl.value);
+                    if (idx < 0 || idx >= data.length) return null;
+                    const rx = data.length === 1 ? plotWidth / 2 : (idx / (data.length - 1)) * plotWidth;
+                    return (
+                      <g key={`ref-${i}`} className={styles.referenceLine}>
+                        <line x1={rx} y1={0} x2={rx} y2={plotHeight} stroke={rlColor} strokeOpacity={0.15} strokeWidth={1} strokeDasharray="4 4" />
+                        {rl.label && (
+                          <text x={rx + 4} y={8} className={styles.referenceLineLabel} fill={rlColor} fillOpacity={0.45}>{rl.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const ry = linearScale(rl.value, yMin, yMax, plotHeight, 0);
+                  return (
+                    <g key={`ref-${i}`} className={styles.referenceLine}>
+                      <line x1={0} y1={ry} x2={plotWidth} y2={ry} stroke={rlColor} strokeOpacity={0.15} strokeWidth={1} strokeDasharray="4 4" />
+                      {rl.label && (
+                        <text x={plotWidth} y={ry - 5} textAnchor="end" className={styles.referenceLineLabel} fill={rlColor} fillOpacity={0.45}>{rl.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
+
+                {/* Gradient fills */}
                 <g mask={fadeMaskId ? `url(#${fadeMaskId})` : undefined}>
-                  {/* Active portion: series color, clipped to left of cursor */}
-                  <g clipPath={`url(#${clipActiveId})`}>
-                    {paths.map((d, i) => (
+                  {areaPaths.map((d, i) =>
+                    d ? (
                       <path
-                        key={series[i].key}
+                        key={`${series[i].key}-fill`}
                         d={d}
-                        pathLength={1}
-                        fill="none"
-                        stroke={series[i].color}
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className={clsx(animate && styles.lineAnimate)}
+                        fill={`url(#${uid}-fill-${i})`}
+                        stroke="none"
                       />
-                    ))}
-                  </g>
-                  {/* Inactive portion: muted color, clipped to right of cursor */}
-                  <g clipPath={`url(#${clipInactiveId})`}>
-                    {paths.map((d, i) => (
-                      <path
-                        key={`${series[i].key}-inactive`}
-                        d={d}
-                        fill="none"
-                        stroke="var(--border-tertiary)"
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    ))}
-                  </g>
+                    ) : null,
+                  )}
                 </g>
 
-                {/* Cursor line (always mounted, visibility toggled via ref) */}
-                <line
-                  ref={cursorRef}
-                  x1={0}
-                  y1={0}
-                  x2={0}
-                  y2={plotHeight}
-                  className={styles.cursorLine}
-                  style={{ display: 'none' }}
-                />
+                {/* Line paths */}
+                <g mask={fadeMaskId ? `url(#${fadeMaskId})` : undefined}>
+                  {interactive ? (
+                    <>
+                      <g clipPath={`url(#${clipActiveId})`}>
+                        {paths.map((d, i) => {
+                          const isDashed = series[i].style !== 'solid';
+                          return (
+                            <path
+                              key={series[i].key}
+                              d={d}
+                              pathLength={animate && !isDashed ? 1 : undefined}
+                              fill="none"
+                              stroke={series[i].color}
+                              strokeWidth={isDashed ? 1 : strokeWidth}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeDasharray={isDashed ? DASH_PATTERNS[series[i].style] : undefined}
+                              className={clsx(animate && !isDashed && styles.lineAnimate)}
+                            />
+                          );
+                        })}
+                      </g>
+                      <g clipPath={`url(#${clipInactiveId})`} opacity={0.4}>
+                        {paths.map((d, i) => {
+                          const isDashed = series[i].style !== 'solid';
+                          return (
+                            <path
+                              key={`${series[i].key}-inactive`}
+                              d={d}
+                              fill="none"
+                              stroke={series[i].color}
+                              strokeWidth={isDashed ? 1 : strokeWidth}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeDasharray={DASH_PATTERNS[series[i].style]}
+                            />
+                          );
+                        })}
+                      </g>
+                    </>
+                  ) : (
+                    paths.map((d, i) => {
+                      const isDashed = series[i].style !== 'solid';
+                      return (
+                        <path
+                          key={series[i].key}
+                          d={d}
+                          pathLength={animate && !isDashed ? 1 : undefined}
+                          fill="none"
+                          stroke={series[i].color}
+                          strokeWidth={isDashed ? 1 : strokeWidth}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeDasharray={DASH_PATTERNS[series[i].style]}
+                          className={clsx(animate && !isDashed && styles.lineAnimate)}
+                        />
+                      );
+                    })
+                  )}
+                </g>
 
-                {/* Active dots (always mounted, positioned via ref) */}
-                {series.map((s, i) => (
-                  <rect
-                    key={s.key}
-                    ref={(el) => {
-                      dotRefs.current[i] = el;
-                    }}
-                    x={0}
-                    y={0}
-                    width={8}
-                    height={8}
-                    rx={2}
-                    fill={s.color}
-                    className={styles.activeDot}
-                    style={{ display: 'none' }}
-                  />
-                ))}
+                {interactive && (
+                  <>
+                    <line
+                      ref={scrub.cursorRef}
+                      x1={0} y1={0} x2={0} y2={plotHeight}
+                      className={styles.cursorLine}
+                      style={{ display: 'none' }}
+                    />
+                    {series.map((s, i) => (
+                      <circle
+                        key={s.key}
+                        ref={(el) => { scrub.dotRefs.current[i] = el; }}
+                        cx={0} cy={0} r={3}
+                        fill={s.color}
+                        className={styles.activeDot}
+                        style={{ display: 'none' }}
+                      />
+                    ))}
+                  </>
+                )}
 
-                {/* Y axis labels */}
                 {yLabels.map(({ y, text }, i) => (
-                  <text
-                    key={i}
-                    x={-8}
-                    y={y}
-                    className={styles.axisLabel}
-                    textAnchor="end"
-                    dominantBaseline="middle"
-                  >
+                  <text key={i} x={-8} y={y} className={styles.axisLabel} textAnchor="end" dominantBaseline="middle">
                     {text}
                   </text>
                 ))}
 
-                {/* X axis labels */}
                 {xLabels.map(({ x, text, index: labelIndex }, i) => (
                   <text
                     key={`${labelIndex}-${text}`}
                     x={x}
                     y={plotHeight + 20}
                     className={styles.axisLabel}
-                    textAnchor={
-                      i === 0
-                        ? 'start'
-                        : i === xLabels.length - 1
-                          ? 'end'
-                          : 'middle'
-                    }
+                    textAnchor={i === 0 ? 'start' : i === xLabels.length - 1 ? 'end' : 'middle'}
                     dominantBaseline="auto"
                   >
                     {text}
@@ -656,11 +570,14 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
               </g>
             </svg>
 
-            {/* Tooltip (always mounted when enabled, visibility toggled via ref) */}
             {showTooltip && (
               <div
-                ref={tooltipRef}
-                className={clsx(styles.tooltip, tooltipMode === 'simple' && styles.tooltipSimple)}
+                ref={scrub.tooltipRef}
+                className={clsx(
+                  styles.tooltip,
+                  tooltipMode === 'simple' && styles.tooltipSimple,
+                  tooltipMode === 'compact' && styles.tooltipCompact,
+                )}
                 style={{
                   position: 'absolute',
                   top: PAD_TOP,
@@ -669,42 +586,59 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                   display: 'none',
                 }}
               >
-                {activeIndex !== null &&
-                  activeIndex < data.length &&
+                {scrub.activeIndex !== null &&
+                  scrub.activeIndex < data.length &&
                   (tooltipMode === 'custom' && tooltipRender ? (
-                    tooltipRender(data[activeIndex], series)
+                    tooltipRender(data[scrub.activeIndex], series)
                   ) : tooltipMode === 'simple' ? (
                     xKey && (
-                      <p className={styles.tooltipLabel}>
+                      <span className={styles.tooltipInlineTime}>
                         {formatXLabel
-                          ? formatXLabel(data[activeIndex][xKey])
-                          : String(data[activeIndex][xKey] ?? '')}
-                      </p>
+                          ? formatXLabel(data[scrub.activeIndex][xKey])
+                          : String(data[scrub.activeIndex][xKey] ?? '')}
+                      </span>
                     )
+                  ) : tooltipMode === 'compact' ? (
+                    <>
+                      {series.map((s, i) => {
+                        const v = Number(data[scrub.activeIndex!][s.key]);
+                        return (
+                          <React.Fragment key={s.key}>
+                            {i > 0 && <span className={styles.tooltipInlineSep}>{'  ·  '}</span>}
+                            <span className={styles.tooltipInlineValue}>
+                              {isNaN(v) ? '--' : fmtValue(v)}
+                            </span>
+                          </React.Fragment>
+                        );
+                      })}
+                      {xKey && (
+                        <>
+                          <span className={styles.tooltipInlineSep}>{'  ·  '}</span>
+                          <span className={styles.tooltipInlineTime}>
+                            {formatXLabel
+                              ? formatXLabel(data[scrub.activeIndex][xKey])
+                              : String(data[scrub.activeIndex][xKey] ?? '')}
+                          </span>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <>
                       {xKey && (
                         <p className={styles.tooltipLabel}>
                           {formatXLabel
-                            ? formatXLabel(data[activeIndex][xKey])
-                            : String(data[activeIndex][xKey] ?? '')}
+                            ? formatXLabel(data[scrub.activeIndex][xKey])
+                            : String(data[scrub.activeIndex][xKey] ?? '')}
                         </p>
                       )}
                       <div className={styles.tooltipItems}>
                         {series.map((s) => {
-                          const v = Number(data[activeIndex][s.key]);
+                          const v = Number(data[scrub.activeIndex!][s.key]);
                           return (
                             <div key={s.key} className={styles.tooltipItem}>
-                              <span
-                                className={styles.tooltipIndicator}
-                                style={{ backgroundColor: s.color }}
-                              />
-                              <span className={styles.tooltipName}>
-                                {s.label}
-                              </span>
-                              <span className={styles.tooltipValue}>
-                                {isNaN(v) ? '--' : fmtValue(v)}
-                              </span>
+                              <span className={styles.tooltipIndicator} style={{ backgroundColor: s.color }} />
+                              <span className={styles.tooltipName}>{s.label}</span>
+                              <span className={styles.tooltipValue}>{isNaN(v) ? '--' : fmtValue(v)}</span>
                             </div>
                           );
                         })}
@@ -716,6 +650,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

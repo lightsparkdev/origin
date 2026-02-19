@@ -88,6 +88,14 @@
   letter-spacing: var(--font-tracking-normal, 0);
 }
 
+@mixin label-chart {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-2xs, 10px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-16, 16px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
 @mixin label-lg {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-lg, 16px);
@@ -138,6 +146,14 @@
 
 @mixin link-sm {
   font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs, 12px);
+  font-weight: var(--font-weight-regular, 400);
+  line-height: var(--font-leading-16, 16px);
+  letter-spacing: var(--font-tracking-normal, 0);
+}
+
+@mixin tooltip-chart {
+  font-family: var(--font-family-mono);
   font-size: var(--font-size-xs, 12px);
   font-weight: var(--font-weight-regular, 400);
   line-height: var(--font-leading-16, 16px);
