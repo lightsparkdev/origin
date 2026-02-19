@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { filerp } from './utils';
 import styles from './Chart.module.scss';
 
 export interface LivePoint {
@@ -41,11 +42,6 @@ const MAX_DELTA_MS = 50;
 const MIN_GRID_GAP = 36;
 const PULSE_INTERVAL = 1500;
 const PULSE_DURATION = 900;
-
-function filerp(current: number, target: number, speed: number, dt: number): number {
-  const factor = 1 - Math.pow(1 - speed, dt / 16.67);
-  return current + (target - current) * factor;
-}
 
 function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace('#', '');

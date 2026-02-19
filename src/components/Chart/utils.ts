@@ -1,3 +1,8 @@
+export function filerp(current: number, target: number, speed: number, dt: number): number {
+  const factor = 1 - Math.pow(1 - speed, dt / 16.67);
+  return current + (target - current) * factor;
+}
+
 export interface Point {
   x: number;
   y: number;

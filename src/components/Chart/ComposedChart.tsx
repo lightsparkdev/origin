@@ -23,6 +23,8 @@ import {
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
   PAD_LEFT_AXIS,
+  BAR_GROUP_GAP,
+  BAR_ITEM_GAP,
   resolveTooltipMode,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
@@ -79,8 +81,6 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   formatYLabelRight?: (value: number) => string;
 }
 
-const GROUP_GAP = 0.12;
-const BAR_GAP = 1;
 const PAD_RIGHT_DUAL = PAD_LEFT_AXIS;
 
 export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
@@ -192,9 +192,9 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
 
     // Bar geometry
     const slotWidth = data.length > 0 ? plotWidth / data.length : 0;
-    const groupWidth = slotWidth * (1 - GROUP_GAP);
+    const groupWidth = slotWidth * (1 - BAR_GROUP_GAP);
     const barWidth = barSeries.length > 0
-      ? Math.max(1, (groupWidth - BAR_GAP * (barSeries.length - 1)) / barSeries.length)
+      ? Math.max(1, (groupWidth - BAR_ITEM_GAP * (barSeries.length - 1)) / barSeries.length)
       : 0;
 
     // Line points and paths
@@ -373,9 +373,9 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                       {barSeries.map((s, si) => {
                         const v = Number(d[s.key]) || 0;
                         const domain = s.axis === 'right' ? rightDomain : leftDomain;
-                        const barH = (v / (domain.max - domain.min)) * plotHeight;
+                        const barH = ((v - domain.min) / (domain.max - domain.min)) * plotHeight;
                         const barY = plotHeight - barH;
-                        const barX = slotX + si * (barWidth + BAR_GAP);
+                        const barX = slotX + si * (barWidth + BAR_ITEM_GAP);
                         return (
                           <rect
                             key={s.key}

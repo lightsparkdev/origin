@@ -115,11 +115,15 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
       [ref, attachRef],
     );
 
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
     React.useEffect(() => {
-      if (!onActiveChange) return;
       const segment = activeIndex !== null ? data[activeIndex] ?? null : null;
-      onActiveChange(activeIndex, segment);
-    }, [activeIndex, onActiveChange, data]);
+      onActiveChangeRef.current?.(activeIndex, segment);
+    }, [activeIndex, data]);
 
     const innerRatio = innerRadiusProp;
 
@@ -196,7 +200,7 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
           empty={empty}
           dataLength={data.length}
           height={height}
-          className={clsx(styles.pieRoot, className)}
+          className={undefined}
         >
           {ready && (
             <>

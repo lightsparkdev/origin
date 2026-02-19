@@ -2,21 +2,19 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { filerp } from './utils';
 import styles from './Chart.module.scss';
 
 export interface LiveValueProps extends React.ComponentPropsWithoutRef<'span'> {
+  /** The target value to animate toward. */
   value: number;
   /** Interpolation speed (0-1). Higher = snappier. */
   lerpSpeed?: number;
+  /** Format the displayed value. */
   formatValue?: (v: number) => string;
 }
 
 const MAX_DELTA_MS = 50;
-
-function filerp(current: number, target: number, speed: number, dt: number): number {
-  const factor = 1 - Math.pow(1 - speed, dt / 16.67);
-  return current + (target - current) * factor;
-}
 
 export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
   function LiveValue(
@@ -32,10 +30,18 @@ export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
     const speedRef = React.useRef(lerpSpeed);
 
     React.useLayoutEffect(() => {
-      targetRef.current = value;
       formatRef.current = formatValue;
       speedRef.current = lerpSpeed;
     });
+
+    // Restart loop when target changes
+    React.useEffect(() => {
+      targetRef.current = value;
+      if (!rafRef.current) {
+        lastFrameRef.current = 0;
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    }, [value]);
 
     const tick = React.useCallback(() => {
       const now = performance.now();
@@ -56,13 +62,17 @@ export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
         el.textContent = fmt ? fmt(display) : display.toFixed(display % 1 === 0 && Math.abs(display - target) < 0.01 ? 0 : 2);
       }
 
+      if (display === target) {
+        rafRef.current = 0;
+        return;
+      }
       rafRef.current = requestAnimationFrame(tick);
     }, []);
 
     React.useEffect(() => {
       rafRef.current = requestAnimationFrame(tick);
       const onVisibility = () => {
-        if (!document.hidden && !rafRef.current) {
+        if (!document.hidden && !rafRef.current && displayRef.current !== targetRef.current) {
           lastFrameRef.current = 0;
           rafRef.current = requestAnimationFrame(tick);
         }
@@ -70,6 +80,7 @@ export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
       document.addEventListener('visibilitychange', onVisibility);
       return () => {
         if (rafRef.current) cancelAnimationFrame(rafRef.current);
+        rafRef.current = 0;
         document.removeEventListener('visibilitychange', onVisibility);
       };
     }, [tick]);

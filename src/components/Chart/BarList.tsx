@@ -87,8 +87,12 @@ export const BarList = React.forwardRef<HTMLDivElement, BarListProps>(
             <div
               key={i}
               className={clsx(styles.barListRow, clickable && styles.barListRowClickable)}
-              role="listitem"
+              role={clickable ? 'button' : 'listitem'}
+              tabIndex={clickable ? 0 : undefined}
               onClick={onClickItem ? () => onClickItem(item, i) : undefined}
+              onKeyDown={onClickItem ? (e: React.KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClickItem(item, i); }
+              } : undefined}
             >
               <div className={styles.barListBar} style={{ width: `${pct}%`, backgroundColor: barColor }} />
               <div className={styles.barListContent}>

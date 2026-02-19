@@ -22,6 +22,12 @@ export type { GaugeChartProps, GaugeThreshold } from './GaugeChart';
 export { BarList } from './BarList';
 export type { BarListProps, BarListItem } from './BarList';
 
+export { Uptime } from './UptimeChart';
+export type { UptimeChartProps, UptimePoint } from './UptimeChart';
+
+export { ActivityGrid } from './ActivityGrid';
+export type { ActivityGridProps, ActivityCell } from './ActivityGrid';
+
 export { Live } from './LiveChart';
 export type { LiveChartProps, LivePoint } from './LiveChart';
 

@@ -3866,6 +3866,55 @@ export default function Home() {
         </div>
       </div>
 
+      <h3 style={{ marginBottom: '0.75rem' }}>Uptime</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <Chart.Uptime
+            data={Array.from({ length: 90 }, (_, i) => ({
+              status: (Math.random() > 0.05 ? 'up' : Math.random() > 0.5 ? 'degraded' : 'down') as 'up' | 'down' | 'degraded',
+              label: `Day ${i + 1}`,
+            }))}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Activity Grid</h3>
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Weekly (with labels)</p>
+          <Chart.ActivityGrid
+            rows={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+            columns={Array.from({ length: 20 }, (_, i) => `W${i + 1}`)}
+            showRowLabels
+            showColumnLabels
+            data={Array.from({ length: 20 }, (_, ci) =>
+              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => ({
+                row: day,
+                col: `W${ci + 1}`,
+                value: Math.floor(Math.random() * 10),
+              })),
+            ).flat()}
+          />
+        </div>
+        <div>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Hourly over 7 days</p>
+          <Chart.ActivityGrid
+            rows={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
+            columns={Array.from({ length: 24 }, (_, i) => `${i}h`)}
+            cellSize={10}
+            cellGap={1}
+            color="var(--color-green-500)"
+            data={Array.from({ length: 24 }, (_, ci) =>
+              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => ({
+                row: day,
+                col: `${ci}h`,
+                value: Math.floor(Math.random() * 20),
+              })),
+            ).flat()}
+          />
+        </div>
+      </div>
+
       <h3 style={{ marginBottom: '0.75rem' }}>Gauge</h3>
       <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
         <div style={{ width: 280 }}>
@@ -3875,25 +3924,9 @@ export default function Home() {
             min={0}
             max={1}
             thresholds={[
-              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great', badge: 'green' },
-              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work', badge: 'yellow' },
-              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor', badge: 'red' },
-            ]}
-            markerLabel="P75"
-            formatValue={(v) => `${v.toFixed(2)}s`}
-          />
-        </div>
-        <div style={{ width: 280 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Compact</p>
-          <Chart.Gauge
-            value={0.32}
-            min={0}
-            max={1}
-            variant="compact"
-            thresholds={[
-              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great', badge: 'green' },
-              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work', badge: 'yellow' },
-              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor', badge: 'red' },
+              { upTo: 0.5, color: 'var(--color-green-500)', label: 'Great' },
+              { upTo: 0.8, color: 'var(--color-yellow-500)', label: 'Needs work' },
+              { upTo: 1, color: 'var(--color-red-500)', label: 'Poor' },
             ]}
             markerLabel="P75"
             formatValue={(v) => `${v.toFixed(2)}s`}

@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { Badge, type BadgeVariant } from '../Badge';
 import styles from './Chart.module.scss';
 
 export interface GaugeThreshold {
@@ -12,8 +11,6 @@ export interface GaugeThreshold {
   color: string;
   /** Optional label for this zone (e.g., "Great", "Needs work"). */
   label?: string;
-  /** Badge variant to use when this zone is active. Maps to Origin's Badge component. */
-  badge?: BadgeVariant;
 }
 
 export interface GaugeChartProps extends React.ComponentPropsWithoutRef<'div'> {
@@ -30,7 +27,7 @@ export interface GaugeChartProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Format the displayed value. */
   formatValue?: (value: number) => string;
   /** Visual density. */
-  variant?: 'default' | 'compact' | 'minimal';
+  variant?: 'default' | 'minimal';
   /** Accessible label. */
   ariaLabel?: string;
 }
@@ -65,7 +62,6 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
         ref={ref}
         className={clsx(
           styles.gauge,
-          variant === 'compact' && styles.gaugeCompact,
           variant === 'minimal' && styles.gaugeMinimal,
           className,
         )}
@@ -74,24 +70,17 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
         aria-valuemin={min}
         aria-valuemax={max}
         aria-label={ariaLabel ?? 'Gauge'}
+        aria-valuetext={`${fmtValue}${activeThreshold?.label ? `, ${activeThreshold.label}` : ''}`}
         {...props}
       >
-        {/* Header */}
         <div className={styles.gaugeHeader}>
-          <span className={styles.gaugeValue}>
-            {fmtValue}
-          </span>
-          {variant === 'default' && activeThreshold?.label && (
-            <Badge variant={activeThreshold.badge ?? 'gray'}>
-              {activeThreshold.label}
-            </Badge>
-          )}
-          {variant === 'compact' && activeThreshold?.label && (
-            <Badge variant={activeThreshold.badge ?? 'gray'}>
-              {activeThreshold.label}
-            </Badge>
-          )}
+          <span className={styles.gaugeValue}>{fmtValue}</span>
         </div>
+        {variant !== 'minimal' && activeThreshold?.label && (
+          <div className={styles.gaugeTrailing}>
+            <span className={styles.gaugeTrailingText}>{activeThreshold.label}</span>
+          </div>
+        )}
 
         {/* Track + marker container */}
         <div className={styles.gaugeTrackWrap}>

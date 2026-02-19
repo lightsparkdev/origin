@@ -69,6 +69,12 @@ export type {
   ComposedSeries as ChartComposedSeries,
   LiveChartProps as ChartLiveProps,
   LivePoint as ChartLivePoint,
+  LiveValueProps as ChartLiveValueProps,
+  LiveDotProps as ChartLiveDotProps,
+  GaugeChartProps as ChartGaugeProps,
+  GaugeThreshold as ChartGaugeThreshold,
+  BarListProps as ChartBarListProps,
+  BarListItem as ChartBarListItem,
 } from './components/Chart';
 
 // Simple components (direct exports)

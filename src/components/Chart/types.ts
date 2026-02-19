@@ -90,6 +90,9 @@ export function resolveSeries(
   return [];
 }
 
+export const BAR_GROUP_GAP = 0.12;
+export const BAR_ITEM_GAP = 1;
+
 export const DASH_PATTERNS: Record<string, string | undefined> = {
   solid: undefined,
   dashed: '4 4',

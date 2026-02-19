@@ -65,7 +65,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
 
   React.useEffect(() => {
     setActiveIndex(null);
-  }, [data]);
+  }, [data.length]);
 
   const onActiveChangeRef = React.useRef(onActiveChange);
   React.useLayoutEffect(() => {
