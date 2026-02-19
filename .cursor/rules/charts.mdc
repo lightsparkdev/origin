@@ -1,0 +1,101 @@
+---
+description: Chart component color and usage conventions
+globs:
+  - src/components/Chart/**/*
+  - src/app/**/Chart*
+  - src/app/**/chart*
+---
+# Chart Color Conventions
+
+## Available Components
+
+| Component | Use case |
+|---|---|
+| `Chart.Line` | Line chart, area chart (via `fill` prop), sparkline-like |
+| `Chart.Sparkline` | Compact inline chart — no axes, no interaction |
+| `Chart.StackedArea` | Stacked cumulative area bands |
+| `Chart.Bar` | Grouped or stacked bar chart |
+| `Chart.Pie` | Pie or donut chart (via `donut` prop) |
+| `Chart.Composed` | Mixed bar + line with dual Y-axes |
+
+## Color Strategy
+
+### Single series
+
+Use `color` prop or `dataKey` — the component defaults to `var(--border-primary)`.
+
+```tsx
+<Chart.Line data={data} dataKey="value" color="var(--color-blue-600)" />
+```
+
+### Multi-series: shade ramps (preferred)
+
+For stacked or grouped data where the series represent parts of a whole, use shades of one hue from the primitive color scale. This creates visual cohesion — the bands read as layers, not competing categories.
+
+```tsx
+// 3-series shade ramp
+series={[
+  { key: 'a', label: 'Primary', color: 'var(--color-blue-700)' },
+  { key: 'b', label: 'Secondary', color: 'var(--color-blue-400)' },
+  { key: 'c', label: 'Tertiary', color: 'var(--color-blue-200)' },
+]}
+```
+
+Recommended shade stops by series count:
+
+- **2 series**: 700, 300
+- **3 series**: 700, 400, 200
+- **4 series**: 700, 500, 300, 100
+- **5 series**: 800, 600, 400, 200, 050
+
+### Multi-series: distinct hues
+
+When the series represent fundamentally different categories (e.g., incoming vs outgoing), use distinct semantic colors:
+
+```tsx
+series={[
+  { key: 'incoming', label: 'Incoming', color: 'var(--surface-blue-strong)' },
+  { key: 'outgoing', label: 'Outgoing', color: 'var(--surface-purple-strong)' },
+]}
+```
+
+### Composed charts (bar + line)
+
+Use a lighter shade for bars (they have large surface area) and full-strength or `--text-primary` for lines (thin, needs contrast):
+
+```tsx
+series={[
+  { key: 'revenue', type: 'bar', color: 'var(--color-blue-300)' },
+  { key: 'rate', type: 'line', axis: 'right', color: 'var(--text-primary)' },
+]}
+```
+
+## Color Scale Reference
+
+Every hue has 12 stops: `050, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950`.
+
+Available hues: `blue`, `purple`, `green`, `pink`, `red`, `yellow`.
+
+Pattern: `var(--color-{hue}-{stop})`
+
+## Fallback Palette
+
+When no `color` is set on a series, the component auto-assigns from `SERIES_COLORS`:
+
+1. `var(--border-primary)` (near-black)
+2. `var(--text-secondary)` (gray)
+3. `var(--surface-blue-strong)`
+4. `var(--surface-purple-strong)`
+5. `var(--surface-green-strong)`
+6. `var(--surface-pink-strong)`
+
+This palette is designed for distinct-hue multi-series. For stacked/grouped charts, always set explicit shade ramp colors.
+
+## Do / Do Not
+
+- **Do** use shade ramps for stacked and grouped charts
+- **Do** use `var(--color-*)` primitive tokens for chart series colors
+- **Do** use lighter shades for large-area fills (bars, area bands) and stronger shades for thin elements (lines, dots)
+- **Do not** hardcode hex colors — use tokens
+- **Do not** rely on the fallback palette for stacked charts — the distinct hues look incohesive when stacked
+- **Do not** use semantic surface tokens (`--surface-blue-strong`) when you need shade control — use the primitive scale instead
