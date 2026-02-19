@@ -385,7 +385,7 @@ test.describe('Chart fadeLeft', () => {
     const gradient = page.locator(
       '[data-testid="chart"] svg linearGradient',
     );
-    await expect(gradient).toBeAttached();
+    await expect(gradient.first()).toBeAttached();
   });
 
   test('fadeLeft={60} adds SVG mask', async ({ mount, page }) => {
