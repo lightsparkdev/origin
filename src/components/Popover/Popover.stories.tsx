@@ -14,6 +14,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const contentStyle = { padding: 'var(--spacing-md)', maxWidth: 280 };
+
 export const Default: Story = {
   render: () => (
     <Popover.Root>
@@ -23,10 +25,12 @@ export const Default: Story = {
       <Popover.Portal>
         <Popover.Positioner>
           <Popover.Popup>
-            <Popover.Title>Popover Title</Popover.Title>
-            <Popover.Description>
-              This is a basic popover with a title and description.
-            </Popover.Description>
+            <div style={contentStyle}>
+              <Popover.Title style={{ margin: 0, fontSize: 14, fontWeight: 500 }}>Popover Title</Popover.Title>
+              <Popover.Description style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
+                This is a basic popover with a title and description.
+              </Popover.Description>
+            </div>
           </Popover.Popup>
         </Popover.Positioner>
       </Popover.Portal>
@@ -44,10 +48,12 @@ export const WithArrow: Story = {
         <Popover.Positioner>
           <Popover.Popup>
             <Popover.Arrow />
-            <Popover.Title>Arrow Popover</Popover.Title>
-            <Popover.Description>
-              This popover includes an arrow pointing to the trigger.
-            </Popover.Description>
+            <div style={contentStyle}>
+              <Popover.Title style={{ margin: 0, fontSize: 14, fontWeight: 500 }}>Arrow Popover</Popover.Title>
+              <Popover.Description style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
+                This popover includes an arrow pointing to the trigger.
+              </Popover.Description>
+            </div>
           </Popover.Popup>
         </Popover.Positioner>
       </Popover.Portal>
@@ -64,13 +70,17 @@ export const WithClose: Story = {
       <Popover.Portal>
         <Popover.Positioner>
           <Popover.Popup>
-            <Popover.Title>Dismissable Popover</Popover.Title>
-            <Popover.Description>
-              Click the close button or outside to dismiss.
-            </Popover.Description>
-            <Popover.Close render={<Button variant="outline" />}>
-              Close
-            </Popover.Close>
+            <div style={contentStyle}>
+              <Popover.Title style={{ margin: 0, fontSize: 14, fontWeight: 500 }}>Dismissable Popover</Popover.Title>
+              <Popover.Description style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
+                Click the close button or outside to dismiss.
+              </Popover.Description>
+              <div style={{ marginTop: 12 }}>
+                <Popover.Close render={<Button variant="outline" size="compact" />}>
+                  Close
+                </Popover.Close>
+              </div>
+            </div>
           </Popover.Popup>
         </Popover.Positioner>
       </Popover.Portal>
@@ -87,10 +97,12 @@ export const OpenByDefault: Story = {
       <Popover.Portal>
         <Popover.Positioner>
           <Popover.Popup>
-            <Popover.Title>Open by Default</Popover.Title>
-            <Popover.Description>
-              This popover renders in its open state.
-            </Popover.Description>
+            <div style={contentStyle}>
+              <Popover.Title style={{ margin: 0, fontSize: 14, fontWeight: 500 }}>Open by Default</Popover.Title>
+              <Popover.Description style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
+                This popover renders in its open state.
+              </Popover.Description>
+            </div>
           </Popover.Popup>
         </Popover.Positioner>
       </Popover.Portal>
