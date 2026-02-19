@@ -27,6 +27,7 @@ export interface Series {
 export type TooltipProp =
   | boolean
   | 'simple'
+  | 'compact'
   | 'detailed'
   | ((
       datum: Record<string, unknown>,
@@ -127,7 +128,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       grid = false,
       tooltip: tooltipProp,
       curve = 'monotone',
-      strokeWidth = 1.5,
+      strokeWidth = 2,
       color,
       animate = true,
       fadeLeft,
@@ -145,13 +146,15 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     const uid = React.useId().replace(/:/g, '');
 
     // Resolve tooltip mode from the polymorphic prop
-    const tooltipMode: 'off' | 'simple' | 'detailed' | 'custom' = !tooltipProp
+    const tooltipMode: 'off' | 'simple' | 'compact' | 'detailed' | 'custom' = !tooltipProp
       ? 'off'
       : tooltipProp === true || tooltipProp === 'detailed'
         ? 'detailed'
         : tooltipProp === 'simple'
           ? 'simple'
-          : 'custom';
+          : tooltipProp === 'compact'
+            ? 'compact'
+            : 'custom';
     const showTooltip = tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
@@ -254,6 +257,16 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       const build = curve === 'monotone' ? monotonePath : linearPath;
       return seriesPoints.map((pts) => build(pts));
     }, [seriesPoints, curve]);
+
+    // Area paths for gradient fills: close each line path along the bottom edge
+    const areaPaths = React.useMemo(() => {
+      return seriesPoints.map((pts, i) => {
+        if (pts.length === 0) return '';
+        const firstX = pts[0].x;
+        const lastX = pts[pts.length - 1].x;
+        return `${paths[i]} L ${lastX},${plotHeight} L ${firstX},${plotHeight} Z`;
+      });
+    }, [seriesPoints, paths, plotHeight]);
 
     // X axis labels (smart spacing to avoid overlap)
     const xLabels = React.useMemo(() => {
@@ -385,12 +398,21 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
         const tip = tooltipRef.current;
         if (tip) {
           const absX = padLeft + clampedX;
-          const isLeftHalf = clampedX <= plotWidth / 2;
-          tip.style.left = `${absX}px`;
-          tip.style.transform = isLeftHalf
-            ? `translateX(${TOOLTIP_GAP}px)`
-            : `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
-          tip.style.display = '';
+          if (tooltipMode === 'compact') {
+            tip.style.display = '';
+            const tipW = tip.offsetWidth;
+            const centered = absX - tipW / 2 + 6;
+            const left = Math.max(padLeft, Math.min(padLeft + plotWidth - tipW, centered));
+            tip.style.left = `${left}px`;
+            tip.style.transform = 'none';
+          } else {
+            const isLeftHalf = clampedX <= plotWidth / 2;
+            tip.style.left = `${absX}px`;
+            tip.style.transform = isLeftHalf
+              ? `translateX(${TOOLTIP_GAP}px)`
+              : `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
+            tip.style.display = '';
+          }
         }
 
         // React state: only update when nearest index actually changes
@@ -402,7 +424,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
         );
         setActiveIndex((prev) => (prev === index ? prev : index));
       },
-      [data.length, plotWidth, padLeft],
+      [data.length, plotWidth, padLeft, tooltipMode],
     );
 
     const hideHover = React.useCallback(() => {
@@ -541,6 +563,22 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                     height={height}
                   />
                 </clipPath>
+
+                {/* Gradient fills: series color fades to transparent downward */}
+                {series.map((s, i) => (
+                  <linearGradient
+                    key={`${uid}-fill-${i}`}
+                    id={`${uid}-fill-${i}`}
+                    gradientUnits="userSpaceOnUse"
+                    x1={0}
+                    y1={0}
+                    x2={0}
+                    y2={plotHeight}
+                  >
+                    <stop offset="0" stopColor={s.color} stopOpacity={0.12} />
+                    <stop offset="1" stopColor={s.color} stopOpacity={0} />
+                  </linearGradient>
+                ))}
               </defs>
 
               <g transform={`translate(${padLeft},${PAD_TOP})`}>
@@ -556,6 +594,20 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                       className={styles.gridLine}
                     />
                   ))}
+
+                {/* Gradient fills (rendered below line strokes) */}
+                <g mask={fadeMaskId ? `url(#${fadeMaskId})` : undefined}>
+                  {areaPaths.map((d, i) =>
+                    d ? (
+                      <path
+                        key={`${series[i].key}-fill`}
+                        d={d}
+                        fill={`url(#${uid}-fill-${i})`}
+                        stroke="none"
+                      />
+                    ) : null,
+                  )}
+                </g>
 
                 {/* Line paths (dual: active color clipped left, tertiary clipped right) */}
                 <g mask={fadeMaskId ? `url(#${fadeMaskId})` : undefined}>
@@ -660,7 +712,11 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
             {showTooltip && (
               <div
                 ref={tooltipRef}
-                className={clsx(styles.tooltip, tooltipMode === 'simple' && styles.tooltipSimple)}
+                className={clsx(
+                  styles.tooltip,
+                  tooltipMode === 'simple' && styles.tooltipSimple,
+                  tooltipMode === 'compact' && styles.tooltipCompact,
+                )}
                 style={{
                   position: 'absolute',
                   top: PAD_TOP,
@@ -675,12 +731,38 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                     tooltipRender(data[activeIndex], series)
                   ) : tooltipMode === 'simple' ? (
                     xKey && (
-                      <p className={styles.tooltipLabel}>
+                      <span className={styles.tooltipInlineTime}>
                         {formatXLabel
                           ? formatXLabel(data[activeIndex][xKey])
                           : String(data[activeIndex][xKey] ?? '')}
-                      </p>
+                      </span>
                     )
+                  ) : tooltipMode === 'compact' ? (
+                    <>
+                      {series.map((s, i) => {
+                        const v = Number(data[activeIndex][s.key]);
+                        return (
+                          <React.Fragment key={s.key}>
+                            {i > 0 && (
+                              <span className={styles.tooltipInlineSep}>{'  ·  '}</span>
+                            )}
+                            <span className={styles.tooltipInlineValue}>
+                              {isNaN(v) ? '--' : fmtValue(v)}
+                            </span>
+                          </React.Fragment>
+                        );
+                      })}
+                      {xKey && (
+                        <>
+                          <span className={styles.tooltipInlineSep}>{'  ·  '}</span>
+                          <span className={styles.tooltipInlineTime}>
+                            {formatXLabel
+                              ? formatXLabel(data[activeIndex][xKey])
+                              : String(data[activeIndex][xKey] ?? '')}
+                          </span>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <>
                       {xKey && (

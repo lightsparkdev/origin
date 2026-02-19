@@ -15,8 +15,8 @@
 // Grid
 
 .gridLine {
-  stroke: var(--border-tertiary);
-  stroke-dasharray: 3 3;
+  stroke: var(--text-primary);
+  stroke-opacity: 0.06;
   stroke-width: var(--stroke-sm);
 }
 
@@ -54,7 +54,7 @@
 // Axis labels
 
 .axisLabel {
-  @include label-xs;
+  @include label-chart;
 
   fill: var(--text-secondary);
 }
@@ -73,9 +73,15 @@
   z-index: 10;
   white-space: nowrap;
 
-  &.tooltipSimple {
-    padding: var(--spacing-2xs) var(--spacing-xs);
-    background-color: var(--surface-primary);
+  &.tooltipSimple,
+  &.tooltipCompact {
+    display: block;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    gap: 0;
   }
 }
 
@@ -118,4 +124,23 @@
   color: var(--text-primary);
   margin-inline-start: auto;
   font-variant-numeric: tabular-nums;
+}
+
+%tooltipInlineBase {
+  @include tooltip-chart;
+
+  line-height: 1;
+}
+
+.tooltipInlineValue {
+  @extend %tooltipInlineBase;
+
+  color: var(--text-primary);
+}
+
+.tooltipInlineSep,
+.tooltipInlineTime {
+  @extend %tooltipInlineBase;
+
+  color: var(--text-secondary);
 }

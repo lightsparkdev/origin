@@ -3623,6 +3623,29 @@ export default function Home() {
           />
         </div>
 
+        {/* Compact: date + value, no labels */}
+        <div style={{ width: 388 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>
+            tooltip=&quot;compact&quot;
+          </p>
+          <Chart.Line
+            data={[
+              { date: 'Aug 10', value: 180 },
+              { date: 'Aug 11', value: 185 },
+              { date: 'Aug 12', value: 182 },
+              { date: 'Aug 13', value: 188 },
+              { date: 'Aug 14', value: 190 },
+              { date: 'Aug 15', value: 195 },
+              { date: 'Aug 16', value: 200 },
+            ]}
+            dataKey="value"
+            xKey="date"
+            height={200}
+            grid
+            tooltip="compact"
+          />
+        </div>
+
         {/* Detailed (default): series rows */}
         <div style={{ width: 388 }}>
           <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>

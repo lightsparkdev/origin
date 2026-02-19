@@ -15,6 +15,8 @@
 .label { @include label; }
 .label-sm { @include label-sm; }
 .label-xs { @include label-xs; }
+.label-chart { @include label-chart; }
+.tooltip-chart { @include tooltip-chart; }
 
 .code { @include code; }
 
