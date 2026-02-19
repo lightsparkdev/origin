@@ -82,15 +82,21 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
             />
           ))}
         </div>
-        {activeIndex !== null && data[activeIndex]?.label && (
-          <div className={styles.uptimeTooltip}>
-            <span
-              className={styles.uptimeDot}
-              style={{ backgroundColor: colors[data[activeIndex].status] }}
-            />
-            <span className={styles.uptimeLabel}>{data[activeIndex].label}</span>
-          </div>
-        )}
+        <div className={styles.uptimeTooltip} style={{ visibility: activeIndex !== null && data[activeIndex]?.label ? 'visible' : 'hidden' }}>
+          {activeIndex !== null && data[activeIndex]?.label && (
+            <>
+              <span
+                className={styles.uptimeDot}
+                style={{ backgroundColor: colors[data[activeIndex].status] }}
+              />
+              <span className={styles.uptimeLabel}>{data[activeIndex].label}</span>
+            </>
+          )}
+          {/* Reserve height when empty */}
+          {(activeIndex === null || !data[activeIndex]?.label) && (
+            <span className={styles.uptimeLabel}>&nbsp;</span>
+          )}
+        </div>
       </div>
     );
   },
