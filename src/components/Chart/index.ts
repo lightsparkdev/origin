@@ -15,3 +15,6 @@ export type { PieChartProps, PieSegment } from './PieChart';
 
 export { Composed } from './ComposedChart';
 export type { ComposedChartProps, ComposedSeries } from './ComposedChart';
+
+export { Live } from './LiveChart';
+export type { LiveChartProps, LivePoint } from './LiveChart';

@@ -1472,6 +1472,53 @@ function TableExamples() {
   );
 }
 
+function LiveDemo() {
+  const [data, setData] = React.useState<{ time: number; value: number }[]>([]);
+  const [value, setValue] = React.useState(100);
+  const valueRef = React.useRef(100);
+
+  React.useEffect(() => {
+    const now = Date.now() / 1000;
+    const seed: { time: number; value: number }[] = [];
+    let v = 100;
+    for (let i = 30; i >= 0; i--) {
+      v += (Math.random() - 0.5) * 4;
+      seed.push({ time: now - i, value: v });
+    }
+    valueRef.current = v;
+    setData(seed);
+    setValue(v);
+
+    const interval = setInterval(() => {
+      const t = Date.now() / 1000;
+      valueRef.current += (Math.random() - 0.5) * 3;
+      const next = valueRef.current;
+      setValue(next);
+      setData((prev) => {
+        const cutoff = t - 60;
+        const filtered = prev.filter((p) => p.time > cutoff);
+        return [...filtered, { time: t, value: next }];
+      });
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <Chart.Live
+      data={data}
+      value={value}
+      color="var(--color-blue-500)"
+      window={30}
+      height={200}
+      grid
+      fill
+      scrub
+      formatValue={(v) => v.toFixed(1)}
+    />
+  );
+}
+
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
@@ -3618,6 +3665,14 @@ export default function Home() {
             series={[{ key: 'a', label: 'Incoming' }, { key: 'b', label: 'Outgoing' }]}
             xKey="d" height={160} grid tooltip="detailed"
           />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Live (Real-Time)</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Streaming data (random walk)</p>
+          <LiveDemo />
         </div>
       </div>
 
