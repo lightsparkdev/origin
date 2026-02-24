@@ -1,238 +1,243 @@
 /**
  * Complete Icon Registry
- * 
+ *
  * All icons from the Figma design system.
- * Icons use round-outlined-radius-3-stroke-1.5 by default.
- * Arrows and chevrons use round-outlined-radius-0-stroke-1.5 for sharp directional elements.
+ * Icons are vendored from @central-icons-react — see icon-manifest.ts
+ * and `npm run icons:extract` for the extraction workflow.
+ *
+ * Variants:
+ *   - outlined (radius-3): default for most icons
+ *   - sharp (radius-0): pure directional arrows and chevrons
+ *   - filled (radius-3): solid fill variants
  */
 
-// Pure directional arrows (radius-0 for sharp geometric precision)
-import { IconArrow } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrow';
-import { IconArrowDown } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowDown';
-import { IconArrowDownLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowDownLeft';
-import { IconArrowDownRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowDownRight';
-import { IconArrowLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowLeft';
-import { IconArrowRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowRight';
-import { IconArrowUp } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowUp';
-import { IconArrowUpLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowUpLeft';
-import { IconArrowUpRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconArrowUpRight';
-import { IconRedirectArrow } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconRedirectArrow';
+// Pure directional arrows (sharp/radius-0 for geometric precision)
+import { IconArrow } from './icons/IconArrow';
+import { IconArrowDown } from './icons/IconArrowDown';
+import { IconArrowDownLeft } from './icons/IconArrowDownLeft';
+import { IconArrowDownRight } from './icons/IconArrowDownRight';
+import { IconArrowLeft } from './icons/IconArrowLeft';
+import { IconArrowRight } from './icons/IconArrowRight';
+import { IconArrowUp } from './icons/IconArrowUp';
+import { IconArrowUpLeft } from './icons/IconArrowUpLeft';
+import { IconArrowUpRight } from './icons/IconArrowUpRight';
+import { IconRedirectArrow } from './icons/IconRedirectArrow';
 
-// Pure directional chevrons (radius-0 for sharp geometric precision)
-import { IconChevronBottom } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronBottom';
-import { IconChevronDownSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronDownSmall';
-import { IconChevronGrabberVertical } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronGrabberVertical';
-import { IconChevronLeft } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronLeft';
-import { IconChevronLeftSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronLeftSmall';
-import { IconChevronRight } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronRight';
-import { IconChevronRightSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronRightSmall';
-import { IconChevronTop } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronTop';
-import { IconChevronTopSmall } from '@central-icons-react/round-outlined-radius-0-stroke-1.5/IconChevronTopSmall';
+// Pure directional chevrons (sharp/radius-0 for geometric precision)
+import { IconChevronBottom } from './icons/IconChevronBottom';
+import { IconChevronDownSmall } from './icons/IconChevronDownSmall';
+import { IconChevronGrabberVertical } from './icons/IconChevronGrabberVertical';
+import { IconChevronLeft } from './icons/IconChevronLeft';
+import { IconChevronLeftSmall } from './icons/IconChevronLeftSmall';
+import { IconChevronRight } from './icons/IconChevronRight';
+import { IconChevronRightSmall } from './icons/IconChevronRightSmall';
+import { IconChevronTop } from './icons/IconChevronTop';
+import { IconChevronTopSmall } from './icons/IconChevronTopSmall';
 
 // Compound arrow variants (radius-3, have structural shapes)
-import { IconArrowBoxRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowBoxRight';
-import { IconArrowDownSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDownSquare';
-import { IconArrowDownWall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowDownWall';
-import { IconArrowInbox } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowInbox';
-import { IconArrowLeftSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowLeftSquare';
-import { IconArrowLoopDownLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowLoopDownLeft';
-import { IconArrowOutOfBox } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowOutOfBox';
-import { IconArrowRightSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowRightSquare';
-import { IconArrowUpSquare } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUpSquare';
-import { IconArrowUpWall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowUpWall';
-import { IconArrowsRepeat } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowsRepeat';
-import { IconArrowsRepeatCircle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconArrowsRepeatCircle';
-import { IconRotate360Left } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRotate360Left';
-import { IconRotate360Right } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRotate360Right';
+import { IconArrowBoxRight } from './icons/IconArrowBoxRight';
+import { IconArrowDownSquare } from './icons/IconArrowDownSquare';
+import { IconArrowDownWall } from './icons/IconArrowDownWall';
+import { IconArrowInbox } from './icons/IconArrowInbox';
+import { IconArrowLeftSquare } from './icons/IconArrowLeftSquare';
+import { IconArrowLoopDownLeft } from './icons/IconArrowLoopDownLeft';
+import { IconArrowOutOfBox } from './icons/IconArrowOutOfBox';
+import { IconArrowRightSquare } from './icons/IconArrowRightSquare';
+import { IconArrowUpSquare } from './icons/IconArrowUpSquare';
+import { IconArrowUpWall } from './icons/IconArrowUpWall';
+import { IconArrowsRepeat } from './icons/IconArrowsRepeat';
+import { IconArrowsRepeatCircle } from './icons/IconArrowsRepeatCircle';
+import { IconRotate360Left } from './icons/IconRotate360Left';
+import { IconRotate360Right } from './icons/IconRotate360Right';
 
 // UI Actions
-import { IconAdjustPhoto } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconAdjustPhoto';
-import { IconAt } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconAt';
-import { IconAutoCrop } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconAutoCrop';
-import { IconBarsThree2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBarsThree2';
-import { IconBell } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBell';
-import { IconBellOff } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBellOff';
-import { IconBlackpoint } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBlackpoint';
-import { IconBrackets1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBrackets1';
-import { IconBrokenHeart } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBrokenHeart';
-import { IconBrowserTabs } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBrowserTabs';
-import { IconBubble3 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBubble3';
-import { IconBubbleWideSparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBubbleWideSparkle';
-import { IconCalendarDays } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCalendarDays';
-import { IconCheckmark2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCheckmark2';
-import { IconCheckmark2Small } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCheckmark2Small';
-import { IconCircleCheck } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCircleCheck';
-import { IconCircleInfo } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCircleInfo';
-import { IconCirclePlus } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCirclePlus';
-import { IconCircleQuestionmark } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCircleQuestionmark';
-import { IconCircleCheck as IconCircleCheckFilled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconCircleCheck';
-import { IconCircleInfo as IconCircleInfoFilled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconCircleInfo';
-import { IconCircleX } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconCircleX';
-import { IconHeart2 as IconHeart2Filled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconHeart2';
-import { IconOngoing as IconOngoingFilled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconOngoing';
-import { IconPeople2 as IconPeople2Filled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconPeople2';
-import { IconClipboard2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconClipboard2';
-import { IconClipboard2Sparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconClipboard2Sparkle';
-import { IconClock } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconClock';
-import { IconCmdBox } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCmdBox';
-import { IconConnectors1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconConnectors1';
-import { IconConnectors2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconConnectors2';
-import { IconConsoleSparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconConsoleSparkle';
-import { IconCrossLarge } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCrossLarge';
-import { IconCrossSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCrossSmall';
-import { IconCryptoWallet } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCryptoWallet';
-import { IconDevices } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDevices';
-import { IconDiamondShine } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDiamondShine';
-import { IconDifferenceIgnored } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDifferenceIgnored';
-import { IconDifferenceModified } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDifferenceModified';
-import { IconDiscoBall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDiscoBall';
-import { IconDotGrid1x3Horizontal } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDotGrid1x3Horizontal';
-import { IconDotGrid1x3HorizontalTight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDotGrid1x3HorizontalTight';
-import { IconDotGrid1x3Vertical } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDotGrid1x3Vertical';
-import { IconDotGrid1x3VerticalTight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDotGrid1x3VerticalTight';
-import { IconDotGrid2x3 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDotGrid2x3';
-import { IconDotGrid3x3 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconDotGrid3x3';
-import { IconExclamationTriangle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconExclamationTriangle';
-import { IconExclamationTriangle as IconExclamationTriangleFilled } from '@central-icons-react/round-filled-radius-3-stroke-1.5/IconExclamationTriangle';
-import { IconEyeOpen } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconEyeOpen';
-import { IconEyeSlash } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconEyeSlash';
-import { IconEyeSlash2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconEyeSlash2';
-import { IconFileArrowLeftIn } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFileArrowLeftIn';
-import { IconFileArrowLeftOut } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFileArrowLeftOut';
-import { IconFileArrowRightOut } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFileArrowRightOut';
-import { IconFileBend } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFileBend';
-import { IconFilter2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFilter2';
-import { IconFingerPrint1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFingerPrint1';
-import { IconFormPyramide } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFormPyramide';
-import { IconForYou } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconForYou';
-import { IconFullScreen } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconFullScreen';
-import { IconGlobe2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconGlobe2';
-import { IconHeart2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconHeart2';
-import { IconHome } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconHome';
-import { IconImport2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconImport2';
-import { IconInitiatives } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconInitiatives';
-import { IconInvite } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconInvite';
-import { IconKey2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconKey2';
-import { IconLayoutColumn } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLayoutColumn';
-import { IconLayoutLeft } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLayoutLeft';
-import { IconLayoutRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLayoutRight';
-import { IconListSparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconListSparkle';
-import { IconLiveActivity } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLiveActivity';
-import { IconLiveFull } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLiveFull';
-import { IconLoader } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLoader';
-import { IconLock } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLock';
-import { IconMagnifyingGlass2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconMagnifyingGlass2';
-import { IconMinusLarge } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconMinusLarge';
-import { IconMinusSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconMinusSmall';
-import { IconMoon } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconMoon';
-import { IconMouse } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconMouse';
-import { IconOffline } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconOffline';
-import { IconOngoing } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconOngoing';
-import { IconPaperclip1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPaperclip1';
-import { IconPassport } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPassport';
-import { IconPassword } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPassword';
-import { IconPasswordStars } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPasswordStars';
-import { IconPencil } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPencil';
-import { IconPencil2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPencil2';
-import { IconPencil3 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPencil3';
-import { IconPencilAi } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPencilAi';
-import { IconPeople2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPeople2';
-import { IconPeopleCircle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPeopleCircle';
-import { IconPeopleIdCard } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPeopleIdCard';
-import { IconPhone } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPhone';
-import { IconPhoneDynamicIsland } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPhoneDynamicIsland';
-import { IconPlusLarge } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPlusLarge';
-import { IconPlusSmall } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPlusSmall';
-import { IconPrompt } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconPrompt';
-import { IconRandom } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRandom';
-import { IconRemix } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRemix';
-import { IconRemoveKeyframe } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRemoveKeyframe';
-import { IconRepeat } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRepeat';
-import { IconRescueRing } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRescueRing';
-import { IconRunShortcut } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconRunShortcut';
-import { IconScanCode } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconScanCode';
-import { IconSearchIntelligence } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSearchIntelligence';
-import { IconSearchlinesSparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSearchlinesSparkle';
-import { IconSecretPhrase } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSecretPhrase';
-import { IconSettingsGear1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSettingsGear1';
-import { IconSettingsGear2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSettingsGear2';
-import { IconShield } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconShield';
-import { IconShield2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconShield2';
-import { IconShieldKeyhole } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconShieldKeyhole';
-import { IconSidebarSimpleLeftWide } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSidebarSimpleLeftWide';
-import { IconSpacebar } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSpacebar';
-import { IconSquareBehindSquare1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSquareBehindSquare1';
-import { IconSquareBehindSquare6 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSquareBehindSquare6';
-import { IconSquareInfo } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSquareInfo';
-import { IconSquarePlus } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSquarePlus';
-import { IconSticker } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSticker';
-import { IconSun } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSun';
-import { IconStop } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconStop';
-import { IconStopCircle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconStopCircle';
-import { IconTag } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTag';
-import { IconTarget } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTarget';
-import { IconTelescope } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTelescope';
-import { IconTextToSpeach } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTextToSpeach';
-import { IconTextareaDrag } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTextareaDrag';
-import { IconTimeFlies } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTimeFlies';
-import { IconTimeslot } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTimeslot';
-import { IconToggle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconToggle';
-import { IconTrashCanSimple } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTrashCanSimple';
-import { IconTrashRounded } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTrashRounded';
-import { IconUnblur } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUnblur';
-import { IconUsbC } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUsbC';
-import { IconVariables } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVariables';
-import { IconWallet1 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconWallet1';
-import { IconWallet3 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconWallet3';
-import { IconWeb3 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconWeb3';
-import { IconWindowSparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconWindowSparkle';
-import { IconWreathSimple } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconWreathSimple';
+import { IconAdjustPhoto } from './icons/IconAdjustPhoto';
+import { IconAt } from './icons/IconAt';
+import { IconAutoCrop } from './icons/IconAutoCrop';
+import { IconBarsThree2 } from './icons/IconBarsThree2';
+import { IconBell } from './icons/IconBell';
+import { IconBellOff } from './icons/IconBellOff';
+import { IconBlackpoint } from './icons/IconBlackpoint';
+import { IconBrackets1 } from './icons/IconBrackets1';
+import { IconBrokenHeart } from './icons/IconBrokenHeart';
+import { IconBrowserTabs } from './icons/IconBrowserTabs';
+import { IconBubble3 } from './icons/IconBubble3';
+import { IconBubbleWideSparkle } from './icons/IconBubbleWideSparkle';
+import { IconCalendarDays } from './icons/IconCalendarDays';
+import { IconCheckmark2 } from './icons/IconCheckmark2';
+import { IconCheckmark2Small } from './icons/IconCheckmark2Small';
+import { IconCircleCheck } from './icons/IconCircleCheck';
+import { IconCircleInfo } from './icons/IconCircleInfo';
+import { IconCirclePlus } from './icons/IconCirclePlus';
+import { IconCircleQuestionmark } from './icons/IconCircleQuestionmark';
+import { IconCircleCheck as IconCircleCheckFilled } from './icons/IconCircleCheckFilled';
+import { IconCircleInfo as IconCircleInfoFilled } from './icons/IconCircleInfoFilled';
+import { IconCircleX } from './icons/IconCircleX';
+import { IconHeart2 as IconHeart2Filled } from './icons/IconHeart2Filled';
+import { IconOngoing as IconOngoingFilled } from './icons/IconOngoingFilled';
+import { IconPeople2 as IconPeople2Filled } from './icons/IconPeople2Filled';
+import { IconClipboard2 } from './icons/IconClipboard2';
+import { IconClipboard2Sparkle } from './icons/IconClipboard2Sparkle';
+import { IconClock } from './icons/IconClock';
+import { IconCmdBox } from './icons/IconCmdBox';
+import { IconConnectors1 } from './icons/IconConnectors1';
+import { IconConnectors2 } from './icons/IconConnectors2';
+import { IconConsoleSparkle } from './icons/IconConsoleSparkle';
+import { IconCrossLarge } from './icons/IconCrossLarge';
+import { IconCrossSmall } from './icons/IconCrossSmall';
+import { IconCryptoWallet } from './icons/IconCryptoWallet';
+import { IconDevices } from './icons/IconDevices';
+import { IconDiamondShine } from './icons/IconDiamondShine';
+import { IconDifferenceIgnored } from './icons/IconDifferenceIgnored';
+import { IconDifferenceModified } from './icons/IconDifferenceModified';
+import { IconDiscoBall } from './icons/IconDiscoBall';
+import { IconDotGrid1x3Horizontal } from './icons/IconDotGrid1x3Horizontal';
+import { IconDotGrid1x3HorizontalTight } from './icons/IconDotGrid1x3HorizontalTight';
+import { IconDotGrid1x3Vertical } from './icons/IconDotGrid1x3Vertical';
+import { IconDotGrid1x3VerticalTight } from './icons/IconDotGrid1x3VerticalTight';
+import { IconDotGrid2x3 } from './icons/IconDotGrid2x3';
+import { IconDotGrid3x3 } from './icons/IconDotGrid3x3';
+import { IconExclamationTriangle } from './icons/IconExclamationTriangle';
+import { IconExclamationTriangle as IconExclamationTriangleFilled } from './icons/IconExclamationTriangleFilled';
+import { IconEyeOpen } from './icons/IconEyeOpen';
+import { IconEyeSlash } from './icons/IconEyeSlash';
+import { IconEyeSlash2 } from './icons/IconEyeSlash2';
+import { IconFileArrowLeftIn } from './icons/IconFileArrowLeftIn';
+import { IconFileArrowLeftOut } from './icons/IconFileArrowLeftOut';
+import { IconFileArrowRightOut } from './icons/IconFileArrowRightOut';
+import { IconFileBend } from './icons/IconFileBend';
+import { IconFilter2 } from './icons/IconFilter2';
+import { IconFingerPrint1 } from './icons/IconFingerPrint1';
+import { IconFormPyramide } from './icons/IconFormPyramide';
+import { IconForYou } from './icons/IconForYou';
+import { IconFullScreen } from './icons/IconFullScreen';
+import { IconGlobe2 } from './icons/IconGlobe2';
+import { IconHeart2 } from './icons/IconHeart2';
+import { IconHome } from './icons/IconHome';
+import { IconImport2 } from './icons/IconImport2';
+import { IconInitiatives } from './icons/IconInitiatives';
+import { IconInvite } from './icons/IconInvite';
+import { IconKey2 } from './icons/IconKey2';
+import { IconLayoutColumn } from './icons/IconLayoutColumn';
+import { IconLayoutLeft } from './icons/IconLayoutLeft';
+import { IconLayoutRight } from './icons/IconLayoutRight';
+import { IconListSparkle } from './icons/IconListSparkle';
+import { IconLiveActivity } from './icons/IconLiveActivity';
+import { IconLiveFull } from './icons/IconLiveFull';
+import { IconLoader } from './icons/IconLoader';
+import { IconLock } from './icons/IconLock';
+import { IconMagnifyingGlass2 } from './icons/IconMagnifyingGlass2';
+import { IconMinusLarge } from './icons/IconMinusLarge';
+import { IconMinusSmall } from './icons/IconMinusSmall';
+import { IconMoon } from './icons/IconMoon';
+import { IconMouse } from './icons/IconMouse';
+import { IconOffline } from './icons/IconOffline';
+import { IconOngoing } from './icons/IconOngoing';
+import { IconPaperclip1 } from './icons/IconPaperclip1';
+import { IconPassport } from './icons/IconPassport';
+import { IconPassword } from './icons/IconPassword';
+import { IconPasswordStars } from './icons/IconPasswordStars';
+import { IconPencil } from './icons/IconPencil';
+import { IconPencil2 } from './icons/IconPencil2';
+import { IconPencil3 } from './icons/IconPencil3';
+import { IconPencilAi } from './icons/IconPencilAi';
+import { IconPeople2 } from './icons/IconPeople2';
+import { IconPeopleCircle } from './icons/IconPeopleCircle';
+import { IconPeopleIdCard } from './icons/IconPeopleIdCard';
+import { IconPhone } from './icons/IconPhone';
+import { IconPhoneDynamicIsland } from './icons/IconPhoneDynamicIsland';
+import { IconPlusLarge } from './icons/IconPlusLarge';
+import { IconPlusSmall } from './icons/IconPlusSmall';
+import { IconPrompt } from './icons/IconPrompt';
+import { IconRandom } from './icons/IconRandom';
+import { IconRemix } from './icons/IconRemix';
+import { IconRemoveKeyframe } from './icons/IconRemoveKeyframe';
+import { IconRepeat } from './icons/IconRepeat';
+import { IconRescueRing } from './icons/IconRescueRing';
+import { IconRunShortcut } from './icons/IconRunShortcut';
+import { IconScanCode } from './icons/IconScanCode';
+import { IconSearchIntelligence } from './icons/IconSearchIntelligence';
+import { IconSearchlinesSparkle } from './icons/IconSearchlinesSparkle';
+import { IconSecretPhrase } from './icons/IconSecretPhrase';
+import { IconSettingsGear1 } from './icons/IconSettingsGear1';
+import { IconSettingsGear2 } from './icons/IconSettingsGear2';
+import { IconShield } from './icons/IconShield';
+import { IconShield2 } from './icons/IconShield2';
+import { IconShieldKeyhole } from './icons/IconShieldKeyhole';
+import { IconSidebarSimpleLeftWide } from './icons/IconSidebarSimpleLeftWide';
+import { IconSpacebar } from './icons/IconSpacebar';
+import { IconSquareBehindSquare1 } from './icons/IconSquareBehindSquare1';
+import { IconSquareBehindSquare6 } from './icons/IconSquareBehindSquare6';
+import { IconSquareInfo } from './icons/IconSquareInfo';
+import { IconSquarePlus } from './icons/IconSquarePlus';
+import { IconSticker } from './icons/IconSticker';
+import { IconSun } from './icons/IconSun';
+import { IconStop } from './icons/IconStop';
+import { IconStopCircle } from './icons/IconStopCircle';
+import { IconTag } from './icons/IconTag';
+import { IconTarget } from './icons/IconTarget';
+import { IconTelescope } from './icons/IconTelescope';
+import { IconTextToSpeach } from './icons/IconTextToSpeach';
+import { IconTextareaDrag } from './icons/IconTextareaDrag';
+import { IconTimeFlies } from './icons/IconTimeFlies';
+import { IconTimeslot } from './icons/IconTimeslot';
+import { IconToggle } from './icons/IconToggle';
+import { IconTrashCanSimple } from './icons/IconTrashCanSimple';
+import { IconTrashRounded } from './icons/IconTrashRounded';
+import { IconUnblur } from './icons/IconUnblur';
+import { IconUsbC } from './icons/IconUsbC';
+import { IconVariables } from './icons/IconVariables';
+import { IconWallet1 } from './icons/IconWallet1';
+import { IconWallet3 } from './icons/IconWallet3';
+import { IconWeb3 } from './icons/IconWeb3';
+import { IconWindowSparkle } from './icons/IconWindowSparkle';
+import { IconWreathSimple } from './icons/IconWreathSimple';
 
 // AI & Sparkle
-import { IconAgenticCoding } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconAgenticCoding';
-import { IconImagineAi } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconImagineAi';
-import { IconVibeCoding2 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVibeCoding2';
-import { IconVisualIntelligence } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVisualIntelligence';
+import { IconAgenticCoding } from './icons/IconAgenticCoding';
+import { IconImagineAi } from './icons/IconImagineAi';
+import { IconVibeCoding2 } from './icons/IconVibeCoding2';
+import { IconVisualIntelligence } from './icons/IconVisualIntelligence';
 
 // Voice
-import { IconVoiceHigh } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVoiceHigh';
-import { IconVoiceLow } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVoiceLow';
-import { IconVoiceMid } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVoiceMid';
-import { IconVoiceRecord } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVoiceRecord';
-import { IconVoiceSettings } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVoiceSettings';
-import { IconVoiceSparkle } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVoiceSparkle';
+import { IconVoiceHigh } from './icons/IconVoiceHigh';
+import { IconVoiceLow } from './icons/IconVoiceLow';
+import { IconVoiceMid } from './icons/IconVoiceMid';
+import { IconVoiceRecord } from './icons/IconVoiceRecord';
+import { IconVoiceSettings } from './icons/IconVoiceSettings';
+import { IconVoiceSparkle } from './icons/IconVoiceSparkle';
 
 // User & People
-import { IconUserAdded } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserAdded';
-import { IconUserAddRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserAddRight';
-import { IconUserBlock } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserBlock';
-import { IconUserDuo } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserDuo';
-import { IconUserEdit } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserEdit';
-import { IconUserGroup } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserGroup';
-import { IconUserRemove } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserRemove';
-import { IconUserRemoveRight } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserRemoveRight';
-import { IconUserSettings } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconUserSettings';
+import { IconUserAdded } from './icons/IconUserAdded';
+import { IconUserAddRight } from './icons/IconUserAddRight';
+import { IconUserBlock } from './icons/IconUserBlock';
+import { IconUserDuo } from './icons/IconUserDuo';
+import { IconUserEdit } from './icons/IconUserEdit';
+import { IconUserGroup } from './icons/IconUserGroup';
+import { IconUserRemove } from './icons/IconUserRemove';
+import { IconUserRemoveRight } from './icons/IconUserRemoveRight';
+import { IconUserSettings } from './icons/IconUserSettings';
 
 // Brands & Logos
-import { IconAntigravity } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconAntigravity';
-import { IconApple } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconApple';
-import { IconBitcoinLogo } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconBitcoinLogo';
-import { IconClaudeai } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconClaudeai';
-import { IconCursor } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconCursor';
-import { IconEuropeanUnion } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconEuropeanUnion';
-import { IconGemini } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconGemini';
-import { IconGithub } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconGithub';
-import { IconGrok } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconGrok';
-import { IconIsoOrg } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconIsoOrg';
-import { IconLinear } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLinear';
-import { IconLinkedin } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconLinkedin';
-import { IconNotion } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconNotion';
-import { IconOpenai } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconOpenai';
-import { IconSlack } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSlack';
-import { IconSupabase } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconSupabase';
-import { IconTwitter } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconTwitter';
-import { IconV0 } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconV0';
-import { IconVercel } from '@central-icons-react/round-outlined-radius-3-stroke-1.5/IconVercel';
+import { IconAntigravity } from './icons/IconAntigravity';
+import { IconApple } from './icons/IconApple';
+import { IconBitcoinLogo } from './icons/IconBitcoinLogo';
+import { IconClaudeai } from './icons/IconClaudeai';
+import { IconCursor } from './icons/IconCursor';
+import { IconEuropeanUnion } from './icons/IconEuropeanUnion';
+import { IconGemini } from './icons/IconGemini';
+import { IconGithub } from './icons/IconGithub';
+import { IconGrok } from './icons/IconGrok';
+import { IconIsoOrg } from './icons/IconIsoOrg';
+import { IconLinear } from './icons/IconLinear';
+import { IconLinkedin } from './icons/IconLinkedin';
+import { IconNotion } from './icons/IconNotion';
+import { IconOpenai } from './icons/IconOpenai';
+import { IconSlack } from './icons/IconSlack';
+import { IconSupabase } from './icons/IconSupabase';
+import { IconTwitter } from './icons/IconTwitter';
+import { IconV0 } from './icons/IconV0';
+import { IconVercel } from './icons/IconVercel';
 
 // Aliases for convenience
 const IconChevronDown = IconChevronDownSmall;
@@ -263,7 +268,7 @@ export const ICON_REGISTRY = {
   IconRedirectArrow,
   IconRotate360Left,
   IconRotate360Right,
-  
+
   // Chevrons
   IconChevronBottom,
   IconChevronDown,
@@ -275,7 +280,7 @@ export const ICON_REGISTRY = {
   IconChevronRightSmall,
   IconChevronTop,
   IconChevronTopSmall,
-  
+
   // Actions & UI
   IconAdjustPhoto,
   IconAt,
