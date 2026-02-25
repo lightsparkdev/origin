@@ -2,30 +2,7 @@
 
 ## Installation
 
-### 1. Generate a GitHub token
-
-Each developer needs a **GitHub Personal Access Token (classic)** with the `read:packages` scope:
-
-1. Go to [GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
-2. Generate a new token with the **`read:packages`** scope
-3. Add it to your shell profile (`~/.zshrc` or `~/.bashrc`):
-
-```bash
-export NPM_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
-```
-
-You must be a member of the `lightsparkdev` GitHub org for the token to have access.
-
-### 2. Configure `.npmrc`
-
-Create `.npmrc` in your project root:
-
-```
-@lightsparkdev:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
-```
-
-### 3. Install the Package
+### 1. Install the Package
 
 ```bash
 npm install @lightsparkdev/origin
@@ -37,7 +14,7 @@ For local development alongside Origin:
 { "dependencies": { "@lightsparkdev/origin": "file:../origin" } }
 ```
 
-### 4. Configure Next.js
+### 2. Configure Next.js
 
 ```ts
 // next.config.ts
@@ -45,7 +22,7 @@ import type { NextConfig } from "next";
 import * as sass from "sass";
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@lightsparkdev/origin'],
+  transpilePackages: ["@lightsparkdev/origin"],
   sassOptions: {
     // Enable pkg: imports for SCSS from node_modules
     importers: [new sass.NodePackageImporter()],
@@ -55,20 +32,24 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-### 5. Copy Fonts
+### 3. Copy Fonts
 
-Copy fonts from `origin/public/fonts/` to `your-app/public/fonts/`.
+Copy the font files from the package into your app's public directory:
 
-Font files must be served from the consuming app's public folder.
+```bash
+cp -r node_modules/@lightsparkdev/origin/public/fonts/ public/fonts/
+```
 
-### 6. Configure `globals.scss`
+The `@font-face` declarations in `_fonts.scss` expect fonts at `/fonts/`. These are Suisse Intl (Regular, Book, Medium) and Suisse Int'l Mono.
+
+### 4. Configure `globals.scss`
 
 ```scss
-@use 'pkg:@lightsparkdev/origin/tokens/variables';
-@use 'pkg:@lightsparkdev/origin/tokens/fonts';
-@use 'pkg:@lightsparkdev/origin/tokens/typography';
-@use 'pkg:@lightsparkdev/origin/tokens/effects';
-@use 'pkg:@lightsparkdev/origin/tokens/reset';
+@use "pkg:@lightsparkdev/origin/tokens/variables";
+@use "pkg:@lightsparkdev/origin/tokens/fonts";
+@use "pkg:@lightsparkdev/origin/tokens/typography";
+@use "pkg:@lightsparkdev/origin/tokens/effects";
+@use "pkg:@lightsparkdev/origin/tokens/reset";
 
 body {
   margin: 0;
@@ -80,6 +61,7 @@ body {
 ```
 
 The `_reset.scss` file includes:
+
 - Box-sizing reset
 - Form element defaults (removes browser backgrounds)
 - Typography resets (h1-h6, p margins)
@@ -111,11 +93,11 @@ Use the `pkg:` prefix for mixins. CSS variables are globally available:
 
 ```scss
 // component.module.scss
-@use 'pkg:@lightsparkdev/origin/tokens/text-styles' as *;
+@use "pkg:@lightsparkdev/origin/tokens/text-styles" as *;
 
 .title {
   @include headline-sm;
-  color: var(--text-primary);  // tokens available globally
+  color: var(--text-primary); // tokens available globally
 }
 ```
 
@@ -132,8 +114,8 @@ If you need app-specific tokens or mixins, create them in a local `src/tokens/` 
 }
 
 // component.module.scss
-@use '../tokens/forms' as *;  // local
-@use 'pkg:@lightsparkdev/origin/tokens/text-styles' as *;  // from Origin
+@use "../tokens/forms" as *; // local
+@use "pkg:@lightsparkdev/origin/tokens/text-styles" as *; // from Origin
 ```
 
 ## Sync

@@ -127,6 +127,12 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
+### Copy Fonts
+
+```bash
+cp -r node_modules/@lightsparkdev/origin/public/fonts/ public/fonts/
+```
+
 ### Usage
 
 ```tsx
