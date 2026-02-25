@@ -8,7 +8,7 @@
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lightsparkdev/origin.git"
+    "url": "git+https://github.com/lightsparkdev/origin.git"
   },
   "type": "module",
   "main": "./src/index.ts",
@@ -31,6 +31,9 @@
     "start": "next start",
     "lint": "eslint src/ && stylelint 'src/**/*.scss'",
     "lint:styles": "stylelint 'src/**/*.scss'",
+    "lint:package": "publint",
+    "lint:types": "attw --pack . --ignore-rules cjs-resolves-to-esm internal-resolution-error",
+    "lint:publish": "npm run lint:package && npm run lint:types",
     "test": "playwright test -c playwright-ct.config.ts",
     "test:ui": "playwright test -c playwright-ct.config.ts --ui",
     "test:unit": "vitest run",
@@ -64,6 +67,7 @@
     }
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
     "@axe-core/playwright": "^4.11.0",
     "@central-icons-react/round-filled-radius-3-stroke-1.5": "^1.1.139",
     "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.137",
@@ -88,6 +92,7 @@
     "jsdom": "^27.4.0",
     "match-sorter": "^8.2.0",
     "next": "^16.1.6",
+    "publint": "^0.3.17",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.80.0",
