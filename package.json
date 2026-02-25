@@ -1,7 +1,10 @@
 {
   "name": "@lightsparkdev/origin",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
   "repository": {
     "type": "git",
@@ -18,6 +21,8 @@
     "src/tokens/",
     "src/lib/",
     "src/index.ts",
+    "public/fonts/",
+    "skills/",
     "README.md"
   ],
   "scripts": {
