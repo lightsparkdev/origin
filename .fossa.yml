@@ -1,0 +1,6 @@
+version: 3
+
+project:
+  id: lightspark/origin
+  name: origin
+  url: https://github.com/lightsparkdev/origin

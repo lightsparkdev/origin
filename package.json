@@ -6,6 +6,7 @@
     "access": "public"
   },
   "description": "Origin Design System v2 - Base UI + Figma-first approach",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lightsparkdev/origin.git"
