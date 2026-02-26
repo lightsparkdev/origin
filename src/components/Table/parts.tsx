@@ -19,10 +19,12 @@ export interface RootProps extends React.TableHTMLAttributes<HTMLTableElement> {
   size?: TableSize;
   /** Whether rows are clickable — shows hover state when true (default: true) */
   clickable?: boolean;
+  /** Accessible table description — rendered as a visually hidden <caption> */
+  caption?: string;
 }
 
 export const Root = React.forwardRef<HTMLTableElement, RootProps>(
-  function Root({ className, hasSelection, size = 'default', clickable = true, ...props }, ref) {
+  function Root({ className, hasSelection, size = 'default', clickable = true, caption, children, ...props }, ref) {
     return (
       <table
         ref={ref}
@@ -31,7 +33,10 @@ export const Root = React.forwardRef<HTMLTableElement, RootProps>(
         data-size={size !== 'default' ? size : undefined}
         data-clickable={clickable || undefined}
         {...props}
-      />
+      >
+        {caption && <caption className={styles.caption}>{caption}</caption>}
+        {children}
+      </table>
     );
   }
 );
@@ -208,16 +213,33 @@ export interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
 }
 
 export const Row = React.forwardRef<HTMLTableRowElement, RowProps>(
-  function Row({ className, selected = false, last = false, ...props }, ref) {
+  function Row({ className, selected = false, last = false, onClick, onKeyDown, ...props }, ref) {
+    const handleKeyDown = React.useMemo(() => {
+      if (!onClick) return onKeyDown;
+      return (event: React.KeyboardEvent<HTMLTableRowElement>) => {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        if (event.target !== event.currentTarget) return;
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onClick(event as unknown as React.MouseEvent<HTMLTableRowElement>);
+        }
+      };
+    }, [onClick, onKeyDown]);
+
     return (
       <tr
         ref={ref}
         className={clsx(
           styles.row,
           last && styles['row--last'],
+          onClick && styles['row--interactive'],
           className
         )}
         data-selected={selected || undefined}
+        onClick={onClick}
+        onKeyDown={handleKeyDown}
+        tabIndex={onClick ? 0 : undefined}
         {...props}
       />
     );

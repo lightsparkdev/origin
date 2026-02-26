@@ -713,6 +713,54 @@ export function CompactFooterTable() {
 }
 
 /**
+ * Table with clickable rows (navigation pattern)
+ */
+export function ClickableRowTable() {
+  const [clickedRow, setClickedRow] = React.useState<string | null>(null);
+
+  const table = useReactTable({
+    data: sampleData,
+    columns: basicColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <div>
+      <Table.Root>
+        <Table.Header>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Table.HeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Table.HeaderCell key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.HeaderCell>
+              ))}
+            </Table.HeaderRow>
+          ))}
+        </Table.Header>
+        <Table.Body>
+          {table.getRowModel().rows.map((row) => (
+            <Table.Row
+              key={row.id}
+              onClick={() => setClickedRow(row.original.name)}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <Table.Cell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              ))}
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+      <div data-testid="clicked-row">{clickedRow}</div>
+    </div>
+  );
+}
+
+/**
  * Table with cell description (secondary text)
  */
 export function DescriptionTable() {

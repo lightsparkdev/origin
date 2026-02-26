@@ -52,6 +52,8 @@ export const ActionBarLabel = React.forwardRef<HTMLSpanElement, ActionBarLabelPr
       <span
         ref={forwardedRef}
         className={clsx(styles.label, className)}
+        aria-live="polite"
+        aria-atomic="true"
         {...elementProps}
       >
         {children}
