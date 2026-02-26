@@ -75,12 +75,13 @@ Outputs to `src/tokens/_variables.scss`.
 
 ### 3. Icon System (`src/components/Icon/`)
 
-Complete icon registry with all ~200 icons from the Figma design system.
+213 vendored icons from Central Icons. Icons are extracted from `@central-icons-react` packages and committed to the repo, so consumers do not need a `CENTRAL_LICENSE_KEY`.
 
 **Key files:**
 - `CentralIcon.tsx` — Main component
-- `icon-registry.ts` — Complete registry (all icons, no sync needed)
-- Strokes scale proportionally with icon size via the library's `size` prop
+- `icon-registry.ts` — Generated registry (do not edit directly)
+- `icons/` — Vendored icon `.mjs` and `.d.ts` files
+- `scripts/extract-icons.mjs` — Single source of truth for which icons to vendor
 
 **Usage:**
 ```tsx
@@ -90,9 +91,17 @@ import { CentralIcon } from '@/components/Icon';
 <CentralIcon name="IconChevronDown" size={16} color="var(--text-secondary)" />
 ```
 
-**Packages (requires license for fresh install):**
+**Adding/updating icons:**
+```bash
+npm run icons:extract   # Regenerate vendored files + registry
+```
+
+Edit the `SECTIONS` array in `scripts/extract-icons.mjs` to add new icons. The script copies files from `node_modules`, strips sourcemaps, generates `icon-registry.ts`, and validates.
+
+**Packages (devDependencies — only needed for extraction):**
 - `@central-icons-react/round-outlined-radius-3-stroke-1.5`
 - `@central-icons-react/round-filled-radius-3-stroke-1.5`
+- `@central-icons-react/round-outlined-radius-0-stroke-1.5`
 
 ---
 
@@ -107,6 +116,8 @@ origin/
 │   │   └── page.tsx
 │   ├── components/
 │   │   └── Icon/               # CentralIcon system
+│   │       ├── icons/          # Vendored icon files (generated)
+│   │       └── icon-registry.ts # Icon registry (generated)
 │   ├── lib/
 │   │   └── dev-warn.ts         # Dev-only warning utility
 │   └── tokens/
@@ -122,7 +133,8 @@ origin/
 │       ├── src/                # Plugin source
 │       └── dist/               # Built plugin
 ├── scripts/
-│   └── build-tokens.js         # Token transformation script
+│   ├── build-tokens.js         # Token transformation script
+│   └── extract-icons.mjs       # Icon vendoring + registry generation
 └── CONTEXT.md                  # This file
 ```
 
@@ -141,11 +153,12 @@ Base UI provides:
 
 We style Base UI components with Figma-extracted CSS.
 
-### 2. Complete Icon Registry (No Sync)
+### 2. Vendored Icon Registry
 
-Unlike the old spec-driven sync approach, Origin includes ALL icons upfront:
-- Simpler (no sync script)
-- All icons available immediately
+Icons are vendored from `@central-icons-react` into the repo:
+- Consumers do not need a `CENTRAL_LICENSE_KEY` to install Origin
+- `scripts/extract-icons.mjs` is the single source of truth for which icons to include
+- `icon-registry.ts` and `icons/` are generated — do not edit directly
 - Tree-shaking still removes unused icons from bundle
 
 ### 3. Figma Structure = Base UI Structure
@@ -219,7 +232,7 @@ import styles from './Accordion.module.scss';
 2. **Test the full flow** — Validate that the approach works in practice
 3. **Add Storybook stories** — For component documentation
 4. **CI/CD setup** — Token validation, type checking
-5. **Central Icons license** — Set `CENTRAL_LICENSE_KEY` in GitHub secrets for CI
+5. **CI/CD setup** — `CENTRAL_LICENSE_KEY` in secrets for icon extraction if needed
 
 ---
 
@@ -233,6 +246,7 @@ npm run storybook     # Start Storybook
 # Build
 npm run build         # Build Next.js
 npm run tokens:build  # Transform Figma tokens to SCSS
+npm run icons:extract # Vendor icons + regenerate registry
 
 # Lint plugin
 cd tools/base-ui-lint
@@ -245,9 +259,7 @@ npm run build         # Build the Figma plugin
 
 ### Central Icons License
 
-The `@central-icons-react` packages require a license. The packages were copied from the origin v1 repo's `node_modules` to bypass the license check during install.
-
-For CI/CD, set `CENTRAL_LICENSE_KEY` as an environment variable/secret.
+The `@central-icons-react` packages are `devDependencies` used only for icon extraction (`npm run icons:extract`). Developers running extraction need `CENTRAL_LICENSE_KEY` set for `npm install`. Consumers of `@lightsparkdev/origin` do not need the key — icons are vendored into the repo.
 
 ### Base UI Package Rename
 

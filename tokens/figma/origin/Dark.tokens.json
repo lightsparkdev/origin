@@ -155,6 +155,32 @@
         },
         "com.figma.isOverride": true
       }
+    },
+    "warning": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9882352948188782,
+          0.729411780834198,
+          0.007843137718737125
+        ],
+        "alpha": 1,
+        "hex": "#FCBA02"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:6468:21",
+        "com.figma.scopes": [
+          "STROKE"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ec20ecabb72415dc74b582e48619de110d966721/-1:-1",
+          "targetVariableName": "color/yellow/500",
+          "targetVariableSetId": "VariableCollectionId:adf8a2cf9464a08e3c0fc9ba15cff9e85ce1d417/-1:-1",
+          "targetVariableSetName": "primitives"
+        },
+        "com.figma.isOverride": true
+      }
     }
   },
   "icon": {
@@ -756,6 +782,33 @@
         "com.figma.aliasData": {
           "targetVariableId": "VariableID:0ce4b76aebf3b94a35cee5d62e39c42612556f00/-1:-1",
           "targetVariableName": "color/alpha/temp-white/04",
+          "targetVariableSetId": "VariableCollectionId:adf8a2cf9464a08e3c0fc9ba15cff9e85ce1d417/-1:-1",
+          "targetVariableSetName": "primitives"
+        },
+        "com.figma.isOverride": true
+      }
+    },
+    "selected": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0.9529411792755127,
+          0.9529411792755127,
+          0.9607843160629272
+        ],
+        "alpha": 0.05999999865889549,
+        "hex": "#F3F3F5"
+      },
+      "$extensions": {
+        "com.figma.variableId": "VariableID:6468:22",
+        "com.figma.scopes": [
+          "FRAME_FILL",
+          "SHAPE_FILL"
+        ],
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:ebd1fb7ca8eba565dc36df8260272034d7dd0a00/-1:-1",
+          "targetVariableName": "color/alpha/temp-white/06",
           "targetVariableSetId": "VariableCollectionId:adf8a2cf9464a08e3c0fc9ba15cff9e85ce1d417/-1:-1",
           "targetVariableSetName": "primitives"
         },

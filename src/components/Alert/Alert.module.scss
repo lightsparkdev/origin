@@ -41,7 +41,7 @@
 
 .default {
   background-color: var(--surface-primary);
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-tertiary);
   padding: var(--spacing-sm) var(--spacing-md);
 
   .iconWrapper {
@@ -57,20 +57,38 @@
   }
 }
 
-.critical {
-  background-color: var(--surface-red);
-  border: var(--stroke-sm) solid var(--border-critical);
-  padding: var(--spacing-sm) var(--spacing-3xl) var(--spacing-sm) var(--spacing-md);
+.warning {
+  background-color: var(--surface-yellow);
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  padding: var(--spacing-sm) var(--spacing-md);
 
   .iconWrapper {
-    color: var(--text-red);
+    color: var(--icon-warning);
   }
 
   .title {
-    color: var(--text-red);
+    color: var(--text-yellow);
   }
 
   .description {
-    color: var(--text-red);
+    color: var(--text-yellow);
+  }
+}
+
+.critical {
+  background-color: var(--surface-red);
+  border: var(--stroke-xs) solid var(--border-tertiary);
+  padding: var(--spacing-sm) var(--spacing-3xl) var(--spacing-sm) var(--spacing-md);
+
+  .iconWrapper {
+    color: var(--icon-critical);
+  }
+
+  .title {
+    color: var(--text-critical);
+  }
+
+  .description {
+    color: var(--text-critical);
   }
 }
