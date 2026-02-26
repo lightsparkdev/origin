@@ -37,7 +37,7 @@
     "lint:styles": "stylelint 'src/**/*.scss'",
     "lint:package": "publint",
     "lint:types": "attw --pack . --ignore-rules cjs-resolves-to-esm internal-resolution-error --exclude-entrypoints ./styles.css",
-    "lint:publish": "npm run lint:package && npm run lint:types",
+    "lint:publish": "npm run build:styles && npm run lint:package && npm run lint:types",
     "test": "playwright test -c playwright-ct.config.ts",
     "test:ui": "playwright test -c playwright-ct.config.ts --ui",
     "test:unit": "vitest run",
