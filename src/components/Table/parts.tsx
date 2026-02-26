@@ -4,6 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import styles from './Table.module.scss';
 import { CentralIcon } from '../Icon';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 
 // ============================================================================
 // Root
@@ -90,6 +91,7 @@ export interface HeaderCellProps extends React.ThHTMLAttributes<HTMLTableCellEle
   resizable?: boolean;
   /** Leading slot content (e.g. checkbox) */
   leading?: React.ReactNode;
+  analyticsName?: string;
 }
 
 export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps>(
@@ -103,15 +105,24 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
       onSort,
       resizable: _resizable = false,
       leading,
+      analyticsName,
       children,
       ...props
     },
     ref
   ) {
+    const trackedSort = useTrackedCallback(
+      analyticsName,
+      'Table.HeaderCell',
+      'sort',
+      onSort,
+      () => ({ column: analyticsName, from_direction: sortDirection }),
+    );
+
     const handleKeyDown = (event: React.KeyboardEvent) => {
-      if (sortable && onSort && (event.key === 'Enter' || event.key === ' ')) {
+      if (sortable && trackedSort && (event.key === 'Enter' || event.key === ' ')) {
         event.preventDefault();
-        onSort(event);
+        trackedSort(event);
       }
     };
 
@@ -141,7 +152,7 @@ export const HeaderCell = React.forwardRef<HTMLTableCellElement, HeaderCellProps
         data-sortable={sortable || undefined}
         data-sorted={sortDirection || undefined}
         tabIndex={sortable ? 0 : undefined}
-        onClick={sortable ? onSort : undefined}
+        onClick={sortable ? trackedSort : undefined}
         onKeyDown={sortable ? handleKeyDown : undefined}
         aria-sort={
           sortDirection === 'asc'

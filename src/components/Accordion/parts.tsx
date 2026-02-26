@@ -3,17 +3,29 @@
 import * as React from 'react';
 import { Accordion as BaseAccordion } from '@base-ui/react/accordion';
 import { CentralIcon } from '../Icon';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import clsx from 'clsx';
 import styles from './Accordion.module.scss';
 
-export interface RootProps extends BaseAccordion.Root.Props {}
+export interface RootProps extends BaseAccordion.Root.Props {
+  analyticsName?: string;
+}
 
 export const Root = React.forwardRef<HTMLDivElement, RootProps>(
-  function Root({ className, ...props }, ref) {
+  function Root({ className, analyticsName, onValueChange, ...props }, ref) {
+    const trackedChange = useTrackedCallback(
+      analyticsName,
+      'Accordion',
+      'change',
+      onValueChange,
+      (value: unknown) => ({ value }),
+    );
+
     return (
       <BaseAccordion.Root
         ref={ref}
         className={clsx(styles.root, className)}
+        onValueChange={trackedChange}
         {...props}
       />
     );

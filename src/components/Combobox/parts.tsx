@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox';
 import { CentralIcon } from '../Icon';
 import { CheckboxIndicator } from '../Checkbox';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import clsx from 'clsx';
 import styles from './Combobox.module.scss';
 import chipStyles from '../Chip/Chip.module.scss';
@@ -14,6 +15,7 @@ const AnchorContext = React.createContext<React.RefObject<HTMLDivElement | null>
 export interface RootProps<Value, Multiple extends boolean | undefined = false>
   extends BaseCombobox.Root.Props<Value, Multiple> {
   autoHighlight?: boolean;
+  analyticsName?: string;
 }
 
 /**
@@ -27,13 +29,23 @@ export interface RootProps<Value, Multiple extends boolean | undefined = false>
  */
 export function Root<Value, Multiple extends boolean | undefined = false>({
   autoHighlight = true,
+  analyticsName,
+  onValueChange,
   children,
   ...props
 }: RootProps<Value, Multiple>) {
   const anchorRef = React.useRef<HTMLDivElement | null>(null);
+  const trackedChange = useTrackedCallback(
+    analyticsName,
+    'Combobox',
+    'change',
+    onValueChange,
+    (value: unknown) => ({ value }),
+  );
+
   return (
     <AnchorContext.Provider value={anchorRef}>
-      <BaseCombobox.Root autoHighlight={autoHighlight} {...props}>
+      <BaseCombobox.Root autoHighlight={autoHighlight} onValueChange={trackedChange} {...props}>
         {children}
       </BaseCombobox.Root>
     </AnchorContext.Provider>

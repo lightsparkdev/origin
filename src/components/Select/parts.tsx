@@ -3,17 +3,29 @@
 import * as React from 'react';
 import { Select as BaseSelect, SelectRootProps } from '@base-ui/react/select';
 import { CentralIcon } from '../Icon';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import clsx from 'clsx';
 import styles from './Select.module.scss';
 
 // Root - generic component, pass through props
 export interface RootProps<Value = string, Multiple extends boolean | undefined = false>
-  extends SelectRootProps<Value, Multiple> {}
+  extends SelectRootProps<Value, Multiple> {
+  analyticsName?: string;
+}
 
-export function Root<Value = string, Multiple extends boolean | undefined = false>(
-  props: RootProps<Value, Multiple>
-) {
-  return <BaseSelect.Root {...props} />;
+export function Root<Value = string, Multiple extends boolean | undefined = false>({
+  analyticsName,
+  onValueChange,
+  ...props
+}: RootProps<Value, Multiple>) {
+  const trackedChange = useTrackedCallback(
+    analyticsName,
+    'Select',
+    'change',
+    onValueChange,
+    (value: unknown) => ({ value }),
+  );
+  return <BaseSelect.Root onValueChange={trackedChange} {...props} />;
 }
 
 // Trigger

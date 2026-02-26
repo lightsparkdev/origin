@@ -3,6 +3,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { CentralIcon } from '../Icon';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Pagination.module.scss';
 
 // Context for sharing pagination state
@@ -38,20 +39,29 @@ export interface PaginationRootProps extends React.ComponentPropsWithoutRef<'nav
   pageSize: number;
   /** Callback when page changes */
   onPageChange?: (page: number) => void;
+  analyticsName?: string;
 }
 
 const PaginationRoot = React.forwardRef<HTMLElement, PaginationRootProps>(
   function PaginationRoot(props, forwardedRef) {
-    const { page, totalItems, pageSize, onPageChange, className, children, ...elementProps } =
+    const { page, totalItems, pageSize, onPageChange, analyticsName, className, children, ...elementProps } =
       props;
+
+    const trackedPageChange = useTrackedCallback(
+      analyticsName,
+      'Pagination',
+      'change',
+      onPageChange,
+      (p: number) => ({ page: p }),
+    );
 
     const totalPages = Math.ceil(totalItems / pageSize);
     const startItem = totalItems === 0 ? 0 : (page - 1) * pageSize + 1;
     const endItem = Math.min(page * pageSize, totalItems);
 
     const contextValue = React.useMemo(
-      () => ({ page, totalItems, pageSize, totalPages, startItem, endItem, onPageChange }),
-      [page, totalItems, pageSize, totalPages, startItem, endItem, onPageChange]
+      () => ({ page, totalItems, pageSize, totalPages, startItem, endItem, onPageChange: trackedPageChange }),
+      [page, totalItems, pageSize, totalPages, startItem, endItem, trackedPageChange]
     );
 
     return (

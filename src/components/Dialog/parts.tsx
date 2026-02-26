@@ -4,11 +4,15 @@ import * as React from 'react';
 import { Dialog as BaseDialog } from '@base-ui/react/dialog';
 import clsx from 'clsx';
 import { CentralIcon } from '../Icon';
+import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 import styles from './Dialog.module.scss';
 
-export interface RootProps extends BaseDialog.Root.Props {}
-export function Root(props: RootProps) {
-  return <BaseDialog.Root {...props} />;
+export interface RootProps extends BaseDialog.Root.Props {
+  analyticsName?: string;
+}
+export function Root({ analyticsName, onOpenChange, ...props }: RootProps) {
+  const trackedOpenChange = useTrackedOpenChange(analyticsName, 'Dialog', onOpenChange);
+  return <BaseDialog.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
 export interface TriggerProps extends BaseDialog.Trigger.Props {}

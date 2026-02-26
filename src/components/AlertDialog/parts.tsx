@@ -3,11 +3,15 @@
 import * as React from 'react';
 import { AlertDialog as BaseAlertDialog } from '@base-ui/react/alert-dialog';
 import clsx from 'clsx';
+import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 import styles from './AlertDialog.module.scss';
 
-export interface RootProps extends BaseAlertDialog.Root.Props {}
-export function Root(props: RootProps) {
-  return <BaseAlertDialog.Root {...props} />;
+export interface RootProps extends BaseAlertDialog.Root.Props {
+  analyticsName?: string;
+}
+export function Root({ analyticsName, onOpenChange, ...props }: RootProps) {
+  const trackedOpenChange = useTrackedOpenChange(analyticsName, 'AlertDialog', onOpenChange);
+  return <BaseAlertDialog.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
 export interface TriggerProps extends BaseAlertDialog.Trigger.Props {}

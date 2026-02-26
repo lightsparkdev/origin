@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { NavigationMenu as BaseNavigationMenu } from '@base-ui/react/navigation-menu';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './NavigationMenu.module.scss';
 
 /* -------------------------------------------------------------------------------------------------
@@ -11,15 +12,25 @@ import styles from './NavigationMenu.module.scss';
 
 export interface RootProps extends BaseNavigationMenu.Root.Props {
   className?: string;
+  analyticsName?: string;
 }
 
 export const Root = React.forwardRef<HTMLElement, RootProps>(
   function Root(props, forwardedRef) {
-    const { className, ...rootProps } = props;
+    const { className, analyticsName, onValueChange, ...rootProps } = props;
+    const trackedChange = useTrackedCallback(
+      analyticsName,
+      'NavigationMenu',
+      'change',
+      onValueChange,
+      (value: unknown) => ({ value }),
+    );
+
     return (
       <BaseNavigationMenu.Root
         ref={forwardedRef}
         className={clsx(styles.root, className)}
+        onValueChange={trackedChange}
         {...rootProps}
       />
     );

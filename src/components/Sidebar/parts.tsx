@@ -6,6 +6,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import styles from './Sidebar.module.scss';
 import { CentralIcon } from '../Icon';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 
 export interface SidebarContextValue {
   collapsed: boolean;
@@ -60,6 +61,7 @@ export interface ProviderProps {
   collapsed?: boolean;
   defaultCollapsed?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
+  analyticsName?: string;
   children: React.ReactNode;
 }
 
@@ -67,20 +69,29 @@ export function Provider({
   collapsed: controlledCollapsed,
   defaultCollapsed = false,
   onCollapsedChange,
+  analyticsName,
   children,
 }: ProviderProps) {
   const [internalCollapsed, setInternalCollapsed] = React.useState(defaultCollapsed);
   const isControlled = controlledCollapsed !== undefined;
   const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
 
+  const trackedCollapsedChange = useTrackedCallback(
+    analyticsName,
+    'Sidebar',
+    'change',
+    onCollapsedChange,
+    (val: boolean) => ({ collapsed: val }),
+  );
+
   const setCollapsed = React.useCallback(
     (value: boolean) => {
       if (!isControlled) {
         setInternalCollapsed(value);
       }
-      onCollapsedChange?.(value);
+      trackedCollapsedChange(value);
     },
-    [isControlled, onCollapsedChange]
+    [isControlled, trackedCollapsedChange]
   );
 
   const toggle = React.useCallback(() => {
