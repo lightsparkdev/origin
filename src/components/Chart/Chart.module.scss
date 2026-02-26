@@ -551,8 +551,8 @@
   @include body-sm;
 
   color: var(--bar-list-name-color, var(--text-primary));
-  font-size: var(--bar-list-name-size, inherit);
-  font-weight: var(--bar-list-name-weight, inherit);
+  font-size: var(--bar-list-name-size, var(--font-size-xs, 12px));
+  font-weight: var(--bar-list-name-weight, var(--font-weight-regular, 400));
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -572,8 +572,8 @@
   @include tooltip-chart;
 
   color: var(--bar-list-value-color, var(--text-primary));
-  font-size: var(--bar-list-value-size, inherit);
-  font-weight: var(--bar-list-value-weight, inherit);
+  font-size: var(--bar-list-value-size, var(--font-size-xs, 12px));
+  font-weight: var(--bar-list-value-weight, var(--font-weight-regular, 400));
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
