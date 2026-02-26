@@ -6,7 +6,7 @@ on:
   pull_request:
     paths:
       - ".github/workflows/release.yaml"
-      - ".github/scripts/generate-changelog.py"
+      - ".github/scripts/generate-changelog.mjs"
 
 jobs:
   create-release-pr:
@@ -73,7 +73,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           OLD_VERSION: ${{ steps.changes.outputs.old_version }}
-        run: python3 .github/scripts/generate-changelog.py
+        run: node .github/scripts/generate-changelog.mjs
 
       # Skip the remaining steps on PR runs (just validate the AI step works)
       - name: Bump version
