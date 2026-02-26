@@ -275,13 +275,14 @@
   --border-hover: rgba(0, 0, 0, 0.30);
   --border-inverted: rgba(255, 255, 255, 0.20);
   --border-critical: #CC0909;
+  --border-warning: #FCBA02;
   --icon-primary: #1A1A1A;
   --icon-secondary: #7C7C7C;
   --icon-tertiary: #C1C0B8;
   --icon-surface: #F8F8F7;
   --icon-info: #0072DB;
   --icon-success: #11A967;
-  --icon-warning: #FCBA02;
+  --icon-warning: #E09000;
   --icon-critical: #CC0909;
   --icon-info-inverted: #EBFEFF;
   --icon-success-inverted: #F0FDF7;
@@ -297,6 +298,7 @@
   --surface-elevated: #FAFAF9;
   --surface-sunken: #F4F4F3;
   --surface-hover: rgba(42, 42, 37, 0.04);
+  --surface-selected: rgba(40, 40, 36, 0.06);
   --surface-active: rgba(42, 42, 37, 0.04);
   --surface-inverted: #1A1A1A;
   --surface-inverted-hover: rgba(255, 255, 255, 0.04);
@@ -327,7 +329,7 @@
   --text-sky: #00B3E0;
   --text-pink: #FF00D4;
   --text-green: #11A967;
-  --text-yellow: #FCBA02;
+  --text-yellow: #E09000;
   --text-red: #EF0D0D;
 }
 
@@ -339,6 +341,7 @@
   --border-hover: rgba(255, 255, 255, 0.30);
   --border-inverted: rgba(0, 0, 0, 0.20);
   --border-critical: #EF0D0D;
+  --border-warning: #FCBA02;
   --icon-primary: #F8F8F7;
   --icon-secondary: #7C7C7C;
   --icon-tertiary: #464646;
@@ -361,6 +364,7 @@
   --surface-elevated: #111111;
   --surface-sunken: #212121;
   --surface-hover: rgba(243, 243, 245, 0.04);
+  --surface-selected: rgba(243, 243, 245, 0.06);
   --surface-active: rgba(243, 243, 245, 0.04);
   --surface-inverted: #F8F8F7;
   --surface-inverted-hover: rgba(0, 0, 0, 0.04);
@@ -403,6 +407,7 @@
     --border-hover: rgba(255, 255, 255, 0.30);
     --border-inverted: rgba(0, 0, 0, 0.20);
     --border-critical: #EF0D0D;
+    --border-warning: #FCBA02;
     --icon-primary: #F8F8F7;
     --icon-secondary: #7C7C7C;
     --icon-tertiary: #464646;
@@ -425,6 +430,7 @@
     --surface-elevated: #111111;
     --surface-sunken: #212121;
     --surface-hover: rgba(243, 243, 245, 0.04);
+    --surface-selected: rgba(243, 243, 245, 0.06);
     --surface-active: rgba(243, 243, 245, 0.04);
     --surface-inverted: #F8F8F7;
     --surface-inverted-hover: rgba(0, 0, 0, 0.04);

@@ -28,10 +28,12 @@ npm run tokens:build              # Build color/spacing tokens
 | Path | Purpose |
 |------|---------|
 | `src/components/` | React components |
+| `src/components/Icon/icons/` | Vendored icon files (generated) |
 | `src/tokens/_variables.scss` | Color, spacing, sizing tokens |
 | `src/tokens/_text-styles.scss` | Typography mixins (generated) |
 | `src/tokens/_effects.scss` | Shadow variables (generated) |
 | `src/tokens/_typography.scss` | Global text classes + reset |
+| `scripts/extract-icons.mjs` | Icon vendoring + registry generation |
 | `tools/figma-styles/` | Figma REST API style fetcher |
 
 ## Commands
@@ -43,6 +45,7 @@ npm run build            # Production build
 npm run figma:styles     # Sync text styles + effects from Figma
 npm run figma:node       # Fetch CSS from any Figma node (fallback for MCP)
 npm run tokens:build     # Build color/spacing tokens
+npm run icons:extract    # Vendor icons + regenerate registry
 npm run test             # Playwright component tests
 npm run test:unit        # Vitest unit tests (fast)
 npm run test:all         # Run both test suites
@@ -64,7 +67,7 @@ npm run lint             # ESLint
 - **Do** use `var(--token)` for all values
 - **Do** run `npm run figma:styles` after Figma style changes
 - **Do not** hardcode colors, spacing, shadows, z-index
-- **Do not** edit generated files (`_text-styles.scss`, `_effects.scss`)
+- **Do not** edit generated files (`_text-styles.scss`, `_effects.scss`, `icon-registry.ts`, `Icon/icons/`)
 - **Do not** use emojis in code or console output
 - **Do not** add decorative comment dividers
 

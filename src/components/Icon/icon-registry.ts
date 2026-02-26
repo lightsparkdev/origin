@@ -171,6 +171,8 @@ import { IconTarget } from './icons/IconTarget';
 import { IconTelescope } from './icons/IconTelescope';
 import { IconTextareaDrag } from './icons/IconTextareaDrag';
 import { IconTextToSpeach } from './icons/IconTextToSpeach';
+import { IconThumbDownCurved } from './icons/IconThumbDownCurved';
+import { IconThumbUpCurved } from './icons/IconThumbUpCurved';
 import { IconTimeFlies } from './icons/IconTimeFlies';
 import { IconTimeslot } from './icons/IconTimeslot';
 import { IconToggle } from './icons/IconToggle';
@@ -401,6 +403,8 @@ export const ICON_REGISTRY = {
   IconTelescope,
   IconTextToSpeach,
   IconTextareaDrag,
+  IconThumbDownCurved,
+  IconThumbUpCurved,
   IconTimeFlies,
   IconTimeslot,
   IconToggle,

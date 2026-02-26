@@ -11,7 +11,7 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'radio' },
-      options: ['default', 'critical'],
+      options: ['default', 'critical', 'warning'],
     },
     icon: {
       control: 'boolean',
@@ -54,6 +54,14 @@ export const NoIcon: Story = {
   },
 };
 
+export const Warning: Story = {
+  args: {
+    variant: 'warning',
+    title: 'Title',
+    description: 'Description here.',
+  },
+};
+
 export const AllVariants: Story = {
   args: {
     title: 'Title',
@@ -61,6 +69,7 @@ export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '420px' }}>
       <Alert variant="default" title="Title" description="Description here." />
+      <Alert variant="warning" title="Title" description="Description here." />
       <Alert variant="critical" title="Title" description="Description here." />
     </div>
   ),

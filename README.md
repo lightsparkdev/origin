@@ -59,7 +59,7 @@ import { CentralIcon } from '@/components/Icon';
 <CentralIcon name="IconHome" size={24} />
 ```
 
-All ~100 icons from the Figma design system are available.
+213 vendored icons from Central Icons. Edit `scripts/extract-icons.mjs` to add icons, then run `npm run icons:extract`.
 
 ## Scripts
 
@@ -69,6 +69,10 @@ All ~100 icons from the Figma design system are available.
 | `npm run build` | Production build |
 | `npm run storybook` | Start Storybook |
 | `npm run tokens:build` | Build tokens from Figma exports |
+| `npm run icons:extract` | Vendor icons and regenerate registry |
+| `npm run test` | Playwright component tests |
+| `npm run test:unit` | Vitest unit tests |
+| `npm run test:all` | Run both test suites |
 | `npm run lint` | Run ESLint |
 
 ## Using as a Package

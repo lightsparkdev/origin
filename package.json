@@ -70,9 +70,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
     "@axe-core/playwright": "^4.11.0",
-    "@central-icons-react/round-filled-radius-3-stroke-1.5": "^1.1.139",
-    "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.137",
-    "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.139",
+    "@central-icons-react/round-filled-radius-3-stroke-1.5": "^1.1.145",
+    "@central-icons-react/round-outlined-radius-0-stroke-1.5": "^1.1.145",
+    "@central-icons-react/round-outlined-radius-3-stroke-1.5": "^1.1.145",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^10.0.1",
     "@playwright/experimental-ct-react": "^1.57.0",

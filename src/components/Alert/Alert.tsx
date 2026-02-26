@@ -8,7 +8,7 @@ import styles from './Alert.module.scss';
 
 export interface AlertProps {
   /** Visual variant of the alert */
-  variant?: 'default' | 'critical';
+  variant?: 'default' | 'critical' | 'warning';
   /** Title text (required) */
   title: string;
   /** Description text */
@@ -20,8 +20,9 @@ export interface AlertProps {
 }
 
 const DEFAULT_ICONS: Record<string, CentralIconName> = {
-  default: 'IconCircleX',
+  default: 'IconCircleInfo',
   critical: 'IconCircleX',
+  warning: 'IconExclamationTriangle',
 };
 
 /**

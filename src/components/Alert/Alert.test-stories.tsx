@@ -38,6 +38,16 @@ export function NoIconAlert() {
   );
 }
 
+export function WarningAlert() {
+  return (
+    <Alert
+      variant="warning"
+      title="Warning Title"
+      description="Warning description text."
+    />
+  );
+}
+
 export function CustomIconAlert() {
   return (
     <Alert

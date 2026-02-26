@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import {
   DefaultAlert,
   CriticalAlert,
+  WarningAlert,
   TitleOnlyAlert,
   NoIconAlert,
   CustomIconAlert,
@@ -41,6 +42,21 @@ test.describe('Alert', () => {
       const alert = page.getByRole('alert');
       await expect(alert).toContainText('Critical Title');
       await expect(alert).toContainText('Critical description text.');
+    });
+  });
+
+  test.describe('warning variant', () => {
+    test('renders with role="alert"', async ({ mount, page }) => {
+      await mount(<WarningAlert />);
+      const alert = page.getByRole('alert');
+      await expect(alert).toBeVisible();
+    });
+
+    test('renders title and description', async ({ mount, page }) => {
+      await mount(<WarningAlert />);
+      const alert = page.getByRole('alert');
+      await expect(alert).toContainText('Warning Title');
+      await expect(alert).toContainText('Warning description text.');
     });
   });
 
