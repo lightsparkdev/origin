@@ -1,27 +1,44 @@
-name: Publish Package
+name: "Publish to npm"
 
 on:
-  release:
-    types: [published]
+  pull_request:
+    types: [closed]
+    branches: [main]
 
 jobs:
   publish:
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'release/')
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      packages: write
+      contents: write
+      id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
-          registry-url: https://npm.pkg.github.com
-      - run: npm ci --legacy-peer-deps
+          node-version: 24
+          cache: "npm"
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
         env:
           CENTRAL_LICENSE_KEY: ${{ secrets.CENTRAL_LICENSE_KEY }}
-      - run: npm run test:unit
-      - run: npm run lint:publish
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run tests
+        run: npm run test:unit
+
+      - name: Run publish checks
+        run: npm run lint:publish
+
+      - name: Publish to npm
+        run: npm publish --provenance --access public
+
+      - name: Create git tag
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"

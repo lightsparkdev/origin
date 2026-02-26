@@ -1,0 +1,205 @@
+name: "Create Release PR"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-release-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Collect changes since last release
+        id: changes
+        run: |
+          OLD_VERSION=$(node -p "require('./package.json').version")
+          echo "old_version=$OLD_VERSION" >> "$GITHUB_OUTPUT"
+
+          # Collect PR merge commit messages since last tag
+          MERGES=$(git log v${OLD_VERSION}..HEAD --merges --pretty=format:"%s" || true)
+
+          # Fall back to non-merge commits if no merges
+          if [ -z "$MERGES" ]; then
+            MERGES=$(git log v${OLD_VERSION}..HEAD --pretty=format:"%s" --no-merges | head -30)
+          fi
+
+          # Also collect the diff stat for context
+          DIFFSTAT=$(git diff v${OLD_VERSION}..HEAD --stat | tail -1)
+
+          # Write to files for the next step
+          echo "$MERGES" > /tmp/commit_messages.txt
+          echo "$DIFFSTAT" > /tmp/diffstat.txt
+
+      - name: Determine version bump and generate changelog
+        id: ai
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          OLD_VERSION="${{ steps.changes.outputs.old_version }}"
+          COMMITS=$(cat /tmp/commit_messages.txt)
+          DIFFSTAT=$(cat /tmp/diffstat.txt)
+          DATE=$(date +%Y-%m-%d)
+
+          # Build the prompt
+          cat > /tmp/prompt.json << 'PROMPT_EOF'
+          {
+            "model": "claude-sonnet-4-5-20250514",
+            "max_tokens": 1024,
+            "messages": [
+              {
+                "role": "user",
+                "content": "COMMITS_PLACEHOLDER"
+              }
+            ]
+          }
+          PROMPT_EOF
+
+          # Inject the actual prompt content with proper escaping
+          PROMPT_TEXT=$(cat <<INNER_EOF
+          You are generating a release changelog for @lightsparkdev/origin, a React component library and design system.
+
+          Current version: ${OLD_VERSION}
+          Diff stat: ${DIFFSTAT}
+
+          Commits since last release:
+          ${COMMITS}
+
+          Tasks:
+          1. Determine if this is a "minor" or "patch" release. Use minor if there are new components, new features, or new public API surface. Use patch for bug fixes, docs, internal refactors, CI changes, and dependency updates. Never use major.
+          2. Write a concise changelog entry that summarizes ONLY changes that impact consumers of the package (new components, API changes, bug fixes, style changes). Omit CI, docs, internal tooling, and repo maintenance.
+
+          Respond in EXACTLY this format with no other text:
+
+          VERSION_BUMP: patch
+          CHANGELOG:
+          ## ${OLD_VERSION} → X.Y.Z (${DATE})
+
+          - First user-facing change
+          - Second user-facing change
+
+          Replace X.Y.Z with the actual new version number. If there are no user-facing changes, write a single line: "- Internal maintenance release (no user-facing changes)".
+          INNER_EOF
+          )
+
+          # Escape for JSON
+          ESCAPED_PROMPT=$(echo "$PROMPT_TEXT" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))')
+
+          # Replace placeholder in JSON
+          python3 -c "
+          import json
+          with open('/tmp/prompt.json') as f:
+              data = json.load(f)
+          data['messages'][0]['content'] = json.loads($ESCAPED_PROMPT)
+          with open('/tmp/prompt.json', 'w') as f:
+              json.dump(data, f)
+          "
+
+          # Call the API
+          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
+            -H "content-type: application/json" \
+            -H "x-api-key: $ANTHROPIC_API_KEY" \
+            -H "anthropic-version: 2023-06-01" \
+            -d @/tmp/prompt.json)
+
+          # Extract the text response
+          AI_OUTPUT=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.loads(sys.stdin.read())['content'][0]['text'])")
+
+          # Parse version bump
+          VERSION_BUMP=$(echo "$AI_OUTPUT" | grep "^VERSION_BUMP:" | awk '{print $2}' | tr -d '[:space:]')
+          if [ "$VERSION_BUMP" != "minor" ] && [ "$VERSION_BUMP" != "patch" ]; then
+            echo "AI returned invalid version bump: '$VERSION_BUMP', defaulting to patch"
+            VERSION_BUMP="patch"
+          fi
+
+          # Parse changelog (everything after CHANGELOG: line)
+          CHANGELOG=$(echo "$AI_OUTPUT" | sed -n '/^CHANGELOG:/,$ p' | tail -n +2)
+
+          echo "version_bump=$VERSION_BUMP" >> "$GITHUB_OUTPUT"
+
+          # Write changelog to file (multi-line safe)
+          echo "$CHANGELOG" > /tmp/changelog_entry.md
+
+          echo "--- AI determined: $VERSION_BUMP ---"
+          echo "$CHANGELOG"
+
+      - name: Bump version
+        id: bump
+        run: |
+          npm version ${{ steps.ai.outputs.version_bump }} --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Update changelog
+        run: |
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+
+          # Replace the AI's placeholder version with the actual bumped version
+          sed -i "s/→ [0-9]*\.[0-9]*\.[0-9]*/→ ${NEW_VERSION}/" /tmp/changelog_entry.md
+
+          if [ -f CHANGELOG.md ]; then
+            # Insert after the title line
+            {
+              head -1 CHANGELOG.md
+              echo ""
+              cat /tmp/changelog_entry.md
+              echo ""
+              tail -n +2 CHANGELOG.md
+            } > /tmp/CHANGELOG.md
+            mv /tmp/CHANGELOG.md CHANGELOG.md
+          else
+            {
+              echo "# Changelog"
+              echo ""
+              cat /tmp/changelog_entry.md
+            } > CHANGELOG.md
+          fi
+
+      - name: Create release branch and PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          OLD_VERSION="${{ steps.changes.outputs.old_version }}"
+          NEW_VERSION="${{ steps.bump.outputs.new_version }}"
+          VERSION_BUMP="${{ steps.ai.outputs.version_bump }}"
+          BRANCH="release/v${NEW_VERSION}"
+
+          git checkout -b "$BRANCH"
+          git add package.json package-lock.json CHANGELOG.md
+          git commit -m "v${NEW_VERSION}"
+          git push -u origin "$BRANCH"
+
+          CHANGELOG_ENTRY=$(cat /tmp/changelog_entry.md)
+
+          gh pr create \
+            --title "v${NEW_VERSION}" \
+            --body "$(cat <<EOF
+          ## Release v${NEW_VERSION}
+
+          **Version bump:** ${VERSION_BUMP} (${OLD_VERSION} → ${NEW_VERSION})
+
+          ### Changes
+
+          ${CHANGELOG_ENTRY}
+
+          ---
+
+          Merging this PR will publish \`@lightsparkdev/origin@${NEW_VERSION}\` to npm.
+          EOF
+          )"
