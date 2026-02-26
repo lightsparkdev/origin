@@ -1,0 +1,47 @@
+name: "Summary Checks"
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, edited]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  required-checks:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      checks: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed
+        uses: tj-actions/changed-files@v45
+
+      - name: Skip if summary.yaml is the only changed file
+        id: skip-summary
+        if: |
+          steps.changed.outputs.all_changed_files_count == '1' &&
+          contains(steps.changed.outputs.all_changed_files, '.github/workflows/summary.yaml')
+        run: |
+          echo "skip=true" >> $GITHUB_OUTPUT
+          echo "Only summary.yaml changed; skipping."
+          exit 0
+
+      - name: GitHub Checks
+        if: steps.skip-summary.outputs.skip != 'true'
+        uses: poseidon/wait-for-status-checks@2130f3234830a363a809b2742ad81ecc7ea684bb
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          interval: 30s
+          delay: 60s
