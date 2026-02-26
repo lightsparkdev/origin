@@ -6,6 +6,7 @@ import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox';
 import { Field } from '@base-ui/react/field';
 import clsx from 'clsx';
 import { CentralIcon } from '../Icon';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Checkbox.module.scss';
 
 interface CheckboxGroupContextValue {
@@ -33,6 +34,7 @@ export interface CheckboxGroupProps extends Omit<React.HTMLAttributes<HTMLDivEle
   allValues?: string[];
   disabled?: boolean;
   variant?: 'default' | 'card';
+  analyticsName?: string;
 }
 
 export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
@@ -44,11 +46,20 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
       allValues,
       disabled = false,
       variant = 'default',
+      analyticsName,
       className,
       children,
       style,
       ...other
     } = props;
+
+    const trackedChange = useTrackedCallback(
+      analyticsName,
+      'Checkbox.Group',
+      'change',
+      onValueChange,
+      (val: string[]) => ({ value: val }),
+    );
 
     const contextValue = React.useMemo(() => ({ variant }), [variant]);
 
@@ -58,7 +69,7 @@ export const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps
           ref={ref}
           value={value}
           defaultValue={defaultValue}
-          onValueChange={onValueChange}
+          onValueChange={trackedChange}
           allValues={allValues}
           disabled={disabled}
           className={clsx(styles.group, className)}

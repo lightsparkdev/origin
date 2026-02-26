@@ -3,16 +3,28 @@
 import * as React from 'react';
 import { Tabs as BaseTabs } from '@base-ui/react/tabs';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Tabs.module.scss';
 
-export interface RootProps extends BaseTabs.Root.Props {}
+export interface RootProps extends BaseTabs.Root.Props {
+  analyticsName?: string;
+}
 
 export const Root = React.forwardRef<HTMLDivElement, RootProps>(
-  function Root({ className, ...props }, ref) {
+  function Root({ className, analyticsName, onValueChange, ...props }, ref) {
+    const trackedChange = useTrackedCallback(
+      analyticsName,
+      'Tabs',
+      'change',
+      onValueChange,
+      (value: unknown) => ({ value }),
+    );
+
     return (
       <BaseTabs.Root
         ref={ref}
         className={clsx(styles.root, className)}
+        onValueChange={trackedChange}
         {...props}
       />
     );

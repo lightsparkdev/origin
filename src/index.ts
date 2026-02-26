@@ -1,6 +1,15 @@
 // Origin Design System - Barrel Export
 // This file exports all components for use as a package
 
+// Analytics
+export { AnalyticsProvider } from './components/Analytics';
+export type {
+  AnalyticsHandler,
+  AnalyticsProviderProps,
+  InteractionInfo,
+  InteractionType,
+} from './components/Analytics';
+
 // Compound components (namespace exports)
 export { Accordion } from './components/Accordion';
 export { AlertDialog } from './components/AlertDialog';

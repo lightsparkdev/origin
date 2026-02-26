@@ -5,6 +5,7 @@ import { RadioGroup as BaseRadioGroup } from '@base-ui/react/radio-group';
 import { Radio as BaseRadio } from '@base-ui/react/radio';
 import { Field } from '@base-ui/react/field';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Radio.module.scss';
 
 interface RadioGroupContextValue {
@@ -34,6 +35,7 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
   required?: boolean;
   name?: string;
   variant?: 'default' | 'card';
+  analyticsName?: string;
 }
 
 export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
@@ -47,11 +49,20 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
       required = false,
       name,
       variant = 'default',
+      analyticsName,
       className,
       children,
       style,
       ...other
     } = props;
+
+    const trackedChange = useTrackedCallback(
+      analyticsName,
+      'Radio.Group',
+      'change',
+      onValueChange,
+      (val: unknown) => ({ value: val }),
+    );
 
     const contextValue = React.useMemo(() => ({ variant }), [variant]);
 
@@ -61,7 +72,7 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
           ref={ref}
           value={value}
           defaultValue={defaultValue}
-          onValueChange={onValueChange}
+          onValueChange={trackedChange}
           disabled={disabled}
           readOnly={readOnly}
           required={required}

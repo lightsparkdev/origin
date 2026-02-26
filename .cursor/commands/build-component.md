@@ -71,6 +71,8 @@
    ├── {Name}.module.scss        # Styles
    └── index.ts                  # Exports
    ```
+   
+   If interactive, wire analytics — see `components.mdc` Analytics section.
 
 7. Mirror Figma exactly — if Figma uses a token, use it; if raw value, use that. **Check `figma-exceptions.mdc` for intentional deviations.**
 

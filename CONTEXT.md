@@ -94,6 +94,18 @@ import { CentralIcon } from '@/components/Icon';
 - `@central-icons-react/round-outlined-radius-3-stroke-1.5`
 - `@central-icons-react/round-filled-radius-3-stroke-1.5`
 
+### 4. Analytics Context (`src/components/Analytics/`)
+
+Opt-in interaction tracking for all interactive primitives. Products provide a single `AnalyticsHandler` via `AnalyticsProvider`; components emit structured `InteractionInfo` when an `analyticsName` prop is set.
+
+**Shared hooks:**
+- `useTrackedCallback` — wraps click, change, submit, select callbacks
+- `useTrackedOpenChange` — wraps overlay open/close with duration tracking
+
+**Instrumented components:** Button, Form, Dialog, AlertDialog, Menu, Popover, Command, ContextMenu, Select, Switch, Checkbox.Group, Radio.Group, Tabs, Toggle, ToggleGroup, Combobox, Accordion, Table, NavigationMenu, Sidebar, Pagination, Menu.Item, Command.Item
+
+If no provider or `analyticsName` is present, the hooks are no-ops — zero cost for products that don't use analytics.
+
 ---
 
 ## Project Structure

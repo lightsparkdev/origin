@@ -4,13 +4,17 @@
 import * as React from 'react';
 import { Popover as BasePopover } from '@base-ui/react/popover';
 import clsx from 'clsx';
+import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 import styles from './Popover.module.scss';
 
 // Root - Groups all parts, manages open state
-export interface PopoverRootProps extends BasePopover.Root.Props {}
+export interface PopoverRootProps extends BasePopover.Root.Props {
+  analyticsName?: string;
+}
 
-export function PopoverRoot(props: PopoverRootProps) {
-  return <BasePopover.Root {...props} />;
+export function PopoverRoot({ analyticsName, onOpenChange, ...props }: PopoverRootProps) {
+  const trackedOpenChange = useTrackedOpenChange(analyticsName, 'Popover', onOpenChange);
+  return <BasePopover.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
 // Trigger - Button that opens the popover

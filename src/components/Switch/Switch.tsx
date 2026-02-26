@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Switch as BaseSwitch } from '@base-ui/react/switch';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Switch.module.scss';
 
 export interface SwitchProps extends Omit<BaseSwitch.Root.Props, 'className'> {
@@ -11,17 +12,26 @@ export interface SwitchProps extends Omit<BaseSwitch.Root.Props, 'className'> {
    * @default 'md'
    */
   size?: 'sm' | 'md';
+  analyticsName?: string;
   className?: string;
 }
 
 export const Switch = React.forwardRef<HTMLSpanElement, SwitchProps>(
   function Switch(props, ref) {
-    const { size = 'md', className, ...other } = props;
+    const { size = 'md', analyticsName, onCheckedChange, className, ...other } = props;
+    const trackedChange = useTrackedCallback(
+      analyticsName,
+      'Switch',
+      'change',
+      onCheckedChange,
+      (checked: boolean) => ({ checked }),
+    );
 
     return (
       <BaseSwitch.Root
         ref={ref}
         className={clsx(styles.root, styles[size], className)}
+        onCheckedChange={trackedChange}
         {...other}
       >
         <BaseSwitch.Thumb className={styles.thumb} />

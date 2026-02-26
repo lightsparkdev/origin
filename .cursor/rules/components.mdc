@@ -141,6 +141,17 @@ export function ComboboxValue(props: ComboboxValueProps): ReactElement
 - Use slots (`React.ReactNode` props) for nested elements
 - Props spread last (consumer wins)
 
+## Analytics
+
+Interactive components accept an optional `analyticsName?: string` prop and use shared hooks from `src/components/Analytics/`:
+
+- **Actions** (Button, Form) — `useTrackedCallback` with `'click'` or `'submit'`
+- **Overlays** (Dialog, Menu, Popover, etc.) — `useTrackedOpenChange` for open/close with duration
+- **Value controls** (Select, Switch, Tabs, etc.) — `useTrackedCallback` with `'change'` and `(value) => ({ value })` metadata
+- **Item selection** (Menu.Item, Command.Item) — `useTrackedCallback` with `'select'`
+
+If no `AnalyticsProvider` exists in the tree or `analyticsName` is omitted, the hooks are no-ops.
+
 ## Testing (TDD)
 
 Write tests before implementation:
@@ -190,6 +201,7 @@ Dev mode TypeScript is lenient. Production build catches:
 - [ ] Figma values mirrored exactly
 - [ ] forwardRef + clsx
 - [ ] **No custom data attributes for states Base UI handles**
+- [ ] **Analytics wired** (if interactive) — `analyticsName` prop + tracking hook
 - [ ] **Production build passes** (`npm run build`)
 - [ ] Reduced motion: `@media (prefers-reduced-motion: reduce)`
 - [ ] Storybook story added

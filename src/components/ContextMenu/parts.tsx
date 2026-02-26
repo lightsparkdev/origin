@@ -6,15 +6,19 @@ import clsx from 'clsx';
 // Reuse Menu styles - visually identical
 import styles from '../Menu/Menu.module.scss';
 import { CentralIcon } from '../Icon';
+import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 
 // ============================================================================
 // Root
 // ============================================================================
 
-export interface RootProps extends BaseContextMenu.Root.Props {}
+export interface RootProps extends BaseContextMenu.Root.Props {
+  analyticsName?: string;
+}
 
-export function Root(props: RootProps) {
-  return <BaseContextMenu.Root {...props} />;
+export function Root({ analyticsName, onOpenChange, ...props }: RootProps) {
+  const trackedOpenChange = useTrackedOpenChange(analyticsName, 'ContextMenu', onOpenChange);
+  return <BaseContextMenu.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
 // ============================================================================

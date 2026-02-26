@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Button as BaseButton } from '@base-ui/react/button';
 import clsx from 'clsx';
 import { Loader } from '../Loader';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -14,6 +15,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
   iconOnly?: boolean;
+  analyticsName?: string;
   children?: React.ReactNode;
 }
 
@@ -30,12 +32,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       leadingIcon,
       trailingIcon,
       iconOnly = false,
+      analyticsName,
+      onClick,
       children,
       className,
       ...props
     },
     ref
   ) {
+    const trackedClick = useTrackedCallback(analyticsName, 'Button', 'click', onClick);
+
     return (
       <BaseButton
         ref={ref}
@@ -49,6 +55,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           loading && styles.loading,
           className
         )}
+        onClick={trackedClick}
         {...props}
       >
         {/* Content wrapper - hidden but preserved during loading to maintain width */}

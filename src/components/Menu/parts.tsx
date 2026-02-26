@@ -5,15 +5,20 @@ import { Menu as BaseMenu } from '@base-ui/react/menu';
 import clsx from 'clsx';
 import styles from './Menu.module.scss';
 import { CentralIcon } from '../Icon';
+import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 
 // ============================================================================
 // Root
 // ============================================================================
 
-export interface RootProps extends BaseMenu.Root.Props {}
+export interface RootProps extends BaseMenu.Root.Props {
+  analyticsName?: string;
+}
 
-export function Root(props: RootProps) {
-  return <BaseMenu.Root {...props} />;
+export function Root({ analyticsName, onOpenChange, ...props }: RootProps) {
+  const trackedOpenChange = useTrackedOpenChange(analyticsName, 'Menu', onOpenChange);
+  return <BaseMenu.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
 // ============================================================================
@@ -80,14 +85,26 @@ export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
 // Item
 // ============================================================================
 
-export interface ItemProps extends BaseMenu.Item.Props {}
+export interface ItemProps extends BaseMenu.Item.Props {
+  analyticsName?: string;
+  analyticsValue?: string;
+}
 
 export const Item = React.forwardRef<HTMLDivElement, ItemProps>(
-  function Item({ className, ...props }, ref) {
+  function Item({ className, analyticsName, analyticsValue, onClick, ...props }, ref) {
+    const trackedClick = useTrackedCallback(
+      analyticsName,
+      'Menu.Item',
+      'select',
+      onClick,
+      analyticsValue != null ? () => ({ value: analyticsValue }) : undefined,
+    );
+
     return (
       <BaseMenu.Item
         ref={ref}
         className={clsx(styles.item, className)}
+        onClick={trackedClick}
         {...props}
       />
     );

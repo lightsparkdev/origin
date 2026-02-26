@@ -6,6 +6,8 @@ import * as React from 'react';
 import { Dialog } from '@base-ui/react/dialog';
 import { Autocomplete } from '@base-ui/react/autocomplete';
 import clsx from 'clsx';
+import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Command.module.scss';
 
 export interface CommandItem {
@@ -16,6 +18,7 @@ export interface CommandItem {
   keywords?: string[];
   onSelect?: () => void;
   disabled?: boolean;
+  analyticsName?: string;
 }
 
 export interface CommandGroup {
@@ -82,6 +85,7 @@ export interface RootProps {
   filter?: (item: CommandItem | CommandGroup, inputValue: string) => boolean;
   loop?: boolean;
   renderItem?: (item: CommandItem) => React.ReactNode;
+  analyticsName?: string;
 }
 
 export function Root(props: RootProps) {
@@ -95,14 +99,16 @@ export function Root(props: RootProps) {
     filter = filterWithKeywords,
     loop = true,
     renderItem,
+    analyticsName,
   } = props;
+  const trackedOpenChange = useTrackedOpenChange(analyticsName, 'Command', onOpenChange);
 
   const handleSelect = React.useCallback(
     (item: CommandItem) => {
       item.onSelect?.();
-      onOpenChange?.(false);
+      trackedOpenChange?.(false);
     },
-    [onOpenChange]
+    [trackedOpenChange]
   );
 
   const contextValue = React.useMemo(
@@ -123,7 +129,7 @@ export function Root(props: RootProps) {
 
   return (
     <CommandContext.Provider value={contextValue}>
-      <Dialog.Root open={open} onOpenChange={onOpenChange} defaultOpen={defaultOpen}>
+      <Dialog.Root open={open} onOpenChange={trackedOpenChange} defaultOpen={defaultOpen}>
         <Dialog.Portal>
           <Dialog.Backdrop className={styles.backdrop} />
           <Dialog.Popup className={styles.popup}>
@@ -189,13 +195,20 @@ interface ItemRendererProps {
 
 function ItemRenderer({ item }: ItemRendererProps) {
   const { onSelect, renderItem } = useCommandContext();
+  const trackedClick = useTrackedCallback(
+    item.analyticsName,
+    'Command.Item',
+    'select',
+    () => onSelect(item),
+    () => ({ value: item.id }),
+  );
 
   return (
     <Autocomplete.Item
       value={item}
       disabled={item.disabled}
       className={styles.item}
-      onClick={() => onSelect(item)}
+      onClick={trackedClick}
     >
       {renderItem ? (
         renderItem(item)
