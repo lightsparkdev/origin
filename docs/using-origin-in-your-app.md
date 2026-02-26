@@ -53,6 +53,18 @@ The `_reset.scss` file includes:
 - Font feature settings
 - Icon system CSS (preserves stroke width at any icon size)
 
+### Webpack resolve.alias caveat
+
+If you add a Webpack `resolve.alias` for `@lightsparkdev/origin` (for example, to point at a local source checkout), use an exact-match alias with the `$` suffix. A broad alias hijacks all subpath lookups and breaks imports like `@lightsparkdev/origin/styles.css`.
+
+```js
+// next.config.js — webpack override
+config.resolve.alias['@lightsparkdev/origin$'] = '/path/to/origin/src/index.ts';
+//                                           ^ exact match — subpath imports still resolve via exports map
+```
+
+Without the `$`, Webpack rewrites `@lightsparkdev/origin/styles.css` to `index.ts/styles.css`, which doesn't exist.
+
 ## Component Usage
 
 ```tsx
