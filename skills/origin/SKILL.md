@@ -9,27 +9,40 @@ Origin is a Figma-first React component library built on Base UI. It ships as ra
 
 ## Required Setup
 
-### next.config.js
+### next.config.ts
 
-```js
-import * as sass from 'sass';
+```ts
+import type { NextConfig } from "next";
 
-const nextConfig = {
+const nextConfig: NextConfig = {
+  transpilePackages: ['@lightsparkdev/origin'],
+};
+
+export default nextConfig;
+```
+
+### Global styles (layout.tsx or app entry)
+
+```ts
+import "@lightsparkdev/origin/styles.css";
+```
+
+### Advanced SCSS token imports (optional)
+
+If you need Origin mixins in your own SCSS files, enable Sass package imports:
+
+```ts
+import type { NextConfig } from "next";
+import * as sass from "sass";
+
+const nextConfig: NextConfig = {
   transpilePackages: ['@lightsparkdev/origin'],
   sassOptions: {
     importers: [new sass.NodePackageImporter()],
   },
 };
-```
 
-### Global styles (layout.tsx or global SCSS)
-
-```scss
-@use 'pkg:@lightsparkdev/origin/tokens/variables';
-@use 'pkg:@lightsparkdev/origin/tokens/fonts';
-@use 'pkg:@lightsparkdev/origin/tokens/typography';
-@use 'pkg:@lightsparkdev/origin/tokens/effects';
-@use 'pkg:@lightsparkdev/origin/tokens/reset';
+export default nextConfig;
 ```
 
 ### Fonts

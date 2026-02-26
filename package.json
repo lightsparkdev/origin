@@ -15,9 +15,11 @@
   "main": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./styles.css": "./dist/styles.css",
     "./tokens/*": "./src/tokens/*"
   },
   "files": [
+    "dist/",
     "src/components/",
     "src/tokens/",
     "src/lib/",
@@ -29,12 +31,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:styles": "sass src/styles/public.scss dist/styles.css --no-source-map",
     "start": "next start",
     "lint": "eslint src/ && stylelint 'src/**/*.scss'",
     "lint:styles": "stylelint 'src/**/*.scss'",
     "lint:package": "publint",
-    "lint:types": "attw --pack . --ignore-rules cjs-resolves-to-esm internal-resolution-error",
-    "lint:publish": "npm run lint:package && npm run lint:types",
+    "lint:types": "attw --pack . --ignore-rules cjs-resolves-to-esm internal-resolution-error --exclude-entrypoints ./styles.css",
+    "lint:publish": "npm run build:styles && npm run lint:package && npm run lint:types",
     "test": "playwright test -c playwright-ct.config.ts",
     "test:ui": "playwright test -c playwright-ct.config.ts --ui",
     "test:unit": "vitest run",
@@ -47,7 +50,8 @@
     "figma:node": "npx tsx tools/figma-styles/fetch-node-css.ts",
     "check:baseui": "node scripts/check-baseui-version.js",
     "patch:playwright": "node scripts/patch-playwright-ct.js",
-    "icons:extract": "node scripts/extract-icons.mjs"
+    "icons:extract": "node scripts/extract-icons.mjs",
+    "prepack": "npm run build:styles"
   },
   "dependencies": {
     "@base-ui/react": "^1.1.0",

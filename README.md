@@ -79,33 +79,8 @@ import { CentralIcon } from '@/components/Icon';
 
 ### Installation
 
-#### 1. Generate a GitHub token
-
-Each developer needs a **GitHub Personal Access Token (classic)** with the `read:packages` scope:
-
-1. Go to [GitHub > Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
-2. Generate a new token with the **`read:packages`** scope
-3. Add it to your shell profile (`~/.zshrc` or `~/.bashrc`):
-
 ```bash
-export NPM_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
-```
-
-You must be a member of the `lightsparkdev` GitHub org for the token to have access.
-
-#### 2. Configure `.npmrc`
-
-Add `.npmrc` to your project root:
-
-```
-@lightsparkdev:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${NPM_TOKEN}
-```
-
-#### 3. Install
-
-```bash
-npm install @lightsparkdev/origin
+npm install @lightsparkdev/origin sass
 ```
 
 Or for local development:
@@ -115,6 +90,39 @@ Or for local development:
 ```
 
 ### Next.js Configuration
+
+```ts
+// next.config.ts
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  transpilePackages: ['@lightsparkdev/origin'],
+};
+
+export default nextConfig;
+```
+
+### Import Styles
+
+```ts
+import "@lightsparkdev/origin/styles.css";
+```
+
+### Copy Fonts
+
+```bash
+cp -r node_modules/@lightsparkdev/origin/public/fonts/ public/fonts/
+```
+
+### Usage
+
+```tsx
+import { Button, Input, Field } from '@lightsparkdev/origin';
+```
+
+### Advanced: SCSS Token Imports (Optional)
+
+If you need Origin mixins in your app SCSS files, configure Sass package imports:
 
 ```ts
 // next.config.ts
@@ -131,31 +139,9 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
-### Copy Fonts
-
-```bash
-cp -r node_modules/@lightsparkdev/origin/public/fonts/ public/fonts/
-```
-
-### Usage
-
-```tsx
-import { Button, Input, Field } from '@lightsparkdev/origin';
-```
-
-### Token Imports (SCSS)
-
-Use `pkg:` prefix to import tokens from the package:
+Then use `pkg:` imports:
 
 ```scss
-// globals.scss
-@use 'pkg:@lightsparkdev/origin/tokens/variables';
-@use 'pkg:@lightsparkdev/origin/tokens/fonts';
-@use 'pkg:@lightsparkdev/origin/tokens/typography';
-@use 'pkg:@lightsparkdev/origin/tokens/effects';
-@use 'pkg:@lightsparkdev/origin/tokens/reset';
-
-// In component SCSS
 @use 'pkg:@lightsparkdev/origin/tokens/text-styles' as *;
 ```
 
