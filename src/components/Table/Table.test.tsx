@@ -8,6 +8,7 @@ import {
   DescriptionTable,
   FooterTable,
   CompactFooterTable,
+  ClickableRowTable,
 } from './Table.test-stories';
 
 test.describe('Table', () => {
@@ -139,5 +140,44 @@ test.describe('Table', () => {
       await page.keyboard.press('Space');
       await expect(nameHeader).toHaveAttribute('data-sorted', 'desc');
     });
+  });
+
+  test.describe('Clickable Rows', () => {
+    test('rows with onClick are focusable', async ({ mount }) => {
+      const component = await mount(<ClickableRowTable />);
+
+      const firstRow = component.locator('tbody tr').first();
+      await expect(firstRow).toHaveAttribute('tabindex', '0');
+    });
+
+    test('Enter key triggers onClick', async ({ mount, page }) => {
+      const component = await mount(<ClickableRowTable />);
+
+      const firstRow = component.locator('tbody tr').first();
+      await firstRow.focus();
+      await page.keyboard.press('Enter');
+
+      await expect(component.locator('[data-testid="clicked-row"]')).toHaveText('Alice Johnson');
+    });
+
+    test('Space key triggers onClick', async ({ mount, page }) => {
+      const component = await mount(<ClickableRowTable />);
+
+      const secondRow = component.locator('tbody tr').nth(1);
+      await secondRow.focus();
+      await page.keyboard.press('Space');
+
+      await expect(component.locator('[data-testid="clicked-row"]')).toHaveText('Bob Smith');
+    });
+
+    test('non-clickable rows are not focusable', async ({ mount }) => {
+      const component = await mount(<BasicTable />);
+
+      const firstRow = component.locator('tbody tr').first();
+      await expect(firstRow).not.toHaveAttribute('tabindex');
+    });
+
+    // Edge cases (child bubbling, consumer onKeyDown) tested in Table.unit.test.tsx
+    // Playwright CT has issues with keyboard events on <tr> elements
   });
 });

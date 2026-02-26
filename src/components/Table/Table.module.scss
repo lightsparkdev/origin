@@ -11,6 +11,10 @@
   border-collapse: collapse;
   border-spacing: 0;
 
+  .caption {
+    @include visually-hidden;
+  }
+
   // Compact density overrides
   &[data-size='compact'] {
     .headerCell {
@@ -114,6 +118,15 @@
 .row {
   .root[data-clickable] &:hover {
     background-color: var(--surface-hover);
+  }
+
+  &--interactive {
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--input-focus);
+    }
   }
 
   &--last {

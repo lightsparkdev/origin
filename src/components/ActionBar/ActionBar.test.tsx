@@ -51,6 +51,13 @@ test.describe('ActionBar', () => {
       await clearButton.focus();
       await expect(clearButton).toBeFocused();
     });
+
+    test('label has aria-live for selection count announcements', async ({ mount, page }) => {
+      await mount(<DefaultActionBar />);
+      const label = page.getByTestId('action-bar-label');
+      await expect(label).toHaveAttribute('aria-live', 'polite');
+      await expect(label).toHaveAttribute('aria-atomic', 'true');
+    });
   });
 
   test.describe('button interactions', () => {
