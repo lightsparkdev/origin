@@ -43,7 +43,7 @@ CHANGELOG:
 Replace X.Y.Z with the actual new version number. If there are no user-facing changes, write a single line: "- Internal maintenance release (no user-facing changes)"."""
 
     payload = json.dumps({
-        "model": "claude-sonnet-4-6-20250514",
+        "model": "claude-sonnet-4-6",
         "max_tokens": 1024,
         "messages": [{"role": "user", "content": prompt}],
     }).encode()

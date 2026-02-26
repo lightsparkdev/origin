@@ -34,8 +34,8 @@ jobs:
       - name: Collect changes since last release
         id: changes
         run: |
-          # Ensure tags are fetched
-          git fetch --tags
+          # Ensure tags are fetched from the upstream repo
+          git fetch origin --tags
 
           OLD_VERSION=$(node -p "require('./package.json').version")
           echo "old_version=$OLD_VERSION" >> "$GITHUB_OUTPUT"
