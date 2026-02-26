@@ -34,8 +34,15 @@ jobs:
       - name: Collect changes since last release
         id: changes
         run: |
+          # Ensure tags are fetched
+          git fetch --tags
+
           OLD_VERSION=$(node -p "require('./package.json').version")
           echo "old_version=$OLD_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Current version: $OLD_VERSION"
+          echo "Tag exists: $(git tag -l v${OLD_VERSION})"
+          echo "Commits since tag:"
+          git log v${OLD_VERSION}..HEAD --oneline | head -10 || echo "(none)"
 
           # Collect PR merge commit messages since last tag
           MERGES=$(git log v${OLD_VERSION}..HEAD --merges --pretty=format:"%s" || true)
