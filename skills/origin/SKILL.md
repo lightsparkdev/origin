@@ -45,6 +45,16 @@ const nextConfig: NextConfig = {
 export default nextConfig;
 ```
 
+### Webpack alias caveat
+
+If adding a `resolve.alias` for `@lightsparkdev/origin`, always use the exact-match `$` suffix:
+
+```js
+config.resolve.alias['@lightsparkdev/origin$'] = '/path/to/src/index.ts';
+```
+
+Without `$`, the alias hijacks subpath imports and breaks `@lightsparkdev/origin/styles.css`.
+
 ### Fonts
 
 Copy fonts from the package into your app's public directory:
