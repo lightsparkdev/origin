@@ -37,8 +37,17 @@ jobs:
       - name: Publish to npm
         run: npm publish --provenance --access public
 
-      - name: Create git tag
+      - name: Create git tag and GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           VERSION=$(node -p "require('./package.json').version")
           git tag "v${VERSION}"
           git push origin "v${VERSION}"
+
+          # Extract this version's changelog entry (everything between this ## and the next ##)
+          NOTES=$(sed -n "/^## .*${VERSION}/,/^## /{ /^## .*${VERSION}/d; /^## /d; p; }" CHANGELOG.md)
+
+          gh release create "v${VERSION}" \
+            --title "v${VERSION}" \
+            --notes "${NOTES:-Release v${VERSION}}"
