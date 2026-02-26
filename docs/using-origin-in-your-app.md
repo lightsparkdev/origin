@@ -5,7 +5,7 @@
 ### 1. Install the Package
 
 ```bash
-npm install @lightsparkdev/origin
+npm install @lightsparkdev/origin sass
 ```
 
 For local development alongside Origin:
@@ -19,14 +19,9 @@ For local development alongside Origin:
 ```ts
 // next.config.ts
 import type { NextConfig } from "next";
-import * as sass from "sass";
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@lightsparkdev/origin"],
-  sassOptions: {
-    // Enable pkg: imports for SCSS from node_modules
-    importers: [new sass.NodePackageImporter()],
-  },
 };
 
 export default nextConfig;
@@ -42,22 +37,12 @@ cp -r node_modules/@lightsparkdev/origin/public/fonts/ public/fonts/
 
 The `@font-face` declarations in `_fonts.scss` expect fonts at `/fonts/`. These are Suisse Intl (Regular, Book, Medium) and Suisse Int'l Mono.
 
-### 4. Configure `globals.scss`
+### 4. Import Origin styles
 
-```scss
-@use "pkg:@lightsparkdev/origin/tokens/variables";
-@use "pkg:@lightsparkdev/origin/tokens/fonts";
-@use "pkg:@lightsparkdev/origin/tokens/typography";
-@use "pkg:@lightsparkdev/origin/tokens/effects";
-@use "pkg:@lightsparkdev/origin/tokens/reset";
+Import the prebuilt stylesheet once in your app root (for example `app/layout.tsx` or `src/main.tsx`):
 
-body {
-  margin: 0;
-  font-family: var(--font-family-sans);
-  color: var(--text-primary);
-  background-color: var(--surface-primary);
-  -webkit-font-smoothing: antialiased;
-}
+```ts
+import "@lightsparkdev/origin/styles.css";
 ```
 
 The `_reset.scss` file includes:
@@ -81,15 +66,30 @@ import { Button, Input, Field, CentralIcon } from '@lightsparkdev/origin';
 <CentralIcon name="IconHome" size={24} />
 ```
 
-## Token Usage in SCSS
+## Token Usage
 
-### In `globals.scss`
+The default stylesheet includes Origin tokens, fonts, effects, typography classes, reset styles, and utility classes.
 
-Files with `:root` selectors (`_variables.scss`, `_fonts.scss`, `_reset.scss`, etc.) must be imported in `globals.scss`.
+## Advanced: SCSS token imports (optional)
 
-### In Component SCSS
+If your app needs Origin mixins in your own SCSS files, enable the Sass package importer:
 
-Use the `pkg:` prefix for mixins. CSS variables are globally available:
+```ts
+// next.config.ts
+import type { NextConfig } from "next";
+import * as sass from "sass";
+
+const nextConfig: NextConfig = {
+  transpilePackages: ["@lightsparkdev/origin"],
+  sassOptions: {
+    importers: [new sass.NodePackageImporter()],
+  },
+};
+
+export default nextConfig;
+```
+
+Then import mixins from Origin:
 
 ```scss
 // component.module.scss
@@ -97,7 +97,7 @@ Use the `pkg:` prefix for mixins. CSS variables are globally available:
 
 .title {
   @include headline-sm;
-  color: var(--text-primary); // tokens available globally
+  color: var(--text-primary);
 }
 ```
 
