@@ -195,10 +195,6 @@ export const GroupLabel = React.forwardRef<HTMLDivElement, GroupLabelProps>(
   }
 );
 
-export interface CollectionProps {
-  children: (item: any, index: number) => React.ReactNode;
-}
-
 /**
  * Autocomplete.Collection - Renders items within a group.
  *

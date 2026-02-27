@@ -135,7 +135,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
       const index = Math.max(0, Math.min(dataLength - 1, Math.round(rawX / step)));
       setActiveIndex((prev) => (prev === index ? prev : index));
     },
-    [dataLength, plotWidth, padLeft, tooltipMode],
+    [dataLength, plotWidth, padLeft, tooltipMode, interpolatorsRef],
   );
 
   const hideHover = React.useCallback(() => {
@@ -226,7 +226,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
         }
       }
     },
-    [dataLength, plotWidth, padLeft, tooltipMode],
+    [dataLength, plotWidth, padLeft, tooltipMode, interpolatorsRef],
   );
 
   const handleKeyDown = React.useCallback(
