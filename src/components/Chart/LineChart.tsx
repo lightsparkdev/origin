@@ -155,7 +155,6 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     if (process.env.NODE_ENV !== 'production') {
       if (color && seriesProp) {
-        // eslint-disable-next-line no-console
         console.warn(
           'Chart.Line: `color` is ignored when `series` is provided. ' +
             'Set color on each series entry instead.',

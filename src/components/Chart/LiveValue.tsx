@@ -34,15 +34,6 @@ export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
       speedRef.current = lerpSpeed;
     });
 
-    // Restart loop when target changes
-    React.useEffect(() => {
-      targetRef.current = value;
-      if (!rafRef.current) {
-        lastFrameRef.current = 0;
-        rafRef.current = requestAnimationFrame(tick);
-      }
-    }, [value]);
-
     const tick = React.useCallback(() => {
       const now = performance.now();
       const dt = lastFrameRef.current ? Math.min(now - lastFrameRef.current, MAX_DELTA_MS) : 16.67;
@@ -68,6 +59,15 @@ export const LiveValue = React.forwardRef<HTMLSpanElement, LiveValueProps>(
       }
       rafRef.current = requestAnimationFrame(tick);
     }, []);
+
+    // Restart loop when target changes
+    React.useEffect(() => {
+      targetRef.current = value;
+      if (!rafRef.current) {
+        lastFrameRef.current = 0;
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    }, [value, tick]);
 
     React.useEffect(() => {
       rafRef.current = requestAnimationFrame(tick);

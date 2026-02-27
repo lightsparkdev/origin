@@ -428,6 +428,7 @@ export interface ValueProps
    * Render function that receives selected value(s) and returns React nodes.
    * For multi-select, receives an array of values.
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- render prop accepts any value type the consumer configures on Root
   children?: React.ReactNode | ((selectedValue: any) => React.ReactNode);
 }
 

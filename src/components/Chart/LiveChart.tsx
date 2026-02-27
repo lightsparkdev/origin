@@ -193,7 +193,6 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
 
     if (process.env.NODE_ENV !== 'production') {
       if (data.some((p) => p.time > 1e12)) {
-        // eslint-disable-next-line no-console
         console.warn(
           'Chart.Live: `time` values appear to be in milliseconds. Expected unix seconds.',
         );
