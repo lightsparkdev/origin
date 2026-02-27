@@ -16,6 +16,12 @@ export { AlertDialog } from './components/AlertDialog';
 export { Autocomplete } from './components/Autocomplete';
 export { Breadcrumb } from './components/Breadcrumb';
 export { Card } from './components/Card';
+export { Collapsible } from './components/Collapsible';
+export type {
+  CollapsibleRootProps,
+  CollapsibleTriggerProps,
+  CollapsiblePanelProps,
+} from './components/Collapsible';
 export { Checkbox } from './components/Checkbox';
 export { Command } from './components/Command';
 export { Combobox } from './components/Combobox';
