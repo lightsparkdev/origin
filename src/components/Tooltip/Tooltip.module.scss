@@ -9,8 +9,8 @@
 .popup {
   max-width: 240px;
   padding: var(--spacing-2xs) var(--spacing-sm);
-  background-color: var(--surface-elevated);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  background-color: var(--surface-panel);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-sm);
   @include body;
@@ -40,8 +40,8 @@
   width: 8px;
   height: 8px;
   transform: rotate(45deg);
-  background-color: var(--surface-elevated);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  background-color: var(--surface-panel);
+  border: var(--stroke-xs) solid var(--border-primary);
 
   &[data-side='top'] {
     bottom: -4px;

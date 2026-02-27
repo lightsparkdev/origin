@@ -42,7 +42,7 @@ export type TooltipProp =
 export type TooltipMode = 'off' | 'simple' | 'compact' | 'detailed' | 'custom';
 
 export const SERIES_COLORS = [
-  'var(--border-primary)',
+  'var(--stroke-primary)',
   'var(--text-secondary)',
   'var(--surface-blue-strong)',
   'var(--surface-purple-strong)',

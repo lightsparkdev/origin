@@ -10,8 +10,8 @@
   min-width: 320px;
   max-width: 420px;
   padding: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) var(--spacing-md); // 8px 8px 8px 16px
-  background-color: var(--surface-elevated);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  background-color: var(--surface-panel);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(10px);
   box-shadow: var(--shadow-lg);
 }

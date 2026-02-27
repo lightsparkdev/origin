@@ -8,7 +8,7 @@
   align-items: center;
   height: 36px;
   background: transparent;
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-sm) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   overflow: visible;
   transition:
@@ -45,7 +45,7 @@
   height: 100%;
   padding-left: var(--spacing-xs);
   padding-right: var(--spacing-3xs);
-  border-right: var(--stroke-sm) solid var(--border-tertiary);
+  border-right: var(--stroke-sm) solid var(--border-primary);
   flex-shrink: 0;
 
   &[data-disabled] {
@@ -70,7 +70,7 @@
   flex-shrink: 0;
   width: 18px;
   height: 18px;
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   border-radius: var(--corner-radius-round);
   overflow: clip;
 
@@ -139,7 +139,7 @@
   max-height: min(23rem, var(--available-height));
   overflow: hidden;
   background: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;

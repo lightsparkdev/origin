@@ -30,7 +30,7 @@
   max-width: calc(100vw - 48px);
   max-height: min(420px, 70vh);
   background-color: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-md));
   box-shadow: var(--shadow-lg);
   overflow: hidden;
@@ -54,7 +54,7 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+  border-bottom: var(--stroke-xs) solid var(--border-primary);
 }
 
 .input {
@@ -95,7 +95,7 @@
   }
 
   &:not([data-empty]) {
-    border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+    border-bottom: var(--stroke-xs) solid var(--border-primary);
   }
 }
 
@@ -206,5 +206,5 @@
 .separator {
   height: var(--stroke-xs);
   margin-block: var(--spacing-3xs);
-  background-color: var(--border-tertiary);
+  background-color: var(--border-primary);
 }

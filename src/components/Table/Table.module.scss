@@ -37,7 +37,7 @@
   padding: 0 var(--spacing-md);
   text-align: left;
   color: var(--text-secondary);
-  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+  border-bottom: var(--stroke-xs) solid var(--border-primary);
   font-weight: normal;
   vertical-align: middle;
   position: relative;
@@ -61,7 +61,7 @@
 
     &:focus-visible {
       outline: none;
-      box-shadow: 0 0 0 2px var(--input-focus);
+      box-shadow: 0 0 0 2px var(--state-focus);
       @include smooth-corners(var(--corner-radius-xs));
     }
   }
@@ -125,7 +125,7 @@
 
     &:focus-visible {
       outline: none;
-      box-shadow: inset 0 0 0 2px var(--input-focus);
+      box-shadow: inset 0 0 0 2px var(--state-focus);
     }
   }
 
@@ -146,7 +146,7 @@
   padding: 0 var(--spacing-md);
   text-align: left;
   color: var(--text-primary);
-  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+  border-bottom: var(--stroke-xs) solid var(--border-primary);
   vertical-align: middle;
   overflow: hidden;
   white-space: nowrap;
@@ -239,7 +239,7 @@
   justify-content: flex-end;
   height: 40px;
   padding: var(--spacing-xs) var(--spacing-md);
-  border-top: var(--stroke-xs) solid var(--border-tertiary);
+  border-top: var(--stroke-xs) solid var(--border-primary);
 
   &[data-size='compact'] {
     height: 32px;

@@ -72,8 +72,8 @@
   flex-direction: column;
   gap: var(--spacing-4xs);
   padding: var(--spacing-3xs) var(--spacing-2xs);
-  background-color: var(--surface-elevated);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  background-color: var(--surface-panel);
+  border: var(--stroke-xs) solid var(--border-primary);
   border-radius: var(--corner-radius-xs);
   box-shadow: 0 1px 3px rgba(0, 0, 0, var(--chart-tooltip-shadow-opacity, 0.06));
   z-index: 10;
@@ -98,7 +98,7 @@
   color: var(--text-secondary);
   padding-bottom: var(--spacing-3xs);
   margin-bottom: var(--spacing-4xs);
-  border-bottom: var(--stroke-xs) solid var(--border-tertiary);
+  border-bottom: var(--stroke-xs) solid var(--border-primary);
   margin-inline: calc(-1 * var(--spacing-2xs));
   padding-inline: var(--spacing-2xs);
 }
@@ -136,7 +136,7 @@
 }
 
 .tooltipFooter {
-  border-top: var(--stroke-xs) solid var(--border-tertiary);
+  border-top: var(--stroke-xs) solid var(--border-primary);
   margin: var(--spacing-4xs) calc(-1 * var(--spacing-2xs)) 0;
   padding: var(--spacing-3xs) var(--spacing-2xs) 0;
 }
@@ -258,7 +258,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--input-focus);
+    box-shadow: 0 0 0 2px var(--state-focus);
     @include smooth-corners(var(--corner-radius-xs));
   }
 }
@@ -469,7 +469,7 @@
 
 .gaugeMarker {
   width: 2px;
-  background-color: var(--border-primary);
+  background-color: var(--stroke-primary);
   flex: 1;
 }
 

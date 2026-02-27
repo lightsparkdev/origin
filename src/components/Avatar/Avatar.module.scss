@@ -11,7 +11,7 @@
   flex-shrink: 0;
   user-select: none;
   vertical-align: middle;
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
 }
 
 // Sizes
@@ -107,7 +107,7 @@
 }
 
 .gray {
-  background-color: var(--surface-strong);
+  background-color: var(--surface-neutral);
 }
 
 // Image - fades in when loaded via Base UI transition attributes
@@ -130,7 +130,7 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  color: var(--text-surface);
+  color: var(--text-inverse);
   text-align: center;
   font-weight: var(--font-weight-book);
   transition: opacity 200ms ease;
@@ -142,31 +142,31 @@
   // Typography scales with avatar size
   .size16 & {
     @include label-xs;
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 
   .size20 & {
     @include label-sm;
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 
   .size24 & {
     @include label-sm;
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 
   .size32 & {
     @include label-sm;
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 
   .size40 & {
     @include label;
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 
   .size48 & {
     @include label-lg;
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }

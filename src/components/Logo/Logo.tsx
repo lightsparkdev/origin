@@ -21,7 +21,7 @@ export interface LogoProps extends Omit<React.SVGProps<SVGSVGElement>, 'children
   height?: number;
   /** 
    * Logo color. Accepts any CSS color value or token.
-   * @default 'var(--surface-inverted)'
+   * @default 'var(--surface-inverse)'
    */
   color?: string;
   /** Required for accessibility. Describes the logo for screen readers. */

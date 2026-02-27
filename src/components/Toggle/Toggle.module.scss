@@ -10,7 +10,7 @@
   height: 32px;
   min-width: 32px;
   padding: 0 var(--spacing-xs);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-xs));
   background-color: var(--surface-primary);
   box-shadow: var(--shadow-sm);
@@ -25,7 +25,7 @@
     outline: none;
     background-color: var(--surface-hover);
     border-color: var(--border-secondary);
-    box-shadow: var(--shadow-sm), 0 0 0 3px var(--input-focus);
+    box-shadow: var(--shadow-sm), 0 0 0 3px var(--state-focus);
   }
 
   @media (hover: hover) {
@@ -73,7 +73,7 @@
       // Keep focus ring visible above siblings
       position: relative;
       z-index: 1;
-      box-shadow: 0 0 0 3px var(--input-focus);
+      box-shadow: 0 0 0 3px var(--state-focus);
     }
 
     &:first-child {

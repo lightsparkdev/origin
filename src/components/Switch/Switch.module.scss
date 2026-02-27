@@ -11,7 +11,7 @@
   transition: background-color 150ms ease;
 
   &[data-checked] {
-    background-color: var(--color-green-600);
+    background-color: var(--surface-green-strong);
   }
 
   &[data-disabled] {
@@ -35,7 +35,7 @@
 
 .thumb {
   display: block;
-  background-color: var(--surface-base);
+  background-color: var(--surface-panel);
   border-radius: var(--corner-radius-round);
   box-shadow: var(--shadow-sm);
   transition: transform 150ms ease;

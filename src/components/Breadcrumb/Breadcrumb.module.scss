@@ -49,7 +49,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--input-focus);
+    box-shadow: 0 0 0 2px var(--state-focus);
     @include smooth-corners(var(--corner-radius-xs));
   }
 
@@ -81,7 +81,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--input-focus);
+    box-shadow: 0 0 0 2px var(--state-focus);
   }
 
   @media (prefers-reduced-motion: reduce) {

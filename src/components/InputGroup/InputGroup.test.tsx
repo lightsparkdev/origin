@@ -325,7 +325,7 @@ test.describe('InputGroup', () => {
         getComputedStyle(el).borderColor
       );
       // The exact color depends on --border-secondary token
-      // Just verify it changed from the default --border-tertiary
+      // Just verify it changed from the default --border-primary
       expect(borderColor).toBeTruthy();
     });
   });

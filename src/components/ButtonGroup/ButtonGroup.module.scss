@@ -30,7 +30,7 @@
 }
 
 // -- Filled variant ----------------------------------------------------------
-// Buttons sit flush; thin separators between them use --border-inverted.
+// Buttons sit flush; thin separators between them use --border-inverse.
 
 .filled {
   > * {
@@ -46,7 +46,7 @@
     bottom: 0;
     left: 0;
     width: var(--stroke-xs);
-    background-color: var(--border-inverted);
+    background-color: var(--border-inverse);
   }
 }
 
@@ -66,7 +66,7 @@
 
 // -- Secondary variant --------------------------------------------------------
 // No container shadow or border-radius. Thin separators between buttons
-// using --border-tertiary, same pseudo-element technique as filled.
+// using --border-primary, same pseudo-element technique as filled.
 
 .secondary {
   > * {
@@ -82,7 +82,7 @@
     bottom: 0;
     left: 0;
     width: var(--stroke-xs);
-    background-color: var(--border-tertiary);
+    background-color: var(--border-primary);
   }
 }
 

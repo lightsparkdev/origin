@@ -34,7 +34,7 @@
   width: 360px;
   max-width: calc(100vw - var(--spacing-2xl));
   overflow: clip;
-  background-color: var(--surface-elevated);
+  background-color: var(--surface-panel);
   border: var(--stroke-xs) solid var(--border-secondary);
   @include smooth-corners(var(--corner-radius-md));
   box-shadow: var(--shadow-lg);

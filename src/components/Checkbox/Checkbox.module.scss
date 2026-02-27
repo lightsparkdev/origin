@@ -78,7 +78,7 @@
   padding: var(--spacing-md);
   padding-right: var(--spacing-3xl);
   @include surface-with-hover(var(--surface-secondary));
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-md));
   overflow: hidden;
 
@@ -114,14 +114,14 @@
   // When used inside Checkbox.Item
   .item[data-checked] &,
   .item[data-indeterminate] & {
-    background-color: var(--surface-inverted);
+    background-color: var(--surface-inverse);
     border-color: transparent;
   }
 
   // When used standalone (Checkbox.Indicator)
   &[data-checked],
   &[data-indeterminate] {
-    background-color: var(--surface-inverted);
+    background-color: var(--surface-inverse);
     border-color: transparent;
   }
 

@@ -21,7 +21,7 @@
 
 .indicator {
   height: 100%;
-  background: var(--surface-inverted);
+  background: var(--surface-inverse);
   transition: width 200ms ease-out;
 
   @media (prefers-reduced-motion: reduce) {

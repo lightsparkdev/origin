@@ -42,7 +42,7 @@
   &:focus-visible {
     background-color: var(--surface-secondary);
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
     outline: none;
   }
 
@@ -91,7 +91,7 @@
   &:focus-visible {
     background-color: var(--surface-secondary);
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
     outline: none;
   }
 
@@ -139,7 +139,7 @@
   &:focus-visible {
     background-color: var(--surface-secondary);
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
     outline: none;
   }
 
@@ -197,7 +197,7 @@
   &:focus-visible {
     background-color: var(--surface-secondary);
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
     outline: none;
   }
 
@@ -309,7 +309,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
@@ -393,7 +393,7 @@
 .arrow {
   display: flex;
   fill: var(--surface-primary);
-  stroke: var(--border-tertiary);
+  stroke: var(--border-primary);
   stroke-width: var(--stroke-xs);
 }
 
@@ -464,6 +464,6 @@
     left: 0;
     right: 0;
     height: var(--stroke-xs);
-    background-color: var(--border-tertiary);
+    background-color: var(--border-primary);
   }
 }
