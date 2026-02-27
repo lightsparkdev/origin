@@ -18,8 +18,8 @@
   color: var(--text-primary);
 
   &.vibrant {
-    background-color: var(--surface-strong);
-    color: var(--text-surface);
+    background-color: var(--surface-neutral);
+    color: var(--text-inverse);
   }
 }
 
@@ -29,7 +29,7 @@
 
   &.vibrant {
     background-color: var(--surface-purple-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }
 
@@ -39,7 +39,7 @@
 
   &.vibrant {
     background-color: var(--surface-blue-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }
 
@@ -49,7 +49,7 @@
 
   &.vibrant {
     background-color: var(--surface-sky-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }
 
@@ -59,7 +59,7 @@
 
   &.vibrant {
     background-color: var(--surface-pink-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }
 
@@ -69,7 +69,7 @@
 
   &.vibrant {
     background-color: var(--surface-green-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }
 
@@ -79,7 +79,7 @@
 
   &.vibrant {
     background-color: var(--surface-yellow-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }
 
@@ -89,6 +89,6 @@
 
   &.vibrant {
     background-color: var(--surface-red-strong);
-    color: var(--text-surface);
+    color: var(--text-inverse);
   }
 }

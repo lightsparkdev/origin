@@ -36,7 +36,7 @@
   width: 24px;
   height: 24px;
   padding: 0;
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   background-color: var(--surface-primary);
   color: var(--icon-primary);
   cursor: pointer;
@@ -70,7 +70,7 @@
   &:focus-visible {
     outline: none;
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
     // Ensure focus ring appears above adjacent button
     position: relative;
     z-index: 1;

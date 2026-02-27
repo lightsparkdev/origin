@@ -13,7 +13,7 @@
   min-height: 36px;
   padding: var(--spacing-2xs) calc(var(--spacing-xs) + 20px) var(--spacing-2xs) var(--spacing-sm);
   background: transparent;
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-sm) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   transition:
     border-color 150ms ease,
@@ -106,7 +106,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 
@@ -148,7 +148,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 
@@ -174,7 +174,7 @@
   max-width: var(--available-width);
   overflow: hidden;
   background: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
@@ -303,7 +303,7 @@
     left: 0;
     right: 0;
     height: var(--stroke-xs);
-    background-color: var(--border-tertiary);
+    background-color: var(--border-primary);
   }
 }
 

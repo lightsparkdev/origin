@@ -10,7 +10,7 @@
   align-items: center;
   height: 36px;
   background: transparent;
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-sm) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   // PhoneInput uses overflow: visible for dropdown positioning; safe here.
   overflow: hidden;
@@ -82,11 +82,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-sunken);
+  background: var(--surface-secondary);
   padding: var(--spacing-none) var(--spacing-sm);
   @include input;
   color: var(--text-secondary);
-  border-right: var(--stroke-sm) solid var(--border-tertiary);
+  border-right: var(--stroke-sm) solid var(--border-primary);
   align-self: stretch;
   cursor: text;
   flex-shrink: 0;
@@ -98,7 +98,7 @@
 
   &:last-child {
     border-right: none;
-    border-left: var(--stroke-sm) solid var(--border-tertiary);
+    border-left: var(--stroke-sm) solid var(--border-primary);
     margin-left: calc(-1 * var(--_gap));
     margin-right: 0;
   }
@@ -167,7 +167,7 @@
 
 .buttonOutline {
   background: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   box-shadow: var(--shadow-sm);
 }
 
@@ -193,7 +193,7 @@
   &:focus-visible {
     background: var(--surface-hover);
     border: var(--stroke-xs) solid var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
     outline: none;
   }
 
@@ -209,7 +209,7 @@
 
 .selectTriggerOutline {
   background: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   box-shadow: var(--shadow-sm);
 }
 

@@ -23,7 +23,7 @@
   width: 320px;
   padding: var(--spacing-md);
   background-color: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-md));
   box-shadow: var(--shadow-lg);
   outline: none;
@@ -129,7 +129,7 @@
   height: 20px;
   padding: 0;
   background-color: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   border-radius: var(--corner-radius-round);
   box-shadow: none;
   cursor: pointer;
@@ -141,7 +141,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: 2px;
   }
 

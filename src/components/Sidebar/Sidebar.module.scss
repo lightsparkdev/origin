@@ -6,7 +6,7 @@
 .root {
   display: flex;
   flex-direction: column;
-  border-right: var(--stroke-xs) solid var(--border-tertiary);
+  border-right: var(--stroke-xs) solid var(--border-primary);
   height: 100%;
   overflow: hidden;
   transition: width 200ms ease;
@@ -26,7 +26,7 @@
   flex-shrink: 0;
   overflow: hidden;
   padding: var(--sidebar-header-padding, 0 var(--spacing-sm));
-  border-bottom: var(--sidebar-header-border, var(--stroke-xs) solid var(--border-tertiary));
+  border-bottom: var(--sidebar-header-border, var(--stroke-xs) solid var(--border-primary));
 
   [data-collapsed='true'] & {
     justify-content: center;
@@ -58,7 +58,7 @@
   flex-shrink: 0;
   overflow: hidden;
   padding: var(--sidebar-footer-padding, var(--spacing-xs));
-  border-top: var(--sidebar-footer-border, var(--stroke-xs) solid var(--border-tertiary));
+  border-top: var(--sidebar-footer-border, var(--stroke-xs) solid var(--border-primary));
 
   [data-collapsed='true'] & {
     align-items: center;
@@ -143,7 +143,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 
@@ -202,7 +202,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 }
@@ -269,7 +269,7 @@
       top: 0;
       bottom: 0;
       width: var(--stroke-sm);
-      background-color: var(--border-tertiary);
+      background-color: var(--border-primary);
       z-index: 0;
     }
   }
@@ -289,7 +289,7 @@
   transition: background-color 150ms ease;
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 
@@ -382,7 +382,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 }
@@ -405,7 +405,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 }
@@ -436,7 +436,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 
@@ -501,7 +501,7 @@
   width: 100%;
   height: var(--stroke-xs);
   margin-block: var(--separator-margin-block);
-  background-color: var(--border-tertiary);
+  background-color: var(--border-primary);
   border: none;
 }
 

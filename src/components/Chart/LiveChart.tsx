@@ -137,7 +137,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
     {
       data,
       value,
-      color = 'var(--border-primary)',
+      color = 'var(--stroke-primary)',
       window: windowSecs = 30,
       grid = true,
       fill = true,

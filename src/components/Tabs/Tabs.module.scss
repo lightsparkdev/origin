@@ -22,7 +22,7 @@
   padding: var(--spacing-3xs);
   // TODO: [A11y] text/secondary on surface/sunken = 3.7:1 contrast (needs 4.5:1)
   // Flag for token audit - consider darker text or lighter surface
-  background: var(--surface-sunken);
+  background: var(--surface-secondary);
 }
 
 .list.minimal {
@@ -37,8 +37,8 @@
   left: var(--active-tab-left);
   width: var(--active-tab-width);
   height: var(--active-tab-height);
-  background: var(--surface-elevated);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  background: var(--surface-panel);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-xs));
   box-shadow: var(--shadow-sm);
   transition: top, left, width, height;
@@ -70,7 +70,7 @@
 
   // Focused state (keyboard navigation)
   &:focus-visible {
-    background: var(--surface-elevated);
+    background: var(--surface-panel);
     border-color: var(--border-secondary);
     outline: none;
     box-shadow: var(--input-focus);
@@ -104,7 +104,7 @@
   width: 100%;
   padding: var(--spacing-4xl) 0;
   overflow: clip;
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
 
   &[data-hidden] {

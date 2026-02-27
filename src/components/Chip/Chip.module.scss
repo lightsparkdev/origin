@@ -6,7 +6,7 @@
 .root {
   display: inline-flex;
   align-items: center;
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   background-color: var(--surface-secondary);
 
@@ -40,7 +40,7 @@
   padding: 0 var(--spacing-3xs);
   height: 100%;
   border: none;
-  border-left: var(--stroke-xs) solid var(--border-tertiary);
+  border-left: var(--stroke-xs) solid var(--border-primary);
   background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
@@ -52,7 +52,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--border-primary);
+    outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
 
@@ -72,7 +72,7 @@
     justify-content: center;
     padding: 0 var(--spacing-xs);
     height: 100%;
-    border-right: var(--stroke-xs) solid var(--border-tertiary);
+    border-right: var(--stroke-xs) solid var(--border-primary);
 
     &:last-of-type {
       border-right: none;
@@ -96,6 +96,6 @@
 
   .dismiss {
     padding: 0 var(--spacing-2xs);
-    border-left: var(--stroke-xs) solid var(--border-tertiary);
+    border-left: var(--stroke-xs) solid var(--border-primary);
   }
 }

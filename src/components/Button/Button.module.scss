@@ -18,7 +18,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
   }
 
   &[data-disabled] {
@@ -70,13 +70,13 @@
 }
 
 .filled {
-  background-color: var(--surface-inverted);
-  color: var(--text-surface);
+  background-color: var(--surface-inverse);
+  color: var(--text-inverse);
 
   @media (hover: hover) {
     &:hover:not([data-disabled]) {
-      background-color: var(--surface-inverted);
-      background-image: linear-gradient(var(--surface-inverted-hover), var(--surface-inverted-hover));
+      background-color: var(--surface-inverse);
+      background-image: linear-gradient(var(--surface-inverse-hover), var(--surface-inverse-hover));
     }
   }
 
@@ -100,7 +100,7 @@
 
   &:focus-visible {
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
   }
 
   &[data-disabled] {
@@ -111,7 +111,7 @@
 .outline {
   background-color: var(--surface-primary);
   color: var(--text-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08);
 
   @media (hover: hover) {
@@ -121,7 +121,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08), 0 0 0 3px var(--input-focus);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.08), 0 0 0 3px var(--state-focus);
   }
 
   &[data-disabled] {
@@ -133,7 +133,7 @@
     box-shadow: none;
 
     &:focus-visible {
-      box-shadow: 0 0 0 3px var(--input-focus);
+      box-shadow: 0 0 0 3px var(--state-focus);
     }
   }
 }
@@ -155,17 +155,17 @@
 
 .critical {
   background-color: var(--surface-red-strong);
-  color: var(--text-surface);
+  color: var(--text-inverse);
 
   @media (hover: hover) {
     &:hover:not([data-disabled]) {
       background-color: var(--surface-red-strong);
-      background-image: linear-gradient(var(--surface-inverted-hover), var(--surface-inverted-hover));
+      background-image: linear-gradient(var(--surface-inverse-hover), var(--surface-inverse-hover));
     }
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 3px var(--input-focus-critical);
+    box-shadow: 0 0 0 3px var(--state-focus-critical);
   }
 
   &[data-disabled] {

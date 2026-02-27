@@ -24,6 +24,6 @@
 .btn { @include btn; }
 .btn-sm { @include btn-sm; }
 
-.link-lg { @include link-lg; }
-.link { @include link; }
-.link-sm { @include link-sm; }
+.link-lg { @include link-lg; color: var(--text-link); text-decoration: underline; }
+.link { @include link; color: var(--text-link); text-decoration: underline; }
+.link-sm { @include link-sm; color: var(--text-link); text-decoration: underline; }

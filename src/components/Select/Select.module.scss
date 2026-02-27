@@ -10,7 +10,7 @@
   height: 36px;
   padding-inline-start: var(--spacing-sm);
   padding-inline-end: var(--spacing-xs);
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-sm) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   color: var(--text-primary);
   cursor: pointer;
@@ -179,7 +179,7 @@
 
   .triggerHybrid:focus-visible:not([data-disabled]) & {
     border-color: var(--border-secondary);
-    box-shadow: 0 0 0 3px var(--input-focus);
+    box-shadow: 0 0 0 3px var(--state-focus);
   }
 
   .triggerHybrid[data-popup-open] & {
@@ -202,7 +202,7 @@
 
 .popup {
   background-color: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
@@ -308,7 +308,7 @@
   flex-shrink: 0;
   width: 22px;
   height: 22px;
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   border-radius: var(--corner-radius-round);
   overflow: clip;
 
@@ -331,7 +331,7 @@
     left: 0;
     right: 0;
     height: var(--stroke-xs);
-    background-color: var(--border-tertiary);
+    background-color: var(--border-primary);
   }
 }
 

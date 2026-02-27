@@ -26,7 +26,7 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 2px var(--input-focus);
+    box-shadow: 0 0 0 2px var(--state-focus);
   }
 
   @media (prefers-reduced-motion: reduce) {

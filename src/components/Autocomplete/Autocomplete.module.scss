@@ -12,7 +12,7 @@
   height: 36px;
   box-sizing: border-box;
   padding-inline: var(--spacing-sm);
-  border: var(--stroke-sm) solid var(--border-tertiary);
+  border: var(--stroke-sm) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   color: var(--text-primary);
   outline: none;
@@ -54,7 +54,7 @@
   max-width: var(--available-width);
   overflow: hidden;
   background: var(--surface-primary);
-  border: var(--stroke-xs) solid var(--border-tertiary);
+  border: var(--stroke-xs) solid var(--border-primary);
   @include smooth-corners(var(--corner-radius-sm));
   box-shadow: var(--shadow-lg);
   outline: 0;
@@ -152,7 +152,7 @@
     left: 0;
     right: 0;
     height: var(--stroke-xs);
-    background-color: var(--border-tertiary);
+    background-color: var(--border-primary);
   }
 }
 
