@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { linearScale, niceTicks } from './utils';
+import { linearScale, niceTicks, thinIndices, dynamicTickTarget, measureLabelWidth, axisPadForLabels } from './utils';
 import { useResizeWidth } from './hooks';
 import {
   type Series,
@@ -12,14 +12,16 @@ import {
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
-  PAD_LEFT_AXIS,
   BAR_GROUP_GAP,
   BAR_ITEM_GAP,
   resolveSeries,
   resolveTooltipMode,
+  axisTickTarget,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
+
+const EMPTY_TICKS = { min: 0, max: 1, ticks: [0, 1] } as const;
 
 export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: Record<string, unknown>[];
@@ -121,17 +123,12 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
     const showValueAxis = grid;
 
     const padBottom = !isHorizontal && showCategoryAxis ? PAD_BOTTOM_AXIS : 0;
-    const padLeft = isHorizontal ? (showCategoryAxis ? 60 : 12) : (showValueAxis ? PAD_LEFT_AXIS : 0);
-    const padRight = isHorizontal && showValueAxis ? 40 : PAD_RIGHT;
-    const plotWidth = Math.max(0, width - padLeft - padRight);
     const plotHeight = Math.max(0, height - PAD_TOP - padBottom);
 
-    // Value domain
-    const { yMin, yMax, yTicks } = React.useMemo(() => {
-      if (yDomain) {
-        const result = niceTicks(yDomain[0], yDomain[1], 5);
-        return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-      }
+    // Value domain — split into raw max + tick generation so we can
+    // measure formatted labels before choosing padding and tick count.
+    const rawValueMax = React.useMemo(() => {
+      if (yDomain) return yDomain[1];
       let max = -Infinity;
       if (stacked) {
         for (let i = 0; i < data.length; i++) {
@@ -154,10 +151,48 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
           if (rl.value > max) max = rl.value;
         }
       }
-      if (max === -Infinity) max = 1;
-      const result = niceTicks(0, max, 5);
-      return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
+      return max === -Infinity ? 1 : max;
     }, [data, series, stacked, referenceLines, yDomain]);
+
+    // Vertical: compute ticks first, then measure labels for padLeft.
+    // Horizontal: measure category labels for padLeft, then compute
+    // plotWidth and tick count from formatted value labels.
+    const verticalTickTarget = axisTickTarget(plotHeight);
+    const verticalTicks = React.useMemo(() => {
+      if (isHorizontal) return EMPTY_TICKS;
+      const domainMin = yDomain ? yDomain[0] : 0;
+      const domainMax = yDomain ? yDomain[1] : rawValueMax;
+      return niceTicks(domainMin, domainMax, verticalTickTarget);
+    }, [isHorizontal, rawValueMax, yDomain, verticalTickTarget]);
+
+    const padLeft = React.useMemo(() => {
+      if (isHorizontal) {
+        if (!showCategoryAxis || !xKey) return 12;
+        const fmt = formatXLabel ?? ((v: unknown) => String(v ?? ''));
+        const maxWidth = Math.max(...data.map((d) => measureLabelWidth(fmt(d[xKey]))));
+        return Math.max(12, Math.ceil(maxWidth) + 12);
+      }
+      if (!showValueAxis) return 0;
+      const fmt = formatYLabel ?? ((v: number) => String(v));
+      return axisPadForLabels(verticalTicks.ticks.map(fmt));
+    }, [isHorizontal, showCategoryAxis, showValueAxis, xKey, data, formatXLabel, formatYLabel, verticalTicks.ticks]);
+    const padRight = isHorizontal && showValueAxis ? 40 : PAD_RIGHT;
+    const plotWidth = Math.max(0, width - padLeft - padRight);
+
+    const tickTarget = React.useMemo(() => {
+      if (!isHorizontal) return verticalTickTarget;
+      const fmt = formatYLabel ?? ((v: number) => String(v));
+      const samples = [fmt(0), fmt(rawValueMax), fmt(rawValueMax / 2), fmt(rawValueMax * 0.75)];
+      return dynamicTickTarget(plotWidth, samples);
+    }, [isHorizontal, verticalTickTarget, plotWidth, rawValueMax, formatYLabel]);
+
+    const { yMin, yMax, yTicks } = React.useMemo(() => {
+      if (!isHorizontal) return { yMin: verticalTicks.min, yMax: verticalTicks.max, yTicks: verticalTicks.ticks };
+      const domainMin = yDomain ? yDomain[0] : 0;
+      const domainMax = yDomain ? yDomain[1] : rawValueMax;
+      const result = niceTicks(domainMin, domainMax, tickTarget);
+      return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
+    }, [isHorizontal, verticalTicks, rawValueMax, yDomain, tickTarget]);
 
     // Bar geometry — slot is along the category axis, bar extends along the value axis
     const categoryLength = isHorizontal ? plotHeight : plotWidth;
@@ -453,21 +488,20 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                 {/* Category axis labels (thinned to avoid overlap) */}
                 {xKey && (() => {
                   const maxLabels = isHorizontal
-                    ? Math.max(1, Math.floor(plotHeight / 24))
-                    : Math.max(1, Math.floor(plotWidth / 50));
-                  const step = data.length <= maxLabels ? 1 : Math.ceil(data.length / maxLabels);
-                  return data.map((d, i) => {
-                    if (i % step !== 0 && i !== data.length - 1) return null;
-                    return isHorizontal ? (
+                    ? Math.max(2, Math.floor(plotHeight / 24))
+                    : Math.max(2, Math.floor(plotWidth / 60));
+                  const indices = thinIndices(data.length, maxLabels);
+                  return indices.map((i) =>
+                    isHorizontal ? (
                       <text key={i} x={-8} y={(i + 0.5) * slotSize} className={styles.axisLabel} textAnchor="end" dominantBaseline="middle">
-                        {formatXLabel ? formatXLabel(d[xKey]) : String(d[xKey] ?? '')}
+                        {formatXLabel ? formatXLabel(data[i][xKey]) : String(data[i][xKey] ?? '')}
                       </text>
                     ) : (
                       <text key={i} x={(i + 0.5) * slotSize} y={plotHeight + 20} className={styles.axisLabel} textAnchor="middle" dominantBaseline="auto">
-                        {formatXLabel ? formatXLabel(d[xKey]) : String(d[xKey] ?? '')}
+                        {formatXLabel ? formatXLabel(data[i][xKey]) : String(data[i][xKey] ?? '')}
                       </text>
-                    );
-                  });
+                    ),
+                  );
                 })()}
               </g>
             </svg>

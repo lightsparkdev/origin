@@ -505,7 +505,7 @@ const uptimeData = Array.from({ length: 90 }, (_, i) => ({
 export const Uptime: Story = {
   render: () => (
     <div style={{ width: 500 }}>
-      <Chart.Uptime data={uptimeData} />
+      <Chart.Uptime data={uptimeData} label="90 days — 97.8% uptime" />
     </div>
   ),
 };

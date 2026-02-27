@@ -17,7 +17,7 @@
 
 .gridLine {
   stroke: var(--text-primary);
-  stroke-opacity: var(--chart-grid-opacity, 0.06);
+  stroke-opacity: var(--chart-grid-opacity, 0.18);
   stroke-width: 1;
   stroke-dasharray: 1 3;
 }
@@ -611,6 +611,7 @@
 
 .uptimeBars {
   display: flex;
+  align-items: flex-end;
   gap: 4px;
   width: 100%;
 }
@@ -619,15 +620,15 @@
   width: 3px;
   flex-shrink: 0;
   height: 100%;
-  transition: opacity 150ms ease;
+  transition: height 150ms ease;
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
 }
 
-.uptimeBarDimmed {
-  opacity: 0.3;
+.uptimeBarActive {
+  height: calc(100% + 4px);
 }
 
 .uptimeTooltip {

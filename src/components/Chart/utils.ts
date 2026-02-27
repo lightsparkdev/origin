@@ -1,3 +1,53 @@
+export const CHART_LABEL_FONT = '11px "Suisse Intl Mono", "SF Mono", Menlo, monospace';
+const LABEL_PADDING = 16;
+const FALLBACK_CHAR_WIDTH = 6.6;
+
+let _measureCtx: CanvasRenderingContext2D | null = null;
+
+/**
+ * Measure the pixel width of a chart axis label using an offscreen canvas.
+ * Falls back to a character-count estimate when running outside a browser.
+ */
+export function measureLabelWidth(text: string): number {
+  if (typeof document === 'undefined') return text.length * FALLBACK_CHAR_WIDTH;
+  if (!_measureCtx) {
+    _measureCtx = document.createElement('canvas').getContext('2d');
+  }
+  if (!_measureCtx) return text.length * FALLBACK_CHAR_WIDTH;
+  _measureCtx.font = CHART_LABEL_FONT;
+  return _measureCtx.measureText(text).width;
+}
+
+/**
+ * Compute how many axis labels fit along an axis of the given pixel length.
+ * Measures representative label texts to determine spacing dynamically.
+ */
+export function dynamicTickTarget(
+  axisLength: number,
+  sampleTexts: string[],
+): number {
+  if (sampleTexts.length === 0) return Math.max(2, Math.floor(axisLength / 60));
+  const maxWidth = Math.max(...sampleTexts.map(measureLabelWidth));
+  return Math.max(2, Math.floor(axisLength / (maxWidth + LABEL_PADDING)));
+}
+
+/** Minimum left padding so very short labels (e.g. "0") don't crowd the axis. */
+const MIN_AXIS_PAD = 24;
+/** Gap between label right edge and plot area left edge. */
+const AXIS_LABEL_GAP = 8;
+/** Extra margin on the left side to prevent label clipping at the container edge. */
+const AXIS_LABEL_INSET = 4;
+
+/**
+ * Compute the left padding needed to fit the widest label plus a gap.
+ * Used for Y-axis labels on vertical charts and category labels on horizontal.
+ */
+export function axisPadForLabels(labels: string[]): number {
+  if (labels.length === 0) return 0;
+  const maxWidth = Math.max(...labels.map(measureLabelWidth));
+  return Math.max(MIN_AXIS_PAD, Math.ceil(maxWidth) + AXIS_LABEL_GAP + AXIS_LABEL_INSET);
+}
+
 export function filerp(current: number, target: number, speed: number, dt: number): number {
   const factor = 1 - Math.pow(1 - speed, dt / 16.67);
   return current + (target - current) * factor;
@@ -224,6 +274,25 @@ export function monotoneInterpolator(points: Point[]): CurveInterpolator {
       t3 * points[seg + 1].y
     );
   };
+}
+
+/**
+ * Return evenly-spaced indices that always include the first and last item.
+ * Used to thin axis labels so they don't overlap.
+ */
+export function thinIndices(count: number, maxVisible: number): number[] {
+  if (count <= 0) return [];
+  if (count <= maxVisible) return Array.from({ length: count }, (_, i) => i);
+  if (maxVisible <= 1) return [0];
+  if (maxVisible === 2) return [0, count - 1];
+
+  const indices: number[] = [0];
+  const step = (count - 1) / (maxVisible - 1);
+  for (let i = 1; i < maxVisible - 1; i++) {
+    indices.push(Math.round(i * step));
+  }
+  indices.push(count - 1);
+  return indices;
 }
 
 export interface StackedBand {

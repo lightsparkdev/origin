@@ -53,7 +53,6 @@ export const SERIES_COLORS = [
 export const PAD_TOP = 8;
 export const PAD_RIGHT = 8;
 export const PAD_BOTTOM_AXIS = 28;
-export const PAD_LEFT_AXIS = 48;
 export const TOOLTIP_GAP = 12;
 
 export function resolveTooltipMode(prop: TooltipProp | undefined): TooltipMode {
@@ -92,6 +91,16 @@ export function resolveSeries(
 
 export const BAR_GROUP_GAP = 0.12;
 export const BAR_ITEM_GAP = 1;
+
+/** Minimum vertical spacing (px) between tick labels at 11px font. */
+export const MIN_TICK_SPACING_VERTICAL = 32;
+/** Minimum horizontal spacing (px) between tick labels at 11px font. */
+export const MIN_TICK_SPACING_HORIZONTAL = 60;
+
+export function axisTickTarget(axisLength: number, horizontal = false): number {
+  const spacing = horizontal ? MIN_TICK_SPACING_HORIZONTAL : MIN_TICK_SPACING_VERTICAL;
+  return Math.max(2, Math.floor(axisLength / spacing));
+}
 
 export const DASH_PATTERNS: Record<string, string | undefined> = {
   solid: undefined,

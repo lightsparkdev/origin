@@ -20,8 +20,17 @@ export interface UptimeChartProps extends React.ComponentPropsWithoutRef<'div'> 
   colors?: Partial<Record<UptimePoint['status'], string>>;
   /** Accessible label. */
   ariaLabel?: string;
-  /** Show tooltip label on hover. Defaults to true. */
-  tooltip?: boolean;
+  /**
+   * Always-visible resting label shown below the bars. On hover it
+   * updates to the hovered bar's label, then returns to this value.
+   * Set to `false` to hide the label row entirely.
+   */
+  label?: string | false;
+  /**
+   * Status dot color shown next to the resting label.
+   * Ignored when a bar is hovered (uses the hovered bar's status color).
+   */
+  labelStatus?: UptimePoint['status'];
   /** Called when a bar is hovered. */
   onHover?: (point: UptimePoint | null, index: number | null) => void;
 }
@@ -40,7 +49,8 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
       barHeight = 32,
       colors: colorsProp,
       ariaLabel,
-      tooltip: showTooltip = true,
+      label: labelProp,
+      labelStatus = 'up',
       onHover,
       className,
       ...props
@@ -49,6 +59,7 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
   ) {
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
     const colors = { ...DEFAULT_COLORS, ...colorsProp };
+    const showLabel = labelProp !== false;
 
     const handleEnter = React.useCallback(
       (i: number) => {
@@ -62,6 +73,10 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
       setActiveIndex(null);
       onHover?.(null, null);
     }, [onHover]);
+
+    const activePoint = activeIndex !== null ? data[activeIndex] : null;
+    const displayLabel = activePoint?.label ?? labelProp ?? null;
+    const displayStatus = activePoint?.status ?? labelStatus;
 
     return (
       <div
@@ -77,7 +92,7 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
               key={i}
               className={clsx(
                 styles.uptimeBar,
-                activeIndex !== null && activeIndex !== i && styles.uptimeBarDimmed,
+                activeIndex === i && styles.uptimeBarActive,
               )}
               style={{ backgroundColor: colors[point.status] }}
               onMouseEnter={() => handleEnter(i)}
@@ -85,21 +100,21 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
             />
           ))}
         </div>
-        {showTooltip && <div className={styles.uptimeTooltip} style={{ visibility: activeIndex !== null && data[activeIndex]?.label ? 'visible' : 'hidden' }}>
-          {activeIndex !== null && data[activeIndex]?.label && (
-            <>
-              <span
-                className={styles.uptimeDot}
-                style={{ backgroundColor: colors[data[activeIndex].status] }}
-              />
-              <span className={styles.uptimeLabel}>{data[activeIndex].label}</span>
-            </>
-          )}
-          {/* Reserve height when empty */}
-          {(activeIndex === null || !data[activeIndex]?.label) && (
-            <span className={styles.uptimeLabel}>&nbsp;</span>
-          )}
-        </div>}
+        {showLabel && (
+          <div className={styles.uptimeTooltip}>
+            {displayLabel ? (
+              <>
+                <span
+                  className={styles.uptimeDot}
+                  style={{ backgroundColor: colors[displayStatus] }}
+                />
+                <span className={styles.uptimeLabel}>{displayLabel}</span>
+              </>
+            ) : (
+              <span className={styles.uptimeLabel} aria-hidden="true">&nbsp;</span>
+            )}
+          </div>
+        )}
       </div>
     );
   },

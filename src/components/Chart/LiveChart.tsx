@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
-import { filerp } from './utils';
+import { filerp, CHART_LABEL_FONT } from './utils';
 import styles from './Chart.module.scss';
 
 export interface LivePoint {
@@ -356,14 +356,14 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           if (alpha < 0.01) continue;
           const v = key / 1000;
           const y = Math.round(toY(v)) + 0.5;
-          ctx.globalAlpha = alpha * 0.06;
+          ctx.globalAlpha = alpha * 0.18;
           ctx.strokeStyle = `rgb(0,0,0)`;
           ctx.setLineDash([1, 3]);
           ctx.beginPath(); ctx.moveTo(padLeft, y); ctx.lineTo(padLeft + chartW, y); ctx.stroke();
           ctx.setLineDash([]);
           ctx.globalAlpha = alpha * 0.4;
           ctx.fillStyle = 'rgb(0,0,0)';
-          ctx.font = '11px "Suisse Intl Mono", "SF Mono", Menlo, monospace';
+          ctx.font = CHART_LABEL_FONT;
           ctx.textAlign = 'right';
           ctx.textBaseline = 'middle';
           ctx.fillText(fmtVal(v), padLeft - 8, y);
@@ -423,7 +423,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
         const fmtTime = cfg.formatTime ?? formatDefaultTime;
         const timeStep = Math.max(1, Math.ceil(cfg.windowSecs / 5));
         const firstT = Math.ceil(leftEdge / timeStep) * timeStep;
-        ctx.font = '11px "Suisse Intl Mono", "SF Mono", Menlo, monospace';
+        ctx.font = CHART_LABEL_FONT;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'top';
         ctx.fillStyle = 'rgb(0,0,0)';
@@ -518,7 +518,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           const fmtTime = cfg.formatTime ?? formatDefaultTime;
           const label = `${fmtVal(hoverVal)}  ·  ${fmtTime(hoverTime)}`;
           ctx.globalAlpha = opacity;
-          ctx.font = '12px "Suisse Intl Mono", "SF Mono", Menlo, monospace';
+          ctx.font = CHART_LABEL_FONT.replace('11px', '12px');
           ctx.textBaseline = 'top';
 
           const labelWidth = ctx.measureText(label).width;

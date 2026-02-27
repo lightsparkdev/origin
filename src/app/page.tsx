@@ -2003,7 +2003,7 @@ export default function Home() {
           />
         </div>
         <div style={{ width: 388 }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Area fill + compact tooltip</p>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Area fill + fadeLeft</p>
           <Chart.Line
             data={[
               { date: 'Mon', value: 120 },
@@ -2019,6 +2019,7 @@ export default function Home() {
             height={200}
             grid
             fill
+            fadeLeft
             tooltip="compact"
           />
         </div>
@@ -2058,6 +2059,7 @@ export default function Home() {
             height={200}
             grid
             tooltip
+            fadeLeft={60}
             referenceLines={[
               { value: 90, label: 'Target' },
               { value: 75, label: 'Minimum' },
@@ -2290,6 +2292,7 @@ export default function Home() {
               status: (i === 12 ? 'down' : i === 34 ? 'degraded' : i === 67 ? 'down' : i === 45 ? 'degraded' : 'up') as 'up' | 'down' | 'degraded',
               label: `Day ${i + 1}`,
             }))}
+            label="90 days — 97.8% uptime"
           />
         </div>
       </div>
