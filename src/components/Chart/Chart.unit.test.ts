@@ -16,9 +16,13 @@ import {
   linearInterpolator,
   filerp,
   stackData,
+  thinIndices,
+  measureLabelWidth,
+  dynamicTickTarget,
+  axisPadForLabels,
   type Point,
 } from './utils';
-import { resolveTooltipMode, resolveSeries, SERIES_COLORS } from './types';
+import { resolveTooltipMode, resolveSeries, SERIES_COLORS, axisTickTarget } from './types';
 
 // ---------------------------------------------------------------------------
 // linearScale
@@ -559,5 +563,165 @@ describe('stackData', () => {
       expect(band.baseline).toEqual([]);
       expect(band.topline).toEqual([]);
     }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// thinIndices
+// ---------------------------------------------------------------------------
+
+describe('thinIndices', () => {
+  it('returns all indices when count fits', () => {
+    expect(thinIndices(5, 10)).toEqual([0, 1, 2, 3, 4]);
+    expect(thinIndices(3, 3)).toEqual([0, 1, 2]);
+  });
+
+  it('returns empty array for zero count', () => {
+    expect(thinIndices(0, 5)).toEqual([]);
+  });
+
+  it('returns [0] when maxVisible is 1', () => {
+    expect(thinIndices(10, 1)).toEqual([0]);
+  });
+
+  it('returns first and last when maxVisible is 2', () => {
+    expect(thinIndices(10, 2)).toEqual([0, 9]);
+  });
+
+  it('always includes first and last index', () => {
+    const result = thinIndices(100, 5);
+    expect(result[0]).toBe(0);
+    expect(result[result.length - 1]).toBe(99);
+  });
+
+  it('returns evenly distributed indices', () => {
+    const result = thinIndices(10, 4);
+    expect(result).toHaveLength(4);
+    expect(result[0]).toBe(0);
+    expect(result[result.length - 1]).toBe(9);
+    for (let i = 1; i < result.length; i++) {
+      expect(result[i]).toBeGreaterThan(result[i - 1]);
+    }
+  });
+
+  it('never returns more indices than count', () => {
+    expect(thinIndices(2, 10)).toHaveLength(2);
+    expect(thinIndices(1, 5)).toHaveLength(1);
+  });
+
+  it('handles single item', () => {
+    expect(thinIndices(1, 5)).toEqual([0]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// yTickTarget
+// ---------------------------------------------------------------------------
+
+describe('axisTickTarget', () => {
+  it('returns at least 2 for very short charts', () => {
+    expect(axisTickTarget(30)).toBe(2);
+    expect(axisTickTarget(0)).toBe(2);
+  });
+
+  it('scales with plot height (vertical)', () => {
+    expect(axisTickTarget(100)).toBe(3);
+    expect(axisTickTarget(160)).toBe(5);
+    expect(axisTickTarget(300)).toBe(9);
+  });
+
+  it('returns more ticks for tall charts', () => {
+    expect(axisTickTarget(600)).toBeGreaterThan(axisTickTarget(200));
+  });
+
+  it('uses wider spacing for horizontal axis', () => {
+    expect(axisTickTarget(300, true)).toBeLessThan(axisTickTarget(300, false));
+    expect(axisTickTarget(300, true)).toBe(5);
+    expect(axisTickTarget(300, false)).toBe(9);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// measureLabelWidth
+// ---------------------------------------------------------------------------
+
+describe('measureLabelWidth', () => {
+  it('returns a positive number for non-empty text', () => {
+    const w = measureLabelWidth('4500');
+    expect(w).toBeGreaterThan(0);
+  });
+
+  it('wider text returns a larger width', () => {
+    const short = measureLabelWidth('0');
+    const long = measureLabelWidth('$1,234,567.00');
+    expect(long).toBeGreaterThan(short);
+  });
+
+  it('returns 0 for empty string', () => {
+    expect(measureLabelWidth('')).toBe(0);
+  });
+
+  it('scales proportionally to character count (fallback path)', () => {
+    const w4 = measureLabelWidth('1234');
+    const w8 = measureLabelWidth('12345678');
+    expect(w8 / w4).toBeCloseTo(2, 0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// dynamicTickTarget
+// ---------------------------------------------------------------------------
+
+describe('dynamicTickTarget', () => {
+  it('returns at least 2', () => {
+    expect(dynamicTickTarget(50, ['$1,000,000.00'])).toBeGreaterThanOrEqual(2);
+  });
+
+  it('fits more ticks for shorter labels', () => {
+    const shortLabels = dynamicTickTarget(400, ['0', '100']);
+    const longLabels = dynamicTickTarget(400, ['$1,234,567.00']);
+    expect(shortLabels).toBeGreaterThan(longLabels);
+  });
+
+  it('fits more ticks in wider axes', () => {
+    const narrow = dynamicTickTarget(200, ['4500']);
+    const wide = dynamicTickTarget(800, ['4500']);
+    expect(wide).toBeGreaterThan(narrow);
+  });
+
+  it('falls back to 60px spacing when no samples given', () => {
+    expect(dynamicTickTarget(300, [])).toBe(5);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// axisPadForLabels
+// ---------------------------------------------------------------------------
+
+describe('axisPadForLabels', () => {
+  it('returns 0 for empty labels', () => {
+    expect(axisPadForLabels([])).toBe(0);
+  });
+
+  it('returns at least MIN_AXIS_PAD for short labels', () => {
+    expect(axisPadForLabels(['0', '5'])).toBeGreaterThanOrEqual(24);
+  });
+
+  it('grows with longer labels', () => {
+    const short = axisPadForLabels(['0', '100']);
+    const long = axisPadForLabels(['$1,000,000', '$2,000,000']);
+    expect(long).toBeGreaterThan(short);
+  });
+
+  it('is driven by the widest label', () => {
+    const withShort = axisPadForLabels(['0', '5', '10']);
+    const withLong = axisPadForLabels(['0', '5', '10', '10,000']);
+    expect(withLong).toBeGreaterThan(withShort);
+  });
+
+  it('accounts for minus sign in negative labels', () => {
+    const positive = axisPadForLabels(['0', '1,000']);
+    const withNeg = axisPadForLabels(['-1,000', '0', '1,000']);
+    expect(withNeg).toBeGreaterThan(positive);
   });
 });

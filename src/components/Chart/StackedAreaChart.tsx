@@ -10,6 +10,8 @@ import {
   monotoneInterpolator,
   linearInterpolator,
   stackData,
+  thinIndices,
+  axisPadForLabels,
   type Point,
 } from './utils';
 import { useResizeWidth, useChartScrub } from './hooks';
@@ -21,9 +23,9 @@ import {
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
-  PAD_LEFT_AXIS,
   resolveTooltipMode,
   resolveSeries,
+  axisTickTarget,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
@@ -115,8 +117,6 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
     const showXAxis = Boolean(xKey);
     const showYAxis = grid;
     const padBottom = showXAxis ? PAD_BOTTOM_AXIS : 0;
-    const padLeft = showYAxis ? PAD_LEFT_AXIS : 0;
-    const plotWidth = Math.max(0, width - padLeft - PAD_RIGHT);
     const plotHeight = Math.max(0, height - PAD_TOP - padBottom);
 
     // Stack the data
@@ -125,9 +125,11 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       [data, series],
     );
 
+    const tickTarget = axisTickTarget(plotHeight);
+
     const { yMin, yMax, yTicks } = React.useMemo(() => {
       if (yDomainProp) {
-        const result = niceTicks(yDomainProp[0], yDomainProp[1], 5);
+        const result = niceTicks(yDomainProp[0], yDomainProp[1], tickTarget);
         return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
       }
       let max = -Infinity;
@@ -142,9 +144,16 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
         }
       }
       if (max === -Infinity) max = 1;
-      const result = niceTicks(0, max, 5);
+      const result = niceTicks(0, max, tickTarget);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [stacked, referenceLines, yDomainProp]);
+    }, [stacked, referenceLines, yDomainProp, tickTarget]);
+
+    const padLeft = React.useMemo(() => {
+      if (!showYAxis) return 0;
+      const fmt = formatYLabel ?? ((v: number) => String(v));
+      return axisPadForLabels(yTicks.map(fmt));
+    }, [showYAxis, yTicks, formatYLabel]);
+    const plotWidth = Math.max(0, width - padLeft - PAD_RIGHT);
 
     // Compute pixel points for top edge of each band (for interpolators and line paths)
     const bandTopPoints = React.useMemo(() => {
@@ -219,15 +228,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
     const xLabels = React.useMemo(() => {
       if (!xKey || data.length === 0 || plotWidth <= 0) return [];
       const maxLabels = Math.max(2, Math.floor(plotWidth / 60));
-      let indices: number[];
-      if (data.length <= maxLabels) {
-        indices = data.map((_, i) => i);
-      } else {
-        indices = [0];
-        const step = (data.length - 1) / (maxLabels - 1);
-        for (let i = 1; i < maxLabels - 1; i++) indices.push(Math.round(i * step));
-        indices.push(data.length - 1);
-      }
+      const indices = thinIndices(data.length, maxLabels);
       return indices.map((i) => {
         const x = data.length === 1 ? plotWidth / 2 : (i / (data.length - 1)) * plotWidth;
         const raw = data[i][xKey];

@@ -9,6 +9,8 @@ import {
   linearPath,
   monotoneInterpolator,
   linearInterpolator,
+  thinIndices,
+  axisPadForLabels,
   type Point,
 } from './utils';
 import { useResizeWidth, useChartScrub } from './hooks';
@@ -22,10 +24,10 @@ import {
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
-  PAD_LEFT_AXIS,
   BAR_GROUP_GAP,
   BAR_ITEM_GAP,
   resolveTooltipMode,
+  axisTickTarget,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
@@ -81,7 +83,7 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   formatYLabelRight?: (value: number) => string;
 }
 
-const PAD_RIGHT_DUAL = PAD_LEFT_AXIS;
+const EMPTY_TICKS = { min: 0, max: 1, ticks: [0, 1] } as const;
 
 export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
   function Composed(
@@ -143,14 +145,14 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
     const lineSeries = React.useMemo(() => series.filter((s) => s.type === 'line'), [series]);
     const hasRightAxis = React.useMemo(() => series.some((s) => s.axis === 'right'), [series]);
 
-    // Geometry
+    // Geometry — plotHeight is independent of padLeft,
+    // so compute ticks first, then derive padLeft from label widths.
     const showXAxis = Boolean(xKey);
     const showYAxis = grid;
     const padBottom = showXAxis ? PAD_BOTTOM_AXIS : 0;
-    const padLeft = showYAxis ? PAD_LEFT_AXIS : 0;
-    const padRight = hasRightAxis ? PAD_RIGHT_DUAL : PAD_RIGHT;
-    const plotWidth = Math.max(0, width - padLeft - padRight);
     const plotHeight = Math.max(0, height - PAD_TOP - padBottom);
+
+    const tickTarget = axisTickTarget(plotHeight);
 
     // Left Y domain (bar series + left-axis lines)
     const leftDomain = React.useMemo(() => {
@@ -167,12 +169,12 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
         }
       }
       if (max === -Infinity) max = 1;
-      return niceTicks(0, max, 5);
-    }, [data, series, referenceLines]);
+      return niceTicks(0, max, tickTarget);
+    }, [data, series, referenceLines, tickTarget]);
 
     // Right Y domain (right-axis lines)
     const rightDomain = React.useMemo(() => {
-      if (!hasRightAxis) return { min: 0, max: 1, ticks: [0, 1] };
+      if (!hasRightAxis) return EMPTY_TICKS;
       let min = Infinity;
       let max = -Infinity;
       for (const s of series.filter((s) => s.axis === 'right')) {
@@ -184,9 +186,21 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
           }
         }
       }
-      if (min === Infinity) return { min: 0, max: 1, ticks: [0, 1] };
-      return niceTicks(min, max, 5);
-    }, [data, series, hasRightAxis]);
+      if (min === Infinity) return EMPTY_TICKS;
+      return niceTicks(min, max, tickTarget);
+    }, [data, series, hasRightAxis, tickTarget]);
+
+    const padLeft = React.useMemo(() => {
+      if (!showYAxis) return 0;
+      const fmt = formatYLabel ?? ((v: number) => String(v));
+      return axisPadForLabels(leftDomain.ticks.map(fmt));
+    }, [showYAxis, leftDomain.ticks, formatYLabel]);
+    const padRight = React.useMemo(() => {
+      if (!hasRightAxis) return PAD_RIGHT;
+      const fmt = formatYLabelRight ?? ((v: number) => String(v));
+      return axisPadForLabels(rightDomain.ticks.map(fmt));
+    }, [hasRightAxis, rightDomain.ticks, formatYLabelRight]);
+    const plotWidth = Math.max(0, width - padLeft - padRight);
 
     // Bar geometry
     const slotWidth = data.length > 0 ? plotWidth / data.length : 0;
@@ -445,9 +459,11 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                   </text>
                 ))}
 
-                {/* X axis labels */}
-                {xKey &&
-                  data.map((d, i) => (
+                {/* X axis labels (thinned to avoid overlap) */}
+                {xKey && (() => {
+                  const maxLabels = Math.max(2, Math.floor(plotWidth / 60));
+                  const indices = thinIndices(data.length, maxLabels);
+                  return indices.map((i) => (
                     <text
                       key={i}
                       x={(i + 0.5) * slotWidth}
@@ -456,9 +472,10 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                       textAnchor="middle"
                       dominantBaseline="auto"
                     >
-                      {formatXLabel ? formatXLabel(d[xKey]) : String(d[xKey] ?? '')}
+                      {formatXLabel ? formatXLabel(data[i][xKey]) : String(data[i][xKey] ?? '')}
                     </text>
-                  ))}
+                  ));
+                })()}
               </g>
             </svg>
 

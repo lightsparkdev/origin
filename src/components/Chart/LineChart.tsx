@@ -11,6 +11,8 @@ import {
   linearPath,
   monotoneInterpolator,
   linearInterpolator,
+  thinIndices,
+  axisPadForLabels,
   type Point,
 } from './utils';
 import { useResizeWidth, useChartScrub } from './hooks';
@@ -22,10 +24,10 @@ import {
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
-  PAD_LEFT_AXIS,
   DASH_PATTERNS,
   resolveTooltipMode,
   resolveSeries,
+  axisTickTarget,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
@@ -164,26 +166,18 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     const fillOpacity = fillProp === true ? 0.08 : typeof fillProp === 'number' ? fillProp : 0.06;
 
-    // Chart area geometry
+    // Chart area geometry — plotHeight is independent of padLeft,
+    // so we compute ticks first, then derive padLeft from label widths.
     const showXAxis = Boolean(xKey);
     const showYAxis = grid;
     const padBottom = showXAxis ? PAD_BOTTOM_AXIS : 0;
-    const padLeft = showYAxis ? PAD_LEFT_AXIS : 0;
-    const plotWidth = Math.max(0, width - padLeft - PAD_RIGHT);
     const plotHeight = Math.max(0, height - PAD_TOP - padBottom);
 
-    // Left-edge fade
-    const fadeWidth =
-      fadeLeft === true ? 40 : typeof fadeLeft === 'number' ? fadeLeft : 0;
-    const hasFade = fadeWidth > 0 && plotWidth > 0;
-    const fadeMaskId = hasFade ? `${uid}-fade` : undefined;
-    const clipActiveId = `${uid}-clip-active`;
-    const clipInactiveId = `${uid}-clip-inactive`;
+    const tickTarget = axisTickTarget(plotHeight);
 
-    // Y domain with nice ticks
     const { yMin, yMax, yTicks } = React.useMemo(() => {
       if (yDomainProp) {
-        const result = niceTicks(yDomainProp[0], yDomainProp[1], 5);
+        const result = niceTicks(yDomainProp[0], yDomainProp[1], tickTarget);
         return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
       }
       let min = Infinity;
@@ -208,9 +202,24 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       if (min === Infinity) {
         return { yMin: 0, yMax: 1, yTicks: [0, 1] };
       }
-      const result = niceTicks(min, max, 5);
+      const result = niceTicks(min, max, tickTarget);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [data, series, referenceLines, yDomainProp]);
+    }, [data, series, referenceLines, yDomainProp, tickTarget]);
+
+    const padLeft = React.useMemo(() => {
+      if (!showYAxis) return 0;
+      const fmt = formatYLabel ?? ((v: number) => String(v));
+      return axisPadForLabels(yTicks.map(fmt));
+    }, [showYAxis, yTicks, formatYLabel]);
+    const plotWidth = Math.max(0, width - padLeft - PAD_RIGHT);
+
+    // Left-edge fade
+    const fadeWidth =
+      fadeLeft === true ? 40 : typeof fadeLeft === 'number' ? fadeLeft : 0;
+    const hasFade = fadeWidth > 0 && plotWidth > 0;
+    const fadeMaskId = hasFade ? `${uid}-fade` : undefined;
+    const clipActiveId = `${uid}-clip-active`;
+    const clipInactiveId = `${uid}-clip-inactive`;
 
     // Compute pixel points for each series
     const seriesPoints = React.useMemo(() => {
@@ -251,17 +260,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     const xLabels = React.useMemo(() => {
       if (!xKey || data.length === 0 || plotWidth <= 0) return [];
       const maxLabels = Math.max(2, Math.floor(plotWidth / 60));
-      let indices: number[];
-      if (data.length <= maxLabels) {
-        indices = data.map((_, i) => i);
-      } else {
-        indices = [0];
-        const step = (data.length - 1) / (maxLabels - 1);
-        for (let i = 1; i < maxLabels - 1; i++) {
-          indices.push(Math.round(i * step));
-        }
-        indices.push(data.length - 1);
-      }
+      const indices = thinIndices(data.length, maxLabels);
       return indices.map((i) => {
         const x =
           data.length === 1
