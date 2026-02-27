@@ -1,49 +1,50 @@
 'use client';
 
 import * as React from 'react';
+// DrawerPreview is renamed to Drawer when it exits Base UI preview.
 import { DrawerPreview as BaseDrawer } from '@base-ui/react/drawer';
 import clsx from 'clsx';
 import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 import styles from './Drawer.module.scss';
 
 // Provider
-export interface DrawerProviderProps extends BaseDrawer.Provider.Props {}
+export interface ProviderProps extends BaseDrawer.Provider.Props {}
 
-export function DrawerProvider(props: DrawerProviderProps) {
+export function Provider(props: ProviderProps) {
   return <BaseDrawer.Provider {...props} />;
 }
 
 // Root
-export interface DrawerRootProps extends BaseDrawer.Root.Props {
+export interface RootProps extends BaseDrawer.Root.Props {
   analyticsName?: string;
 }
 
-export function DrawerRoot({ analyticsName, onOpenChange, ...props }: DrawerRootProps) {
+export function Root({ analyticsName, onOpenChange, ...props }: RootProps) {
   const trackedOpenChange = useTrackedOpenChange(analyticsName, 'Drawer', onOpenChange);
   return <BaseDrawer.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
 // Trigger
-export interface DrawerTriggerProps extends BaseDrawer.Trigger.Props {}
+export interface TriggerProps extends BaseDrawer.Trigger.Props {}
 
-export const DrawerTrigger = React.forwardRef<HTMLButtonElement, DrawerTriggerProps>(
-  function DrawerTrigger(props, ref) {
+export const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
+  function Trigger(props, ref) {
     return <BaseDrawer.Trigger ref={ref} {...props} />;
   },
 );
 
 // Portal
-export interface DrawerPortalProps extends BaseDrawer.Portal.Props {}
+export interface PortalProps extends BaseDrawer.Portal.Props {}
 
-export function DrawerPortal(props: DrawerPortalProps) {
+export function Portal(props: PortalProps) {
   return <BaseDrawer.Portal {...props} />;
 }
 
 // Backdrop
-export interface DrawerBackdropProps extends BaseDrawer.Backdrop.Props {}
+export interface BackdropProps extends BaseDrawer.Backdrop.Props {}
 
-export const DrawerBackdrop = React.forwardRef<HTMLDivElement, DrawerBackdropProps>(
-  function DrawerBackdrop({ className, ...props }, ref) {
+export const Backdrop = React.forwardRef<HTMLDivElement, BackdropProps>(
+  function Backdrop({ className, ...props }, ref) {
     return (
       <BaseDrawer.Backdrop
         ref={ref}
@@ -55,10 +56,10 @@ export const DrawerBackdrop = React.forwardRef<HTMLDivElement, DrawerBackdropPro
 );
 
 // Viewport
-export interface DrawerViewportProps extends BaseDrawer.Viewport.Props {}
+export interface ViewportProps extends BaseDrawer.Viewport.Props {}
 
-export const DrawerViewport = React.forwardRef<HTMLDivElement, DrawerViewportProps>(
-  function DrawerViewport({ className, ...props }, ref) {
+export const Viewport = React.forwardRef<HTMLDivElement, ViewportProps>(
+  function Viewport({ className, ...props }, ref) {
     return (
       <BaseDrawer.Viewport
         ref={ref}
@@ -70,10 +71,10 @@ export const DrawerViewport = React.forwardRef<HTMLDivElement, DrawerViewportPro
 );
 
 // Popup
-export interface DrawerPopupProps extends BaseDrawer.Popup.Props {}
+export interface PopupProps extends BaseDrawer.Popup.Props {}
 
-export const DrawerPopup = React.forwardRef<HTMLDivElement, DrawerPopupProps>(
-  function DrawerPopup({ className, ...props }, ref) {
+export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
+  function Popup({ className, ...props }, ref) {
     return (
       <BaseDrawer.Popup
         ref={ref}
@@ -85,10 +86,10 @@ export const DrawerPopup = React.forwardRef<HTMLDivElement, DrawerPopupProps>(
 );
 
 // Content
-export interface DrawerContentProps extends BaseDrawer.Content.Props {}
+export interface ContentProps extends BaseDrawer.Content.Props {}
 
-export const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps>(
-  function DrawerContent({ className, ...props }, ref) {
+export const Content = React.forwardRef<HTMLDivElement, ContentProps>(
+  function Content({ className, ...props }, ref) {
     return (
       <BaseDrawer.Content
         ref={ref}
@@ -100,10 +101,10 @@ export const DrawerContent = React.forwardRef<HTMLDivElement, DrawerContentProps
 );
 
 // Title
-export interface DrawerTitleProps extends BaseDrawer.Title.Props {}
+export interface TitleProps extends BaseDrawer.Title.Props {}
 
-export const DrawerTitle = React.forwardRef<HTMLHeadingElement, DrawerTitleProps>(
-  function DrawerTitle({ className, ...props }, ref) {
+export const Title = React.forwardRef<HTMLHeadingElement, TitleProps>(
+  function Title({ className, ...props }, ref) {
     return (
       <BaseDrawer.Title
         ref={ref}
@@ -115,10 +116,10 @@ export const DrawerTitle = React.forwardRef<HTMLHeadingElement, DrawerTitleProps
 );
 
 // Description
-export interface DrawerDescriptionProps extends BaseDrawer.Description.Props {}
+export interface DescriptionProps extends BaseDrawer.Description.Props {}
 
-export const DrawerDescription = React.forwardRef<HTMLParagraphElement, DrawerDescriptionProps>(
-  function DrawerDescription({ className, ...props }, ref) {
+export const Description = React.forwardRef<HTMLParagraphElement, DescriptionProps>(
+  function Description({ className, ...props }, ref) {
     return (
       <BaseDrawer.Description
         ref={ref}
@@ -130,19 +131,19 @@ export const DrawerDescription = React.forwardRef<HTMLParagraphElement, DrawerDe
 );
 
 // Close
-export interface DrawerCloseProps extends BaseDrawer.Close.Props {}
+export interface CloseProps extends BaseDrawer.Close.Props {}
 
-export const DrawerClose = React.forwardRef<HTMLButtonElement, DrawerCloseProps>(
-  function DrawerClose(props, ref) {
+export const Close = React.forwardRef<HTMLButtonElement, CloseProps>(
+  function Close(props, ref) {
     return <BaseDrawer.Close ref={ref} {...props} />;
   },
 );
 
 // Indent
-export interface DrawerIndentProps extends BaseDrawer.Indent.Props {}
+export interface IndentProps extends BaseDrawer.Indent.Props {}
 
-export const DrawerIndent = React.forwardRef<HTMLDivElement, DrawerIndentProps>(
-  function DrawerIndent({ className, ...props }, ref) {
+export const Indent = React.forwardRef<HTMLDivElement, IndentProps>(
+  function Indent({ className, ...props }, ref) {
     return (
       <BaseDrawer.Indent
         ref={ref}
@@ -154,10 +155,10 @@ export const DrawerIndent = React.forwardRef<HTMLDivElement, DrawerIndentProps>(
 );
 
 // IndentBackground
-export interface DrawerIndentBackgroundProps extends BaseDrawer.IndentBackground.Props {}
+export interface IndentBackgroundProps extends BaseDrawer.IndentBackground.Props {}
 
-export const DrawerIndentBackground = React.forwardRef<HTMLDivElement, DrawerIndentBackgroundProps>(
-  function DrawerIndentBackground({ className, ...props }, ref) {
+export const IndentBackground = React.forwardRef<HTMLDivElement, IndentBackgroundProps>(
+  function IndentBackground({ className, ...props }, ref) {
     return (
       <BaseDrawer.IndentBackground
         ref={ref}
@@ -170,17 +171,17 @@ export const DrawerIndentBackground = React.forwardRef<HTMLDivElement, DrawerInd
 
 // Display names
 if (process.env.NODE_ENV !== 'production') {
-  DrawerProvider.displayName = 'Drawer.Provider';
-  DrawerRoot.displayName = 'Drawer.Root';
-  DrawerTrigger.displayName = 'Drawer.Trigger';
-  DrawerPortal.displayName = 'Drawer.Portal';
-  DrawerBackdrop.displayName = 'Drawer.Backdrop';
-  DrawerViewport.displayName = 'Drawer.Viewport';
-  DrawerPopup.displayName = 'Drawer.Popup';
-  DrawerContent.displayName = 'Drawer.Content';
-  DrawerTitle.displayName = 'Drawer.Title';
-  DrawerDescription.displayName = 'Drawer.Description';
-  DrawerClose.displayName = 'Drawer.Close';
-  DrawerIndent.displayName = 'Drawer.Indent';
-  DrawerIndentBackground.displayName = 'Drawer.IndentBackground';
+  Provider.displayName = 'Drawer.Provider';
+  Root.displayName = 'Drawer.Root';
+  Trigger.displayName = 'Drawer.Trigger';
+  Portal.displayName = 'Drawer.Portal';
+  Backdrop.displayName = 'Drawer.Backdrop';
+  Viewport.displayName = 'Drawer.Viewport';
+  Popup.displayName = 'Drawer.Popup';
+  Content.displayName = 'Drawer.Content';
+  Title.displayName = 'Drawer.Title';
+  Description.displayName = 'Drawer.Description';
+  Close.displayName = 'Drawer.Close';
+  Indent.displayName = 'Drawer.Indent';
+  IndentBackground.displayName = 'Drawer.IndentBackground';
 }

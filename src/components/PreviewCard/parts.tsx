@@ -6,33 +6,33 @@ import clsx from 'clsx';
 import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 import styles from './PreviewCard.module.scss';
 
-export interface PreviewCardRootProps extends BasePreviewCard.Root.Props {
+export interface RootProps extends BasePreviewCard.Root.Props {
   analyticsName?: string;
 }
 
-export function PreviewCardRoot({ analyticsName, onOpenChange, ...props }: PreviewCardRootProps) {
+export function Root({ analyticsName, onOpenChange, ...props }: RootProps) {
   const trackedOpenChange = useTrackedOpenChange(analyticsName, 'PreviewCard', onOpenChange);
   return <BasePreviewCard.Root onOpenChange={trackedOpenChange} {...props} />;
 }
 
-export interface PreviewCardTriggerProps extends BasePreviewCard.Trigger.Props {}
+export interface TriggerProps extends BasePreviewCard.Trigger.Props {}
 
-export const PreviewCardTrigger = React.forwardRef<HTMLAnchorElement, PreviewCardTriggerProps>(
-  function PreviewCardTrigger(props, ref) {
+export const Trigger = React.forwardRef<HTMLAnchorElement, TriggerProps>(
+  function Trigger(props, ref) {
     return <BasePreviewCard.Trigger ref={ref} {...props} />;
   },
 );
 
-export interface PreviewCardPortalProps extends BasePreviewCard.Portal.Props {}
+export interface PortalProps extends BasePreviewCard.Portal.Props {}
 
-export function PreviewCardPortal(props: PreviewCardPortalProps) {
+export function Portal(props: PortalProps) {
   return <BasePreviewCard.Portal {...props} />;
 }
 
-export interface PreviewCardPositionerProps extends BasePreviewCard.Positioner.Props {}
+export interface PositionerProps extends BasePreviewCard.Positioner.Props {}
 
-export const PreviewCardPositioner = React.forwardRef<HTMLDivElement, PreviewCardPositionerProps>(
-  function PreviewCardPositioner({ className, sideOffset = 8, ...props }, ref) {
+export const Positioner = React.forwardRef<HTMLDivElement, PositionerProps>(
+  function Positioner({ className, sideOffset = 8, ...props }, ref) {
     return (
       <BasePreviewCard.Positioner
         ref={ref}
@@ -44,10 +44,10 @@ export const PreviewCardPositioner = React.forwardRef<HTMLDivElement, PreviewCar
   },
 );
 
-export interface PreviewCardPopupProps extends BasePreviewCard.Popup.Props {}
+export interface PopupProps extends BasePreviewCard.Popup.Props {}
 
-export const PreviewCardPopup = React.forwardRef<HTMLDivElement, PreviewCardPopupProps>(
-  function PreviewCardPopup({ className, ...props }, ref) {
+export const Popup = React.forwardRef<HTMLDivElement, PopupProps>(
+  function Popup({ className, ...props }, ref) {
     return (
       <BasePreviewCard.Popup
         ref={ref}
@@ -58,10 +58,10 @@ export const PreviewCardPopup = React.forwardRef<HTMLDivElement, PreviewCardPopu
   },
 );
 
-export interface PreviewCardArrowProps extends BasePreviewCard.Arrow.Props {}
+export interface ArrowProps extends BasePreviewCard.Arrow.Props {}
 
-export const PreviewCardArrow = React.forwardRef<HTMLDivElement, PreviewCardArrowProps>(
-  function PreviewCardArrow({ className, ...props }, ref) {
+export const Arrow = React.forwardRef<HTMLDivElement, ArrowProps>(
+  function Arrow({ className, ...props }, ref) {
     return (
       <BasePreviewCard.Arrow
         ref={ref}
@@ -73,10 +73,10 @@ export const PreviewCardArrow = React.forwardRef<HTMLDivElement, PreviewCardArro
 );
 
 if (process.env.NODE_ENV !== 'production') {
-  PreviewCardRoot.displayName = 'PreviewCard.Root';
-  PreviewCardTrigger.displayName = 'PreviewCard.Trigger';
-  PreviewCardPortal.displayName = 'PreviewCard.Portal';
-  PreviewCardPositioner.displayName = 'PreviewCard.Positioner';
-  PreviewCardPopup.displayName = 'PreviewCard.Popup';
-  PreviewCardArrow.displayName = 'PreviewCard.Arrow';
+  Root.displayName = 'PreviewCard.Root';
+  Trigger.displayName = 'PreviewCard.Trigger';
+  Portal.displayName = 'PreviewCard.Portal';
+  Positioner.displayName = 'PreviewCard.Positioner';
+  Popup.displayName = 'PreviewCard.Popup';
+  Arrow.displayName = 'PreviewCard.Arrow';
 }
