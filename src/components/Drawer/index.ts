@@ -1,0 +1,63 @@
+export {
+  DrawerProvider as Provider,
+  DrawerRoot as Root,
+  DrawerTrigger as Trigger,
+  DrawerPortal as Portal,
+  DrawerBackdrop as Backdrop,
+  DrawerViewport as Viewport,
+  DrawerPopup as Popup,
+  DrawerContent as Content,
+  DrawerTitle as Title,
+  DrawerDescription as Description,
+  DrawerClose as Close,
+  DrawerIndent as Indent,
+  DrawerIndentBackground as IndentBackground,
+} from './parts';
+
+export type {
+  DrawerProviderProps,
+  DrawerRootProps,
+  DrawerTriggerProps,
+  DrawerPortalProps,
+  DrawerBackdropProps,
+  DrawerViewportProps,
+  DrawerPopupProps,
+  DrawerContentProps,
+  DrawerTitleProps,
+  DrawerDescriptionProps,
+  DrawerCloseProps,
+  DrawerIndentProps,
+  DrawerIndentBackgroundProps,
+} from './parts';
+
+import {
+  DrawerProvider,
+  DrawerRoot,
+  DrawerTrigger,
+  DrawerPortal,
+  DrawerBackdrop,
+  DrawerViewport,
+  DrawerPopup,
+  DrawerContent,
+  DrawerTitle,
+  DrawerDescription,
+  DrawerClose,
+  DrawerIndent,
+  DrawerIndentBackground,
+} from './parts';
+
+export const Drawer = {
+  Provider: DrawerProvider,
+  Root: DrawerRoot,
+  Trigger: DrawerTrigger,
+  Portal: DrawerPortal,
+  Backdrop: DrawerBackdrop,
+  Viewport: DrawerViewport,
+  Popup: DrawerPopup,
+  Content: DrawerContent,
+  Title: DrawerTitle,
+  Description: DrawerDescription,
+  Close: DrawerClose,
+  Indent: DrawerIndent,
+  IndentBackground: DrawerIndentBackground,
+};

@@ -27,6 +27,22 @@ export { Command } from './components/Command';
 export { Combobox } from './components/Combobox';
 export { ContextMenu } from './components/ContextMenu';
 export { Dialog } from './components/Dialog';
+export { Drawer } from './components/Drawer';
+export type {
+  DrawerProviderProps,
+  DrawerRootProps,
+  DrawerTriggerProps,
+  DrawerPortalProps,
+  DrawerBackdropProps,
+  DrawerViewportProps,
+  DrawerPopupProps,
+  DrawerContentProps,
+  DrawerTitleProps,
+  DrawerDescriptionProps,
+  DrawerCloseProps,
+  DrawerIndentProps,
+  DrawerIndentBackgroundProps,
+} from './components/Drawer';
 export { Field } from './components/Field';
 export { Fieldset } from './components/Fieldset';
 export type { FieldsetRootProps, FieldsetLegendProps, FieldsetErrorProps } from './components/Fieldset';
@@ -55,6 +71,15 @@ export { Tabs } from './components/Tabs';
 export { Toast } from './components/Toast';
 export { Tooltip } from './components/Tooltip';
 export { Popover } from './components/Popover';
+export { PreviewCard } from './components/PreviewCard';
+export type {
+  PreviewCardRootProps,
+  PreviewCardTriggerProps,
+  PreviewCardPortalProps,
+  PreviewCardPositionerProps,
+  PreviewCardPopupProps,
+  PreviewCardArrowProps,
+} from './components/PreviewCard';
 export type {
   PopoverRootProps,
   PopoverTriggerProps,
