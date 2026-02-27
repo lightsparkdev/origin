@@ -2,6 +2,11 @@ name: "Create Release PR"
 
 on:
   workflow_dispatch:
+  # Temporary: run on PRs that modify this workflow for validation
+  pull_request:
+    paths:
+      - ".github/workflows/release.yaml"
+      - ".github/scripts/generate-changelog.mjs"
 
 jobs:
   create-release-pr:
@@ -29,8 +34,15 @@ jobs:
       - name: Collect changes since last release
         id: changes
         run: |
+          # Ensure tags are fetched from the upstream repo
+          git fetch origin --tags
+
           OLD_VERSION=$(node -p "require('./package.json').version")
           echo "old_version=$OLD_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Current version: $OLD_VERSION"
+          echo "Tag exists: $(git tag -l v${OLD_VERSION})"
+          echo "Commits since tag:"
+          git log v${OLD_VERSION}..HEAD --oneline | head -10 || echo "(none)"
 
           # Collect PR merge commit messages since last tag
           MERGES=$(git log v${OLD_VERSION}..HEAD --merges --pretty=format:"%s" || true)
@@ -43,103 +55,29 @@ jobs:
           # Also collect the diff stat for context
           DIFFSTAT=$(git diff v${OLD_VERSION}..HEAD --stat | tail -1)
 
-          # Write to files for the next step
-          echo "$MERGES" > /tmp/commit_messages.txt
-          echo "$DIFFSTAT" > /tmp/diffstat.txt
+          # Write to env files for the next step
+          {
+            echo "COMMITS<<COMMITS_EOF"
+            echo "$MERGES"
+            echo "COMMITS_EOF"
+          } >> "$GITHUB_ENV"
+
+          {
+            echo "DIFFSTAT<<DIFFSTAT_EOF"
+            echo "$DIFFSTAT"
+            echo "DIFFSTAT_EOF"
+          } >> "$GITHUB_ENV"
 
       - name: Determine version bump and generate changelog
         id: ai
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          OLD_VERSION="${{ steps.changes.outputs.old_version }}"
-          COMMITS=$(cat /tmp/commit_messages.txt)
-          DIFFSTAT=$(cat /tmp/diffstat.txt)
-          DATE=$(date +%Y-%m-%d)
+          OLD_VERSION: ${{ steps.changes.outputs.old_version }}
+        run: node .github/scripts/generate-changelog.mjs
 
-          # Build the prompt
-          cat > /tmp/prompt.json << 'PROMPT_EOF'
-          {
-            "model": "claude-sonnet-4-5-20250514",
-            "max_tokens": 1024,
-            "messages": [
-              {
-                "role": "user",
-                "content": "COMMITS_PLACEHOLDER"
-              }
-            ]
-          }
-          PROMPT_EOF
-
-          # Inject the actual prompt content with proper escaping
-          PROMPT_TEXT=$(cat <<INNER_EOF
-          You are generating a release changelog for @lightsparkdev/origin, a React component library and design system.
-
-          Current version: ${OLD_VERSION}
-          Diff stat: ${DIFFSTAT}
-
-          Commits since last release:
-          ${COMMITS}
-
-          Tasks:
-          1. Determine if this is a "minor" or "patch" release. Use minor if there are new components, new features, or new public API surface. Use patch for bug fixes, docs, internal refactors, CI changes, and dependency updates. Never use major.
-          2. Write a concise changelog entry that summarizes ONLY changes that impact consumers of the package (new components, API changes, bug fixes, style changes). Omit CI, docs, internal tooling, and repo maintenance.
-
-          Respond in EXACTLY this format with no other text:
-
-          VERSION_BUMP: patch
-          CHANGELOG:
-          ## ${OLD_VERSION} → X.Y.Z (${DATE})
-
-          - First user-facing change
-          - Second user-facing change
-
-          Replace X.Y.Z with the actual new version number. If there are no user-facing changes, write a single line: "- Internal maintenance release (no user-facing changes)".
-          INNER_EOF
-          )
-
-          # Escape for JSON
-          ESCAPED_PROMPT=$(echo "$PROMPT_TEXT" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))')
-
-          # Replace placeholder in JSON
-          python3 -c "
-          import json
-          with open('/tmp/prompt.json') as f:
-              data = json.load(f)
-          data['messages'][0]['content'] = json.loads($ESCAPED_PROMPT)
-          with open('/tmp/prompt.json', 'w') as f:
-              json.dump(data, f)
-          "
-
-          # Call the API
-          RESPONSE=$(curl -s https://api.anthropic.com/v1/messages \
-            -H "content-type: application/json" \
-            -H "x-api-key: $ANTHROPIC_API_KEY" \
-            -H "anthropic-version: 2023-06-01" \
-            -d @/tmp/prompt.json)
-
-          # Extract the text response
-          AI_OUTPUT=$(echo "$RESPONSE" | python3 -c "import sys,json; print(json.loads(sys.stdin.read())['content'][0]['text'])")
-
-          # Parse version bump
-          VERSION_BUMP=$(echo "$AI_OUTPUT" | grep "^VERSION_BUMP:" | awk '{print $2}' | tr -d '[:space:]')
-          if [ "$VERSION_BUMP" != "minor" ] && [ "$VERSION_BUMP" != "patch" ]; then
-            echo "AI returned invalid version bump: '$VERSION_BUMP', defaulting to patch"
-            VERSION_BUMP="patch"
-          fi
-
-          # Parse changelog (everything after CHANGELOG: line)
-          CHANGELOG=$(echo "$AI_OUTPUT" | sed -n '/^CHANGELOG:/,$ p' | tail -n +2)
-
-          echo "version_bump=$VERSION_BUMP" >> "$GITHUB_OUTPUT"
-
-          # Write changelog to file (multi-line safe)
-          echo "$CHANGELOG" > /tmp/changelog_entry.md
-
-          echo "--- AI determined: $VERSION_BUMP ---"
-          echo "$CHANGELOG"
-
+      # Skip the remaining steps on PR runs (just validate the AI step works)
       - name: Bump version
+        if: github.event_name == 'workflow_dispatch'
         id: bump
         run: |
           npm version ${{ steps.ai.outputs.version_bump }} --no-git-tag-version
@@ -147,6 +85,7 @@ jobs:
           echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Update changelog
+        if: github.event_name == 'workflow_dispatch'
         run: |
           NEW_VERSION="${{ steps.bump.outputs.new_version }}"
 
@@ -172,6 +111,7 @@ jobs:
           fi
 
       - name: Create release branch and PR
+        if: github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
