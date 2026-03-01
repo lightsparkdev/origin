@@ -61,6 +61,8 @@ import { Popover } from '@/components/Popover';
 import { PreviewCard } from '@/components/PreviewCard';
 import { Logo } from '@/components/Logo';
 import { Toggle, ToggleGroup } from '@/components/Toggle';
+import * as Calendar from '@/components/Calendar';
+import type { DateRange } from '@/components/Calendar';
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
@@ -1625,6 +1627,103 @@ function DrawerDemo() {
   );
 }
 
+function CalendarDemo() {
+  const [singleDate, setSingleDate] = React.useState<Date | null>(null);
+  const [rangeValue, setRangeValue] = React.useState<Date | DateRange | null>(null);
+  const [mode, setMode] = React.useState<'single' | 'range'>('range');
+  const [includeTime, setIncludeTime] = React.useState(false);
+
+  return (
+    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '128px' }}>
+      <div>
+        <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>Single date</p>
+        <Calendar.Root value={singleDate} onValueChange={(v) => setSingleDate(v as Date)}>
+          <Calendar.Header />
+          <Calendar.Navigation />
+          <Calendar.Grid />
+          <Calendar.Footer>
+            <Button variant="outline" size="compact" style={{ width: '100%' }}>Apply</Button>
+          </Calendar.Footer>
+        </Calendar.Root>
+      </div>
+      <div>
+        <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>Date range</p>
+        <Calendar.Root
+          mode={mode}
+          includeTime={includeTime}
+          value={rangeValue}
+          onValueChange={setRangeValue}
+        >
+          <Calendar.Header />
+          <Calendar.Navigation />
+          <Calendar.Grid />
+          <Calendar.Controls>
+            <Calendar.ControlItem label="End date">
+              <Switch
+                size="sm"
+                checked={mode === 'range'}
+                onCheckedChange={(v) => {
+                  setMode(v ? 'range' : 'single');
+                  setRangeValue(null);
+                }}
+              />
+            </Calendar.ControlItem>
+            <Calendar.ControlItem label="Include time">
+              <Switch size="sm" checked={includeTime} onCheckedChange={setIncludeTime} />
+            </Calendar.ControlItem>
+          </Calendar.Controls>
+          <Calendar.Footer>
+            <Button variant="outline" size="compact" style={{ width: '100%' }}>Apply</Button>
+          </Calendar.Footer>
+        </Calendar.Root>
+      </div>
+      <div>
+        <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>French (locale)</p>
+        <Calendar.Root
+          mode={mode}
+          includeTime={includeTime}
+          value={rangeValue}
+          onValueChange={setRangeValue}
+          locale="fr-FR"
+          weekStartsOn={1}
+          labels={{
+            previousMonth: 'Mois pr\u00e9c\u00e9dent',
+            nextMonth: 'Mois suivant',
+            date: 'Date',
+            time: 'Heure',
+            startDate: 'Date de d\u00e9but',
+            endDate: 'Date de fin',
+            startTime: 'Heure de d\u00e9but',
+            endTime: 'Heure de fin',
+          }}
+        >
+          <Calendar.Header />
+          <Calendar.Navigation />
+          <Calendar.Grid />
+          <Calendar.Controls>
+            <Calendar.ControlItem label="Date de fin">
+              <Switch
+                size="sm"
+                checked={mode === 'range'}
+                onCheckedChange={(v) => {
+                  setMode(v ? 'range' : 'single');
+                  setRangeValue(null);
+                }}
+              />
+            </Calendar.ControlItem>
+            <Calendar.ControlItem label="Inclure l'heure">
+              <Switch size="sm" checked={includeTime} onCheckedChange={setIncludeTime} />
+            </Calendar.ControlItem>
+          </Calendar.Controls>
+          <Calendar.Footer>
+            <Button variant="outline" size="compact" style={{ width: '100%' }}>Appliquer</Button>
+          </Calendar.Footer>
+        </Calendar.Root>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
@@ -1632,6 +1731,9 @@ export default function Home() {
       <h1>Origin</h1>
       <p style={{ marginBottom: '2rem' }}>Design system rebuild — Base UI + Figma-first approach.</p>
       
+      <h2 style={{ marginBottom: '1rem' }}>Calendar</h2>
+      <CalendarDemo />
+
       <h2 style={{ marginBottom: '1rem' }}>Accordion Component</h2>
       
       <Accordion.Root defaultValue={['item-1']} style={{ marginBottom: '128px' }}>
