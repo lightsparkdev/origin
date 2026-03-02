@@ -232,6 +232,8 @@ interface CalendarContextValue {
   setDate: (which: 'start' | 'end', date: Date) => void;
   setTime: (which: 'start' | 'end', hours: number, minutes: number) => void;
   isDateDisabled: (date: Date) => boolean;
+  min?: Date;
+  max?: Date;
 
   locale: string;
   weekStartsOn: 0 | 1;
@@ -367,21 +369,19 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
     }, []);
 
     const goToMonth = React.useCallback((offset: number) => {
-      setViewDate((prev) => {
-        const next = addMonths(prev, offset);
-        setFocusedDateState((prevFocused) => {
-          const lastDay = new Date(
-            next.getFullYear(),
-            next.getMonth() + 1,
-            0,
-          ).getDate();
-          return new Date(
-            next.getFullYear(),
-            next.getMonth(),
-            Math.min(prevFocused.getDate(), lastDay),
-          );
-        });
-        return next;
+      setViewDate((prev) => addMonths(prev, offset));
+      setFocusedDateState((prev) => {
+        const target = addMonths(prev, offset);
+        const lastDay = new Date(
+          target.getFullYear(),
+          target.getMonth() + 1,
+          0,
+        ).getDate();
+        return new Date(
+          target.getFullYear(),
+          target.getMonth(),
+          Math.min(prev.getDate(), lastDay),
+        );
       });
     }, []);
 
@@ -433,12 +433,13 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
 
         // Range mode
         if (pendingStart === null) {
-          setPendingStart(applyTime(date, rangeValue?.start ?? null));
+          setPendingStart(startOfDay(date));
         } else {
-          const a = applyTime(pendingStart, rangeValue?.start ?? null);
-          const b = applyTime(date, rangeValue?.end ?? null);
-          const start = isDateBefore(b, a) ? b : a;
-          const end = isDateBefore(b, a) ? a : b;
+          const reversed = isDateBefore(date, pendingStart);
+          const startDate = reversed ? date : pendingStart;
+          const endDate = reversed ? pendingStart : date;
+          const start = applyTime(startDate, rangeValue?.start ?? null);
+          const end = applyTime(endDate, rangeValue?.end ?? null);
           trackedSelect({ start, end });
           setPendingStart(null);
           setHoveredDate(null);
@@ -467,10 +468,15 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
           }
           if (which === 'start') newRange.start = d;
           else newRange.end = d;
-          if (isDateBefore(newRange.end, newRange.start)) {
+          const swapped = isDateBefore(newRange.end, newRange.start);
+          if (swapped) {
             const tmp = newRange.start;
             newRange.start = newRange.end;
             newRange.end = tmp;
+          }
+          if (swapped && includeTime) {
+            newRange.start.setHours(current.start.getHours(), current.start.getMinutes(), 0, 0);
+            newRange.end.setHours(current.end.getHours(), current.end.getMinutes(), 0, 0);
           }
           trackedSelect(newRange);
         }
@@ -515,6 +521,8 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
         setDate,
         setTime,
         isDateDisabled,
+        min,
+        max,
         locale,
         weekStartsOn,
         labels,
@@ -537,6 +545,8 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
         setDate,
         setTime,
         isDateDisabled,
+        min,
+        max,
         locale,
         weekStartsOn,
         labels,
@@ -652,7 +662,6 @@ function DateInput({
       }}
       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-          commit();
           (e.target as HTMLInputElement).blur();
         }
       }}
@@ -715,6 +724,16 @@ function TimeInput({
 
   const placeholder = getTimePlaceholder(locale);
 
+  function commit() {
+    if (draft === formatted) return;
+    const parsed = parseTimeString(draft);
+    if (parsed) {
+      onTimeChange(parsed.hours, parsed.minutes);
+    } else {
+      setDraft(formatted);
+    }
+  }
+
   return (
     <Input
       aria-label={label}
@@ -726,20 +745,11 @@ function TimeInput({
       onFocus={() => setHasFocus(true)}
       onBlur={() => {
         setHasFocus(false);
-        const parsed = parseTimeString(draft);
-        if (parsed) {
-          onTimeChange(parsed.hours, parsed.minutes);
-        } else {
-          setDraft(formatted);
-        }
+        commit();
       }}
       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-          const parsed = parseTimeString(draft);
-          if (parsed) {
-            onTimeChange(parsed.hours, parsed.minutes);
-            (e.target as HTMLInputElement).blur();
-          }
+          (e.target as HTMLInputElement).blur();
         }
       }}
     />
@@ -856,13 +866,20 @@ export const Navigation = React.forwardRef<
   CalendarNavigationProps
 >(function CalendarNavigation(props, forwardedRef) {
   const { className, ...elementProps } = props;
-  const { viewYear, viewMonth, goToPreviousMonth, goToNextMonth, locale, labels } =
-    useCalendarContext();
+  const ctx = useCalendarContext();
+  const { viewYear, viewMonth, goToPreviousMonth, goToNextMonth, locale, labels } = ctx;
 
   const monthLabel = new Date(viewYear, viewMonth, 1).toLocaleDateString(
     locale,
     { month: 'long', year: 'numeric' },
   );
+
+  const isPrevDisabled = ctx.min
+    ? isDateBefore(new Date(viewYear, viewMonth, 0), ctx.min)
+    : false;
+  const isNextDisabled = ctx.max
+    ? isDateBefore(ctx.max, new Date(viewYear, viewMonth + 1, 1))
+    : false;
 
   return (
     <div
@@ -879,6 +896,7 @@ export const Navigation = React.forwardRef<
           className={styles.navButton}
           onClick={goToPreviousMonth}
           aria-label={labels.previousMonth}
+          disabled={isPrevDisabled}
         >
           <CentralIcon name="IconChevronLeft" size={16} />
         </button>
@@ -887,6 +905,7 @@ export const Navigation = React.forwardRef<
           className={styles.navButton}
           onClick={goToNextMonth}
           aria-label={labels.nextMonth}
+          disabled={isNextDisabled}
         >
           <CentralIcon name="IconChevronRight" size={16} />
         </button>
@@ -1174,7 +1193,7 @@ export const Grid = React.forwardRef<HTMLTableElement, CalendarGridProps>(
                       data-outside-month={s.isOutsideMonth || undefined}
                       data-disabled={s.isDisabled || undefined}
                       aria-selected={
-                        s.isSelected || s.isRangeStart || s.isRangeEnd || undefined
+                        s.isSelected || s.isRangeStart || s.isRangeEnd || s.isInRange || undefined
                       }
                       aria-disabled={s.isDisabled || undefined}
                       aria-label={date.toLocaleDateString(ctx.locale, {

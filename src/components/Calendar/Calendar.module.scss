@@ -59,6 +59,12 @@
     outline: 2px solid var(--border-focus);
     outline-offset: -2px;
   }
+
+  &:disabled {
+    opacity: calc(var(--opacity-50) / 100);
+    cursor: default;
+    pointer-events: none;
+  }
 }
 
 // Grid (table)
@@ -113,6 +119,10 @@
   &:focus-visible {
     outline: 2px solid var(--border-focus);
     outline-offset: -2px;
+  }
+
+  &[data-today]:not([data-selected]):not([data-range-start]):not([data-range-end]):not([data-in-range]) {
+    background: var(--surface-hover);
   }
 
   &[data-selected] {

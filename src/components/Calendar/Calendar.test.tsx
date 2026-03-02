@@ -24,6 +24,7 @@ import {
   TestCustomLabels,
   TestRenderDay,
   TestLocaleWithTime,
+  TestDateInputMinMax,
 } from './Calendar.test-stories';
 
 test.describe('Calendar', () => {
@@ -522,6 +523,72 @@ test.describe('Calendar', () => {
     await expect(page.getByTestId('selected-minutes')).toHaveText('0');
   });
 
+  test('aria-selected is set on in-range dates', async ({ mount, page }) => {
+    await mount(<TestRangeWithValue />);
+
+    const midBtn = page.getByRole('button', {
+      name: /Thursday, February 12, 2026/,
+    });
+    await expect(midBtn).toHaveAttribute('aria-selected', 'true');
+
+    const midBtn2 = page.getByRole('button', {
+      name: /Friday, February 13, 2026/,
+    });
+    await expect(midBtn2).toHaveAttribute('aria-selected', 'true');
+  });
+
+  test('nav buttons are disabled when adjacent month is out of min/max', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestMinMax />);
+
+    const prevBtn = page.getByRole('button', { name: 'Previous month' });
+    const nextBtn = page.getByRole('button', { name: 'Next month' });
+
+    await expect(prevBtn).toBeDisabled();
+    await expect(nextBtn).toBeDisabled();
+  });
+
+  test('reverse range with time preserves correct start/end times', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestRangeWithTime />);
+
+    // Existing: start=Feb 11 9:00 AM, end=Feb 15 5:30 PM
+    // Click later date first, then earlier date (reverse order)
+    await page
+      .getByRole('button', { name: /Friday, February 20, 2026/ })
+      .click();
+    await page
+      .getByRole('button', { name: /Thursday, February 12, 2026/ })
+      .click();
+
+    // Verify dates via data attributes (timezone-safe)
+    const startBtn = page.getByRole('button', { name: /Thursday, February 12, 2026/ });
+    const endBtn = page.getByRole('button', { name: /Friday, February 20, 2026/ });
+    await expect(startBtn).toHaveAttribute('data-range-start');
+    await expect(endBtn).toHaveAttribute('data-range-end');
+
+    // After reverse ordering, start keeps start time (9:00), end keeps end time (17:30)
+    await expect(page.getByTestId('start-hours')).toHaveText('9');
+    await expect(page.getByTestId('start-minutes')).toHaveText('0');
+    await expect(page.getByTestId('end-hours')).toHaveText('17');
+    await expect(page.getByTestId('end-minutes')).toHaveText('30');
+  });
+
+  test('time input commits on Enter via blur', async ({ mount, page }) => {
+    await mount(<TestWithTime />);
+
+    const timeInput = page.getByRole('textbox', { name: 'Time' });
+    await timeInput.fill('4:00 PM');
+    await timeInput.press('Enter');
+
+    await expect(page.getByTestId('selected-hours')).toHaveText('16');
+    await expect(page.getByTestId('selected-minutes')).toHaveText('0');
+  });
+
   test('locale=de-DE renders German month and weekday names', async ({
     mount,
     page,
@@ -636,5 +703,171 @@ test.describe('Calendar', () => {
 
     const timeValue = await timeInput.inputValue();
     expect(timeValue).toContain('14:30');
+  });
+
+  test('date input rejects out-of-range dates and reverts', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestDateInputMinMax />);
+
+    const dateInput = page.getByRole('textbox', { name: 'Date' });
+    await expect(dateInput).toHaveValue('02/11/2026');
+
+    // Type a date before min (Feb 5)
+    await dateInput.fill('02/01/2026');
+    await dateInput.blur();
+
+    await expect(dateInput).toHaveValue('02/11/2026');
+    await expect(page.getByTestId('selected')).toHaveText('2026-02-11');
+
+    // Type a date after max (Feb 25)
+    await dateInput.fill('03/15/2026');
+    await dateInput.blur();
+
+    await expect(dateInput).toHaveValue('02/11/2026');
+    await expect(page.getByTestId('selected')).toHaveText('2026-02-11');
+  });
+
+  test('invalid time input reverts to previous value', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestWithTime />);
+
+    const timeInput = page.getByRole('textbox', { name: 'Time' });
+    await expect(timeInput).toHaveValue('2:30 PM');
+
+    await timeInput.fill('abc');
+    await timeInput.blur();
+
+    await expect(timeInput).toHaveValue('2:30 PM');
+    await expect(page.getByTestId('selected-hours')).toHaveText('14');
+    await expect(page.getByTestId('selected-minutes')).toHaveText('30');
+  });
+
+  test('keyboard PageDown/PageUp navigates months', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestDefault />);
+
+    await page
+      .getByRole('button', { name: /Sunday, February 15, 2026/ })
+      .click();
+
+    await page.keyboard.press('PageDown');
+    await expect(page.getByText('March 2026')).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /Sunday, March 15, 2026/ }),
+    ).toHaveAttribute('tabindex', '0');
+
+    // Re-focus the grid to enable PageUp
+    await page
+      .getByRole('button', { name: /Sunday, March 15, 2026/ })
+      .focus();
+
+    await page.keyboard.press('PageUp');
+    await expect(page.getByText('February 2026')).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: /Sunday, February 15, 2026/ }),
+    ).toHaveAttribute('tabindex', '0');
+  });
+
+  test('keyboard Home moves to start of week, End to end', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestDefault />);
+
+    // Feb 11 2026 is Wednesday (weekStartsOn=0, so week starts Sunday)
+    await page
+      .getByRole('button', { name: /Wednesday, February 11, 2026/ })
+      .click();
+
+    await page.keyboard.press('Home');
+    await expect(
+      page.getByRole('button', { name: /Sunday, February 8, 2026/ }),
+    ).toBeFocused();
+
+    await page.keyboard.press('End');
+    await expect(
+      page.getByRole('button', { name: /Saturday, February 14, 2026/ }),
+    ).toBeFocused();
+  });
+
+  test('keyboard Space selects focused date', async ({ mount, page }) => {
+    await mount(<TestDefault />);
+
+    await page
+      .getByRole('button', { name: /Sunday, February 15, 2026/ })
+      .click();
+
+    await page.keyboard.press('ArrowRight');
+    await expect(
+      page.getByRole('button', { name: /Monday, February 16, 2026/ }),
+    ).toBeFocused();
+
+    await page.keyboard.press(' ');
+    await expect(page.getByTestId('selected')).toHaveText('2026-02-16');
+  });
+
+  test('range hover preview shows in-range highlight', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestRange />);
+
+    // First click sets pendingStart
+    await page
+      .getByRole('button', { name: /Wednesday, February 11, 2026/ })
+      .click();
+
+    // Hover over a later date
+    await page
+      .getByRole('button', { name: /Sunday, February 15, 2026/ })
+      .hover();
+
+    // Mid-range day should show in-range preview
+    const midBtn = page.getByRole('button', {
+      name: /Thursday, February 12, 2026/,
+    });
+    await expect(midBtn).toHaveAttribute('data-in-range');
+
+    // Start and end should show range markers
+    const startBtn = page.getByRole('button', {
+      name: /Wednesday, February 11, 2026/,
+    });
+    const endBtn = page.getByRole('button', {
+      name: /Sunday, February 15, 2026/,
+    });
+    await expect(startBtn).toHaveAttribute('data-range-start');
+    await expect(endBtn).toHaveAttribute('data-range-end');
+  });
+
+  test('typing start date past end date swaps with correct times', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<TestRangeWithTime />);
+
+    // Existing: start=Feb 11 9:00 AM, end=Feb 15 5:30 PM
+    const startDate = page.getByRole('textbox', { name: 'Start date' });
+
+    // Type a start date after the end date
+    await startDate.fill('02/20/2026');
+    await startDate.blur();
+
+    // Dates should swap: Feb 15 becomes start, Feb 20 becomes end
+    const newStartBtn = page.getByRole('button', { name: /Sunday, February 15, 2026/ });
+    const newEndBtn = page.getByRole('button', { name: /Friday, February 20, 2026/ });
+    await expect(newStartBtn).toHaveAttribute('data-range-start');
+    await expect(newEndBtn).toHaveAttribute('data-range-end');
+
+    // Times should stay in their roles: start keeps 9:00, end keeps 17:30
+    await expect(page.getByTestId('start-hours')).toHaveText('9');
+    await expect(page.getByTestId('start-minutes')).toHaveText('0');
+    await expect(page.getByTestId('end-hours')).toHaveText('17');
+    await expect(page.getByTestId('end-minutes')).toHaveText('30');
   });
 });

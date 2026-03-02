@@ -520,6 +520,26 @@ export function TestRenderDay() {
   );
 }
 
+export function TestDateInputMinMax() {
+  const [value, setValue] = useState<Date | null>(new Date(2026, 1, 11));
+  return (
+    <Calendar.Root
+      value={value}
+      onValueChange={(v) => setValue(v as Date)}
+      defaultMonth={new Date(2026, 1, 1)}
+      min={new Date(2026, 1, 5)}
+      max={new Date(2026, 1, 25)}
+    >
+      <Calendar.Header />
+      <Calendar.Navigation />
+      <Calendar.Grid />
+      <div data-testid="selected">
+        {value ? value.toISOString().split('T')[0] : 'none'}
+      </div>
+    </Calendar.Root>
+  );
+}
+
 export function TestLocaleWithTime() {
   const [value, setValue] = useState<Date | null>(
     new Date(2026, 1, 11, 14, 30),
