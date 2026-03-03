@@ -129,8 +129,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
       return { left, right, visible: true };
     }, [data.nodes, data.links, showLabels, showValues, fmtValue, width]);
 
-    const padTop =
-      hasStages && labelPad.visible ? STAGE_HEIGHT + STAGE_GAP : 8;
+    const padTop = hasStages ? STAGE_HEIGHT + STAGE_GAP : 8;
 
     const layout = React.useMemo(() => {
       const plotWidth = width - labelPad.left - labelPad.right;
@@ -377,7 +376,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
             >
               {svgDesc && <desc>{svgDesc}</desc>}
 
-              {hasStages && labelPad.visible && (
+              {hasStages && (
                 <g className={styles.sankeyStages}>
                   {stages.map((label, i) => {
                     const col = nodesByColumn.get(i);
@@ -514,9 +513,9 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
                         ly = midY;
                         anchor = 'start';
                       } else {
-                        lx = (node.x0 + node.x1) / 2;
-                        ly = node.y0 - 6;
-                        anchor = 'middle';
+                        lx = node.x1 + LABEL_GAP;
+                        ly = midY;
+                        anchor = 'start';
                       }
 
                       return (
@@ -525,9 +524,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
                           x={lx}
                           y={ly}
                           textAnchor={anchor}
-                          dominantBaseline={
-                            isFirst || isLast ? 'central' : 'auto'
-                          }
+                          dominantBaseline="central"
                           className={styles.sankeyLabel}
                         >
                           {node.label}

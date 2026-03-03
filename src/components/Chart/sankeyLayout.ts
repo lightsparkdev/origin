@@ -138,11 +138,13 @@ function computeNodePositions(
     node.x1 = node.x0 + nodeWidth;
   }
 
-  const maxValue = Math.max(...Array.from(columns.values()).map(
-    (col) => col.reduce((s, n) => s + n.value, 0) + Math.max(0, col.length - 1) * nodePadding,
-  ), 1);
-
-  const ky = height / maxValue;
+  const ky = Math.min(...Array.from(columns.values()).map(
+    (col) => {
+      const totalValue = col.reduce((s, n) => s + n.value, 0);
+      const totalPadding = Math.max(0, col.length - 1) * nodePadding;
+      return totalValue > 0 ? (height - totalPadding) / totalValue : height;
+    },
+  ));
 
   for (const [, col] of columns) {
     let y = 0;
@@ -238,15 +240,25 @@ function resolveCollisions(col: LayoutNode[], nodePadding: number, height: numbe
     y = node.y1 + nodePadding;
   }
 
-  let overflow = col[col.length - 1].y1 - height;
+  const last = col[col.length - 1];
+  const overflow = last.y1 - height;
   if (overflow > 0) {
-    for (let i = col.length - 1; i >= 0; i--) {
-      const node = col[i];
-      const shift = Math.min(overflow, node.y0 - (i === 0 ? 0 : col[i - 1].y1 + nodePadding));
-      node.y0 -= shift;
-      node.y1 -= shift;
-      overflow -= shift;
-      if (overflow <= 0) break;
+    last.y0 -= overflow;
+    last.y1 -= overflow;
+    for (let i = col.length - 2; i >= 0; i--) {
+      const overlap = col[i].y1 + nodePadding - col[i + 1].y0;
+      if (overlap > 0) {
+        col[i].y0 -= overlap;
+        col[i].y1 -= overlap;
+      }
+    }
+  }
+
+  if (col[0].y0 < 0) {
+    const shift = -col[0].y0;
+    for (const node of col) {
+      node.y0 += shift;
+      node.y1 += shift;
     }
   }
 }
