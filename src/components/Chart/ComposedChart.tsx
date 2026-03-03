@@ -7,6 +7,8 @@ import {
   niceTicks,
   monotonePath,
   linearPath,
+  monotonePathGroups,
+  linearPathGroups,
   monotoneInterpolator,
   linearInterpolator,
   thinIndices,
@@ -19,6 +21,7 @@ import {
   type ResolvedSeries,
   type TooltipProp,
   type ReferenceLine,
+  type ReferenceBand,
   SERIES_COLORS,
   DASH_PATTERNS,
   PAD_TOP,
@@ -58,6 +61,8 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   curve?: 'monotone' | 'linear';
   /** Reference lines on the left Y axis. */
   referenceLines?: ReferenceLine[];
+  /** Shaded bands spanning a value range on the left Y axis. Rendered behind bars and lines. */
+  referenceBands?: ReferenceBand[];
   /** Show legend below chart. */
   legend?: boolean;
   /** Show loading skeleton. */
@@ -81,6 +86,8 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   formatYLabel?: (value: number) => string;
   /** Formatter for the right Y axis labels. */
   formatYLabelRight?: (value: number) => string;
+  /** Connect across null/NaN gaps in line series. When false, gaps break the line. */
+  connectNulls?: boolean;
 }
 
 const EMPTY_TICKS = { min: 0, max: 1, ticks: [0, 1] } as const;
@@ -96,6 +103,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       tooltip: tooltipProp,
       curve = 'monotone',
       referenceLines,
+      referenceBands,
       legend,
       loading,
       empty,
@@ -107,6 +115,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       formatXLabel,
       formatYLabel,
       formatYLabelRight,
+      connectNulls = true,
       className,
       ...props
     },
@@ -168,9 +177,15 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
           if (rl.value > max) max = rl.value;
         }
       }
+      if (referenceBands) {
+        for (const rb of referenceBands) {
+          const hi = Math.max(rb.from, rb.to);
+          if (hi > max) max = hi;
+        }
+      }
       if (max === -Infinity) max = 1;
       return niceTicks(0, max, tickTarget);
-    }, [data, series, referenceLines, tickTarget]);
+    }, [data, series, referenceLines, referenceBands, tickTarget]);
 
     // Right Y domain (right-axis lines)
     const rightDomain = React.useMemo(() => {
@@ -210,28 +225,48 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       : 0;
 
     // Line points and paths
-    const linePoints = React.useMemo(() => {
-      if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0) return [];
-      return lineSeries.map((s) => {
+    const { linePoints, lineGroups } = React.useMemo(() => {
+      if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0)
+        return { linePoints: [] as Point[][], lineGroups: [] as Point[][][] };
+      const allPoints: Point[][] = [];
+      const allGroups: Point[][][] = [];
+      for (const s of lineSeries) {
         const domain = s.axis === 'right' ? rightDomain : leftDomain;
         const points: Point[] = [];
+        const groups: Point[][] = [];
+        let currentGroup: Point[] = [];
         for (let i = 0; i < data.length; i++) {
           const v = Number(data[i][s.key]);
-          if (isNaN(v)) continue;
+          if (isNaN(v)) {
+            if (!connectNulls && currentGroup.length > 0) {
+              groups.push(currentGroup);
+              currentGroup = [];
+            }
+            continue;
+          }
           const x = data.length === 1
             ? plotWidth / 2
             : (i + 0.5) * slotWidth;
           const y = linearScale(v, domain.min, domain.max, plotHeight, 0);
-          points.push({ x, y });
+          const pt = { x, y };
+          points.push(pt);
+          currentGroup.push(pt);
         }
-        return points;
-      });
-    }, [data, lineSeries, plotWidth, plotHeight, slotWidth, leftDomain, rightDomain]);
+        if (currentGroup.length > 0) groups.push(currentGroup);
+        allPoints.push(points);
+        allGroups.push(groups);
+      }
+      return { linePoints: allPoints, lineGroups: allGroups };
+    }, [data, lineSeries, plotWidth, plotHeight, slotWidth, leftDomain, rightDomain, connectNulls]);
 
     const linePaths = React.useMemo(() => {
-      const build = curve === 'monotone' ? monotonePath : linearPath;
-      return linePoints.map((pts) => build(pts));
-    }, [linePoints, curve]);
+      if (connectNulls) {
+        const build = curve === 'monotone' ? monotonePath : linearPath;
+        return linePoints.map((pts) => build(pts));
+      }
+      const build = curve === 'monotone' ? monotonePathGroups : linearPathGroups;
+      return lineGroups.map((groups) => build(groups));
+    }, [linePoints, lineGroups, curve, connectNulls]);
 
     // Interpolators for line dot tracking
     const interpolators = React.useMemo(() => {
@@ -254,6 +289,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       interpolatorsRef,
       data,
       onActiveChange,
+      onActivate: onClickDatum,
     });
 
     // Y axis labels
@@ -316,8 +352,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
         height={height}
         legend={legend}
         series={wrapperSeries}
-        activeIndex={scrub.activeIndex}
-        ariaLiveContent={ariaLiveContent}
+        ariaLiveContent={showTooltip ? ariaLiveContent : undefined}
       >
       <div
         ref={mergedRef}
@@ -351,6 +386,37 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                   yLabelsLeft.map(({ y }, i) => (
                     <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
                   ))}
+
+                {/* Reference bands */}
+                {referenceBands?.map((rb, i) => {
+                  const bandColor = rb.color ?? 'var(--stroke-primary)';
+                  if (rb.axis === 'x') {
+                    const x1 = data.length > 0 ? (rb.from + 0.5) * slotWidth : 0;
+                    const x2 = data.length > 0 ? (rb.to + 0.5) * slotWidth : plotWidth;
+                    const bx = Math.min(x1, x2);
+                    const bw = Math.abs(x2 - x1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const y1 = linearScale(rb.from, leftDomain.min, leftDomain.max, plotHeight, 0);
+                  const y2 = linearScale(rb.to, leftDomain.min, leftDomain.max, plotHeight, 0);
+                  const by = Math.min(y1, y2);
+                  const bh = Math.abs(y1 - y2);
+                  return (
+                    <g key={`band-${i}`}>
+                      <rect x={0} y={by} width={plotWidth} height={bh} fill={bandColor} opacity={0.06} />
+                      {rb.label && (
+                        <text x={plotWidth / 2} y={by + bh / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {

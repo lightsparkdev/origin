@@ -112,6 +112,7 @@ export type {
   LineChartProps as ChartLineProps,
   Series as ChartSeries,
   ReferenceLine as ChartReferenceLine,
+  ReferenceBand as ChartReferenceBand,
   SparklineProps as ChartSparklineProps,
   StackedAreaChartProps as ChartStackedAreaProps,
   BarChartProps as ChartBarProps,
@@ -121,12 +122,14 @@ export type {
   ComposedSeries as ChartComposedSeries,
   LiveChartProps as ChartLiveProps,
   LivePoint as ChartLivePoint,
-  LiveValueProps as ChartLiveValueProps,
-  LiveDotProps as ChartLiveDotProps,
   GaugeChartProps as ChartGaugeProps,
   GaugeThreshold as ChartGaugeThreshold,
   BarListProps as ChartBarListProps,
   BarListItem as ChartBarListItem,
+  WaterfallChartProps as ChartWaterfallProps,
+  WaterfallSegment as ChartWaterfallSegment,
+  FunnelChartProps as ChartFunnelProps,
+  FunnelStage as ChartFunnelStage,
 } from './components/Chart';
 
 // Simple components (direct exports)

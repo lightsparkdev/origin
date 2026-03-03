@@ -323,7 +323,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       const toY = (v: number) => PAD.top + (1 - (v - st.displayMin) / (st.displayMax - st.displayMin)) * chartH;
       const clampY = (y: number) => Math.max(PAD.top, Math.min(PAD.top + chartH, y));
 
-      // Grid
+      // Grid lines (drawn before fade so lines fade at the left edge)
       if (cfg.grid) {
         const valRange = st.displayMax - st.displayMin;
         const pxPerUnit = chartH / (valRange || 1);
@@ -350,7 +350,6 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           if (!st.gridLabels.has(key)) st.gridLabels.set(key, 0.01);
         }
 
-        const fmtVal = cfg.formatValue ?? ((v: number) => v.toFixed(v % 1 === 0 ? 0 : 2));
         ctx.lineWidth = 1;
         for (const [key, alpha] of st.gridLabels) {
           if (alpha < 0.01) continue;
@@ -361,12 +360,6 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           ctx.setLineDash([1, 3]);
           ctx.beginPath(); ctx.moveTo(padLeft, y); ctx.lineTo(padLeft + chartW, y); ctx.stroke();
           ctx.setLineDash([]);
-          ctx.globalAlpha = alpha * 0.4;
-          ctx.fillStyle = 'rgb(0,0,0)';
-          ctx.font = CHART_LABEL_FONT;
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(fmtVal(v), padLeft - 8, y);
         }
         ctx.globalAlpha = 1;
       }
@@ -417,6 +410,23 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       ctx.fillStyle = fadeGrad;
       ctx.fillRect(0, 0, padLeft + FADE_EDGE_WIDTH, h);
       ctx.restore();
+
+      // Y-axis labels (drawn after fade so they remain visible)
+      if (cfg.grid) {
+        const fmtVal = cfg.formatValue ?? ((v: number) => v.toFixed(v % 1 === 0 ? 0 : 2));
+        ctx.font = CHART_LABEL_FONT;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgb(0,0,0)';
+        for (const [key, alpha] of st.gridLabels) {
+          if (alpha < 0.01) continue;
+          const v = key / 1000;
+          const y = Math.round(toY(v)) + 0.5;
+          ctx.globalAlpha = alpha * 0.4;
+          ctx.fillText(fmtVal(v), padLeft - 8, y);
+        }
+        ctx.globalAlpha = 1;
+      }
 
       // Time axis
       if (cfg.grid) {

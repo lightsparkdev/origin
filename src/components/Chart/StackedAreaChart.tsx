@@ -20,6 +20,7 @@ import {
   type ResolvedSeries,
   type TooltipProp,
   type ReferenceLine,
+  type ReferenceBand,
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
@@ -41,6 +42,8 @@ export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'d
   fillOpacity?: number;
   /** Horizontal reference lines at specific y-values. */
   referenceLines?: ReferenceLine[];
+  /** Shaded bands spanning a value range. Rendered behind area bands. */
+  referenceBands?: ReferenceBand[];
   /** Fixed Y-axis domain. When omitted, auto-scales from stacked totals. */
   yDomain?: [number, number];
   /** Show a legend below the chart for multi-series. */
@@ -49,8 +52,6 @@ export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'d
   loading?: boolean;
   /** Content to show when data is empty. `true` for default message. */
   empty?: React.ReactNode;
-  /** Control animation. Currently a no-op — provided for API consistency with other chart types. */
-  animate?: boolean;
   ariaLabel?: string;
   onActiveChange?: (
     index: number | null,
@@ -78,11 +79,11 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       curve = 'monotone',
       fillOpacity = 0.4,
       referenceLines,
+      referenceBands,
       yDomain: yDomainProp,
       legend,
       loading,
       empty,
-      animate: _animate,
       ariaLabel,
       onActiveChange,
       onClickDatum,
@@ -143,10 +144,16 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
           if (rl.value > max) max = rl.value;
         }
       }
+      if (referenceBands) {
+        for (const rb of referenceBands) {
+          const hi = Math.max(rb.from, rb.to);
+          if (hi > max) max = hi;
+        }
+      }
       if (max === -Infinity) max = 1;
       const result = niceTicks(0, max, tickTarget);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [stacked, referenceLines, yDomainProp, tickTarget]);
+    }, [stacked, referenceLines, referenceBands, yDomainProp, tickTarget]);
 
     const padLeft = React.useMemo(() => {
       if (!showYAxis) return 0;
@@ -222,6 +229,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       interpolatorsRef,
       data,
       onActiveChange,
+      onActivate: onClickDatum,
     });
 
     // X axis labels
@@ -281,8 +289,7 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
         height={height}
         legend={legend}
         series={series}
-        activeIndex={scrub.activeIndex}
-        ariaLiveContent={ariaLiveContent}
+        ariaLiveContent={showTooltip ? ariaLiveContent : undefined}
       >
       <div
         ref={mergedRef}
@@ -316,6 +323,37 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                   yLabels.map(({ y }, i) => (
                     <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
                   ))}
+
+                {/* Reference bands */}
+                {referenceBands?.map((rb, i) => {
+                  const bandColor = rb.color ?? 'var(--stroke-primary)';
+                  if (rb.axis === 'x') {
+                    const x1 = data.length <= 1 ? 0 : (rb.from / (data.length - 1)) * plotWidth;
+                    const x2 = data.length <= 1 ? plotWidth : (rb.to / (data.length - 1)) * plotWidth;
+                    const bx = Math.min(x1, x2);
+                    const bw = Math.abs(x2 - x1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const y1 = linearScale(rb.from, yMin, yMax, plotHeight, 0);
+                  const y2 = linearScale(rb.to, yMin, yMax, plotHeight, 0);
+                  const by = Math.min(y1, y2);
+                  const bh = Math.abs(y1 - y2);
+                  return (
+                    <g key={`band-${i}`}>
+                      <rect x={0} y={by} width={plotWidth} height={bh} fill={bandColor} opacity={0.06} />
+                      {rb.label && (
+                        <text x={plotWidth / 2} y={by + bh / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {

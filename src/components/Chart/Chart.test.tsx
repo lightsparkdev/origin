@@ -16,6 +16,14 @@ import {
   SimpleTooltip,
   DetailedTooltipExplicit,
   CustomTooltip,
+  ScatterBasic,
+  ScatterMultiSeries,
+  SplitBasic,
+  BarListRanked,
+  WaterfallBasic,
+  SankeyBasic,
+  FunnelBasic,
+  BarBasic,
 } from './Chart.test-stories';
 
 const axeConfig = {
@@ -445,5 +453,332 @@ test.describe('Chart props', () => {
     const paths = page.locator('[data-testid="chart"] svg path[stroke]:not([stroke="none"])');
     const cls = await paths.first().getAttribute('class');
     expect(cls).toBeTruthy();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Scatter chart
+// ---------------------------------------------------------------------------
+
+test.describe('Scatter chart', () => {
+  test('renders circles for data points', async ({ mount, page }) => {
+    await mount(<ScatterBasic />);
+    const circles = page.locator('[data-testid="scatter-chart"] svg circle');
+    const count = await circles.count();
+    expect(count).toBe(4);
+  });
+
+  test('has role="img" and aria-label', async ({ mount, page }) => {
+    await mount(<ScatterBasic />);
+    const svg = page.locator('[data-testid="scatter-chart"] svg');
+    await expect(svg).toHaveAttribute('role', 'img');
+    await expect(svg).toHaveAttribute('aria-label');
+  });
+
+  test('renders grid lines when grid=true', async ({ mount, page }) => {
+    await mount(<ScatterBasic />);
+    const lines = page.locator('[data-testid="scatter-chart"] svg line');
+    const count = await lines.count();
+    expect(count).toBeGreaterThanOrEqual(2);
+  });
+
+  test('multi-series renders legend when legend=true', async ({ mount, page }) => {
+    await mount(<ScatterMultiSeries />);
+    const legendItems = page.locator('[data-testid="scatter-chart"]').locator('..').getByText('Series A', { exact: true });
+    await expect(legendItems).toBeVisible();
+  });
+
+  test('has no accessibility violations', async ({ mount, page }) => {
+    await mount(<ScatterBasic />);
+    const results = await new AxeBuilder({ page })
+      .options(axeConfig)
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Split chart
+// ---------------------------------------------------------------------------
+
+test.describe('Split chart', () => {
+  test('renders segments for data', async ({ mount, page }) => {
+    await mount(<SplitBasic />);
+    const root = page.locator('[data-testid="split-chart"]');
+    await expect(root).toBeVisible();
+    const barWrap = root.locator('[role="img"]');
+    await expect(barWrap).toBeAttached();
+  });
+
+  test('renders legend items', async ({ mount, page }) => {
+    await mount(<SplitBasic />);
+    const root = page.locator('[data-testid="split-chart"]');
+    await expect(root.getByText('Payments')).toBeVisible();
+    await expect(root.getByText('Transfers')).toBeVisible();
+    await expect(root.getByText('Fees')).toBeVisible();
+  });
+
+  test('has no accessibility violations', async ({ mount, page }) => {
+    await mount(<SplitBasic />);
+    const results = await new AxeBuilder({ page })
+      .options({
+        ...axeConfig,
+        rules: { ...axeConfig.rules, 'color-contrast': { enabled: false } },
+      })
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// BarList ranked variant
+// ---------------------------------------------------------------------------
+
+test.describe('BarList ranked variant', () => {
+  test('renders ranked rows with rank numbers', async ({ mount, page }) => {
+    await mount(<BarListRanked />);
+    const root = page.locator('[data-testid="barlist-ranked"]');
+    await expect(root).toBeVisible();
+    await expect(root.getByText('United States')).toBeVisible();
+    await expect(root.getByText('Japan')).toBeVisible();
+    await expect(root.getByText('1', { exact: true })).toBeVisible();
+  });
+
+  test('has role="list"', async ({ mount, page }) => {
+    await mount(<BarListRanked />);
+    const root = page.locator('[data-testid="barlist-ranked"]');
+    await expect(root).toHaveAttribute('role', 'list');
+  });
+
+  test('shows change indicators', async ({ mount, page }) => {
+    await mount(<BarListRanked />);
+    const root = page.locator('[data-testid="barlist-ranked"]');
+    const arrows = root.getByText('\u2191');
+    await expect(arrows).toBeVisible();
+  });
+
+  test('has no accessibility violations', async ({ mount, page }) => {
+    await mount(<BarListRanked />);
+    const results = await new AxeBuilder({ page })
+      .options(axeConfig)
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
+
+// ---------------------------------------------------------------------------
+// Waterfall chart
+// ---------------------------------------------------------------------------
+
+test.describe('Waterfall chart', () => {
+  test('renders bars for each segment', async ({ mount, page }) => {
+    await mount(<WaterfallBasic />);
+    const rects = page.locator('[data-testid="waterfall-chart"] svg rect[fill]');
+    const count = await rects.count();
+    expect(count).toBeGreaterThanOrEqual(7);
+  });
+
+  test('renders connector lines when showConnectors=true', async ({ mount, page }) => {
+    await mount(<WaterfallBasic />);
+    const connectors = page.locator('[data-testid="waterfall-chart"] svg line[stroke-dasharray="2 2"]');
+    const count = await connectors.count();
+    expect(count).toBeGreaterThanOrEqual(1);
+  });
+
+  test('has role="img" and aria-label', async ({ mount, page }) => {
+    await mount(<WaterfallBasic />);
+    const svg = page.locator('[data-testid="waterfall-chart"] svg');
+    await expect(svg).toHaveAttribute('role', 'img');
+    await expect(svg).toHaveAttribute('aria-label');
+  });
+
+  test('has no accessibility violations', async ({ mount, page }) => {
+    await mount(<WaterfallBasic />);
+    const results = await new AxeBuilder({ page })
+      .options(axeConfig)
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Sankey chart
+// ---------------------------------------------------------------------------
+
+test.describe('Sankey chart', () => {
+  test('renders nodes as rects', async ({ mount, page }) => {
+    await mount(<SankeyBasic />);
+    const rects = page.locator('[data-testid="sankey-chart"] svg rect[role="graphics-symbol"]');
+    const count = await rects.count();
+    expect(count).toBe(4);
+  });
+
+  test('renders links as paths', async ({ mount, page }) => {
+    await mount(<SankeyBasic />);
+    const paths = page.locator('[data-testid="sankey-chart"] svg path[role="graphics-symbol"]');
+    const count = await paths.count();
+    expect(count).toBe(4);
+  });
+
+  test('has role="graphics-document" and aria-roledescription', async ({ mount, page }) => {
+    await mount(<SankeyBasic />);
+    const svg = page.locator('[data-testid="sankey-chart"] svg');
+    await expect(svg).toHaveAttribute('role', 'graphics-document');
+    await expect(svg).toHaveAttribute('aria-roledescription', 'Flow diagram');
+  });
+
+  test('renders node labels', async ({ mount, page }) => {
+    await mount(<SankeyBasic />);
+    const root = page.locator('[data-testid="sankey-chart"]');
+    const labels = root.locator('svg text');
+    const count = await labels.count();
+    expect(count).toBe(4);
+  });
+
+  test('has no accessibility violations', async ({ mount, page }) => {
+    await mount(<SankeyBasic />);
+    const results = await new AxeBuilder({ page })
+      .options(axeConfig)
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Funnel chart
+// ---------------------------------------------------------------------------
+
+test.describe('Funnel chart', () => {
+  test('renders a path for each stage', async ({ mount, page }) => {
+    await mount(<FunnelBasic />);
+    const paths = page.locator(
+      '[data-testid="funnel-chart"] svg path[role="graphics-symbol"]',
+    );
+    const count = await paths.count();
+    expect(count).toBe(5);
+  });
+
+  test('shows conversion rate in tooltip on hover', async ({ mount, page }) => {
+    await mount(<FunnelBasic />);
+    const svg = page.locator('[data-testid="funnel-chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="funnel-chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await expect(tooltip).toContainText('42%');
+  });
+
+  test('has role="img" and aria-label', async ({ mount, page }) => {
+    await mount(<FunnelBasic />);
+    const svg = page.locator('[data-testid="funnel-chart"] svg');
+    await expect(svg).toHaveAttribute('role', 'img');
+    await expect(svg).toHaveAttribute('aria-label');
+  });
+
+  test('has no accessibility violations', async ({ mount, page }) => {
+    await mount(<FunnelBasic />);
+    const results = await new AxeBuilder({ page })
+      .options(axeConfig)
+      .analyze();
+    expect(results.violations).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Keyboard interaction
+// ---------------------------------------------------------------------------
+
+test.describe('Keyboard interaction', () => {
+  test('Line chart: arrow keys show tooltip, Escape dismisses', async ({ mount, page }) => {
+    await mount(<FullChart />);
+    const svg = page.locator('[data-testid="chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toBeHidden();
+  });
+
+  test('Bar chart: arrow keys show tooltip, Escape dismisses', async ({ mount, page }) => {
+    await mount(<BarBasic />);
+    const svg = page.locator('[data-testid="bar-chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="bar-chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toBeHidden();
+  });
+
+  test('Scatter chart: arrow keys show tooltip, Escape dismisses', async ({ mount, page }) => {
+    await mount(<ScatterBasic />);
+    const svg = page.locator('[data-testid="scatter-chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="scatter-chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toBeHidden();
+  });
+
+  test('Split chart: arrow keys swap legend to active segment', async ({ mount, page }) => {
+    await mount(<SplitBasic />);
+    const bar = page.locator('[data-testid="split-chart"] [class*="splitBarWrap"]');
+    const legend = page.locator('[data-testid="split-chart"] [class*="legend"]').first();
+    await expect(legend).toContainText('Payments');
+    await expect(legend).toContainText('Transfers');
+    await bar.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(legend).toContainText('Payments');
+    await expect(legend).not.toContainText('Transfers');
+    await page.keyboard.press('Escape');
+    await expect(legend).toContainText('Transfers');
+  });
+
+  test('Funnel chart: arrow keys show tooltip, Escape dismisses', async ({ mount, page }) => {
+    await mount(<FunnelBasic />);
+    const svg = page.locator('[data-testid="funnel-chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="funnel-chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toBeHidden();
+  });
+
+  test('Waterfall chart: arrow keys show tooltip, Escape dismisses', async ({ mount, page }) => {
+    await mount(<WaterfallBasic />);
+    const svg = page.locator('[data-testid="waterfall-chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="waterfall-chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toBeHidden();
+  });
+
+  test('Sankey chart: arrow keys show tooltip, Escape dismisses', async ({ mount, page }) => {
+    await mount(<SankeyBasic />);
+    const svg = page.locator('[data-testid="sankey-chart"] svg');
+    await svg.focus();
+    await page.keyboard.press('ArrowRight');
+    const tooltip = page.locator('[data-testid="sankey-chart"] > div[class*="tooltip"]').first();
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(tooltip).toBeHidden();
+  });
+
+  test('focus-visible ring appears on SVG charts', async ({ mount, page }) => {
+    await mount(<FullChart />);
+    const svg = page.locator('[data-testid="chart"] svg');
+    await svg.focus();
+    const outline = await svg.evaluate((el) => getComputedStyle(el).outlineStyle);
+    expect(outline).not.toBe('none');
   });
 });

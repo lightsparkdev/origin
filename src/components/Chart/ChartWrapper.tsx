@@ -14,7 +14,6 @@ export interface ChartWrapperProps {
   series?: ResolvedSeries[];
   children: React.ReactNode;
   className?: string;
-  activeIndex?: number | null;
   ariaLiveContent?: string;
 }
 
@@ -27,7 +26,6 @@ export function ChartWrapper({
   series,
   children,
   className,
-  activeIndex: _activeIndex,
   ariaLiveContent,
 }: ChartWrapperProps) {
   if (loading) {

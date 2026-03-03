@@ -9,6 +9,8 @@ import {
   niceTicks,
   monotonePath,
   linearPath,
+  monotonePathGroups,
+  linearPathGroups,
   monotoneInterpolator,
   linearInterpolator,
   thinIndices,
@@ -21,6 +23,7 @@ import {
   type ResolvedSeries,
   type TooltipProp,
   type ReferenceLine,
+  type ReferenceBand,
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
@@ -32,7 +35,7 @@ import {
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
-export type { Series, TooltipProp, ReferenceLine };
+export type { Series, TooltipProp, ReferenceLine, ReferenceBand };
 
 export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Array of data objects. Each object should contain keys matching `dataKey` or `series[].key`. */
@@ -70,8 +73,14 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   fadeLeft?: boolean | number;
   /** Reference lines at specific values. Supports horizontal (y) and vertical (x) lines. */
   referenceLines?: ReferenceLine[];
+  /** Shaded bands spanning a value range. Rendered behind data paths. */
+  referenceBands?: ReferenceBand[];
   /** Fixed Y-axis domain. When omitted, auto-scales from data. */
   yDomain?: [number, number];
+  /** Comparison data for "this period vs last period" overlays. Rendered as dashed lines behind the main paths. */
+  compareData?: Record<string, unknown>[];
+  /** Legend label for comparison series. Defaults to "Previous". */
+  compareLabel?: string;
   /** Show a legend below the chart for multi-series. */
   legend?: boolean;
   /** Show a loading skeleton. */
@@ -98,6 +107,8 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   formatXLabel?: (value: unknown) => string;
   /** Format y-axis labels. */
   formatYLabel?: (value: number) => string;
+  /** Connect across null/NaN gaps. When false, gaps break the line. */
+  connectNulls?: boolean;
 }
 
 export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
@@ -117,7 +128,10 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       fill: fillProp,
       fadeLeft,
       referenceLines,
+      referenceBands,
       yDomain: yDomainProp,
+      compareData,
+      compareLabel,
       legend,
       loading,
       empty,
@@ -128,6 +142,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       formatValue,
       formatXLabel,
       formatYLabel,
+      connectNulls = true,
       className,
       ...props
     },
@@ -191,6 +206,17 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           }
         }
       }
+      if (compareData) {
+        for (const s of series) {
+          for (const d of compareData) {
+            const v = Number(d[s.key]);
+            if (!isNaN(v)) {
+              if (v < min) min = v;
+              if (v > max) max = v;
+            }
+          }
+        }
+      }
       if (referenceLines) {
         for (const rl of referenceLines) {
           if (rl.axis !== 'x') {
@@ -199,12 +225,22 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           }
         }
       }
+      if (referenceBands) {
+        for (const rb of referenceBands) {
+          if (rb.axis !== 'x') {
+            const lo = Math.min(rb.from, rb.to);
+            const hi = Math.max(rb.from, rb.to);
+            if (lo < min) min = lo;
+            if (hi > max) max = hi;
+          }
+        }
+      }
       if (min === Infinity) {
         return { yMin: 0, yMax: 1, yTicks: [0, 1] };
       }
       const result = niceTicks(min, max, tickTarget);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [data, series, referenceLines, yDomainProp, tickTarget]);
+    }, [data, series, compareData, referenceLines, referenceBands, yDomainProp, tickTarget]);
 
     const padLeft = React.useMemo(() => {
       if (!showYAxis) return 0;
@@ -221,16 +257,86 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     const clipActiveId = `${uid}-clip-active`;
     const clipInactiveId = `${uid}-clip-inactive`;
 
-    // Compute pixel points for each series
-    const seriesPoints = React.useMemo(() => {
-      if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0) return [];
-      return series.map((s) => {
+    // Compute pixel points for each series (flat list for interpolators,
+    // grouped by contiguous runs for gap rendering when connectNulls=false).
+    const { seriesPoints, seriesGroups } = React.useMemo(() => {
+      if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0)
+        return { seriesPoints: [] as Point[][], seriesGroups: [] as Point[][][] };
+      const allPoints: Point[][] = [];
+      const allGroups: Point[][][] = [];
+      for (const s of series) {
         const points: Point[] = [];
+        const groups: Point[][] = [];
+        let currentGroup: Point[] = [];
         for (let i = 0; i < data.length; i++) {
           const v = Number(data[i][s.key]);
-          if (isNaN(v)) continue;
+          if (isNaN(v)) {
+            if (!connectNulls && currentGroup.length > 0) {
+              groups.push(currentGroup);
+              currentGroup = [];
+            }
+            continue;
+          }
           const x =
             data.length === 1
+              ? plotWidth / 2
+              : (i / (data.length - 1)) * plotWidth;
+          const y = linearScale(v, yMin, yMax, plotHeight, 0);
+          const pt = { x, y };
+          points.push(pt);
+          currentGroup.push(pt);
+        }
+        if (currentGroup.length > 0) groups.push(currentGroup);
+        allPoints.push(points);
+        allGroups.push(groups);
+      }
+      return { seriesPoints: allPoints, seriesGroups: allGroups };
+    }, [data, series, plotWidth, plotHeight, yMin, yMax, connectNulls]);
+
+    // SVG paths
+    const paths = React.useMemo(() => {
+      if (connectNulls) {
+        const build = curve === 'monotone' ? monotonePath : linearPath;
+        return seriesPoints.map((pts) => build(pts));
+      }
+      const build = curve === 'monotone' ? monotonePathGroups : linearPathGroups;
+      return seriesGroups.map((groups) => build(groups));
+    }, [seriesPoints, seriesGroups, curve, connectNulls]);
+
+    // Area paths
+    const areaPaths = React.useMemo(() => {
+      if (connectNulls) {
+        return seriesPoints.map((pts, i) => {
+          if (pts.length === 0) return '';
+          const firstX = pts[0].x;
+          const lastX = pts[pts.length - 1].x;
+          return `${paths[i]} L ${lastX},${plotHeight} L ${firstX},${plotHeight} Z`;
+        });
+      }
+      const buildPath = curve === 'monotone' ? monotonePath : linearPath;
+      return seriesGroups.map((groups) =>
+        groups.map((g) => {
+          if (g.length === 0) return '';
+          const d = buildPath(g);
+          const firstX = g[0].x;
+          const lastX = g[g.length - 1].x;
+          return `${d} L ${lastX},${plotHeight} L ${firstX},${plotHeight} Z`;
+        }).join(''),
+      );
+    }, [seriesPoints, seriesGroups, paths, plotHeight, connectNulls, curve]);
+
+    // Compare data: points and paths for period comparison overlay
+    const compareLen = compareData ? Math.min(data.length, compareData.length) : 0;
+
+    const compareSeriesPoints = React.useMemo(() => {
+      if (!compareData || compareLen === 0 || plotWidth <= 0 || plotHeight <= 0) return [];
+      return series.map((s) => {
+        const points: Point[] = [];
+        for (let i = 0; i < compareLen; i++) {
+          const v = Number(compareData[i][s.key]);
+          if (isNaN(v)) continue;
+          const x =
+            compareLen === 1
               ? plotWidth / 2
               : (i / (data.length - 1)) * plotWidth;
           const y = linearScale(v, yMin, yMax, plotHeight, 0);
@@ -238,23 +344,12 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
         }
         return points;
       });
-    }, [data, series, plotWidth, plotHeight, yMin, yMax]);
+    }, [compareData, compareLen, series, data.length, plotWidth, plotHeight, yMin, yMax]);
 
-    // SVG paths
-    const paths = React.useMemo(() => {
+    const comparePaths = React.useMemo(() => {
       const build = curve === 'monotone' ? monotonePath : linearPath;
-      return seriesPoints.map((pts) => build(pts));
-    }, [seriesPoints, curve]);
-
-    // Area paths
-    const areaPaths = React.useMemo(() => {
-      return seriesPoints.map((pts, i) => {
-        if (pts.length === 0) return '';
-        const firstX = pts[0].x;
-        const lastX = pts[pts.length - 1].x;
-        return `${paths[i]} L ${lastX},${plotHeight} L ${firstX},${plotHeight} Z`;
-      });
-    }, [seriesPoints, paths, plotHeight]);
+      return compareSeriesPoints.map((pts) => build(pts));
+    }, [compareSeriesPoints, curve]);
 
     // X axis labels
     const xLabels = React.useMemo(() => {
@@ -303,6 +398,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       interpolatorsRef,
       data,
       onActiveChange,
+      onActivate: onClickDatum,
     });
 
     const fmtValue = React.useCallback(
@@ -346,7 +442,6 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
         height={height}
         legend={legend}
         series={series}
-        activeIndex={scrub.activeIndex}
         ariaLiveContent={interactive ? ariaLiveContent : undefined}
       >
         <div
@@ -423,6 +518,37 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                     <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
                   ))}
 
+                {/* Reference bands */}
+                {referenceBands?.map((rb, i) => {
+                  const bandColor = rb.color ?? 'var(--stroke-primary)';
+                  if (rb.axis === 'x') {
+                    const x1 = data.length <= 1 ? 0 : (rb.from / (data.length - 1)) * plotWidth;
+                    const x2 = data.length <= 1 ? plotWidth : (rb.to / (data.length - 1)) * plotWidth;
+                    const bx = Math.min(x1, x2);
+                    const bw = Math.abs(x2 - x1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const y1 = linearScale(rb.from, yMin, yMax, plotHeight, 0);
+                  const y2 = linearScale(rb.to, yMin, yMax, plotHeight, 0);
+                  const by = Math.min(y1, y2);
+                  const bh = Math.abs(y1 - y2);
+                  return (
+                    <g key={`band-${i}`}>
+                      <rect x={0} y={by} width={plotWidth} height={bh} fill={bandColor} opacity={0.06} />
+                      {rb.label && (
+                        <text x={plotWidth / 2} y={by + bh / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
+
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {
                   const rlColor = rl.color ?? 'var(--text-primary)';
@@ -449,6 +575,23 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                     </g>
                   );
                 })}
+
+                {/* Comparison paths (dashed, behind main data) */}
+                {comparePaths.map((d, i) =>
+                  d ? (
+                    <path
+                      key={`compare-${series[i].key}`}
+                      d={d}
+                      fill="none"
+                      stroke={series[i].color}
+                      strokeWidth={1}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeDasharray="6 4"
+                      opacity={0.4}
+                    />
+                  ) : null,
+                )}
 
                 {/* Gradient fills */}
                 <g mask={fadeMaskId ? `url(#${fadeMaskId})` : undefined}>
@@ -632,12 +775,33 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
                       <div className={styles.tooltipItems}>
                         {series.map((s) => {
                           const v = Number(data[scrub.activeIndex!][s.key]);
+                          const cv = compareData && scrub.activeIndex! < compareData.length
+                            ? Number(compareData[scrub.activeIndex!][s.key])
+                            : NaN;
+                          const delta = !isNaN(v) && !isNaN(cv) ? v - cv : NaN;
+                          const pct = !isNaN(delta) && cv !== 0
+                            ? ((delta / Math.abs(cv)) * 100).toFixed(1)
+                            : null;
                           return (
-                            <div key={s.key} className={styles.tooltipItem}>
-                              <span className={styles.tooltipIndicator} style={{ backgroundColor: s.color }} />
-                              <span className={styles.tooltipName}>{s.label}</span>
-                              <span className={styles.tooltipValue}>{isNaN(v) ? '--' : fmtValue(v)}</span>
-                            </div>
+                            <React.Fragment key={s.key}>
+                              <div className={styles.tooltipItem}>
+                                <span className={styles.tooltipIndicator} style={{ backgroundColor: s.color }} />
+                                <span className={styles.tooltipName}>{s.label}</span>
+                                <span className={styles.tooltipValue}>{isNaN(v) ? '--' : fmtValue(v)}</span>
+                              </div>
+                              {compareData && !isNaN(cv) && (
+                                <div className={styles.tooltipItem}>
+                                  <span className={styles.tooltipIndicator} style={{ backgroundColor: s.color, opacity: 0.4 }} />
+                                  <span className={styles.tooltipName}>{compareLabel ?? 'Previous'}</span>
+                                  <span className={styles.tooltipValue}>
+                                    {fmtValue(cv)}
+                                    {!isNaN(delta) && (
+                                      <> ({delta >= 0 ? '+' : ''}{fmtValue(delta)}{pct ? `, ${delta >= 0 ? '+' : ''}${pct}%` : ''})</>
+                                    )}
+                                  </span>
+                                </div>
+                              )}
+                            </React.Fragment>
                           );
                         })}
                       </div>
@@ -648,6 +812,20 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           </>
         )}
       </div>
+      {legend && compareData && compareData.length > 0 && (
+        <div className={styles.legend} style={{ paddingTop: series.length > 1 ? 0 : undefined }}>
+          <div className={styles.legendItem}>
+            <span
+              className={styles.legendDot}
+              style={{
+                backgroundColor: 'transparent',
+                border: `1.5px dashed ${series[0]?.color ?? 'var(--text-secondary)'}`,
+              }}
+            />
+            <span className={styles.legendLabel}>{compareLabel ?? 'Previous'}</span>
+          </div>
+        </div>
+      )}
       </ChartWrapper>
     );
   },

@@ -29,6 +29,19 @@ export interface ReferenceLine {
   axis?: 'x' | 'y';
 }
 
+export interface ReferenceBand {
+  /** Start value (Y-axis value for horizontal bands, x-axis index for vertical). */
+  from: number;
+  /** End value. */
+  to: number;
+  /** Optional label text rendered inside the band. */
+  label?: string;
+  /** Fill color. Defaults to stroke-primary at 6% opacity. */
+  color?: string;
+  /** Band direction. Defaults to 'y' (horizontal band spanning a Y range). */
+  axis?: 'x' | 'y';
+}
+
 export type TooltipProp =
   | boolean
   | 'simple'

@@ -1477,23 +1477,6 @@ function TableExamples() {
   );
 }
 
-function LiveValueDemo() {
-  const [value, setValue] = React.useState(12847);
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setValue((v) => v + Math.floor(Math.random() * 5) + 1);
-    }, 800);
-    return () => clearInterval(interval);
-  }, []);
-  return (
-    <Chart.LiveValue
-      value={value}
-      formatValue={(v) => `$${Math.round(v).toLocaleString()}`}
-      style={{ fontSize: 32, fontWeight: 500 }}
-    />
-  );
-}
-
 function LiveDemo() {
   const [data, setData] = React.useState<{ time: number; value: number }[]>([]);
   const [value, setValue] = React.useState(100);
@@ -2213,32 +2196,6 @@ export default function Home() {
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Live Primitives</h3>
-      <div style={{ display: 'flex', gap: '2rem', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>LiveValue</p>
-          <LiveValueDemo />
-        </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>active</p>
-            <Chart.LiveDot status="active" />
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>processing</p>
-            <Chart.LiveDot status="processing" />
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>idle</p>
-            <Chart.LiveDot status="idle" />
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>error</p>
-            <Chart.LiveDot status="error" />
-          </div>
-        </div>
-      </div>
-
       <h3 style={{ marginBottom: '0.75rem' }}>Sparkline</h3>
       <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '2rem' }}>
         <div style={{ width: 160 }}>
@@ -2399,43 +2356,6 @@ export default function Home() {
         </div>
       </div>
 
-      <h3 style={{ marginBottom: '0.75rem' }}>Activity Grid</h3>
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
-        <div>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Weekly (with labels)</p>
-          <Chart.ActivityGrid
-            rows={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
-            columns={Array.from({ length: 20 }, (_, i) => `W${i + 1}`)}
-            showRowLabels
-            showColumnLabels
-            data={Array.from({ length: 20 }, (_, ci) =>
-              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, di) => ({
-                row: day,
-                col: `W${ci + 1}`,
-                value: ((ci * 7 + di * 3 + 5) % 10),
-              })),
-            ).flat()}
-          />
-        </div>
-        <div>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Hourly over 7 days</p>
-          <Chart.ActivityGrid
-            rows={['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']}
-            columns={Array.from({ length: 24 }, (_, i) => `${i}h`)}
-            cellSize={10}
-            cellGap={1}
-            color="var(--color-green-500)"
-            data={Array.from({ length: 24 }, (_, ci) =>
-              ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, di) => ({
-                row: day,
-                col: `${ci}h`,
-                value: ((ci * 3 + di * 7 + 2) % 19),
-              })),
-            ).flat()}
-          />
-        </div>
-      </div>
-
       <h3 style={{ marginBottom: '0.75rem' }}>Gauge</h3>
       <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
         <div style={{ width: 280 }}>
@@ -2507,6 +2427,165 @@ export default function Home() {
               { name: 'Other', value: 8, color: 'var(--color-blue-100)' },
             ]}
             height={200}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Scatter</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Multi-series with grid</p>
+          <Chart.Scatter
+            data={[
+              {
+                key: 'product-a',
+                label: 'Product A',
+                color: 'var(--color-blue-600)',
+                data: [
+                  { x: 10, y: 30, label: 'Jan' },
+                  { x: 25, y: 55, label: 'Feb' },
+                  { x: 40, y: 70, label: 'Mar' },
+                  { x: 55, y: 45, label: 'Apr' },
+                  { x: 70, y: 85, label: 'May' },
+                  { x: 85, y: 60, label: 'Jun' },
+                ],
+              },
+              {
+                key: 'product-b',
+                label: 'Product B',
+                color: 'var(--color-purple-500)',
+                data: [
+                  { x: 15, y: 60 },
+                  { x: 30, y: 40 },
+                  { x: 50, y: 80 },
+                  { x: 65, y: 35 },
+                  { x: 80, y: 90 },
+                ],
+              },
+            ]}
+            height={300}
+            grid
+            tooltip
+            legend
+            formatXLabel={(v) => `${v}%`}
+            formatYLabel={(v) => `$${v}`}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Split (Distribution)</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Shade ramp</p>
+          <Chart.Split
+            data={[
+              { label: 'Payments', value: 4200, color: 'var(--color-blue-700)' },
+              { label: 'Transfers', value: 2800, color: 'var(--color-blue-400)' },
+              { label: 'Fees', value: 650, color: 'var(--color-blue-200)' },
+              { label: 'Refunds', value: 320, color: 'var(--color-blue-100)' },
+            ]}
+            formatValue={(v) => `$${v.toLocaleString()}`}
+            showValues
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>BarList (ranked)</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 400 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>With rank, change indicators, and secondary values</p>
+          <Chart.BarList
+            data={[
+              { name: 'United States', value: 4200, secondaryValue: 32, change: 'up' as const },
+              { name: 'United Kingdom', value: 2800, secondaryValue: 21, change: 'down' as const },
+              { name: 'Germany', value: 1500, secondaryValue: 11, change: 'neutral' as const },
+              { name: 'Japan', value: 900, secondaryValue: 7 },
+              { name: 'Brazil', value: 650, secondaryValue: 5, change: 'up' as const },
+            ]}
+            formatValue={(v) => `$${v.toLocaleString()}`}
+            formatSecondaryValue={(v) => `${v}%`}
+            showRank
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Waterfall</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 500 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Revenue breakdown</p>
+          <Chart.Waterfall
+            data={[
+              { label: 'Revenue', value: 420, type: 'total' },
+              { label: 'Product', value: 280 },
+              { label: 'Services', value: 140 },
+              { label: 'Refunds', value: -85 },
+              { label: 'Fees', value: -45 },
+              { label: 'Tax', value: -62 },
+              { label: 'Net', value: 648, type: 'total' },
+            ]}
+            height={300}
+            grid
+            tooltip
+            showValues
+            formatValue={(v) => `$${v}`}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Funnel</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <div style={{ width: 600 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Conversion pipeline</p>
+          <Chart.Funnel
+            data={[
+              { label: 'Visitors', value: 10000, color: 'var(--color-blue-700)' },
+              { label: 'Sign ups', value: 4200, color: 'var(--color-blue-500)' },
+              { label: 'Activated', value: 2800, color: 'var(--color-blue-400)' },
+              { label: 'Subscribed', value: 1200, color: 'var(--color-blue-300)' },
+              { label: 'Retained', value: 900, color: 'var(--color-blue-200)' },
+            ]}
+            formatValue={(v) => v.toLocaleString()}
+          />
+        </div>
+      </div>
+
+      <h3 style={{ marginBottom: '0.75rem' }}>Sankey</h3>
+      <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '128px' }}>
+        <div style={{ width: 640 }}>
+          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>Budget allocation</p>
+          <Chart.Sankey
+            data={{
+              nodes: [
+                { id: 'revenue', label: 'Revenue', color: 'var(--color-blue-700)' },
+                { id: 'grants', label: 'Grants', color: 'var(--color-blue-400)' },
+                { id: 'investments', label: 'Investments', color: 'var(--color-blue-200)' },
+                { id: 'engineering', label: 'Engineering', color: 'var(--color-purple-600)' },
+                { id: 'marketing', label: 'Marketing', color: 'var(--color-purple-400)' },
+                { id: 'operations', label: 'Operations', color: 'var(--color-purple-200)' },
+                { id: 'product', label: 'Product', color: 'var(--color-green-600)' },
+                { id: 'growth', label: 'Growth', color: 'var(--color-green-400)' },
+                { id: 'infra', label: 'Infrastructure', color: 'var(--color-green-200)' },
+              ],
+              links: [
+                { source: 'revenue', target: 'engineering', value: 400 },
+                { source: 'revenue', target: 'marketing', value: 200 },
+                { source: 'revenue', target: 'operations', value: 150 },
+                { source: 'grants', target: 'engineering', value: 80 },
+                { source: 'grants', target: 'operations', value: 40 },
+                { source: 'investments', target: 'marketing', value: 60 },
+                { source: 'investments', target: 'engineering', value: 30 },
+                { source: 'engineering', target: 'product', value: 350 },
+                { source: 'engineering', target: 'infra', value: 160 },
+                { source: 'marketing', target: 'growth', value: 220 },
+                { source: 'marketing', target: 'product', value: 40 },
+                { source: 'operations', target: 'infra', value: 120 },
+                { source: 'operations', target: 'growth', value: 70 },
+              ],
+            }}
+            stages={['Sources', 'Departments', 'Outcomes']}
+            showValues
+            height={380}
+            formatValue={(v) => `$${v}k`}
           />
         </div>
       </div>

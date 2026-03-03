@@ -38,6 +38,7 @@ export interface ChartScrubOptions {
     index: number | null,
     datum: Record<string, unknown> | null,
   ) => void;
+  onActivate?: (index: number, datum: Record<string, unknown>) => void;
 }
 
 export function useChartScrub(opts: ChartScrubOptions) {
@@ -50,6 +51,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
     interpolatorsRef,
     data,
     onActiveChange,
+    onActivate,
   } = opts;
 
   const cursorRef = React.useRef<SVGLineElement>(null);
@@ -114,6 +116,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
       const tip = tooltipRef.current;
       if (tip) {
         const absX = padLeft + clampedX;
+        const totalW = padLeft + plotWidth + PAD_RIGHT;
         if (tooltipMode === 'compact') {
           tip.style.display = '';
           const tipW = tip.offsetWidth;
@@ -122,12 +125,17 @@ export function useChartScrub(opts: ChartScrubOptions) {
           tip.style.left = `${left}px`;
           tip.style.transform = 'none';
         } else {
-          const isLeftHalf = clampedX <= plotWidth / 2;
-          tip.style.left = `${absX}px`;
-          tip.style.transform = isLeftHalf
-            ? `translateX(${TOOLTIP_GAP}px)`
-            : `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
           tip.style.display = '';
+          const tipW = tip.offsetWidth;
+          const fitsRight = absX + TOOLTIP_GAP + tipW <= totalW;
+          const fitsLeft = absX - TOOLTIP_GAP - tipW >= 0;
+          const preferRight = clampedX <= plotWidth / 2;
+          tip.style.left = `${absX}px`;
+          if ((preferRight && fitsRight) || !fitsLeft) {
+            tip.style.transform = `translateX(${TOOLTIP_GAP}px)`;
+          } else {
+            tip.style.transform = `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
+          }
         }
       }
 
@@ -209,6 +217,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
       const tip = tooltipRef.current;
       if (tip) {
         const absX = padLeft + x;
+        const totalW = padLeft + plotWidth + PAD_RIGHT;
         if (tooltipMode === 'compact') {
           tip.style.display = '';
           const tipW = tip.offsetWidth;
@@ -217,12 +226,17 @@ export function useChartScrub(opts: ChartScrubOptions) {
           tip.style.left = `${left}px`;
           tip.style.transform = 'none';
         } else {
-          const isLeftHalf = x <= plotWidth / 2;
-          tip.style.left = `${absX}px`;
-          tip.style.transform = isLeftHalf
-            ? `translateX(${TOOLTIP_GAP}px)`
-            : `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
           tip.style.display = '';
+          const tipW = tip.offsetWidth;
+          const fitsRight = absX + TOOLTIP_GAP + tipW <= totalW;
+          const fitsLeft = absX - TOOLTIP_GAP - tipW >= 0;
+          const preferRight = x <= plotWidth / 2;
+          tip.style.left = `${absX}px`;
+          if ((preferRight && fitsRight) || !fitsLeft) {
+            tip.style.transform = `translateX(${TOOLTIP_GAP}px)`;
+          } else {
+            tip.style.transform = `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
+          }
         }
       }
     },
@@ -238,6 +252,12 @@ export function useChartScrub(opts: ChartScrubOptions) {
         case 'ArrowLeft': case 'ArrowUp': next = Math.max(0, next - 1); break;
         case 'Home': next = 0; break;
         case 'End': next = dataLength - 1; break;
+        case 'Enter': case ' ':
+          if (onActivate && activeIndex !== null && activeIndex < dataLength) {
+            e.preventDefault();
+            onActivate(activeIndex, data[activeIndex]);
+          }
+          return;
         case 'Escape': hideHover(); return;
         default: return;
       }
@@ -245,7 +265,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
       setActiveIndex(next);
       positionAtIndex(next);
     },
-    [dataLength, activeIndex, hideHover, positionAtIndex],
+    [dataLength, activeIndex, hideHover, positionAtIndex, onActivate],
   );
 
   return {

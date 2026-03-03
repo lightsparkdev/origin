@@ -11,6 +11,15 @@
 .svg {
   display: block;
   overflow: visible;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: 2px;
+  }
 }
 
 // Grid
@@ -165,12 +174,99 @@
   }
 }
 
+.barAnimateHorizontal {
+  animation: bar-grow-horizontal 500ms cubic-bezier(0.33, 1, 0.68, 1) both;
+  transform-box: fill-box;
+  transform-origin: left center;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
 @keyframes bar-grow {
   from {
     transform: scaleY(0);
   }
   to {
     transform: scaleY(1);
+  }
+}
+
+@keyframes bar-grow-horizontal {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+// Sankey
+
+.sankeyLink {
+  transition: stroke-opacity 200ms ease;
+  cursor: default;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.sankeyNode {
+  transition: opacity 200ms ease;
+  cursor: default;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.sankeyLabel {
+  @include label-chart;
+
+  font-size: 11px;
+  fill: var(--text-primary);
+  pointer-events: none;
+}
+
+.sankeyValueLabel {
+  fill-opacity: 0.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.sankeyStageLabel {
+  @include label-chart;
+
+  font-size: 10px;
+  fill: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sankeyAnimate {
+  animation: sankey-fade-in 400ms cubic-bezier(0.33, 1, 0.68, 1) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes sankey-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+// Scatter dots
+
+.scatterDotAnimate {
+  opacity: 0;
+  animation: chart-fade-in 400ms ease both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 1;
   }
 }
 
@@ -214,7 +310,7 @@
 
 .pieSegment {
   opacity: 0;
-  animation: pie-fade-in 400ms ease both;
+  animation: chart-fade-in 400ms ease both;
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
@@ -222,7 +318,7 @@
   }
 }
 
-@keyframes pie-fade-in {
+@keyframes chart-fade-in {
   from {
     opacity: 0;
   }
@@ -283,51 +379,6 @@
   margin-inline-start: auto;
 }
 
-// LiveValue
-
-.liveValue {
-  @include label-lg;
-
-  font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
-}
-
-// LiveDot
-
-.liveDot {
-  display: inline-block;
-  width: var(--live-dot-size, 8px);
-  height: var(--live-dot-size, 8px);
-  border-radius: 50%;
-  background-color: var(--live-dot-color);
-  flex-shrink: 0;
-  position: relative;
-}
-
-.liveDotPulse::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background-color: var(--live-dot-color);
-  animation: live-dot-pulse 1.5s ease-out infinite;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
-
-@keyframes live-dot-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.4;
-  }
-  100% {
-    transform: scale(3);
-    opacity: 0;
-  }
-}
-
 // Loading / empty states
 
 .loading {
@@ -372,6 +423,36 @@
   @include label-chart;
 
   font-size: 12px;
+}
+
+// Shared empty and skeleton for HTML-based charts
+
+.chartEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  color: var(--text-tertiary);
+
+  @include label-chart;
+
+  font-size: 12px;
+}
+
+.chartSkeleton {
+  height: 32px;
+  background: linear-gradient(
+    90deg,
+    var(--surface-secondary) 25%,
+    var(--surface-tertiary, var(--surface-secondary)) 50%,
+    var(--surface-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }
 
 // Screen reader only
@@ -524,12 +605,20 @@
   &:hover .barListBar {
     opacity: 0.8;
   }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: -2px;
+  }
 }
 
 .barListBar {
   position: absolute;
   inset: 0;
-  border-radius: var(--corner-radius-xs);
   transition: opacity 150ms ease;
 
   @media (prefers-reduced-motion: reduce) {
@@ -568,14 +657,53 @@
   }
 }
 
+.barListRank {
+  @include tooltip-chart;
+
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.barListValues {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  margin-inline-start: auto;
+  flex-shrink: 0;
+}
+
 .barListValue {
   @include tooltip-chart;
 
   color: var(--bar-list-value-color, var(--text-primary));
   font-size: var(--bar-list-value-size, var(--font-size-xs, 12px));
   font-weight: var(--bar-list-value-weight, var(--font-weight-regular, 400));
-  flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+}
+
+.barListSecondary {
+  @include body-sm;
+
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.barListChange {
+  @include body-sm;
+
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.barListChangeUp {
+  color: var(--text-success, var(--surface-green-strong));
+}
+
+.barListChangeDown {
+  color: var(--text-critical, var(--surface-red-strong, var(--text-tertiary)));
 }
 
 .barListEmpty {
@@ -592,8 +720,13 @@
 
 .barListSkeleton {
   height: 32px;
-  background-color: var(--surface-secondary);
-  border-radius: var(--corner-radius-xs);
+  background: linear-gradient(
+    90deg,
+    var(--surface-secondary) 25%,
+    var(--surface-tertiary, var(--surface-secondary)) 50%,
+    var(--surface-secondary) 75%
+  );
+  background-size: 200% 100%;
   animation: skeleton-shimmer 1.5s ease-in-out infinite;
 
   @media (prefers-reduced-motion: reduce) {
@@ -651,65 +784,6 @@
   color: var(--text-secondary);
 }
 
-// Activity Grid
-
-.activityGrid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3xs);
-}
-
-.activityColLabels {
-  overflow: visible;
-}
-
-.activityColLabel {
-  @include label-chart;
-
-  font-size: 9px;
-  color: var(--text-secondary);
-  text-align: left;
-  white-space: nowrap;
-}
-
-.activityBody {
-  display: flex;
-  gap: var(--spacing-2xs);
-}
-
-.activityRowLabels {
-  display: flex;
-  flex-direction: column;
-}
-
-.activityRowLabel {
-  @include label-chart;
-
-  font-size: 9px;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  white-space: nowrap;
-}
-
-.activityCells {
-  display: grid;
-}
-
-.activityCell {
-  border-radius: 2px;
-  transition: opacity 100ms ease;
-
-  @media (prefers-reduced-motion: reduce) {
-    transition: none;
-  }
-}
-
-.activityCellClickable {
-  cursor: pointer;
-}
-
 // Inline tooltip variants
 
 %tooltipInlineBase {
@@ -730,3 +804,113 @@
 
   color: var(--text-secondary);
 }
+
+// Split (Distribution)
+
+.splitRoot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.splitBarWrap {
+  display: flex;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--border-primary);
+    outline-offset: 2px;
+  }
+}
+
+.splitSegment {
+  min-width: 2px;
+  transition: opacity 150ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.splitSegmentClickable {
+  cursor: pointer;
+}
+
+.splitSkeleton {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--surface-secondary) 25%,
+    var(--surface-tertiary, var(--surface-secondary)) 50%,
+    var(--surface-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+.splitTooltipInline {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+}
+
+.splitTooltipLabel {
+  @include body-sm;
+
+  color: var(--text-secondary);
+}
+
+.splitTooltipValue {
+  @include tooltip-chart;
+
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+// Funnel
+
+.funnelFlowAnimate {
+  animation: funnel-flow-reveal 600ms cubic-bezier(0.33, 1, 0.68, 1) both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes funnel-flow-reveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.funnelSkeletonWrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 0;
+}
+
+// Waterfall
+
+.waterfallConnector {
+  pointer-events: none;
+}
+
+.waterfallValue {
+  fill-opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+

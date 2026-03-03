@@ -386,48 +386,6 @@ export const Live: Story = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  14. LiveValueDemo                                                          */
-/* -------------------------------------------------------------------------- */
-
-function LiveValueWrapper() {
-  const [value, setValue] = React.useState(12847);
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setValue((v) => v + Math.floor(Math.random() * 5) + 1);
-    }, 800);
-    return () => clearInterval(interval);
-  }, []);
-  return (
-    <Chart.LiveValue
-      value={value}
-      formatValue={(v) => `$${Math.round(v).toLocaleString()}`}
-      style={{ fontSize: 32, fontWeight: 500 }}
-    />
-  );
-}
-
-export const LiveValueDemo: Story = {
-  render: () => <LiveValueWrapper />,
-};
-
-/* -------------------------------------------------------------------------- */
-/*  15. LiveDotStates                                                          */
-/* -------------------------------------------------------------------------- */
-
-export const LiveDotStates: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-      {(['active', 'processing', 'idle', 'error'] as const).map((status) => (
-        <div key={status} style={{ textAlign: 'center' }}>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginBottom: 8 }}>{status}</p>
-          <Chart.LiveDot status={status} />
-        </div>
-      ))}
-    </div>
-  ),
-};
-
-/* -------------------------------------------------------------------------- */
 /*  16. Gauge                                                                  */
 /* -------------------------------------------------------------------------- */
 
@@ -511,28 +469,185 @@ export const Uptime: Story = {
 };
 
 /* -------------------------------------------------------------------------- */
-/*  20. ActivityGrid                                                           */
+/*  21. Scatter                                                                */
 /* -------------------------------------------------------------------------- */
 
-const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-const weeks = Array.from({ length: 20 }, (_, i) => `W${i + 1}`);
-
-const activityData = weeks.flatMap((week, ci) =>
-  days.map((day) => ({
-    row: day,
-    col: week,
-    value: ((ci * 7 + days.indexOf(day)) * 37) % 10,
-  })),
-);
-
-export const ActivityGrid: Story = {
+export const Scatter: Story = {
   render: () => (
-    <Chart.ActivityGrid
-      rows={days}
-      columns={weeks}
-      showRowLabels
-      showColumnLabels
-      data={activityData}
-    />
+    <div style={{ width: 500 }}>
+      <Chart.Scatter
+        data={[
+          {
+            key: 'product-a',
+            label: 'Product A',
+            color: 'var(--color-blue-600)',
+            data: [
+              { x: 10, y: 30, label: 'Jan' },
+              { x: 25, y: 55, label: 'Feb' },
+              { x: 40, y: 70, label: 'Mar' },
+              { x: 55, y: 45, label: 'Apr' },
+              { x: 70, y: 85, label: 'May' },
+              { x: 85, y: 60, label: 'Jun' },
+            ],
+          },
+          {
+            key: 'product-b',
+            label: 'Product B',
+            color: 'var(--color-purple-500)',
+            data: [
+              { x: 15, y: 60 },
+              { x: 30, y: 40 },
+              { x: 50, y: 80 },
+              { x: 65, y: 35 },
+              { x: 80, y: 90 },
+            ],
+          },
+        ]}
+        height={300}
+        grid
+        tooltip
+        legend
+        formatXLabel={(v) => `${v}%`}
+        formatYLabel={(v) => `$${v}`}
+      />
+    </div>
+  ),
+};
+
+/* -------------------------------------------------------------------------- */
+/*  22. Split (Distribution)                                                   */
+/* -------------------------------------------------------------------------- */
+
+export const Split: Story = {
+  render: () => (
+    <div style={{ width: 500 }}>
+      <Chart.Split
+        data={[
+          { label: 'Payments', value: 4200, color: 'var(--color-blue-700)' },
+          { label: 'Transfers', value: 2800, color: 'var(--color-blue-400)' },
+          { label: 'Fees', value: 650, color: 'var(--color-blue-200)' },
+          { label: 'Refunds', value: 320, color: 'var(--color-blue-100)' },
+        ]}
+        formatValue={(v) => `$${v.toLocaleString()}`}
+        showValues
+      />
+    </div>
+  ),
+};
+
+/* -------------------------------------------------------------------------- */
+/*  23. BarListRanked                                                          */
+/* -------------------------------------------------------------------------- */
+
+export const BarListRanked: Story = {
+  render: () => (
+    <div style={{ width: 400 }}>
+      <Chart.BarList
+        data={[
+          { name: 'United States', value: 4200, secondaryValue: 32, change: 'up' },
+          { name: 'United Kingdom', value: 2800, secondaryValue: 21, change: 'down' },
+          { name: 'Germany', value: 1500, secondaryValue: 11, change: 'neutral' },
+          { name: 'Japan', value: 900, secondaryValue: 7 },
+          { name: 'Brazil', value: 650, secondaryValue: 5, change: 'up' },
+        ]}
+        formatValue={(v) => `$${v.toLocaleString()}`}
+        formatSecondaryValue={(v) => `${v}%`}
+        showRank
+      />
+    </div>
+  ),
+};
+
+
+/* -------------------------------------------------------------------------- */
+/*  27. Waterfall                                                              */
+/* -------------------------------------------------------------------------- */
+
+export const Waterfall: Story = {
+  render: () => (
+    <div style={{ width: 500 }}>
+      <Chart.Waterfall
+        data={[
+          { label: 'Revenue', value: 420, type: 'total' },
+          { label: 'Product', value: 280 },
+          { label: 'Services', value: 140 },
+          { label: 'Refunds', value: -85 },
+          { label: 'Fees', value: -45 },
+          { label: 'Tax', value: -62 },
+          { label: 'Net', value: 648, type: 'total' },
+        ]}
+        height={300}
+        grid
+        tooltip
+        showValues
+        formatValue={(v) => `$${v}`}
+      />
+    </div>
+  ),
+};
+
+/* -------------------------------------------------------------------------- */
+/*  28. Sankey                                                                 */
+/* -------------------------------------------------------------------------- */
+
+export const Funnel: Story = {
+  render: () => (
+    <div style={{ width: 600 }}>
+      <Chart.Funnel
+        data={[
+          { label: 'Visitors', value: 10000, color: 'var(--color-blue-700)' },
+          { label: 'Sign ups', value: 4200, color: 'var(--color-blue-500)' },
+          { label: 'Activated', value: 2800, color: 'var(--color-blue-400)' },
+          { label: 'Subscribed', value: 1200, color: 'var(--color-blue-300)' },
+          { label: 'Retained', value: 900, color: 'var(--color-blue-200)' },
+        ]}
+        formatValue={(v) => v.toLocaleString()}
+      />
+    </div>
+  ),
+};
+
+/* -------------------------------------------------------------------------- */
+/*  26. Sankey                                                                 */
+/* -------------------------------------------------------------------------- */
+
+export const Sankey: Story = {
+  render: () => (
+    <div style={{ width: 640 }}>
+      <Chart.Sankey
+        data={{
+          nodes: [
+            { id: 'revenue', label: 'Revenue', color: 'var(--color-blue-700)' },
+            { id: 'grants', label: 'Grants', color: 'var(--color-blue-400)' },
+            { id: 'investments', label: 'Investments', color: 'var(--color-blue-200)' },
+            { id: 'engineering', label: 'Engineering', color: 'var(--color-purple-600)' },
+            { id: 'marketing', label: 'Marketing', color: 'var(--color-purple-400)' },
+            { id: 'operations', label: 'Operations', color: 'var(--color-purple-200)' },
+            { id: 'product', label: 'Product', color: 'var(--color-green-600)' },
+            { id: 'growth', label: 'Growth', color: 'var(--color-green-400)' },
+            { id: 'infra', label: 'Infrastructure', color: 'var(--color-green-200)' },
+          ],
+          links: [
+            { source: 'revenue', target: 'engineering', value: 400 },
+            { source: 'revenue', target: 'marketing', value: 200 },
+            { source: 'revenue', target: 'operations', value: 150 },
+            { source: 'grants', target: 'engineering', value: 80 },
+            { source: 'grants', target: 'operations', value: 40 },
+            { source: 'investments', target: 'marketing', value: 60 },
+            { source: 'investments', target: 'engineering', value: 30 },
+            { source: 'engineering', target: 'product', value: 350 },
+            { source: 'engineering', target: 'infra', value: 160 },
+            { source: 'marketing', target: 'growth', value: 220 },
+            { source: 'marketing', target: 'product', value: 40 },
+            { source: 'operations', target: 'infra', value: 120 },
+            { source: 'operations', target: 'growth', value: 70 },
+          ],
+        }}
+        stages={['Sources', 'Departments', 'Outcomes']}
+        showValues
+        height={380}
+        formatValue={(v) => `$${v}k`}
+      />
+    </div>
   ),
 };

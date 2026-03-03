@@ -222,3 +222,166 @@ export function CustomTooltip() {
     />
   );
 }
+
+export function ScatterBasic() {
+  return (
+    <Chart.Scatter
+      data={[
+        {
+          key: 'group-a',
+          label: 'Group A',
+          data: [
+            { x: 10, y: 30 },
+            { x: 40, y: 70 },
+            { x: 70, y: 45 },
+            { x: 90, y: 90 },
+          ],
+        },
+      ]}
+      height={250}
+      grid
+      tooltip
+      data-testid="scatter-chart"
+    />
+  );
+}
+
+export function ScatterMultiSeries() {
+  return (
+    <Chart.Scatter
+      data={[
+        {
+          key: 'a',
+          label: 'Series A',
+          data: [
+            { x: 10, y: 30 },
+            { x: 40, y: 70 },
+            { x: 70, y: 45 },
+          ],
+        },
+        {
+          key: 'b',
+          label: 'Series B',
+          color: 'var(--surface-blue-strong)',
+          data: [
+            { x: 20, y: 60 },
+            { x: 50, y: 20 },
+            { x: 80, y: 80 },
+          ],
+        },
+      ]}
+      height={250}
+      grid
+      tooltip
+      legend
+      data-testid="scatter-chart"
+    />
+  );
+}
+
+export function SplitBasic() {
+  return (
+    <Chart.Split
+      data={[
+        { label: 'Payments', value: 4200 },
+        { label: 'Transfers', value: 2800 },
+        { label: 'Fees', value: 650 },
+      ]}
+      data-testid="split-chart"
+    />
+  );
+}
+
+export function BarListRanked() {
+  return (
+    <Chart.BarList
+      data={[
+        { name: 'United States', value: 4200, change: 'up' as const },
+        { name: 'United Kingdom', value: 2800, change: 'down' as const },
+        { name: 'Germany', value: 1500, change: 'neutral' as const },
+        { name: 'Japan', value: 900 },
+      ]}
+      showRank
+      data-testid="barlist-ranked"
+    />
+  );
+}
+
+
+export function WaterfallBasic() {
+  return (
+    <Chart.Waterfall
+      data={[
+        { label: 'Revenue', value: 420, type: 'total' },
+        { label: 'Product', value: 280 },
+        { label: 'Services', value: 140 },
+        { label: 'Refunds', value: -85 },
+        { label: 'Fees', value: -45 },
+        { label: 'Tax', value: -62 },
+        { label: 'Net', value: 648, type: 'total' },
+      ]}
+      height={300}
+      grid
+      tooltip
+      showConnectors
+      data-testid="waterfall-chart"
+    />
+  );
+}
+
+export function FunnelBasic() {
+  return (
+    <Chart.Funnel
+      data={[
+        { label: 'Visitors', value: 10000 },
+        { label: 'Sign ups', value: 4200 },
+        { label: 'Activated', value: 2800 },
+        { label: 'Subscribed', value: 1200 },
+        { label: 'Retained', value: 900 },
+      ]}
+      data-testid="funnel-chart"
+    />
+  );
+}
+
+export function BarBasic() {
+  return (
+    <Chart.Bar
+      data={[
+        { date: 'Mon', value: 120 },
+        { date: 'Tue', value: 150 },
+        { date: 'Wed', value: 140 },
+        { date: 'Thu', value: 180 },
+        { date: 'Fri', value: 160 },
+      ]}
+      series={[{ key: 'value', label: 'Revenue' }]}
+      xKey="date"
+      height={200}
+      tooltip
+      data-testid="bar-chart"
+    />
+  );
+}
+
+export function SankeyBasic() {
+  return (
+    <Chart.Sankey
+      data={{
+        nodes: [
+          { id: 'a', label: 'Source A' },
+          { id: 'b', label: 'Source B' },
+          { id: 'c', label: 'Target X' },
+          { id: 'd', label: 'Target Y' },
+        ],
+        links: [
+          { source: 'a', target: 'c', value: 30 },
+          { source: 'a', target: 'd', value: 20 },
+          { source: 'b', target: 'c', value: 40 },
+          { source: 'b', target: 'd', value: 10 },
+        ],
+      }}
+      height={300}
+      data-testid="sankey-chart"
+    />
+  );
+}
