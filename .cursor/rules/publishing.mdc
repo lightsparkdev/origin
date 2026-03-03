@@ -4,7 +4,7 @@ Origin publishes to GitHub Packages on release.
 
 ## When to Publish
 
-- After component additions/changes ready for Grid consumption
+- After component additions/changes ready for consumption
 - After token updates
 - After bug fixes affecting consumers
 
@@ -20,7 +20,7 @@ gh release create vX.Y.Z --title "vX.Y.Z" --generate-notes
 
 - Verify build passes: `npm run build`
 - Verify tests pass: `npm run test:unit`
-- Update Grid's dependency version after publishing
+- Update the consuming product's dependency version after publishing
 
 ## Version Guidelines
 
@@ -30,7 +30,7 @@ gh release create vX.Y.Z --title "vX.Y.Z" --generate-notes
 
 ## After Publishing
 
-In Grid, update to the new version:
+In the consuming product, update to the new version:
 
 ```bash
 npm install @lightsparkdev/origin@latest

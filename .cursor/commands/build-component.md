@@ -113,7 +113,7 @@
     - `npm run build` — catch export/import errors
     - `npm test` — full test suite
 
-14. **Publish (if ready for Grid)**:
+14. **Publish (if ready for consumers)**:
     > "Component is exported and tested. Ready to publish?
     > - Yes → Follow `publishing.mdc` to release a new version
     > - Not yet → Skip, publish later with other changes"
