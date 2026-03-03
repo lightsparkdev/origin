@@ -66,7 +66,7 @@ export const SidePanel: StoryObj = {
                     {[
                       ['Request ID', 'ck8qs-177'],
                       ['Path', '/customers'],
-                      ['Host', 'grid-k507nwxq0.vercel.app'],
+                      ['Host', 'api.example.com'],
                       ['Duration', '314ms'],
                       ['Cache', 'HIT'],
                     ].map(([label, value]) => (

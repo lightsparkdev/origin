@@ -1525,9 +1525,9 @@ function LiveDemo() {
 }
 
 const drawerRequests = [
-  { id: 'ck8qs-177', method: 'GET', path: '/customers', status: 200, duration: '314ms', host: 'grid-k507nwxq0.vercel.app', cache: 'HIT' },
-  { id: 'ck8qs-178', method: 'POST', path: '/transactions', status: 201, duration: '892ms', host: 'grid-k507nwxq0.vercel.app', cache: 'MISS' },
-  { id: 'ck8qs-179', method: 'GET', path: '/fees', status: 200, duration: '156ms', host: 'grid-k507nwxq0.vercel.app', cache: 'HIT' },
+  { id: 'ck8qs-177', method: 'GET', path: '/customers', status: 200, duration: '314ms', host: 'api.example.com', cache: 'HIT' },
+  { id: 'ck8qs-178', method: 'POST', path: '/transactions', status: 201, duration: '892ms', host: 'api.example.com', cache: 'MISS' },
+  { id: 'ck8qs-179', method: 'GET', path: '/fees', status: 200, duration: '156ms', host: 'api.example.com', cache: 'HIT' },
 ];
 
 function DrawerDemo() {
