@@ -11,6 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/lightsparkdev/origin.git"
   },
+  "homepage": "https://github.com/lightsparkdev/origin#readme",
+  "bugs": {
+    "url": "https://github.com/lightsparkdev/origin/issues"
+  },
   "type": "module",
   "main": "./src/index.ts",
   "exports": {

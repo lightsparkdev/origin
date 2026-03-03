@@ -6,7 +6,11 @@ import { resolve } from 'path';
 config({ path: resolve(process.cwd(), '.env.local') });
 
 export const FIGMA_TOKEN = process.env.FIGMA_TOKEN;
-export const FILE_KEY = '3JvbUyTqbbPL8cCpwSX0j4';
+export const FILE_KEY = process.env.FIGMA_FILE_KEY;
+
+if (!FILE_KEY) {
+  throw new Error('FIGMA_FILE_KEY not found in environment');
+}
 
 export interface FigmaColor {
   r: number;

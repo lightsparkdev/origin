@@ -1,5 +1,3 @@
-// Figma: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system?node-id=6338-2213
-
 'use client';
 
 import * as React from 'react';
