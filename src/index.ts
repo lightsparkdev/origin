@@ -15,17 +15,17 @@ export { Accordion } from './components/Accordion';
 export { AlertDialog } from './components/AlertDialog';
 export { Autocomplete } from './components/Autocomplete';
 export { Breadcrumb } from './components/Breadcrumb';
-export * as Calendar from './components/Calendar';
+export * as DatePicker from './components/DatePicker';
 export type {
-  CalendarRootProps,
-  CalendarHeaderProps,
-  CalendarNavigationProps,
-  CalendarGridProps,
-  CalendarControlsProps,
-  CalendarControlItemProps,
-  CalendarFooterProps,
+  DatePickerRootProps,
+  DatePickerHeaderProps,
+  DatePickerNavigationProps,
+  DatePickerGridProps,
+  DatePickerControlsProps,
+  DatePickerControlItemProps,
+  DatePickerFooterProps,
   DateRange,
-} from './components/Calendar';
+} from './components/DatePicker';
 
 export { Card } from './components/Card';
 export { Collapsible } from './components/Collapsible';

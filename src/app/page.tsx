@@ -61,8 +61,8 @@ import { Popover } from '@/components/Popover';
 import { PreviewCard } from '@/components/PreviewCard';
 import { Logo } from '@/components/Logo';
 import { Toggle, ToggleGroup } from '@/components/Toggle';
-import * as Calendar from '@/components/Calendar';
-import type { DateRange } from '@/components/Calendar';
+import * as DatePicker from '@/components/DatePicker';
+import type { DateRange } from '@/components/DatePicker';
 // Data for combobox examples
 const fruits = ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry', 'Fig', 'Grape'];
 
@@ -1610,7 +1610,7 @@ function DrawerDemo() {
   );
 }
 
-function CalendarDemo() {
+function DatePickerDemo() {
   const [singleDate, setSingleDate] = React.useState<Date | null>(null);
   const [rangeValue, setRangeValue] = React.useState<Date | DateRange | null>(null);
   const [mode, setMode] = React.useState<'single' | 'range'>('range');
@@ -1620,28 +1620,28 @@ function CalendarDemo() {
     <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', marginBottom: '128px' }}>
       <div>
         <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>Single date</p>
-        <Calendar.Root value={singleDate} onValueChange={(v) => setSingleDate(v as Date)}>
-          <Calendar.Header />
-          <Calendar.Navigation />
-          <Calendar.Grid />
-          <Calendar.Footer>
+        <DatePicker.Root value={singleDate} onValueChange={(v) => setSingleDate(v as Date)}>
+          <DatePicker.Header />
+          <DatePicker.Navigation />
+          <DatePicker.Grid />
+          <DatePicker.Footer>
             <Button variant="outline" size="compact" style={{ width: '100%' }}>Apply</Button>
-          </Calendar.Footer>
-        </Calendar.Root>
+          </DatePicker.Footer>
+        </DatePicker.Root>
       </div>
       <div>
         <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>Date range</p>
-        <Calendar.Root
+        <DatePicker.Root
           mode={mode}
           includeTime={includeTime}
           value={rangeValue}
           onValueChange={setRangeValue}
         >
-          <Calendar.Header />
-          <Calendar.Navigation />
-          <Calendar.Grid />
-          <Calendar.Controls>
-            <Calendar.ControlItem label="End date">
+          <DatePicker.Header />
+          <DatePicker.Navigation />
+          <DatePicker.Grid />
+          <DatePicker.Controls>
+            <DatePicker.ControlItem label="End date">
               <Switch
                 size="sm"
                 checked={mode === 'range'}
@@ -1650,19 +1650,19 @@ function CalendarDemo() {
                   setRangeValue(null);
                 }}
               />
-            </Calendar.ControlItem>
-            <Calendar.ControlItem label="Include time">
+            </DatePicker.ControlItem>
+            <DatePicker.ControlItem label="Include time">
               <Switch size="sm" checked={includeTime} onCheckedChange={setIncludeTime} />
-            </Calendar.ControlItem>
-          </Calendar.Controls>
-          <Calendar.Footer>
+            </DatePicker.ControlItem>
+          </DatePicker.Controls>
+          <DatePicker.Footer>
             <Button variant="outline" size="compact" style={{ width: '100%' }}>Apply</Button>
-          </Calendar.Footer>
-        </Calendar.Root>
+          </DatePicker.Footer>
+        </DatePicker.Root>
       </div>
       <div>
         <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>French (locale)</p>
-        <Calendar.Root
+        <DatePicker.Root
           mode={mode}
           includeTime={includeTime}
           value={rangeValue}
@@ -1680,11 +1680,11 @@ function CalendarDemo() {
             endTime: 'Heure de fin',
           }}
         >
-          <Calendar.Header />
-          <Calendar.Navigation />
-          <Calendar.Grid />
-          <Calendar.Controls>
-            <Calendar.ControlItem label="Date de fin">
+          <DatePicker.Header />
+          <DatePicker.Navigation />
+          <DatePicker.Grid />
+          <DatePicker.Controls>
+            <DatePicker.ControlItem label="Date de fin">
               <Switch
                 size="sm"
                 checked={mode === 'range'}
@@ -1693,15 +1693,15 @@ function CalendarDemo() {
                   setRangeValue(null);
                 }}
               />
-            </Calendar.ControlItem>
-            <Calendar.ControlItem label="Inclure l'heure">
+            </DatePicker.ControlItem>
+            <DatePicker.ControlItem label="Inclure l'heure">
               <Switch size="sm" checked={includeTime} onCheckedChange={setIncludeTime} />
-            </Calendar.ControlItem>
-          </Calendar.Controls>
-          <Calendar.Footer>
+            </DatePicker.ControlItem>
+          </DatePicker.Controls>
+          <DatePicker.Footer>
             <Button variant="outline" size="compact" style={{ width: '100%' }}>Appliquer</Button>
-          </Calendar.Footer>
-        </Calendar.Root>
+          </DatePicker.Footer>
+        </DatePicker.Root>
       </div>
     </div>
   );
@@ -2033,8 +2033,6 @@ export default function Home() {
           </ButtonGroup>
         </div>
       </div>
-      <h2 style={{ marginBottom: '1rem' }}>Calendar</h2>
-      <CalendarDemo />
       <div style={{ marginBottom: '128px' }} />
 
       <h2 style={{ marginBottom: '1rem' }}>Card Component</h2>
@@ -2693,6 +2691,10 @@ export default function Home() {
       <h2 style={{ marginBottom: '1rem' }}>Context Menu Component</h2>
       
       <ContextMenuExamples />
+      <div style={{ marginBottom: '128px' }} />
+
+      <h2 style={{ marginBottom: '1rem' }}>DatePicker</h2>
+      <DatePickerDemo />
       <div style={{ marginBottom: '128px' }} />
 
       <h2 style={{ marginBottom: '1rem' }}>Dialog Component</h2>

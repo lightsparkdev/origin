@@ -6,7 +6,7 @@ import { CentralIcon } from '../Icon';
 import { Input } from '../Input';
 import { Fieldset } from '../Fieldset';
 import { useTrackedCallback } from '../Analytics/useTrackedCallback';
-import styles from './Calendar.module.scss';
+import styles from './DatePicker.module.scss';
 
 function startOfDay(date: Date): Date {
   const d = new Date(date);
@@ -139,7 +139,7 @@ export interface DateRange {
   end: Date;
 }
 
-export interface CalendarLabels {
+export interface DatePickerLabels {
   previousMonth: string;
   nextMonth: string;
   date: string;
@@ -154,7 +154,7 @@ export interface CalendarLabels {
   endDateAndTime: string;
 }
 
-const DEFAULT_LABELS: CalendarLabels = {
+const DEFAULT_LABELS: DatePickerLabels = {
   previousMonth: 'Previous month',
   nextMonth: 'Next month',
   date: 'Date',
@@ -179,7 +179,7 @@ export interface DayCellState {
   isInRange: boolean;
 }
 
-export interface CalendarRootProps extends React.ComponentPropsWithoutRef<'div'> {
+export interface DatePickerRootProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Selection mode. */
   mode?: 'single' | 'range';
   /** Whether time inputs are shown in the header. */
@@ -205,12 +205,12 @@ export interface CalendarRootProps extends React.ComponentPropsWithoutRef<'div'>
   /** First day of week: 0 = Sunday, 1 = Monday. */
   weekStartsOn?: 0 | 1;
   /** Override accessibility labels for navigation and inputs. */
-  labels?: Partial<CalendarLabels>;
+  labels?: Partial<DatePickerLabels>;
   /** Analytics tracking name. */
   analyticsName?: string;
 }
 
-interface CalendarContextValue {
+interface DatePickerContextValue {
   viewYear: number;
   viewMonth: number;
   goToPreviousMonth: () => void;
@@ -237,23 +237,23 @@ interface CalendarContextValue {
 
   locale: string;
   weekStartsOn: 0 | 1;
-  labels: CalendarLabels;
+  labels: DatePickerLabels;
 }
 
-const CalendarContext = React.createContext<CalendarContextValue | undefined>(
+const DatePickerContext = React.createContext<DatePickerContextValue | undefined>(
   undefined,
 );
 
-function useCalendarContext() {
-  const context = React.useContext(CalendarContext);
+function useDatePickerContext() {
+  const context = React.useContext(DatePickerContext);
   if (context === undefined) {
-    throw new Error('Calendar parts must be placed within <Calendar.Root>.');
+    throw new Error('DatePicker parts must be placed within <DatePicker.Root>.');
   }
   return context;
 }
 
-export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
-  function CalendarRoot(props, forwardedRef) {
+export const Root = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
+  function DatePickerRoot(props, forwardedRef) {
     const {
       className,
       children,
@@ -278,8 +278,8 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
       if (monthProp !== undefined && !onMonthChange) {
         // eslint-disable-next-line no-console
         console.warn(
-          'Calendar: `month` prop provided without `onMonthChange`. ' +
-            'The calendar will navigate internally but the controlled prop will become stale.',
+          'DatePicker: `month` prop provided without `onMonthChange`. ' +
+            'The date picker will navigate internally but the controlled prop will become stale.',
         );
       }
     }
@@ -400,7 +400,7 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
 
     const trackedSelect = useTrackedCallback(
       analyticsName,
-      'Calendar',
+      'DatePicker',
       'change',
       onValueChange,
       (val: Date | DateRange) => ({
@@ -502,7 +502,7 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
       [mode, singleValue, rangeValue, trackedSelect],
     );
 
-    const contextValue = React.useMemo<CalendarContextValue>(
+    const contextValue = React.useMemo<DatePickerContextValue>(
       () => ({
         viewYear,
         viewMonth,
@@ -554,7 +554,7 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
     );
 
     return (
-      <CalendarContext.Provider value={contextValue}>
+      <DatePickerContext.Provider value={contextValue}>
         <div
           ref={forwardedRef}
           className={clsx(styles.root, className)}
@@ -562,7 +562,7 @@ export const Root = React.forwardRef<HTMLDivElement, CalendarRootProps>(
         >
           {children}
         </div>
-      </CalendarContext.Provider>
+      </DatePickerContext.Provider>
     );
   },
 );
@@ -626,7 +626,7 @@ function DateInput({
   label: string;
   which: 'start' | 'end';
 }) {
-  const ctx = useCalendarContext();
+  const ctx = useDatePickerContext();
   const formatted = formatDateValue(date, ctx.locale);
   const [draft, setDraft] = React.useState(formatted);
   const [hasFocus, setHasFocus] = React.useState(false);
@@ -783,7 +783,7 @@ function DateTimeRow({
 }
 
 function HeaderAutoLayout() {
-  const ctx = useCalendarContext();
+  const ctx = useDatePickerContext();
   const l = ctx.labels;
 
   if (ctx.mode === 'single' && !ctx.includeTime) {
@@ -841,11 +841,11 @@ function HeaderAutoLayout() {
   );
 }
 
-export interface CalendarHeaderProps
+export interface DatePickerHeaderProps
   extends React.ComponentPropsWithoutRef<'div'> {}
 
-export const Header = React.forwardRef<HTMLDivElement, CalendarHeaderProps>(
-  function CalendarHeader({ className, children, ...props }, forwardedRef) {
+export const Header = React.forwardRef<HTMLDivElement, DatePickerHeaderProps>(
+  function DatePickerHeader({ className, children, ...props }, forwardedRef) {
     return (
       <div
         ref={forwardedRef}
@@ -858,15 +858,15 @@ export const Header = React.forwardRef<HTMLDivElement, CalendarHeaderProps>(
   },
 );
 
-export interface CalendarNavigationProps
+export interface DatePickerNavigationProps
   extends React.ComponentPropsWithoutRef<'div'> {}
 
 export const Navigation = React.forwardRef<
   HTMLDivElement,
-  CalendarNavigationProps
->(function CalendarNavigation(props, forwardedRef) {
+  DatePickerNavigationProps
+>(function DatePickerNavigation(props, forwardedRef) {
   const { className, ...elementProps } = props;
-  const ctx = useCalendarContext();
+  const ctx = useDatePickerContext();
   const { viewYear, viewMonth, goToPreviousMonth, goToNextMonth, locale, labels } = ctx;
 
   const monthLabel = new Date(viewYear, viewMonth, 1).toLocaleDateString(
@@ -914,11 +914,11 @@ export const Navigation = React.forwardRef<
   );
 });
 
-export interface CalendarControlsProps
+export interface DatePickerControlsProps
   extends React.ComponentPropsWithoutRef<'div'> {}
 
-export const Controls = React.forwardRef<HTMLDivElement, CalendarControlsProps>(
-  function CalendarControls({ className, children, ...props }, forwardedRef) {
+export const Controls = React.forwardRef<HTMLDivElement, DatePickerControlsProps>(
+  function DatePickerControls({ className, children, ...props }, forwardedRef) {
     return (
       <div
         ref={forwardedRef}
@@ -931,7 +931,7 @@ export const Controls = React.forwardRef<HTMLDivElement, CalendarControlsProps>(
   },
 );
 
-export interface CalendarControlItemProps
+export interface DatePickerControlItemProps
   extends React.ComponentPropsWithoutRef<'div'> {
   /** Text label for the control. */
   label: string;
@@ -939,8 +939,8 @@ export interface CalendarControlItemProps
 
 export const ControlItem = React.forwardRef<
   HTMLDivElement,
-  CalendarControlItemProps
->(function CalendarControlItem(
+  DatePickerControlItemProps
+>(function DatePickerControlItem(
   { className, label, children, ...props },
   forwardedRef,
 ) {
@@ -956,11 +956,11 @@ export const ControlItem = React.forwardRef<
   );
 });
 
-export interface CalendarFooterProps
+export interface DatePickerFooterProps
   extends React.ComponentPropsWithoutRef<'div'> {}
 
-export const Footer = React.forwardRef<HTMLDivElement, CalendarFooterProps>(
-  function CalendarFooter({ className, children, ...props }, forwardedRef) {
+export const Footer = React.forwardRef<HTMLDivElement, DatePickerFooterProps>(
+  function DatePickerFooter({ className, children, ...props }, forwardedRef) {
     return (
       <div
         ref={forwardedRef}
@@ -973,16 +973,16 @@ export const Footer = React.forwardRef<HTMLDivElement, CalendarFooterProps>(
   },
 );
 
-export interface CalendarGridProps
+export interface DatePickerGridProps
   extends React.ComponentPropsWithoutRef<'table'> {
   /** Custom render function for day cell content. */
   renderDay?: (date: Date, state: DayCellState) => React.ReactNode;
 }
 
-export const Grid = React.forwardRef<HTMLTableElement, CalendarGridProps>(
-  function CalendarGrid(props, forwardedRef) {
+export const Grid = React.forwardRef<HTMLTableElement, DatePickerGridProps>(
+  function DatePickerGrid(props, forwardedRef) {
     const { className, renderDay, ...elementProps } = props;
-    const ctx = useCalendarContext();
+    const ctx = useDatePickerContext();
 
     const gridRef = React.useRef<HTMLTableElement>(null);
     const mergedRef = React.useCallback(
@@ -1228,11 +1228,11 @@ export const Grid = React.forwardRef<HTMLTableElement, CalendarGridProps>(
 );
 
 if (process.env.NODE_ENV !== 'production') {
-  Root.displayName = 'Calendar.Root';
-  Header.displayName = 'Calendar.Header';
-  Navigation.displayName = 'Calendar.Navigation';
-  Grid.displayName = 'Calendar.Grid';
-  Controls.displayName = 'Calendar.Controls';
-  ControlItem.displayName = 'Calendar.ControlItem';
-  Footer.displayName = 'Calendar.Footer';
+  Root.displayName = 'DatePicker.Root';
+  Header.displayName = 'DatePicker.Header';
+  Navigation.displayName = 'DatePicker.Navigation';
+  Grid.displayName = 'DatePicker.Grid';
+  Controls.displayName = 'DatePicker.Controls';
+  ControlItem.displayName = 'DatePicker.ControlItem';
+  Footer.displayName = 'DatePicker.Footer';
 }

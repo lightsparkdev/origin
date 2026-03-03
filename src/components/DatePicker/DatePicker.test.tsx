@@ -25,9 +25,9 @@ import {
   TestRenderDay,
   TestLocaleWithTime,
   TestDateInputMinMax,
-} from './Calendar.test-stories';
+} from './DatePicker.test-stories';
 
-test.describe('Calendar', () => {
+test.describe('DatePicker', () => {
   test('renders current month with weekday headers and day grid', async ({
     mount,
     page,

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import * as Calendar from './index';
+import * as DatePicker from './index';
 import type { DateRange, DayCellState } from './index';
 import { Switch } from '../Switch';
 import { Button } from '../Button';
@@ -8,16 +8,16 @@ import { Button } from '../Button';
 function SingleCalendar() {
   const [value, setValue] = useState<Date | null>(null);
   return (
-    <Calendar.Root value={value} onValueChange={(v) => setValue(v as Date)}>
-      <Calendar.Header />
-      <Calendar.Navigation />
-      <Calendar.Grid />
-      <Calendar.Footer>
+    <DatePicker.Root value={value} onValueChange={(v) => setValue(v as Date)}>
+      <DatePicker.Header />
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+      <DatePicker.Footer>
         <Button variant="outline" size="compact" style={{ width: '100%' }}>
           Apply
         </Button>
-      </Calendar.Footer>
-    </Calendar.Root>
+      </DatePicker.Footer>
+    </DatePicker.Root>
   );
 }
 
@@ -27,17 +27,17 @@ function RangeCalendar() {
   const [value, setValue] = useState<Date | DateRange | null>(null);
 
   return (
-    <Calendar.Root
+    <DatePicker.Root
       mode={mode}
       includeTime={includeTime}
       value={value}
       onValueChange={setValue}
     >
-      <Calendar.Header />
-      <Calendar.Navigation />
-      <Calendar.Grid />
-      <Calendar.Controls>
-        <Calendar.ControlItem label="End date">
+      <DatePicker.Header />
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+      <DatePicker.Controls>
+        <DatePicker.ControlItem label="End date">
           <Switch
             size="sm"
             checked={mode === 'range'}
@@ -46,52 +46,52 @@ function RangeCalendar() {
               setValue(null);
             }}
           />
-        </Calendar.ControlItem>
-        <Calendar.ControlItem label="Include time">
+        </DatePicker.ControlItem>
+        <DatePicker.ControlItem label="Include time">
           <Switch
             size="sm"
             checked={includeTime}
             onCheckedChange={setIncludeTime}
           />
-        </Calendar.ControlItem>
-      </Calendar.Controls>
-      <Calendar.Footer>
+        </DatePicker.ControlItem>
+      </DatePicker.Controls>
+      <DatePicker.Footer>
         <Button variant="outline" size="compact" style={{ width: '100%' }}>
           Apply
         </Button>
-      </Calendar.Footer>
-    </Calendar.Root>
+      </DatePicker.Footer>
+    </DatePicker.Root>
   );
 }
 
 function WithTimeCalendar() {
   const [value, setValue] = useState<Date | null>(null);
   return (
-    <Calendar.Root
+    <DatePicker.Root
       value={value}
       onValueChange={(v) => setValue(v as Date)}
       includeTime
     >
-      <Calendar.Header />
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Header />
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
 function RangeWithTimeCalendar() {
   const [value, setValue] = useState<DateRange | null>(null);
   return (
-    <Calendar.Root
+    <DatePicker.Root
       mode="range"
       includeTime
       value={value}
       onValueChange={(v) => setValue(v as DateRange)}
     >
-      <Calendar.Header />
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Header />
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
@@ -102,48 +102,48 @@ function ConstrainedCalendar() {
   max.setMonth(max.getMonth() + 3);
 
   return (
-    <Calendar.Root
+    <DatePicker.Root
       value={value}
       onValueChange={(v) => setValue(v as Date)}
       min={today}
       max={max}
     >
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
 function WeekdaysOnlyCalendar() {
   const [value, setValue] = useState<Date | null>(null);
   return (
-    <Calendar.Root
+    <DatePicker.Root
       value={value}
       onValueChange={(v) => setValue(v as Date)}
       disabled={(date) => date.getDay() === 0 || date.getDay() === 6}
     >
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
 function MondayStartCalendar() {
   const [value, setValue] = useState<Date | null>(null);
   return (
-    <Calendar.Root
+    <DatePicker.Root
       value={value}
       onValueChange={(v) => setValue(v as Date)}
       weekStartsOn={1}
     >
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
 const meta: Meta = {
-  title: 'Components/Calendar',
+  title: 'Components/DatePicker',
   parameters: { layout: 'centered' },
 };
 
@@ -182,7 +182,7 @@ export const MondayStart: Story = {
 function GermanCalendar() {
   const [value, setValue] = useState<Date | null>(null);
   return (
-    <Calendar.Root
+    <DatePicker.Root
       value={value}
       onValueChange={(v) => setValue(v as Date)}
       locale="de-DE"
@@ -193,10 +193,10 @@ function GermanCalendar() {
         date: 'Datum',
       }}
     >
-      <Calendar.Header />
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Header />
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
@@ -207,15 +207,15 @@ export const LocaleGerman: Story = {
 function JapaneseCalendar() {
   const [value, setValue] = useState<Date | null>(null);
   return (
-    <Calendar.Root
+    <DatePicker.Root
       value={value}
       onValueChange={(v) => setValue(v as Date)}
       locale="ja-JP"
     >
-      <Calendar.Header />
-      <Calendar.Navigation />
-      <Calendar.Grid />
-    </Calendar.Root>
+      <DatePicker.Header />
+      <DatePicker.Navigation />
+      <DatePicker.Grid />
+    </DatePicker.Root>
   );
 }
 
@@ -228,9 +228,9 @@ function EventDotsCalendar() {
   const eventDays = new Set([3, 7, 14, 21, 28]);
 
   return (
-    <Calendar.Root value={value} onValueChange={(v) => setValue(v as Date)}>
-      <Calendar.Navigation />
-      <Calendar.Grid
+    <DatePicker.Root value={value} onValueChange={(v) => setValue(v as Date)}>
+      <DatePicker.Navigation />
+      <DatePicker.Grid
         renderDay={(date: Date, state: DayCellState) => (
           <span style={{ position: 'relative' }}>
             {date.getDate()}
@@ -252,7 +252,7 @@ function EventDotsCalendar() {
           </span>
         )}
       />
-    </Calendar.Root>
+    </DatePicker.Root>
   );
 }
 
