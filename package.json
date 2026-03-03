@@ -62,8 +62,7 @@
     "@base-ui/utils": "^0.2.3",
     "@tanstack/react-table": "^8.21.3",
     "ajv": "^8.18.0",
-    "clsx": "^2.1.1",
-    "motion": "^12.23.26"
+    "clsx": "^2.1.1"
   },
   "peerDependencies": {
     "next": ">=14",
