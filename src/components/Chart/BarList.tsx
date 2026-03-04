@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface BarListItem {
@@ -33,7 +35,8 @@ export interface BarListProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Format the secondary value for display. */
   formatSecondaryValue?: (value: number) => string;
   /** Called when a row is clicked. */
-  onClickItem?: (item: BarListItem, index: number) => void;
+  onClickDatum?: (item: BarListItem, index: number) => void;
+  analyticsName?: string;
   /** Show numbered rank in front of each row. */
   showRank?: boolean;
   /** Maximum number of items to display. */
@@ -46,11 +49,15 @@ export interface BarListProps extends React.ComponentPropsWithoutRef<'div'> {
   ariaLabel?: string;
 }
 
+const SKELETON_HEIGHT = 120;
+
 const CHANGE_ARROWS: Record<string, string> = {
   up: '\u2191',
   down: '\u2193',
   neutral: '\u2013',
 };
+
+const barListClickMeta = (item: BarListItem) => ({ name: item.name });
 
 export const BarList = React.forwardRef<HTMLDivElement, BarListProps>(
   function BarList(
@@ -59,7 +66,8 @@ export const BarList = React.forwardRef<HTMLDivElement, BarListProps>(
       color = 'var(--surface-secondary)',
       formatValue,
       formatSecondaryValue,
-      onClickItem,
+      onClickDatum,
+      analyticsName,
       showRank,
       max,
       loading,
@@ -70,35 +78,26 @@ export const BarList = React.forwardRef<HTMLDivElement, BarListProps>(
     },
     ref,
   ) {
-    if (loading) {
-      return (
-        <div ref={ref} className={clsx(styles.barList, className)} {...props}>
-          {[1, 2, 3].map((i) => (
-            <div key={i} className={styles.barListRow}>
-              <div className={styles.barListSkeleton} style={{ width: `${90 - i * 20}%` }} />
-            </div>
-          ))}
-        </div>
-      );
-    }
+    const trackedClickItem = useTrackedCallback(
+      analyticsName, 'Chart.BarList', 'click', onClickDatum,
+      onClickDatum ? barListClickMeta : undefined,
+    );
 
     const items = max ? data.slice(0, max) : data;
-
-    if (items.length === 0 && empty !== undefined) {
-      return (
-        <div ref={ref} className={clsx(styles.barList, className)} {...props}>
-          <div className={styles.barListEmpty}>
-            {typeof empty === 'boolean' ? 'No data' : empty}
-          </div>
-        </div>
-      );
-    }
 
     const maxValue = Math.max(...items.map((d) => d.value), 1);
     const fmtValue = (v: number) => (formatValue ? formatValue(v) : String(v));
     const fmtSecondary = (v: number) => (formatSecondaryValue ? formatSecondaryValue(v) : String(v));
 
     return (
+      <ChartWrapper
+        ref={ref}
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={SKELETON_HEIGHT}
+        className={className}
+      >
       <div
         ref={ref}
         className={clsx(styles.barList, className)}
@@ -109,18 +108,19 @@ export const BarList = React.forwardRef<HTMLDivElement, BarListProps>(
         {items.map((item, i) => {
           const pct = (item.value / maxValue) * 100;
           const barColor = item.color ?? color;
-          const clickable = Boolean(onClickItem || item.href);
+          const clickable = Boolean(onClickDatum || item.href);
           const display = item.displayValue ?? fmtValue(item.value);
 
           return (
             <div
               key={item.key ?? i}
-              className={clsx(styles.barListRow, clickable && styles.barListRowClickable)}
+              className={styles.barListRow}
+              data-clickable={clickable || undefined}
               role="listitem"
               tabIndex={clickable ? 0 : undefined}
-              onClick={onClickItem ? () => onClickItem(item, i) : undefined}
-              onKeyDown={onClickItem ? (e: React.KeyboardEvent) => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClickItem(item, i); }
+              onClick={onClickDatum ? () => trackedClickItem(item, i) : undefined}
+              onKeyDown={onClickDatum ? (e: React.KeyboardEvent) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trackedClickItem(item, i); }
               } : undefined}
             >
               <div className={styles.barListBar} style={{ width: `${pct}%`, backgroundColor: barColor }} />
@@ -155,6 +155,7 @@ export const BarList = React.forwardRef<HTMLDivElement, BarListProps>(
           );
         })}
       </div>
+      </ChartWrapper>
     );
   },
 );

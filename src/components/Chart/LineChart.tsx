@@ -15,7 +15,9 @@ import {
   axisPadForLabels,
   type Point,
 } from './utils';
-import { useResizeWidth, useChartScrub } from './hooks';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
+import { useResizeWidth, useChartInteraction } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type Series,
   type ResolvedSeries,
@@ -34,6 +36,8 @@ import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export type { Series, TooltipProp, ReferenceLine, ReferenceBand };
+
+const clickIndexMeta = (index: number) => ({ index });
 
 export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Array of data objects. Each object should contain keys matching `dataKey` or `series[].key`. */
@@ -87,7 +91,7 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
   empty?: React.ReactNode;
   /** Accessible label for the chart SVG. */
   ariaLabel?: string;
-  /** Disables scrub interaction, cursor, dots, and tooltip. */
+  /** Disables interaction, cursor, dots, and tooltip. */
   interactive?: boolean;
   /** Called when the hovered data point changes. Receives `null` on leave. */
   onActiveChange?: (
@@ -99,6 +103,8 @@ export interface LineChartProps extends React.ComponentPropsWithoutRef<'div'> {
     index: number,
     datum: Record<string, unknown>,
   ) => void;
+  /** Analytics name for event tracking. */
+  analyticsName?: string;
   /** Format values in tooltips. */
   formatValue?: (value: number) => string;
   /** Format x-axis labels. */
@@ -137,6 +143,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
       interactive = true,
       onActiveChange,
       onClickDatum,
+      analyticsName,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -147,6 +154,10 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     ref,
   ) {
     const { width, attachRef } = useResizeWidth();
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.Line', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
+    );
     const uid = React.useId().replace(/:/g, '');
 
     const tooltipMode = resolveTooltipMode(tooltipProp);
@@ -154,14 +165,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const mergedRef = useMergedRef(ref, attachRef);
 
     const series = React.useMemo<ResolvedSeries[]>(
       () => resolveSeries(seriesProp, dataKey, color),
@@ -387,7 +391,7 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
     }, [interpolators]);
 
     // Scrub interaction
-    const scrub = useChartScrub({
+    const scrub = useChartInteraction({
       dataLength: data.length,
       seriesCount: series.length,
       plotWidth,
@@ -408,8 +412,8 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     const handleClick = React.useCallback(() => {
       if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
-      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
-    }, [onClickDatum, scrub.activeIndex, data]);
+      trackedClick(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, trackedClick, scrub.activeIndex, data]);
 
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
@@ -434,12 +438,14 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={data.length}
         height={height}
         legend={legend}
         series={series}
+        className={className}
         ariaLiveContent={interactive ? ariaLiveContent : undefined}
       >
         <div

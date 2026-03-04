@@ -4,6 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { linearScale, niceTicks, thinIndices, dynamicTickTarget, measureLabelWidth, axisPadForLabels } from './utils';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type Series,
   type ResolvedSeries,
@@ -21,9 +22,12 @@ import {
   axisTickTarget,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Chart.module.scss';
 
 const EMPTY_TICKS = { min: 0, max: 1, ticks: [0, 1] } as const;
+
+const clickIndexMeta = (index: number) => ({ index });
 
 export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: Record<string, unknown>[];
@@ -59,6 +63,9 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   empty?: React.ReactNode;
   /** Click handler called with the active data index and datum. */
   onClickDatum?: (index: number, datum: Record<string, unknown>) => void;
+  analyticsName?: string;
+  /** Disables interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
   /** Control bar mount animation. Defaults to `true`. */
   animate?: boolean;
   /** Per-data-point color override. Return a CSS color string to override `series.color`, or `undefined` to keep the default. */
@@ -92,6 +99,8 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       loading,
       empty,
       onClickDatum,
+      analyticsName,
+      interactive: interactiveProp = true,
       animate = true,
       getBarColor,
       orientation = 'vertical',
@@ -105,17 +114,15 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
     const tooltipMode = resolveTooltipMode(tooltipProp);
-    const showTooltip = tooltipMode !== 'off';
+    const showTooltip = interactiveProp && tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
+    const mergedRef = useMergedRef(ref, attachRef);
+
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.Bar', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
     );
 
     const series = React.useMemo<ResolvedSeries[]>(
@@ -344,7 +351,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
           case ' ':
             if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
               e.preventDefault();
-              onClickDatum(activeIndex, data[activeIndex]);
+              trackedClick(activeIndex, data[activeIndex]);
             }
             return;
           case 'Escape':
@@ -380,26 +387,28 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
           tip.style.display = '';
         }
       },
-      [activeIndex, data, slotSize, padLeft, padRight, plotWidth, isHorizontal, onClickDatum, handleMouseLeave],
+      [activeIndex, data, slotSize, padLeft, padRight, plotWidth, isHorizontal, onClickDatum, trackedClick, handleMouseLeave],
     );
 
-    const interactive = showTooltip || !!onClickDatum;
+    const interactive = interactiveProp;
 
     const handleClick = React.useCallback(() => {
       if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
-        onClickDatum(activeIndex, data[activeIndex]);
+        trackedClick(activeIndex, data[activeIndex]);
       }
-    }, [onClickDatum, activeIndex, data]);
+    }, [onClickDatum, activeIndex, data, trackedClick]);
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={data.length}
         height={height}
         legend={legend}
         series={series}
-        ariaLiveContent={showTooltip ? ariaLiveContent : undefined}
+        className={className}
+        ariaLiveContent={interactiveProp ? ariaLiveContent : undefined}
       >
         <div
           ref={mergedRef}

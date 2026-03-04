@@ -130,6 +130,14 @@ export type {
   WaterfallSegment as ChartWaterfallSegment,
   FunnelChartProps as ChartFunnelProps,
   FunnelStage as ChartFunnelStage,
+  ScatterChartProps as ChartScatterProps,
+  ScatterSeries as ChartScatterSeries,
+  ScatterPoint as ChartScatterPoint,
+  UptimeChartProps as ChartUptimeProps,
+  UptimePoint as ChartUptimePoint,
+  LiveDotProps as ChartLiveDotProps,
+  LiveDotStatus as ChartLiveDotStatus,
+  LiveValueProps as ChartLiveValueProps,
 } from './components/Chart';
 
 // Simple components (direct exports)

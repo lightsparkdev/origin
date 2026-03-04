@@ -28,12 +28,17 @@ export type { UptimeChartProps, UptimePoint } from './UptimeChart';
 export { Live } from './LiveChart';
 export type { LiveChartProps, LivePoint } from './LiveChart';
 
+export { LiveDot } from './LiveDot';
+export type { LiveDotProps, LiveDotStatus } from './LiveDot';
+
+export { LiveValue } from './LiveValue';
+export type { LiveValueProps } from './LiveValue';
+
 export { Scatter } from './ScatterChart';
 export type { ScatterChartProps, ScatterSeries, ScatterPoint } from './ScatterChart';
 
 export { Split } from './SplitChart';
 export type { SplitChartProps, SplitSegment } from './SplitChart';
-
 
 export { Sankey } from './SankeyChart';
 export type { SankeyChartProps, SankeyData, SankeyNode, SankeyLink, LayoutNode, LayoutLink } from './SankeyChart';

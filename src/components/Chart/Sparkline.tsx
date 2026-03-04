@@ -4,6 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { linearScale, niceTicks } from './utils';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import { SERIES_COLORS } from './types';
 import { Line, type LineChartProps } from './LineChart';
 import styles from './Chart.module.scss';
@@ -16,19 +17,11 @@ export interface SparklineProps
 
 const SparklineBar = React.forwardRef<HTMLDivElement, SparklineProps>(
   function SparklineBar(
-    { data, dataKey, color, height = 40, className, ...props },
+    { data, dataKey, color, height = 40, className, analyticsName: _analyticsName, ...props },
     ref,
   ) {
     const { width, attachRef } = useResizeWidth();
-
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const mergedRef = useMergedRef(ref, attachRef);
 
     const key = dataKey ?? 'value';
     const barColor = color ?? SERIES_COLORS[0];

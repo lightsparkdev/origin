@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import { SERIES_COLORS } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface SplitSegment {
@@ -23,7 +25,11 @@ export interface SplitChartProps extends React.ComponentPropsWithoutRef<'div'> {
   empty?: React.ReactNode;
   ariaLabel?: string;
   onClickDatum?: (segment: SplitSegment, index: number) => void;
+  onActiveChange?: (index: number | null) => void;
+  analyticsName?: string;
 }
+
+const splitClickMeta = (_segment: SplitSegment, index: number) => ({ index });
 
 export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
   function Split(
@@ -38,12 +44,29 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
       empty,
       ariaLabel,
       onClickDatum,
+      onActiveChange,
+      analyticsName,
       className,
       ...props
     },
     ref,
   ) {
+    const trackedClickDatum = useTrackedCallback(
+      analyticsName, 'Chart.Split', 'click', onClickDatum,
+      onClickDatum ? splitClickMeta : undefined,
+    );
+
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
+
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
+    React.useEffect(() => {
+      onActiveChangeRef.current?.(activeIndex);
+    }, [activeIndex]);
+
     const barRef = React.useRef<HTMLDivElement>(null);
 
     const handleKeyDown = React.useCallback(
@@ -72,7 +95,7 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
           case ' ':
             if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
               e.preventDefault();
-              onClickDatum(data[activeIndex], activeIndex);
+              trackedClickDatum(data[activeIndex], activeIndex);
             }
             return;
           default:
@@ -81,28 +104,8 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
         e.preventDefault();
         setActiveIndex(next);
       },
-      [activeIndex, data, onClickDatum],
+      [activeIndex, data, onClickDatum, trackedClickDatum],
     );
-
-    if (loading) {
-      return (
-        <div ref={ref} className={clsx(styles.splitRoot, className)} {...props}>
-          <div className={styles.splitBarWrap} style={{ height }}>
-            <div className={styles.splitSkeleton} />
-          </div>
-        </div>
-      );
-    }
-
-    if (data.length === 0 && empty !== undefined) {
-      return (
-        <div ref={ref} className={clsx(styles.splitRoot, className)} {...props}>
-          <div className={styles.chartEmpty}>
-            {typeof empty === 'boolean' ? 'No data' : empty}
-          </div>
-        </div>
-      );
-    }
 
     const total = data.reduce((sum, d) => sum + d.value, 0);
     const fmtValue = (v: number) => (formatValue ? formatValue(v) : String(v));
@@ -117,6 +120,14 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
       `Distribution: ${segments.map((s) => `${s.label} ${Math.round(s.pct)}%`).join(', ')}`;
 
     return (
+      <ChartWrapper
+        ref={ref}
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        className={className}
+      >
       <div ref={ref} className={clsx(styles.splitRoot, className)} {...props}>
         <div
           ref={barRef}
@@ -132,17 +143,15 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
             return (
               <div
                 key={seg.key ?? i}
-                className={clsx(
-                  styles.splitSegment,
-                  onClickDatum && styles.splitSegmentClickable,
-                )}
+                className={styles.splitSegment}
+                data-clickable={onClickDatum ? true : undefined}
                 style={{
                   flexBasis: `${seg.pct}%`,
                   backgroundColor: seg.color,
                 }}
                 onMouseEnter={() => setActiveIndex(i)}
                 onMouseLeave={() => setActiveIndex(null)}
-                onClick={onClickDatum ? () => onClickDatum(seg, i) : undefined}
+                onClick={onClickDatum ? () => trackedClickDatum(seg, i) : undefined}
               />
             );
           })}
@@ -176,6 +185,7 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
           </div>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

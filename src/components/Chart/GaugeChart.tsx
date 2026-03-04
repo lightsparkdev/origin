@@ -28,6 +28,8 @@ export interface GaugeChartProps extends React.ComponentPropsWithoutRef<'div'> {
   formatValue?: (value: number) => string;
   /** Visual density. */
   variant?: 'default' | 'minimal';
+  loading?: boolean;
+  analyticsName?: string;
   /** Accessible label. */
   ariaLabel?: string;
 }
@@ -42,6 +44,8 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
       markerLabel,
       formatValue,
       variant = 'default',
+      loading,
+      analyticsName: _analyticsName,
       ariaLabel,
       className,
       ...props
@@ -56,6 +60,16 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
     );
 
     const fmtValue = formatValue ? formatValue(value) : String(value);
+
+    if (loading) {
+      return (
+        <div ref={ref} className={clsx(styles.root, className)} {...props}>
+          <div className={styles.loading}>
+            <div className={styles.loadingSkeleton} />
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div

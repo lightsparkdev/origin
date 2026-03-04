@@ -6,9 +6,11 @@ import type { ResolvedSeries } from './types';
 import styles from './Chart.module.scss';
 
 export interface ChartWrapperProps {
+  ref?: React.Ref<HTMLDivElement>;
   loading?: boolean;
   empty?: React.ReactNode;
   dataLength: number;
+  isEmpty?: boolean;
   height: number;
   legend?: boolean;
   series?: ResolvedSeries[];
@@ -18,9 +20,11 @@ export interface ChartWrapperProps {
 }
 
 export function ChartWrapper({
+  ref,
   loading,
   empty,
   dataLength,
+  isEmpty,
   height,
   legend,
   series,
@@ -28,9 +32,11 @@ export function ChartWrapper({
   className,
   ariaLiveContent,
 }: ChartWrapperProps) {
+  const showEmpty = isEmpty ?? (dataLength === 0);
+
   if (loading) {
     return (
-      <div className={clsx(styles.root, className)} style={{ height }}>
+      <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
         <div className={styles.loading}>
           <div className={styles.loadingSkeleton} />
         </div>
@@ -38,9 +44,9 @@ export function ChartWrapper({
     );
   }
 
-  if (dataLength === 0 && empty !== undefined) {
+  if (showEmpty && empty !== undefined) {
     return (
-      <div className={clsx(styles.root, className)} style={{ height }}>
+      <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
         <div className={styles.empty}>
           {typeof empty === 'boolean' ? 'No data' : empty}
         </div>

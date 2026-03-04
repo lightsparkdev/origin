@@ -4,8 +4,10 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { linearScale, niceTicks, thinIndices, axisPadForLabels } from './utils';
 import { useResizeWidth } from './hooks';
-import { PAD_TOP, PAD_RIGHT, PAD_BOTTOM_AXIS, TOOLTIP_GAP, axisTickTarget } from './types';
+import { useMergedRef } from './useMergedRef';
+import { type TooltipProp, PAD_TOP, PAD_RIGHT, PAD_BOTTOM_AXIS, TOOLTIP_GAP, axisTickTarget } from './types';
 import { ChartWrapper } from './ChartWrapper';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Chart.module.scss';
 
 export interface WaterfallSegment {
@@ -25,11 +27,15 @@ export interface WaterfallChartProps extends React.ComponentPropsWithoutRef<'div
   height?: number;
   grid?: boolean;
   animate?: boolean;
-  tooltip?: boolean;
+  tooltip?: TooltipProp;
   loading?: boolean;
   empty?: React.ReactNode;
   ariaLabel?: string;
   onClickDatum?: (index: number, segment: WaterfallSegment) => void;
+  onActiveChange?: (index: number | null) => void;
+  analyticsName?: string;
+  /** Disables interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
 }
 
 interface ComputedBar {
@@ -51,6 +57,8 @@ const DEFAULT_COLORS: Record<string, string> = {
   total: 'var(--color-blue-500)',
 };
 
+const clickIndexMeta = (index: number) => ({ index });
+
 export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
   function Waterfall(
     {
@@ -67,6 +75,9 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
       empty,
       ariaLabel,
       onClickDatum,
+      onActiveChange,
+      analyticsName,
+      interactive: interactiveProp = true,
       className,
       ...props
     },
@@ -76,13 +87,20 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
+    React.useEffect(() => {
+      onActiveChangeRef.current?.(activeIndex);
+    }, [activeIndex]);
+
+    const mergedRef = useMergedRef(ref, attachRef);
+
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.Waterfall', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
     );
 
     const bars = React.useMemo<ComputedBar[]>(() => {
@@ -222,7 +240,7 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
           case ' ':
             if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
               e.preventDefault();
-              onClickDatum(activeIndex, data[activeIndex]);
+              trackedClick(activeIndex, data[activeIndex]);
             }
             return;
           case 'Escape':
@@ -244,16 +262,16 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
           tip.style.display = '';
         }
       },
-      [activeIndex, data, slotSize, padLeft, onClickDatum, handleMouseLeave],
+      [activeIndex, data, slotSize, padLeft, onClickDatum, trackedClick, handleMouseLeave],
     );
 
-    const interactive = tooltipProp !== false || !!onClickDatum;
+    const interactive = interactiveProp;
 
     const handleClick = React.useCallback(() => {
       if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
-        onClickDatum(activeIndex, data[activeIndex]);
+        trackedClick(activeIndex, data[activeIndex]);
       }
-    }, [onClickDatum, activeIndex, data]);
+    }, [onClickDatum, activeIndex, data, trackedClick]);
 
     const ready = width > 0;
 
@@ -269,10 +287,12 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={data.length}
         height={height}
+        className={className}
       >
         <div
           ref={mergedRef}
@@ -419,30 +439,42 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
                   }}
                 >
                   {activeIndex !== null && activeIndex < data.length && (
-                    <>
-                      <p className={styles.tooltipLabel}>
-                        {data[activeIndex].label}
-                      </p>
-                      <div className={styles.tooltipItems}>
-                        <div className={styles.tooltipItem}>
-                          <span className={styles.tooltipIndicator} style={{ backgroundColor: bars[activeIndex].fill }} />
-                          <span className={styles.tooltipName}>
-                            {bars[activeIndex].segmentType === 'total' ? 'Total' : 'Change'}
-                          </span>
-                          <span className={styles.tooltipValue}>
-                            {fmtValue(bars[activeIndex].segmentType === 'total'
-                              ? bars[activeIndex].y1
-                              : data[activeIndex].value)}
-                          </span>
-                        </div>
-                        <div className={clsx(styles.tooltipItem, styles.tooltipFooter)}>
-                          <span className={styles.tooltipName}>Running total</span>
-                          <span className={styles.tooltipValue}>
-                            {fmtValue(bars[activeIndex].runningTotal)}
-                          </span>
-                        </div>
-                      </div>
-                    </>
+                    typeof tooltipProp === 'function'
+                      ? tooltipProp(
+                          {
+                            label: data[activeIndex].label,
+                            value: data[activeIndex].value,
+                            type: bars[activeIndex].segmentType,
+                            runningTotal: bars[activeIndex].runningTotal,
+                          },
+                          [],
+                        )
+                      : (
+                        <>
+                          <p className={styles.tooltipLabel}>
+                            {data[activeIndex].label}
+                          </p>
+                          <div className={styles.tooltipItems}>
+                            <div className={styles.tooltipItem}>
+                              <span className={styles.tooltipIndicator} style={{ backgroundColor: bars[activeIndex].fill }} />
+                              <span className={styles.tooltipName}>
+                                {bars[activeIndex].segmentType === 'total' ? 'Total' : 'Change'}
+                              </span>
+                              <span className={styles.tooltipValue}>
+                                {fmtValue(bars[activeIndex].segmentType === 'total'
+                                  ? bars[activeIndex].y1
+                                  : data[activeIndex].value)}
+                              </span>
+                            </div>
+                            <div className={clsx(styles.tooltipItem, styles.tooltipFooter)}>
+                              <span className={styles.tooltipName}>Running total</span>
+                              <span className={styles.tooltipValue}>
+                                {fmtValue(bars[activeIndex].runningTotal)}
+                              </span>
+                            </div>
+                          </div>
+                        </>
+                      )
                   )}
                 </div>
               )}

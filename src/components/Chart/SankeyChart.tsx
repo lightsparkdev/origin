@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type SankeyData,
   type LayoutNode,
@@ -11,6 +13,7 @@ import {
   sankeyLinkPath,
 } from './sankeyLayout';
 import { SERIES_COLORS } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import { measureLabelWidth } from './utils';
 import styles from './Chart.module.scss';
 
@@ -30,8 +33,10 @@ export interface SankeyChartProps extends React.ComponentPropsWithoutRef<'div'> 
   empty?: React.ReactNode;
   ariaLabel?: string;
   formatValue?: (value: number) => string;
+  tooltip?: boolean;
   onClickNode?: (node: LayoutNode) => void;
   onClickLink?: (link: LayoutLink) => void;
+  analyticsName?: string;
 }
 
 type ActiveElement =
@@ -47,6 +52,9 @@ const LINK_OPACITY = 0.5;
 const LINK_OPACITY_DIM = 0.06;
 const NODE_OPACITY_DIM = 0.15;
 
+const sankeyNodeClickMeta = (node: LayoutNode) => ({ id: node.id });
+const sankeyLinkClickMeta = (link: LayoutLink) => ({ source: link.source, target: link.target });
+
 export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
   function Sankey(
     {
@@ -58,36 +66,40 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
       showLabels = true,
       showValues = false,
       stages,
+      tooltip = true,
       loading,
       empty,
       ariaLabel,
       formatValue,
       onClickNode,
       onClickLink,
+      analyticsName,
       className,
       ...props
     },
     ref,
   ) {
+    const trackedClickNode = useTrackedCallback(
+      analyticsName, 'Chart.Sankey', 'click', onClickNode,
+      onClickNode ? sankeyNodeClickMeta : undefined,
+    );
+    const trackedClickLink = useTrackedCallback(
+      analyticsName, 'Chart.Sankey', 'click', onClickLink,
+      onClickLink ? sankeyLinkClickMeta : undefined,
+    );
+
     const { width, attachRef } = useResizeWidth();
     const [active, setActive] = React.useState<ActiveElement>(null);
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const rootRef = React.useRef<HTMLDivElement | null>(null);
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        rootRef.current = node;
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const resizeRef = useMergedRef(ref, attachRef);
+    const mergedRef = useMergedRef(resizeRef, rootRef);
 
     const hasStages = stages !== undefined && stages.length > 0;
 
     const fmtValue = React.useCallback(
-      (v: number) => (formatValue ? formatValue(v) : v.toLocaleString()),
+      (v: number) => (formatValue ? formatValue(v) : String(v)),
       [formatValue],
     );
 
@@ -278,7 +290,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
             case ' ': {
               if (onClickNode && activeNode) {
                 e.preventDefault();
-                onClickNode(activeNode);
+                trackedClickNode(activeNode);
               }
               return;
             }
@@ -313,38 +325,8 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
           }
         }
       },
-      [active, layout, nodesByColumn, maxColumn, labelPad, padTop, width, onClickNode, handleMouseLeave],
+      [active, layout, nodesByColumn, maxColumn, labelPad, padTop, width, onClickNode, trackedClickNode, handleMouseLeave],
     );
-
-    if (loading) {
-      return (
-        <div
-          ref={mergedRef}
-          className={clsx(styles.root, className)}
-          style={{ height }}
-          {...props}
-        >
-          <div className={styles.loading}>
-            <div className={styles.loadingSkeleton} />
-          </div>
-        </div>
-      );
-    }
-
-    if (data.nodes.length === 0 && empty !== undefined) {
-      return (
-        <div
-          ref={mergedRef}
-          className={clsx(styles.root, className)}
-          style={{ height }}
-          {...props}
-        >
-          <div className={styles.chartEmpty}>
-            {typeof empty === 'boolean' ? 'No data' : empty}
-          </div>
-        </div>
-      );
-    }
 
     const ready = width > 0 && layout;
 
@@ -353,6 +335,15 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
       : undefined;
 
     return (
+      <ChartWrapper
+        ref={mergedRef}
+        loading={loading}
+        empty={empty}
+        isEmpty={data.nodes.length === 0}
+        dataLength={data.nodes.length}
+        height={height}
+        className={className}
+      >
       <div
         ref={mergedRef}
         className={clsx(styles.root, className)}
@@ -362,7 +353,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
         {ready && (
           <>
             <svg
-              role="graphics-document"
+              role="img"
               aria-roledescription="Flow diagram"
               aria-label={ariaLabel ?? svgDesc ?? 'Sankey diagram'}
               width={width}
@@ -445,7 +436,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
                         onMouseMove={positionTooltip}
                         onClick={
                           onClickLink
-                            ? () => onClickLink(link)
+                            ? () => trackedClickLink(link)
                             : undefined
                         }
                       />
@@ -485,7 +476,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
                         onMouseMove={positionTooltip}
                         onClick={
                           onClickNode
-                            ? () => onClickNode(node)
+                            ? () => trackedClickNode(node)
                             : undefined
                         }
                       />
@@ -542,33 +533,36 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
               </g>
             </svg>
 
-            <div
-              ref={tooltipRef}
-              className={styles.tooltip}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                pointerEvents: 'none',
-                display: 'none',
-              }}
-            >
-              {tooltipContent && (
-                <div className={styles.tooltipItems}>
-                  <div className={styles.tooltipItem}>
-                    <span className={styles.tooltipName}>
-                      {tooltipContent.label}
-                    </span>
-                    <span className={styles.tooltipValue}>
-                      {tooltipContent.value}
-                    </span>
+            {tooltip !== false && (
+              <div
+                ref={tooltipRef}
+                className={styles.tooltip}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  pointerEvents: 'none',
+                  display: 'none',
+                }}
+              >
+                {tooltipContent && (
+                  <div className={styles.tooltipItems}>
+                    <div className={styles.tooltipItem}>
+                      <span className={styles.tooltipName}>
+                        {tooltipContent.label}
+                      </span>
+                      <span className={styles.tooltipValue}>
+                        {tooltipContent.value}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

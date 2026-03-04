@@ -3,7 +3,9 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { linearScale, niceTicks, thinIndices, axisPadForLabels } from './utils';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type TooltipProp,
   type ReferenceLine,
@@ -49,12 +51,18 @@ export interface ScatterChartProps extends React.ComponentPropsWithoutRef<'div'>
   loading?: boolean;
   empty?: React.ReactNode;
   formatValue?: (value: number) => string;
-  formatXLabel?: (value: number) => string;
+  formatXLabel?: (value: unknown) => string;
   formatYLabel?: (value: number) => string;
   xDomain?: [number, number];
   yDomain?: [number, number];
   onClickDatum?: (seriesKey: string, point: ScatterPoint, index: number) => void;
+  onActiveChange?: (activeDot: { seriesIndex: number; pointIndex: number } | null) => void;
+  analyticsName?: string;
+  /** Disables interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
 }
+
+const scatterClickMeta = (seriesKey: string, _point: ScatterPoint, index: number) => ({ seriesKey, index });
 
 interface ResolvedScatterSeries {
   key: string;
@@ -91,28 +99,29 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
       xDomain: xDomainProp,
       yDomain: yDomainProp,
       onClickDatum,
+      onActiveChange,
+      analyticsName,
+      interactive = true,
       className,
       ...props
     },
     ref,
   ) {
+    const trackedClickDatum = useTrackedCallback(
+      analyticsName, 'Chart.Scatter', 'click', onClickDatum,
+      onClickDatum ? scatterClickMeta : undefined,
+    );
+
     const { width, attachRef } = useResizeWidth();
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const [activeDot, setActiveDot] = React.useState<ActiveDot | null>(null);
 
     const tooltipMode = resolveTooltipMode(tooltipProp);
-    const showTooltip = tooltipMode !== 'off';
+    const showTooltip = interactive && tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const mergedRef = useMergedRef(ref, attachRef);
 
     const series = React.useMemo<ResolvedScatterSeries[]>(
       () =>
@@ -305,8 +314,8 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
 
     const handleClick = React.useCallback(() => {
       if (!onClickDatum || !activeDot) return;
-      onClickDatum(activeDot.series.key, activeDot.point, activeDot.pointIndex);
-    }, [onClickDatum, activeDot]);
+      trackedClickDatum(activeDot.series.key, activeDot.point, activeDot.pointIndex);
+    }, [onClickDatum, activeDot, trackedClickDatum]);
 
     const ready = width > 0;
 
@@ -334,6 +343,19 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
       return result;
     }, [series]);
 
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
+    React.useEffect(() => {
+      onActiveChangeRef.current?.(
+        activeDot
+          ? { seriesIndex: activeDot.seriesIndex, pointIndex: activeDot.pointIndex }
+          : null,
+      );
+    }, [activeDot]);
+
     const handleKeyDown = React.useCallback(
       (e: React.KeyboardEvent) => {
         if (allPointsFlat.length === 0) return;
@@ -349,7 +371,7 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
           case 'Enter': case ' ':
             if (onClickDatum && activeDot) {
               e.preventDefault();
-              onClickDatum(activeDot.series.key, activeDot.point, activeDot.pointIndex);
+              trackedClickDatum(activeDot.series.key, activeDot.point, activeDot.pointIndex);
             }
             return;
           case 'Escape': handleMouseLeave(); return;
@@ -361,7 +383,7 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
         const sp = screenPoints[dot.seriesIndex][dot.pointIndex];
         positionTooltip(sp.sx, sp.sy);
       },
-      [allPointsFlat, activeDot, screenPoints, onClickDatum, handleMouseLeave, positionTooltip],
+      [allPointsFlat, activeDot, screenPoints, onClickDatum, trackedClickDatum, handleMouseLeave, positionTooltip],
     );
 
     const legendSeries = React.useMemo(
@@ -371,12 +393,14 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={totalPoints}
         height={height}
         legend={legend}
         series={legendSeries}
+        className={className}
         ariaLiveContent={showTooltip ? ariaLiveContent : undefined}
       >
         <div
@@ -390,14 +414,14 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
               <svg
                 role="img"
                 aria-label={ariaLabel ?? svgDesc ?? 'Scatter chart'}
-                tabIndex={0}
+                tabIndex={interactive ? 0 : undefined}
                 width={width}
                 height={height}
                 className={styles.svg}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
+                onMouseMove={interactive ? handleMouseMove : undefined}
+                onMouseLeave={interactive ? handleMouseLeave : undefined}
                 onClick={onClickDatum ? handleClick : undefined}
-                onTouchStart={(e) => {
+                onTouchStart={interactive ? (e) => {
                   if (!e.touches[0]) return;
                   const rect = e.currentTarget.getBoundingClientRect();
                   const mx = e.touches[0].clientX - rect.left - padLeft;
@@ -408,8 +432,8 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
                     const sp = screenPoints[nearest.seriesIndex][nearest.pointIndex];
                     positionTooltip(sp.sx, sp.sy);
                   }
-                }}
-                onTouchMove={(e) => {
+                } : undefined}
+                onTouchMove={interactive ? (e) => {
                   if (!e.touches[0]) return;
                   const rect = e.currentTarget.getBoundingClientRect();
                   const mx = e.touches[0].clientX - rect.left - padLeft;
@@ -423,10 +447,10 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
                     const tip = tooltipRef.current;
                     if (tip) tip.style.display = 'none';
                   }
-                }}
-                onTouchEnd={handleMouseLeave}
-                onTouchCancel={handleMouseLeave}
-                onKeyDown={handleKeyDown}
+                } : undefined}
+                onTouchEnd={interactive ? handleMouseLeave : undefined}
+                onTouchCancel={interactive ? handleMouseLeave : undefined}
+                onKeyDown={interactive ? handleKeyDown : undefined}
               >
                 {svgDesc && <desc>{svgDesc}</desc>}
 
@@ -489,7 +513,7 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
 
                   {screenPoints.map((pts, si) =>
                     pts.map(({ sx, sy, point }, pi) => {
-                      const isActive = activeDot?.seriesIndex === si && activeDot?.pointIndex === pi;
+                      const isActive = interactive && activeDot?.seriesIndex === si && activeDot?.pointIndex === pi;
                       const r = point.size ?? dotSize;
                       return (
                         <circle
@@ -516,7 +540,7 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
                 </g>
               </svg>
 
-              {showTooltip && (
+              {interactive && showTooltip && (
                 <div
                   ref={tooltipRef}
                   className={styles.tooltip}

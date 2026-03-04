@@ -1518,7 +1518,7 @@ function LiveDemo() {
       height={200}
       grid
       fill
-      scrub
+      interactive
       formatValue={(v) => v.toFixed(1)}
     />
   );

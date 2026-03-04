@@ -2,8 +2,11 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import { SERIES_COLORS } from './types';
+import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
 
 export interface FunnelStage {
@@ -19,13 +22,16 @@ export interface FunnelChartProps extends React.ComponentPropsWithoutRef<'div'> 
   formatRate?: (rate: number) => string;
   showRates?: boolean;
   showLabels?: boolean;
-  showGrid?: boolean;
+  grid?: boolean;
   height?: number;
   animate?: boolean;
   loading?: boolean;
   empty?: React.ReactNode;
   ariaLabel?: string;
+  tooltip?: boolean;
   onClickDatum?: (index: number, stage: FunnelStage) => void;
+  onActiveChange?: (index: number | null) => void;
+  analyticsName?: string;
 }
 
 const PAD = 8;
@@ -33,6 +39,8 @@ const LABEL_ROW_HEIGHT = 18;
 const LABEL_GAP = 6;
 
 const rd = (n: number) => Math.round(n * 100) / 100;
+
+const clickIndexMeta = (index: number) => ({ index });
 
 export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
   function Funnel(
@@ -42,13 +50,16 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
       formatRate,
       showRates = true,
       showLabels = true,
-      showGrid = true,
+      grid = true,
       height = 140,
       animate = true,
+      tooltip = true,
       loading,
       empty,
       ariaLabel,
       onClickDatum,
+      onActiveChange,
+      analyticsName,
       className,
       ...props
     },
@@ -56,21 +67,29 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
   ) {
     const { width, attachRef } = useResizeWidth();
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
+
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
+    React.useEffect(() => {
+      onActiveChangeRef.current?.(activeIndex);
+    }, [activeIndex]);
+
     const tooltipRef = React.useRef<HTMLDivElement>(null);
     const rootRef = React.useRef<HTMLDivElement | null>(null);
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        rootRef.current = node;
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.Funnel', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
     );
 
+    const resizeRef = useMergedRef(ref, attachRef);
+    const mergedRef = useMergedRef(resizeRef, rootRef);
+
     const fmtValue = React.useCallback(
-      (v: number) => (formatValue ? formatValue(v) : v.toLocaleString()),
+      (v: number) => (formatValue ? formatValue(v) : String(v)),
       [formatValue],
     );
 
@@ -84,7 +103,7 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
 
     const dense = stageWidth < 60;
     const effectiveShowLabels = showLabels && !dense;
-    const effectiveShowGrid = showGrid && !dense;
+    const effectiveShowGrid = grid && !dense;
 
     const labelSpace = effectiveShowLabels ? LABEL_ROW_HEIGHT + LABEL_GAP : 0;
     const plotHeight = Math.max(0, height - PAD * 2 - labelSpace);
@@ -219,7 +238,7 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
           case ' ':
             if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
               e.preventDefault();
-              onClickDatum(activeIndex, data[activeIndex]);
+              trackedClick(activeIndex, data[activeIndex]);
             }
             return;
           case 'Escape':
@@ -244,53 +263,20 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
           tip.style.display = '';
         }
       },
-      [activeIndex, data, stageWidth, flatRatio, centerY, width, onClickDatum, handleMouseLeave],
+      [activeIndex, data, stageWidth, flatRatio, centerY, width, onClickDatum, trackedClick, handleMouseLeave],
     );
 
     const ready = width > 0;
 
-    if (loading) {
-      return (
-        <div
-          ref={mergedRef}
-          className={clsx(styles.root, className)}
-          style={{ height }}
-          {...props}
-        >
-          <div className={styles.loading}>
-            <div className={styles.funnelSkeletonWrap}>
-              {[100, 45, 15].map((pct, i) => (
-                <div
-                  key={i}
-                  className={styles.chartSkeleton}
-                  style={{
-                    flex: 1,
-                    height: `${pct}%`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      );
-    }
-
-    if (data.length === 0 && empty !== undefined) {
-      return (
-        <div
-          ref={mergedRef}
-          className={clsx(styles.root, className)}
-          style={{ height }}
-          {...props}
-        >
-          <div className={styles.chartEmpty}>
-            {typeof empty === 'boolean' ? 'No data' : empty}
-          </div>
-        </div>
-      );
-    }
-
     return (
+      <ChartWrapper
+        ref={mergedRef}
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        className={className}
+      >
       <div
         ref={mergedRef}
         className={clsx(styles.root, className)}
@@ -348,7 +334,7 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
                   onMouseLeave={handleMouseLeave}
                   onClick={
                     onClickDatum
-                      ? () => onClickDatum(i, data[i])
+                      ? () => trackedClick(i, data[i])
                       : undefined
                   }
                   cursor={onClickDatum ? 'pointer' : undefined}
@@ -381,41 +367,44 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
                 })}
             </svg>
 
-            <div
-              ref={tooltipRef}
-              className={styles.tooltip}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                pointerEvents: 'none',
-                display: 'none',
-              }}
-            >
-              {tooltipContent && (
-                <div className={styles.tooltipItems}>
-                  <div className={styles.tooltipItem}>
-                    <span className={styles.tooltipName}>
-                      {tooltipContent.label}
-                    </span>
-                    <span className={styles.tooltipValue}>
-                      {tooltipContent.value}
-                    </span>
-                  </div>
-                  {tooltipContent.rate && (
+            {tooltip !== false && (
+              <div
+                ref={tooltipRef}
+                className={styles.tooltip}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  pointerEvents: 'none',
+                  display: 'none',
+                }}
+              >
+                {tooltipContent && (
+                  <div className={styles.tooltipItems}>
                     <div className={styles.tooltipItem}>
-                      <span className={styles.tooltipName}>Rate</span>
+                      <span className={styles.tooltipName}>
+                        {tooltipContent.label}
+                      </span>
                       <span className={styles.tooltipValue}>
-                        {tooltipContent.rate}
+                        {tooltipContent.value}
                       </span>
                     </div>
-                  )}
-                </div>
-              )}
-            </div>
+                    {tooltipContent.rate && (
+                      <div className={styles.tooltipItem}>
+                        <span className={styles.tooltipName}>Rate</span>
+                        <span className={styles.tooltipValue}>
+                          {tooltipContent.rate}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </>
         )}
       </div>
+      </ChartWrapper>
     );
   },
 );

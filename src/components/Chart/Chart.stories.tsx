@@ -1,6 +1,10 @@
 import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import * as Chart from './';
+import type { WaterfallSegment } from './';
+import { AnalyticsProvider } from '../Analytics';
+import type { InteractionInfo } from '../Analytics';
+import { Button } from '../Button';
 
 const meta = {
   title: 'Components/Chart',
@@ -12,10 +16,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-/* -------------------------------------------------------------------------- */
-/*  1. Line                                                                   */
-/* -------------------------------------------------------------------------- */
 
 export const Line: Story = {
   render: () => (
@@ -41,10 +41,6 @@ export const Line: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  2. LineAreaFill                                                            */
-/* -------------------------------------------------------------------------- */
-
 export const LineAreaFill: Story = {
   render: () => (
     <div style={{ width: 388 }}>
@@ -68,10 +64,6 @@ export const LineAreaFill: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  3. LineDashed                                                              */
-/* -------------------------------------------------------------------------- */
 
 export const LineDashed: Story = {
   render: () => (
@@ -98,10 +90,6 @@ export const LineDashed: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  4. LineReferenceLines                                                      */
-/* -------------------------------------------------------------------------- */
-
 export const LineReferenceLines: Story = {
   render: () => (
     <div style={{ width: 388 }}>
@@ -127,10 +115,6 @@ export const LineReferenceLines: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  5. SparklineLine                                                           */
-/* -------------------------------------------------------------------------- */
-
 export const SparklineLine: Story = {
   render: () => (
     <div style={{ width: 160 }}>
@@ -141,10 +125,6 @@ export const SparklineLine: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  6. SparklineBar                                                            */
-/* -------------------------------------------------------------------------- */
 
 export const SparklineBar: Story = {
   render: () => (
@@ -162,10 +142,6 @@ export const SparklineBar: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  7. StackedArea                                                             */
-/* -------------------------------------------------------------------------- */
 
 export const StackedArea: Story = {
   render: () => (
@@ -193,10 +169,6 @@ export const StackedArea: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  8. BarGrouped                                                              */
-/* -------------------------------------------------------------------------- */
-
 export const BarGrouped: Story = {
   render: () => (
     <div style={{ width: 388 }}>
@@ -220,10 +192,6 @@ export const BarGrouped: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  9. BarStacked                                                              */
-/* -------------------------------------------------------------------------- */
 
 export const BarStacked: Story = {
   render: () => (
@@ -250,10 +218,6 @@ export const BarStacked: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  10. BarHorizontal                                                          */
-/* -------------------------------------------------------------------------- */
-
 export const BarHorizontal: Story = {
   render: () => (
     <div style={{ width: 388 }}>
@@ -275,10 +239,6 @@ export const BarHorizontal: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  11. Composed                                                               */
-/* -------------------------------------------------------------------------- */
 
 export const Composed: Story = {
   render: () => (
@@ -306,10 +266,6 @@ export const Composed: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  12. Donut                                                                  */
-/* -------------------------------------------------------------------------- */
-
 export const Donut: Story = {
   render: () => (
     <div style={{ width: 388 }}>
@@ -325,10 +281,6 @@ export const Donut: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  13. Live                                                                   */
-/* -------------------------------------------------------------------------- */
 
 function LiveChartWrapper() {
   const [data, setData] = React.useState<{ time: number; value: number }[]>([]);
@@ -371,7 +323,7 @@ function LiveChartWrapper() {
       height={200}
       grid
       fill
-      scrub
+      interactive
       formatValue={(v) => v.toFixed(1)}
     />
   );
@@ -384,10 +336,6 @@ export const Live: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  16. Gauge                                                                  */
-/* -------------------------------------------------------------------------- */
 
 export const Gauge: Story = {
   render: () => (
@@ -408,10 +356,6 @@ export const Gauge: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  17. GaugeMinimal                                                           */
-/* -------------------------------------------------------------------------- */
-
 export const GaugeMinimal: Story = {
   render: () => (
     <div style={{ width: 280 }}>
@@ -431,10 +375,6 @@ export const GaugeMinimal: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  18. BarList                                                                */
-/* -------------------------------------------------------------------------- */
-
 export const BarList: Story = {
   render: () => (
     <div style={{ width: 400 }}>
@@ -451,10 +391,6 @@ export const BarList: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  19. Uptime                                                                 */
-/* -------------------------------------------------------------------------- */
-
 const uptimeData = Array.from({ length: 90 }, (_, i) => ({
   status: (i % 17 === 0 ? 'down' : i % 11 === 0 ? 'degraded' : 'up') as 'up' | 'down' | 'degraded',
   label: `Day ${i + 1}`,
@@ -467,10 +403,6 @@ export const Uptime: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  21. Scatter                                                                */
-/* -------------------------------------------------------------------------- */
 
 export const Scatter: Story = {
   render: () => (
@@ -514,10 +446,6 @@ export const Scatter: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  22. Split (Distribution)                                                   */
-/* -------------------------------------------------------------------------- */
-
 export const Split: Story = {
   render: () => (
     <div style={{ width: 500 }}>
@@ -534,10 +462,6 @@ export const Split: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  23. BarListRanked                                                          */
-/* -------------------------------------------------------------------------- */
 
 export const BarListRanked: Story = {
   render: () => (
@@ -558,10 +482,6 @@ export const BarListRanked: Story = {
   ),
 };
 
-
-/* -------------------------------------------------------------------------- */
-/*  27. Waterfall                                                              */
-/* -------------------------------------------------------------------------- */
 
 export const Waterfall: Story = {
   render: () => (
@@ -586,10 +506,6 @@ export const Waterfall: Story = {
   ),
 };
 
-/* -------------------------------------------------------------------------- */
-/*  28. Sankey                                                                 */
-/* -------------------------------------------------------------------------- */
-
 export const Funnel: Story = {
   render: () => (
     <div style={{ width: 600 }}>
@@ -606,10 +522,6 @@ export const Funnel: Story = {
     </div>
   ),
 };
-
-/* -------------------------------------------------------------------------- */
-/*  26. Sankey                                                                 */
-/* -------------------------------------------------------------------------- */
 
 export const Sankey: Story = {
   render: () => (
@@ -650,4 +562,551 @@ export const Sankey: Story = {
       />
     </div>
   ),
+};
+
+export const LiveDotStates: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--spacing-xl)', alignItems: 'center' }}>
+      {(['active', 'degraded', 'down', 'unknown'] as const).map((status) => (
+        <div key={status} style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)' }}>
+          <Chart.LiveDot status={status} size={8} />
+          <span className="body-sm" style={{ color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
+            {status}
+          </span>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+export const LiveValueAnimated: Story = {
+  render: function Render() {
+    const [value, setValue] = React.useState(1234);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <Chart.LiveValue
+          value={value}
+          formatValue={(v) => v.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          className="headline-lg"
+          style={{ color: 'var(--text-primary)' }}
+        />
+        <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
+          <Button variant="outline" size="compact" onClick={() => setValue((v) => v + Math.floor(Math.random() * 500))}>
+            Increase
+          </Button>
+          <Button variant="outline" size="compact" onClick={() => setValue((v) => Math.max(0, v - Math.floor(Math.random() * 500)))}>
+            Decrease
+          </Button>
+          <Button variant="outline" size="compact" onClick={() => setValue(0)}>
+            Reset
+          </Button>
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-tertiary)' }}>
+          Target: {value.toLocaleString()} — the displayed value lerps smoothly toward the target.
+        </p>
+      </div>
+    );
+  },
+};
+
+export const BarWithAnalytics: Story = {
+  render: function Render() {
+    const [events, setEvents] = React.useState<string[]>([]);
+
+    const handler = React.useMemo(
+      () => ({
+        onInteraction: (info: InteractionInfo) => {
+          const entry = `${info.component} · ${info.interaction} · "${info.name}" ${info.metadata ? JSON.stringify(info.metadata) : ''}`;
+          setEvents((prev) => [entry, ...prev].slice(0, 10));
+        },
+      }),
+      [],
+    );
+
+    return (
+      <AnalyticsProvider value={handler}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)' }}>
+          <div style={{ width: 388 }}>
+            <Chart.Bar
+              analyticsName="revenue-chart"
+              data={[
+                { month: 'Jan', revenue: 400 },
+                { month: 'Feb', revenue: 300 },
+                { month: 'Mar', revenue: 520 },
+                { month: 'Apr', revenue: 480 },
+                { month: 'May', revenue: 610 },
+              ]}
+              series={[{ key: 'revenue', label: 'Revenue' }]}
+              xKey="month"
+              height={200}
+              grid
+              tooltip
+              onClickDatum={() => {}}
+            />
+          </div>
+          <div>
+            <p className="body-sm" style={{ margin: '0 0 var(--spacing-xs)', color: 'var(--text-secondary)' }}>
+              Click a bar to fire an analytics event
+            </p>
+            <pre
+              className="body-sm"
+              style={{
+                margin: 0,
+                padding: 'var(--spacing-sm)',
+                background: 'var(--surface-secondary)',
+                borderRadius: 'var(--radius-md)',
+                maxHeight: 160,
+                overflow: 'auto',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              {events.length === 0 ? '(no events yet)' : events.join('\n')}
+            </pre>
+          </div>
+        </div>
+      </AnalyticsProvider>
+    );
+  },
+};
+
+export const StackedAreaNonInteractive: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.StackedArea
+        data={[
+          { date: 'Mon', a: 40, b: 30, c: 20 },
+          { date: 'Tue', a: 50, b: 35, c: 25 },
+          { date: 'Wed', a: 45, b: 40, c: 30 },
+          { date: 'Thu', a: 60, b: 38, c: 22 },
+          { date: 'Fri', a: 55, b: 42, c: 28 },
+        ]}
+        series={[
+          { key: 'a', label: 'Primary', color: 'var(--color-blue-700)' },
+          { key: 'b', label: 'Secondary', color: 'var(--color-blue-400)' },
+          { key: 'c', label: 'Tertiary', color: 'var(--color-blue-200)' },
+        ]}
+        xKey="date"
+        height={200}
+        interactive={false}
+        grid
+      />
+    </div>
+  ),
+};
+
+export const BarNonInteractive: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Bar
+        data={[
+          { month: 'Jan', value: 400 },
+          { month: 'Feb', value: 300 },
+          { month: 'Mar', value: 520 },
+          { month: 'Apr', value: 480 },
+        ]}
+        series={[{ key: 'value', label: 'Revenue' }]}
+        xKey="month"
+        height={200}
+        interactive={false}
+        grid
+      />
+    </div>
+  ),
+};
+
+export const ComposedNonInteractive: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Composed
+        data={[
+          { month: 'Jan', revenue: 400, rate: 2.1 },
+          { month: 'Feb', revenue: 300, rate: 1.8 },
+          { month: 'Mar', revenue: 520, rate: 2.5 },
+          { month: 'Apr', revenue: 480, rate: 2.3 },
+        ]}
+        series={[
+          { key: 'revenue', type: 'bar', label: 'Revenue', color: 'var(--color-blue-300)' },
+          { key: 'rate', type: 'line', label: 'Rate', axis: 'right', color: 'var(--text-primary)' },
+        ]}
+        xKey="month"
+        height={200}
+        interactive={false}
+        grid
+      />
+    </div>
+  ),
+};
+
+export const ScatterNonInteractive: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Scatter
+        data={[
+          {
+            key: 'data',
+            label: 'Observations',
+            data: [
+              { x: 10, y: 30 }, { x: 20, y: 50 }, { x: 30, y: 45 },
+              { x: 40, y: 70 }, { x: 50, y: 60 }, { x: 60, y: 80 },
+            ],
+          },
+        ]}
+        height={200}
+        interactive={false}
+        grid
+      />
+    </div>
+  ),
+};
+
+export const StackedAreaNoAnimation: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.StackedArea
+        data={[
+          { date: 'Mon', a: 40, b: 30, c: 20 },
+          { date: 'Tue', a: 50, b: 35, c: 25 },
+          { date: 'Wed', a: 45, b: 40, c: 30 },
+          { date: 'Thu', a: 60, b: 38, c: 22 },
+          { date: 'Fri', a: 55, b: 42, c: 28 },
+        ]}
+        series={[
+          { key: 'a', label: 'Primary', color: 'var(--color-blue-700)' },
+          { key: 'b', label: 'Secondary', color: 'var(--color-blue-400)' },
+          { key: 'c', label: 'Tertiary', color: 'var(--color-blue-200)' },
+        ]}
+        xKey="date"
+        height={200}
+        animate={false}
+        grid
+      />
+    </div>
+  ),
+};
+
+export const PieNoAnimation: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Pie
+        data={[
+          { name: 'Engineering', value: 45, color: 'var(--color-blue-700)' },
+          { name: 'Marketing', value: 25, color: 'var(--color-blue-400)' },
+          { name: 'Operations', value: 20, color: 'var(--color-blue-200)' },
+          { name: 'Support', value: 10, color: 'var(--color-blue-100)' },
+        ]}
+        height={200}
+        animate={false}
+        legend
+      />
+    </div>
+  ),
+};
+
+export const FunnelActiveChange: Story = {
+  render: function Render() {
+    const [active, setActive] = React.useState<number | null>(null);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <div style={{ width: 388 }}>
+          <Chart.Funnel
+            data={[
+              { label: 'Visitors', value: 5000 },
+              { label: 'Signups', value: 2500 },
+              { label: 'Trials', value: 1200 },
+              { label: 'Paid', value: 600 },
+            ]}
+            height={160}
+            onActiveChange={setActive}
+          />
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+          Active index: {active ?? 'none'}
+        </p>
+      </div>
+    );
+  },
+};
+
+export const WaterfallActiveChange: Story = {
+  render: function Render() {
+    const [active, setActive] = React.useState<number | null>(null);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <div style={{ width: 388 }}>
+          <Chart.Waterfall
+            data={[
+              { label: 'Revenue', value: 1000, type: 'increase' },
+              { label: 'COGS', value: -400, type: 'decrease' },
+              { label: 'Gross', value: 600, type: 'total' },
+              { label: 'OpEx', value: -200, type: 'decrease' },
+              { label: 'Net', value: 400, type: 'total' },
+            ]}
+            height={200}
+            grid
+            onActiveChange={setActive}
+          />
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+          Active index: {active ?? 'none'}
+        </p>
+      </div>
+    );
+  },
+};
+
+export const SplitActiveChange: Story = {
+  render: function Render() {
+    const [active, setActive] = React.useState<number | null>(null);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <div style={{ width: 388 }}>
+          <Chart.Split
+            data={[
+              { label: 'Completed', value: 65, color: 'var(--color-blue-700)' },
+              { label: 'In progress', value: 25, color: 'var(--color-blue-400)' },
+              { label: 'Blocked', value: 10, color: 'var(--color-blue-200)' },
+            ]}
+            height={32}
+            onActiveChange={setActive}
+          />
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+          Active index: {active ?? 'none'}
+        </p>
+      </div>
+    );
+  },
+};
+
+export const ScatterActiveChange: Story = {
+  render: function Render() {
+    const [active, setActive] = React.useState<{ seriesIndex: number; pointIndex: number } | null>(null);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <div style={{ width: 500 }}>
+          <Chart.Scatter
+            data={[
+              {
+                key: 'product-a',
+                label: 'Product A',
+                color: 'var(--color-blue-600)',
+                data: [
+                  { x: 10, y: 30, label: 'Jan' },
+                  { x: 25, y: 55, label: 'Feb' },
+                  { x: 40, y: 70, label: 'Mar' },
+                  { x: 55, y: 45, label: 'Apr' },
+                  { x: 70, y: 85, label: 'May' },
+                  { x: 85, y: 60, label: 'Jun' },
+                ],
+              },
+              {
+                key: 'product-b',
+                label: 'Product B',
+                color: 'var(--color-purple-500)',
+                data: [
+                  { x: 15, y: 60 },
+                  { x: 30, y: 40 },
+                  { x: 50, y: 80 },
+                  { x: 65, y: 35 },
+                  { x: 80, y: 90 },
+                ],
+              },
+            ]}
+            height={300}
+            grid
+            tooltip
+            legend
+            onActiveChange={setActive}
+          />
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+          Active: {active ? `series ${active.seriesIndex}, point ${active.pointIndex}` : 'none'}
+        </p>
+      </div>
+    );
+  },
+};
+
+export const ComposedFixedDomain: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Composed
+        data={[
+          { month: 'Jan', revenue: 400, rate: 2.1 },
+          { month: 'Feb', revenue: 300, rate: 1.8 },
+          { month: 'Mar', revenue: 520, rate: 2.5 },
+          { month: 'Apr', revenue: 480, rate: 2.3 },
+          { month: 'May', revenue: 610, rate: 2.8 },
+        ]}
+        series={[
+          { key: 'revenue', type: 'bar', label: 'Revenue ($)', color: 'var(--color-blue-300)' },
+          { key: 'rate', type: 'line', label: 'Rate (%)', axis: 'right', color: 'var(--text-primary)' },
+        ]}
+        xKey="month"
+        height={240}
+        grid
+        tooltip
+        yDomain={[0, 1000]}
+        yDomainRight={[0, 5]}
+      />
+    </div>
+  ),
+};
+
+export const WaterfallCustomTooltip: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Waterfall
+        data={[
+          { label: 'Revenue', value: 1000, type: 'increase' },
+          { label: 'COGS', value: -400, type: 'decrease' },
+          { label: 'Gross profit', value: 600, type: 'total' },
+          { label: 'Expenses', value: -200, type: 'decrease' },
+          { label: 'Net income', value: 400, type: 'total' },
+        ]}
+        height={200}
+        grid
+        tooltip={(d) => {
+          const datum = d as WaterfallSegment;
+          return (
+            <div>
+              <strong>{datum.label}</strong>
+              <br />
+              {`$${Math.abs(datum.value).toLocaleString()}`}
+            </div>
+          );
+        }}
+      />
+    </div>
+  ),
+};
+
+export const SankeyNoTooltip: Story = {
+  render: () => (
+    <div style={{ width: 500 }}>
+      <Chart.Sankey
+        data={{
+          nodes: [
+            { id: 'a', label: 'Source A', color: 'var(--color-blue-700)' },
+            { id: 'b', label: 'Source B', color: 'var(--color-blue-400)' },
+            { id: 'c', label: 'Target', color: 'var(--color-green-600)' },
+          ],
+          links: [
+            { source: 'a', target: 'c', value: 100 },
+            { source: 'b', target: 'c', value: 50 },
+          ],
+        }}
+        height={200}
+        tooltip={false}
+      />
+    </div>
+  ),
+};
+
+export const FunnelNoTooltip: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Funnel
+        data={[
+          { label: 'Visitors', value: 5000 },
+          { label: 'Signups', value: 2500 },
+          { label: 'Trials', value: 1200 },
+          { label: 'Paid', value: 600 },
+        ]}
+        height={160}
+        tooltip={false}
+      />
+    </div>
+  ),
+};
+
+export const UptimeLoading: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Uptime data={[]} height={32} loading />
+    </div>
+  ),
+};
+
+export const UptimeEmpty: Story = {
+  render: () => (
+    <div style={{ width: 388 }}>
+      <Chart.Uptime data={[]} height={32} empty="No uptime data available" />
+    </div>
+  ),
+};
+
+export const GaugeLoading: Story = {
+  render: () => (
+    <div style={{ width: 200 }}>
+      <Chart.Gauge value={0} min={0} max={100} thresholds={[]} loading />
+    </div>
+  ),
+};
+
+export const LiveLoading: Story = {
+  render: () => (
+    <div style={{ width: 500 }}>
+      <Chart.Live data={[]} value={0} height={200} loading />
+    </div>
+  ),
+};
+
+export const LiveEmpty: Story = {
+  render: () => (
+    <div style={{ width: 500 }}>
+      <Chart.Live data={[]} value={0} height={200} empty="Waiting for live data" />
+    </div>
+  ),
+};
+
+export const PieKeyboardNav: Story = {
+  render: function Render() {
+    const [active, setActive] = React.useState<number | null>(null);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <div style={{ width: 388 }}>
+          <Chart.Pie
+            data={[
+              { name: 'Engineering', value: 45, color: 'var(--color-blue-700)' },
+              { name: 'Marketing', value: 25, color: 'var(--color-blue-400)' },
+              { name: 'Operations', value: 20, color: 'var(--color-blue-200)' },
+              { name: 'Support', value: 10, color: 'var(--color-blue-100)' },
+            ]}
+            height={200}
+            legend
+            onActiveChange={setActive}
+          />
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+          Focus the chart and use arrow keys to cycle segments. Active: {active ?? 'none'}
+        </p>
+      </div>
+    );
+  },
+};
+
+export const UptimeKeyboardNav: Story = {
+  render: function Render() {
+    const [active, setActive] = React.useState<number | null>(null);
+    const data = Array.from({ length: 30 }, (_, i) => ({
+      status: i === 12 || i === 13 ? ('down' as const) : ('up' as const),
+      label: new Date(Date.now() - (30 - i) * 60_000).toLocaleTimeString(),
+    }));
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+        <div style={{ width: 388 }}>
+          <Chart.Uptime
+            data={data}
+            height={32}
+            onActiveChange={(_point, index) => setActive(index)}
+          />
+        </div>
+        <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+          Focus the bars and use arrow keys to navigate. Active: {active ?? 'none'}
+        </p>
+      </div>
+    );
+  },
 };

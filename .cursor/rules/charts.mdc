@@ -130,7 +130,7 @@ Each chart type exposes a click handler matching its data model:
 | `Chart.Line`, `Chart.Bar`, `Chart.Composed`, `Chart.StackedArea`, `Chart.Pie` | `onClickDatum(index: number, datum: Record<string, unknown>) => void` |
 | `Chart.Split` | `onClickDatum(segment: SplitSegment, index: number) => void` |
 | `Chart.Scatter` | `onClickDatum(seriesKey: string, point: ScatterPoint, index: number) => void` |
-| `Chart.BarList` | `onClickItem(item: BarListItem, index: number) => void` |
+| `Chart.BarList` | `onClickDatum(item: BarListItem, index: number) => void` |
 | `Chart.Funnel` | `onClickDatum(index: number, stage: FunnelStage) => void` |
 | `Chart.Waterfall` | `onClickDatum(index: number, segment: WaterfallSegment) => void` |
 | `Chart.Sankey` | `onClickNode(node: LayoutNode) => void` / `onClickLink(link: LayoutLink) => void` |

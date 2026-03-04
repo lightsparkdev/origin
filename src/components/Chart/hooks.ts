@@ -26,7 +26,7 @@ export function useResizeWidth() {
   return { width, attachRef };
 }
 
-export interface ChartScrubOptions {
+export interface ChartInteractionOptions {
   dataLength: number;
   seriesCount: number;
   plotWidth: number;
@@ -41,7 +41,7 @@ export interface ChartScrubOptions {
   onActivate?: (index: number, datum: Record<string, unknown>) => void;
 }
 
-export function useChartScrub(opts: ChartScrubOptions) {
+export function useChartInteraction(opts: ChartInteractionOptions) {
   const {
     dataLength,
     seriesCount,
@@ -68,6 +68,9 @@ export function useChartScrub(opts: ChartScrubOptions) {
   React.useEffect(() => {
     setActiveIndex(null);
   }, [data.length]);
+
+  const dataRef = React.useRef(data);
+  React.useLayoutEffect(() => { dataRef.current = data; }, [data]);
 
   const onActiveChangeRef = React.useRef(onActiveChange);
   React.useLayoutEffect(() => {
@@ -255,7 +258,7 @@ export function useChartScrub(opts: ChartScrubOptions) {
         case 'Enter': case ' ':
           if (onActivate && activeIndex !== null && activeIndex < dataLength) {
             e.preventDefault();
-            onActivate(activeIndex, data[activeIndex]);
+            onActivate(activeIndex, dataRef.current[activeIndex]);
           }
           return;
         case 'Escape': hideHover(); return;

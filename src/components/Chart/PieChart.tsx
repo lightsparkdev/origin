@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import { SERIES_COLORS } from './types';
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
@@ -33,6 +35,8 @@ export interface PieChartProps extends React.ComponentPropsWithoutRef<'div'> {
   onActiveChange?: (index: number | null, segment: PieSegment | null) => void;
   /** Called when a segment is clicked. */
   onClickDatum?: (index: number, segment: PieSegment) => void;
+  animate?: boolean;
+  analyticsName?: string;
   ariaLabel?: string;
   formatValue?: (value: number) => string;
 }
@@ -79,6 +83,8 @@ function arcPath(
   ].join(' ');
 }
 
+const clickIndexMeta = (index: number) => ({ index });
+
 const SEGMENT_GAP = 0.02;
 
 export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
@@ -92,7 +98,9 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
       loading,
       empty,
       onActiveChange,
+      animate = true,
       onClickDatum,
+      analyticsName,
       ariaLabel,
       formatValue,
       className,
@@ -103,17 +111,15 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
     const tooltipEnabled = !!tooltipProp;
     const customTooltip = typeof tooltipProp === 'function' ? tooltipProp : null;
 
+    const trackedClickDatum = useTrackedCallback(
+      analyticsName, 'Chart.Pie', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
+    );
+
     const { width, attachRef } = useResizeWidth();
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const mergedRef = useMergedRef(ref, attachRef);
 
     const onActiveChangeRef = React.useRef(onActiveChange);
     React.useLayoutEffect(() => {
@@ -183,24 +189,63 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
       return null;
     }, [tooltipEnabled, activeSeg, customTooltip]);
 
+    const handleKeyDown = React.useCallback(
+      (e: React.KeyboardEvent) => {
+        if (segments.length === 0) return;
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+            e.preventDefault();
+            setActiveIndex((prev) =>
+              prev === null ? 0 : (prev + 1) % segments.length,
+            );
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+            e.preventDefault();
+            setActiveIndex((prev) =>
+              prev === null
+                ? segments.length - 1
+                : (prev - 1 + segments.length) % segments.length,
+            );
+            break;
+          case 'Enter':
+          case ' ':
+            if (onClickDatum && activeIndex !== null) {
+              e.preventDefault();
+              trackedClickDatum(activeIndex, data[activeIndex]);
+            }
+            return;
+          case 'Escape':
+            e.preventDefault();
+            setActiveIndex(null);
+            break;
+          default:
+            return;
+        }
+      },
+      [segments.length, onClickDatum, activeIndex, trackedClickDatum, data],
+    );
+
     const ariaLiveText =
       activeSeg && tooltipEnabled
         ? `${activeSeg.name}: ${fmtValue(activeSeg.value)} (${activeSeg.percentage.toFixed(0)}%)`
         : undefined;
 
     return (
-      <div
+      <ChartWrapper
         ref={mergedRef}
-        className={clsx(styles.root, styles.pieRoot, className)}
-        style={{ height }}
-        {...props}
+        loading={loading}
+        empty={empty}
+        dataLength={data.length}
+        height={height}
+        className={className}
       >
-        <ChartWrapper
-          loading={loading}
-          empty={empty}
-          dataLength={data.length}
-          height={height}
-          className={undefined}
+        <div
+          ref={mergedRef}
+          className={clsx(styles.root, styles.pieRoot, className)}
+          style={{ height }}
+          {...props}
         >
           {ready && (
             <>
@@ -210,6 +255,8 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
                 width={svgSize}
                 height={svgSize}
                 className={styles.svg}
+                tabIndex={0}
+                onKeyDown={handleKeyDown}
               >
                 {svgDesc && <desc>{svgDesc}</desc>}
 
@@ -226,14 +273,17 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
                       stroke="var(--surface-primary)"
                       strokeWidth={1.5}
                       transform={`translate(${tx}, ${ty})`}
+                      role="graphics-symbol"
+                      aria-roledescription="Segment"
+                      aria-label={`${data[i].name}: ${data[i].value}`}
                       onMouseEnter={() => setActiveIndex(i)}
                       onMouseLeave={() => setActiveIndex(null)}
-                      onClick={() => onClickDatum?.(i, data[i])}
+                      onClick={() => trackedClickDatum(i, data[i])}
                       className={styles.pieSegment}
                       style={{
-                        cursor: 'pointer',
-                        transition: 'transform 200ms cubic-bezier(0.33, 1, 0.68, 1)',
-                        animationDelay: `${i * 60}ms`,
+                        animationDelay: animate ? `${i * 60}ms` : undefined,
+                        animation: animate ? undefined : 'none',
+                        opacity: animate ? undefined : 1,
                       }}
                     />
                   );
@@ -304,8 +354,8 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
               </div>
             </>
           )}
-        </ChartWrapper>
-      </div>
+        </div>
+      </ChartWrapper>
     );
   },
 );
