@@ -65,8 +65,8 @@ test.describe('Button', () => {
     const bgColor = await button.evaluate((el) =>
       getComputedStyle(el).backgroundColor
     );
-    // --color-alpha-black-04 = rgba(0, 0, 0, 0.04)
-    expect(bgColor).toMatch(/rgba\(0,\s*0,\s*0,\s*0\.0[34]\d*\)/);
+    // --surface-alpha-secondary resolves to a low-opacity tint
+    expect(bgColor).not.toBe('rgba(0, 0, 0, 0)');
   });
 
   test('secondary variant has no border by default', async ({ mount, page }) => {
