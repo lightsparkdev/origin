@@ -4,6 +4,11 @@ import {
   TestClosed,
   TestNonModal,
   TestControlled,
+  TestSnapPoints,
+  TestWithHandle,
+  TestSidePanel,
+  TestNested,
+  TestIndent,
 } from './Drawer.test-stories';
 
 test.describe('Drawer', () => {
@@ -83,6 +88,16 @@ test.describe('Drawer', () => {
       const popup = page.getByTestId('popup');
       await expect(popup).toBeVisible();
     });
+
+    test('allows clicks on background content', async ({ mount, page }) => {
+      await mount(<TestNonModal />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+
+      const bgButton = page.getByTestId('background-button');
+      await bgButton.click({ force: true });
+      await expect(bgButton).toHaveText('Clicked');
+    });
   });
 
   test.describe('Controlled', () => {
@@ -96,6 +111,72 @@ test.describe('Drawer', () => {
 
       await page.getByTestId('close').click();
       await expect(popup).not.toBeVisible();
+    });
+  });
+
+  test.describe('Snap points', () => {
+    test('renders at snap point offset', async ({ mount, page }) => {
+      await mount(<TestSnapPoints />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+
+      const transform = await popup.evaluate((el) => getComputedStyle(el).transform);
+      expect(transform).not.toBe('none');
+    });
+  });
+
+  test.describe('Handle', () => {
+    test('renders handle bar element', async ({ mount, page }) => {
+      await mount(<TestWithHandle />);
+      const handle = page.getByTestId('handle');
+      await expect(handle).toBeVisible();
+    });
+
+    test('handle is hidden from accessibility tree', async ({ mount, page }) => {
+      await mount(<TestWithHandle />);
+      const handle = page.getByTestId('handle');
+      await expect(handle).toHaveAttribute('aria-hidden', 'true');
+    });
+  });
+
+  test.describe('Side panel', () => {
+    test('renders with swipe direction attribute', async ({ mount, page }) => {
+      await mount(<TestSidePanel />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+      await expect(popup).toHaveAttribute('data-swipe-direction', 'right');
+    });
+
+    test('closes on escape', async ({ mount, page }) => {
+      await mount(<TestSidePanel />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+
+      await page.keyboard.press('Escape');
+      await expect(popup).not.toBeVisible();
+    });
+  });
+
+  test.describe('Nested drawers', () => {
+    test('parent visible, child opens on trigger click', async ({ mount, page }) => {
+      await mount(<TestNested />);
+      const parentPopup = page.getByTestId('parent-popup');
+      await expect(parentPopup).toBeVisible();
+
+      const childTrigger = page.getByTestId('child-trigger');
+      await expect(childTrigger).toBeVisible();
+
+      await childTrigger.click();
+      const childPopup = page.getByTestId('child-popup');
+      await expect(childPopup).toBeVisible();
+    });
+  });
+
+  test.describe('Indent effect', () => {
+    test('indent element receives data-active when drawer is open', async ({ mount, page }) => {
+      await mount(<TestIndent />);
+      const indent = page.getByTestId('indent');
+      await expect(indent).toHaveAttribute('data-active', '');
     });
   });
 

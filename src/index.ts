@@ -39,7 +39,7 @@ export { Command } from './components/Command';
 export { Combobox } from './components/Combobox';
 export { ContextMenu } from './components/ContextMenu';
 export { Dialog } from './components/Dialog';
-export { Drawer } from './components/Drawer';
+export { Drawer, createHandle } from './components/Drawer';
 export type {
   DrawerProviderProps,
   DrawerRootProps,
@@ -52,6 +52,7 @@ export type {
   DrawerTitleProps,
   DrawerDescriptionProps,
   DrawerCloseProps,
+  DrawerHandleProps,
   DrawerIndentProps,
   DrawerIndentBackgroundProps,
 } from './components/Drawer';

@@ -10,6 +10,7 @@ export {
   DrawerTitle as Title,
   DrawerDescription as Description,
   DrawerClose as Close,
+  DrawerHandle as Handle,
   DrawerIndent as Indent,
   DrawerIndentBackground as IndentBackground,
 } from './parts';
@@ -26,9 +27,12 @@ export type {
   DrawerTitleProps,
   DrawerDescriptionProps,
   DrawerCloseProps,
+  DrawerHandleProps,
   DrawerIndentProps,
   DrawerIndentBackgroundProps,
 } from './parts';
+
+export { DrawerPreview as BaseDrawer } from '@base-ui/react/drawer';
 
 import {
   DrawerProvider,
@@ -42,9 +46,14 @@ import {
   DrawerTitle,
   DrawerDescription,
   DrawerClose,
+  DrawerHandle,
   DrawerIndent,
   DrawerIndentBackground,
 } from './parts';
+
+import { DrawerPreview } from '@base-ui/react/drawer';
+
+export const createHandle = DrawerPreview.createHandle;
 
 export const Drawer = {
   Provider: DrawerProvider,
@@ -58,6 +67,8 @@ export const Drawer = {
   Title: DrawerTitle,
   Description: DrawerDescription,
   Close: DrawerClose,
+  Handle: DrawerHandle,
   Indent: DrawerIndent,
   IndentBackground: DrawerIndentBackground,
+  createHandle: DrawerPreview.createHandle,
 };
