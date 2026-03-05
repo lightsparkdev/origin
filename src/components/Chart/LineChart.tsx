@@ -457,8 +457,8 @@ export const Line = React.forwardRef<HTMLDivElement, LineChartProps>(
           {ready && (
             <>
               <svg
-                role="graphics-document document"
-                aria-roledescription="Line chart"
+                role={interactive ? 'graphics-document document' : 'img'}
+                aria-roledescription={interactive ? 'Line chart' : undefined}
                 aria-label={ariaLabel ?? svgDesc ?? 'Line chart'}
                 tabIndex={interactive ? 0 : undefined}
                 width={width}
