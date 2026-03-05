@@ -270,7 +270,7 @@
   --font-weight-bold: 700;
   --font-weight-black: 900;
   --border-primary: rgba(38, 38, 35, 0.10);
-  --border-secondary: rgba(35, 35, 33, 0.30);
+  --border-secondary: rgba(37, 37, 34, 0.20);
   --border-focus: #1A1A1A;
   --border-inverse: rgba(255, 255, 255, 0.20);
   --border-critical: #CC0909;
@@ -310,6 +310,12 @@
   --surface-yellow-strong: #FCBA02;
   --surface-red: #FFC4C4;
   --surface-red-strong: #CC0909;
+  --surface-alpha-primary: rgba(43, 43, 38, 0.02);
+  --surface-alpha-secondary: rgba(42, 42, 37, 0.04);
+  --surface-alpha-tertiary: rgba(40, 40, 36, 0.06);
+  --surface-alpha-inverse-primary: rgba(242, 242, 245, 0.02);
+  --surface-alpha-inverse-secondary: rgba(243, 243, 245, 0.04);
+  --surface-alpha-inverse-tertiary: rgba(243, 243, 245, 0.06);
   --text-primary: #1A1A1A;
   --text-secondary: #7C7C7C;
   --text-tertiary: #989898;
@@ -327,8 +333,8 @@
 
 [data-theme="dark"],
 .dark {
-  --border-primary: rgba(244, 244, 245, 0.10);
-  --border-secondary: rgba(245, 245, 245, 0.30);
+  --border-primary: rgba(243, 243, 245, 0.06);
+  --border-secondary: rgba(244, 244, 245, 0.10);
   --border-focus: #F8F8F7;
   --border-inverse: rgba(0, 0, 0, 0.20);
   --border-critical: #EF0D0D;
@@ -346,7 +352,7 @@
   --state-focus-critical: #A80C0C;
   --surface-base: #000000;
   --surface-primary: #1A1A1A;
-  --surface-secondary: #111111;
+  --surface-secondary: #212121;
   --surface-tertiary: #282828;
   --surface-neutral: #3D3D3D;
   --surface-panel: #212121;
@@ -368,8 +374,14 @@
   --surface-yellow-strong: #E09000;
   --surface-red: #CC0909;
   --surface-red-strong: #EF0D0D;
+  --surface-alpha-primary: rgba(242, 242, 245, 0.02);
+  --surface-alpha-secondary: rgba(243, 243, 245, 0.04);
+  --surface-alpha-tertiary: rgba(243, 243, 245, 0.06);
+  --surface-alpha-inverse-primary: rgba(43, 43, 38, 0.02);
+  --surface-alpha-inverse-secondary: rgba(42, 42, 37, 0.04);
+  --surface-alpha-inverse-tertiary: rgba(243, 243, 245, 0.06);
   --text-primary: #F0F0EE;
-  --text-secondary: #7C7C7C;
+  --text-secondary: #989898;
   --text-tertiary: #656565;
   --text-inverse: #1A1A1A;
   --text-link: #F0F0EE;
@@ -385,8 +397,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --border-primary: rgba(244, 244, 245, 0.10);
-    --border-secondary: rgba(245, 245, 245, 0.30);
+    --border-primary: rgba(243, 243, 245, 0.06);
+    --border-secondary: rgba(244, 244, 245, 0.10);
     --border-focus: #F8F8F7;
     --border-inverse: rgba(0, 0, 0, 0.20);
     --border-critical: #EF0D0D;
@@ -404,7 +416,7 @@
     --state-focus-critical: #A80C0C;
     --surface-base: #000000;
     --surface-primary: #1A1A1A;
-    --surface-secondary: #111111;
+    --surface-secondary: #212121;
     --surface-tertiary: #282828;
     --surface-neutral: #3D3D3D;
     --surface-panel: #212121;
@@ -426,8 +438,14 @@
     --surface-yellow-strong: #E09000;
     --surface-red: #CC0909;
     --surface-red-strong: #EF0D0D;
+    --surface-alpha-primary: rgba(242, 242, 245, 0.02);
+    --surface-alpha-secondary: rgba(243, 243, 245, 0.04);
+    --surface-alpha-tertiary: rgba(243, 243, 245, 0.06);
+    --surface-alpha-inverse-primary: rgba(43, 43, 38, 0.02);
+    --surface-alpha-inverse-secondary: rgba(42, 42, 37, 0.04);
+    --surface-alpha-inverse-tertiary: rgba(243, 243, 245, 0.06);
     --text-primary: #F0F0EE;
-    --text-secondary: #7C7C7C;
+    --text-secondary: #989898;
     --text-tertiary: #656565;
     --text-inverse: #1A1A1A;
     --text-link: #F0F0EE;
