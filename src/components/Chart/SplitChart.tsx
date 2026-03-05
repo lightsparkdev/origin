@@ -16,6 +16,8 @@ export interface SplitSegment {
 
 export interface SplitChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: SplitSegment[];
+  /** Display variant. `default` shows a dot legend; `detailed` shows formatted value and percentage per segment. */
+  variant?: 'default' | 'detailed';
   formatValue?: (value: number) => string;
   showPercentage?: boolean;
   showValues?: boolean;
@@ -35,6 +37,7 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
   function Split(
     {
       data,
+      variant = 'default',
       formatValue,
       showPercentage = true,
       showValues = false,
@@ -161,7 +164,7 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
           })}
         </div>
 
-        {legend && (
+        {legend && variant === 'default' && (
           <div className={styles.legend}>
             {activeIndex !== null && segments[activeIndex] ? (
               <div className={styles.legendItem}>
@@ -186,6 +189,30 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
                 </div>
               ))
             )}
+          </div>
+        )}
+
+        {variant === 'detailed' && (
+          <div className={styles.splitDetailedLegend}>
+            {segments.map((seg, i) => (
+              <div
+                key={seg.key ?? i}
+                className={styles.splitDetailedItem}
+              >
+                <div className={styles.splitDetailedLabel}>
+                  <span className={styles.legendDot} style={{ backgroundColor: seg.color }} />
+                  {seg.label}
+                </div>
+                <div className={styles.splitDetailedValue}>
+                  {fmtValue(seg.value)}
+                </div>
+                {showPercentage && (
+                  <div className={styles.splitDetailedCount}>
+                    {`${seg.pct.toFixed(1)}%`}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
         <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>

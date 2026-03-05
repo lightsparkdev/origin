@@ -294,6 +294,24 @@ export function SplitBasic() {
   );
 }
 
+export function SplitDetailed() {
+  return (
+    <Chart.Split
+      data={[
+        { label: 'Incoming', value: 246_100_000 },
+        { label: 'Outgoing', value: 87_800_000 },
+        { label: 'Bidirectional', value: 4_600_000 },
+      ]}
+      variant="detailed"
+      formatValue={(v: number) => {
+        if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+        return `$${v}`;
+      }}
+      data-testid="split-chart"
+    />
+  );
+}
+
 export function BarListRanked() {
   return (
     <Chart.BarList
