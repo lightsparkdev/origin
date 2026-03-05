@@ -4,41 +4,37 @@ import * as React from 'react';
 import clsx from 'clsx';
 import styles from './Chart.module.scss';
 
+export type LiveDotStatus = 'active' | 'degraded' | 'down' | 'unknown';
+
 export interface LiveDotProps extends React.ComponentPropsWithoutRef<'span'> {
-  /** Status determines color: active (green), idle (neutral), error (red), processing (accent). */
-  status?: 'active' | 'idle' | 'error' | 'processing';
-  /** Show pulsing ring animation. Defaults to true for active and processing. */
-  pulse?: boolean;
-  /** Dot size in px. */
+  status?: LiveDotStatus;
   size?: number;
 }
 
-const STATUS_COLORS: Record<string, string> = {
-  active: 'var(--surface-green-strong)',
-  idle: 'var(--text-tertiary)',
-  error: 'var(--surface-red-strong)',
-  processing: 'var(--surface-blue-strong)',
+const STATUS_COLORS: Record<LiveDotStatus, string> = {
+  active: 'var(--color-blue-700)',
+  degraded: 'var(--color-yellow-500)',
+  down: 'var(--color-red-500)',
+  unknown: 'var(--color-gray-300)',
 };
 
 export const LiveDot = React.forwardRef<HTMLSpanElement, LiveDotProps>(
-  function LiveDot(
-    { status = 'active', pulse, size = 8, className, style, ...props },
-    ref,
-  ) {
-    const shouldPulse = pulse ?? (status === 'active' || status === 'processing');
-    const color = STATUS_COLORS[status] ?? STATUS_COLORS.active;
+  function LiveDot({ status = 'active', size = 8, className, style, ...props }, ref) {
+    const color = STATUS_COLORS[status];
+    const shouldPulse = status === 'active';
 
     return (
       <span
         ref={ref}
         className={clsx(styles.liveDot, shouldPulse && styles.liveDotPulse, className)}
         style={{
-          '--live-dot-color': color,
-          '--live-dot-size': `${size}px`,
+          width: size,
+          height: size,
+          backgroundColor: color,
           ...style,
-        } as React.CSSProperties}
+        }}
         role="status"
-        aria-label={status}
+        aria-label={`Status: ${status}`}
         {...props}
       />
     );

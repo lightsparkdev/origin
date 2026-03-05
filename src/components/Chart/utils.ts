@@ -216,6 +216,14 @@ export function linearPath(points: Point[]): string {
   return segments.join('');
 }
 
+export function monotonePathGroups(groups: Point[][]): string {
+  return groups.map((g) => monotonePath(g)).join('');
+}
+
+export function linearPathGroups(groups: Point[][]): string {
+  return groups.map((g) => linearPath(g)).join('');
+}
+
 // Interpolators: given screen-space points, return a function that
 // evaluates the curve's y at any screen x. These assume data points
 // are evenly spaced on x (index-based), which makes the Bezier x-component

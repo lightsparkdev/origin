@@ -1,5 +1,3 @@
-// Figma: https://figma.com/design/3JvbUyTqbbPL8cCpwSX0j4?node-id=2053-951
-
 @use '../../tokens/mixins' as *;
 
 .button {
@@ -86,14 +84,14 @@
 }
 
 .secondary {
-  background-color: var(--color-alpha-black-04);
+  background-color: var(--surface-alpha-secondary);
   color: var(--text-primary);
   // Reserve border space so focus doesn't shift layout
   border: var(--stroke-xs) solid transparent;
 
   @media (hover: hover) {
     &:hover:not([data-disabled]) {
-      background-color: var(--color-alpha-black-04);
+      background-color: var(--surface-alpha-secondary);
       background-image: linear-gradient(var(--surface-hover), var(--surface-hover));
     }
   }

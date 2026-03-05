@@ -7,18 +7,23 @@ import {
   niceTicks,
   monotonePath,
   linearPath,
+  monotonePathGroups,
+  linearPathGroups,
   monotoneInterpolator,
   linearInterpolator,
   thinIndices,
   axisPadForLabels,
   type Point,
 } from './utils';
-import { useResizeWidth, useChartScrub } from './hooks';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
+import { useResizeWidth, useChartInteraction } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type Series,
   type ResolvedSeries,
   type TooltipProp,
   type ReferenceLine,
+  type ReferenceBand,
   SERIES_COLORS,
   DASH_PATTERNS,
   PAD_TOP,
@@ -58,6 +63,8 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   curve?: 'monotone' | 'linear';
   /** Reference lines on the left Y axis. */
   referenceLines?: ReferenceLine[];
+  /** Shaded bands spanning a value range on the left Y axis. Rendered behind bars and lines. */
+  referenceBands?: ReferenceBand[];
   /** Show legend below chart. */
   legend?: boolean;
   /** Show loading skeleton. */
@@ -67,6 +74,8 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
   /** Control animation. */
   animate?: boolean;
   ariaLabel?: string;
+  /** Disables interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
   onActiveChange?: (
     index: number | null,
     datum: Record<string, unknown> | null,
@@ -76,14 +85,24 @@ export interface ComposedChartProps extends React.ComponentPropsWithoutRef<'div'
     index: number,
     datum: Record<string, unknown>,
   ) => void;
+  /** Analytics name for event tracking. */
+  analyticsName?: string;
   formatValue?: (value: number) => string;
   formatXLabel?: (value: unknown) => string;
   formatYLabel?: (value: number) => string;
   /** Formatter for the right Y axis labels. */
   formatYLabelRight?: (value: number) => string;
+  /** Connect across null/NaN gaps in line series. When false, gaps break the line. */
+  connectNulls?: boolean;
+  /** Lock the left Y-axis domain instead of auto-scaling from data. */
+  yDomain?: [number, number];
+  /** Lock the right Y-axis domain instead of auto-scaling from data. */
+  yDomainRight?: [number, number];
 }
 
 const EMPTY_TICKS = { min: 0, max: 1, ticks: [0, 1] } as const;
+
+const clickIndexMeta = (index: number) => ({ index });
 
 export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
   function Composed(
@@ -96,36 +115,39 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       tooltip: tooltipProp,
       curve = 'monotone',
       referenceLines,
+      referenceBands,
       legend,
       loading,
       empty,
       animate = true,
       ariaLabel,
+      interactive = true,
       onActiveChange,
       onClickDatum,
+      analyticsName,
       formatValue,
       formatXLabel,
       formatYLabel,
       formatYLabelRight,
+      connectNulls = true,
+      yDomain: yDomainProp,
+      yDomainRight: yDomainRightProp,
       className,
       ...props
     },
     ref,
   ) {
     const { width, attachRef } = useResizeWidth();
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.Composed', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
+    );
     const tooltipMode = resolveTooltipMode(tooltipProp);
-    const showTooltip = tooltipMode !== 'off';
+    const showTooltip = interactive && tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const mergedRef = useMergedRef(ref, attachRef);
 
     // Resolve series
     const series = React.useMemo<ResolvedComposedSeries[]>(
@@ -156,6 +178,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
 
     // Left Y domain (bar series + left-axis lines)
     const leftDomain = React.useMemo(() => {
+      if (yDomainProp) return niceTicks(yDomainProp[0], yDomainProp[1], tickTarget);
       let max = -Infinity;
       for (const s of series.filter((s) => s.axis === 'left')) {
         for (const d of data) {
@@ -168,13 +191,20 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
           if (rl.value > max) max = rl.value;
         }
       }
+      if (referenceBands) {
+        for (const rb of referenceBands) {
+          const hi = Math.max(rb.from, rb.to);
+          if (hi > max) max = hi;
+        }
+      }
       if (max === -Infinity) max = 1;
       return niceTicks(0, max, tickTarget);
-    }, [data, series, referenceLines, tickTarget]);
+    }, [data, series, referenceLines, referenceBands, tickTarget, yDomainProp]);
 
     // Right Y domain (right-axis lines)
     const rightDomain = React.useMemo(() => {
       if (!hasRightAxis) return EMPTY_TICKS;
+      if (yDomainRightProp) return niceTicks(yDomainRightProp[0], yDomainRightProp[1], tickTarget);
       let min = Infinity;
       let max = -Infinity;
       for (const s of series.filter((s) => s.axis === 'right')) {
@@ -188,7 +218,7 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       }
       if (min === Infinity) return EMPTY_TICKS;
       return niceTicks(min, max, tickTarget);
-    }, [data, series, hasRightAxis, tickTarget]);
+    }, [data, series, hasRightAxis, tickTarget, yDomainRightProp]);
 
     const padLeft = React.useMemo(() => {
       if (!showYAxis) return 0;
@@ -210,28 +240,48 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
       : 0;
 
     // Line points and paths
-    const linePoints = React.useMemo(() => {
-      if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0) return [];
-      return lineSeries.map((s) => {
+    const { linePoints, lineGroups } = React.useMemo(() => {
+      if (plotWidth <= 0 || plotHeight <= 0 || data.length === 0)
+        return { linePoints: [] as Point[][], lineGroups: [] as Point[][][] };
+      const allPoints: Point[][] = [];
+      const allGroups: Point[][][] = [];
+      for (const s of lineSeries) {
         const domain = s.axis === 'right' ? rightDomain : leftDomain;
         const points: Point[] = [];
+        const groups: Point[][] = [];
+        let currentGroup: Point[] = [];
         for (let i = 0; i < data.length; i++) {
           const v = Number(data[i][s.key]);
-          if (isNaN(v)) continue;
+          if (isNaN(v)) {
+            if (!connectNulls && currentGroup.length > 0) {
+              groups.push(currentGroup);
+              currentGroup = [];
+            }
+            continue;
+          }
           const x = data.length === 1
             ? plotWidth / 2
             : (i + 0.5) * slotWidth;
           const y = linearScale(v, domain.min, domain.max, plotHeight, 0);
-          points.push({ x, y });
+          const pt = { x, y };
+          points.push(pt);
+          currentGroup.push(pt);
         }
-        return points;
-      });
-    }, [data, lineSeries, plotWidth, plotHeight, slotWidth, leftDomain, rightDomain]);
+        if (currentGroup.length > 0) groups.push(currentGroup);
+        allPoints.push(points);
+        allGroups.push(groups);
+      }
+      return { linePoints: allPoints, lineGroups: allGroups };
+    }, [data, lineSeries, plotWidth, plotHeight, slotWidth, leftDomain, rightDomain, connectNulls]);
 
     const linePaths = React.useMemo(() => {
-      const build = curve === 'monotone' ? monotonePath : linearPath;
-      return linePoints.map((pts) => build(pts));
-    }, [linePoints, curve]);
+      if (connectNulls) {
+        const build = curve === 'monotone' ? monotonePath : linearPath;
+        return linePoints.map((pts) => build(pts));
+      }
+      const build = curve === 'monotone' ? monotonePathGroups : linearPathGroups;
+      return lineGroups.map((groups) => build(groups));
+    }, [linePoints, lineGroups, curve, connectNulls]);
 
     // Interpolators for line dot tracking
     const interpolators = React.useMemo(() => {
@@ -245,15 +295,16 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
     }, [interpolators]);
 
     // Scrub
-    const scrub = useChartScrub({
+    const scrub = useChartInteraction({
       dataLength: data.length,
       seriesCount: lineSeries.length,
       plotWidth,
       padLeft,
-      tooltipMode,
+      tooltipMode: interactive ? tooltipMode : 'off',
       interpolatorsRef,
       data,
       onActiveChange,
+      onActivate: onClickDatum,
     });
 
     // Y axis labels
@@ -282,8 +333,8 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
 
     const handleClick = React.useCallback(() => {
       if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
-      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
-    }, [onClickDatum, scrub.activeIndex, data]);
+      trackedClick(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, trackedClick, scrub.activeIndex, data]);
 
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
@@ -310,14 +361,15 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={data.length}
         height={height}
         legend={legend}
         series={wrapperSeries}
-        activeIndex={scrub.activeIndex}
-        ariaLiveContent={ariaLiveContent}
+        className={className}
+        ariaLiveContent={interactive ? ariaLiveContent : undefined}
       >
       <div
         ref={mergedRef}
@@ -328,19 +380,20 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
+              aria-roledescription="Chart"
               aria-label={ariaLabel ?? svgDesc ?? 'Composed chart'}
-              tabIndex={0}
+              tabIndex={interactive ? 0 : undefined}
               width={width}
               height={height}
               className={styles.svg}
-              onMouseMove={scrub.handleMouseMove}
-              onMouseLeave={scrub.hideHover}
-              onTouchStart={scrub.handleTouchStart}
-              onTouchMove={scrub.handleTouchMove}
-              onTouchEnd={scrub.hideHover}
-              onTouchCancel={scrub.hideHover}
-              onKeyDown={scrub.handleKeyDown}
+              onMouseMove={interactive ? scrub.handleMouseMove : undefined}
+              onMouseLeave={interactive ? scrub.hideHover : undefined}
+              onTouchStart={interactive ? scrub.handleTouchStart : undefined}
+              onTouchMove={interactive ? scrub.handleTouchMove : undefined}
+              onTouchEnd={interactive ? scrub.hideHover : undefined}
+              onTouchCancel={interactive ? scrub.hideHover : undefined}
+              onKeyDown={interactive ? scrub.handleKeyDown : undefined}
               onClick={onClickDatum ? handleClick : undefined}
             >
               {svgDesc && <desc>{svgDesc}</desc>}
@@ -351,6 +404,37 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                   yLabelsLeft.map(({ y }, i) => (
                     <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
                   ))}
+
+                {/* Reference bands */}
+                {referenceBands?.map((rb, i) => {
+                  const bandColor = rb.color ?? 'var(--stroke-primary)';
+                  if (rb.axis === 'x') {
+                    const x1 = data.length > 0 ? (rb.from + 0.5) * slotWidth : 0;
+                    const x2 = data.length > 0 ? (rb.to + 0.5) * slotWidth : plotWidth;
+                    const bx = Math.min(x1, x2);
+                    const bw = Math.abs(x2 - x1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const y1 = linearScale(rb.from, leftDomain.min, leftDomain.max, plotHeight, 0);
+                  const y2 = linearScale(rb.to, leftDomain.min, leftDomain.max, plotHeight, 0);
+                  const by = Math.min(y1, y2);
+                  const bh = Math.abs(y1 - y2);
+                  return (
+                    <g key={`band-${i}`}>
+                      <rect x={0} y={by} width={plotWidth} height={bh} fill={bandColor} opacity={0.06} />
+                      {rb.label && (
+                        <text x={plotWidth / 2} y={by + bh / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {
@@ -425,25 +509,27 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
                   );
                 })}
 
-                {/* Cursor line */}
-                <line
-                  ref={scrub.cursorRef}
-                  x1={0} y1={0} x2={0} y2={plotHeight}
-                  className={styles.cursorLine}
-                  style={{ display: 'none' }}
-                />
+                {interactive && (
+                  <>
+                    <line
+                      ref={scrub.cursorRef}
+                      x1={0} y1={0} x2={0} y2={plotHeight}
+                      className={styles.cursorLine}
+                      style={{ display: 'none' }}
+                    />
 
-                {/* Line dots */}
-                {lineSeries.map((s, i) => (
-                  <circle
-                    key={s.key}
-                    ref={(el) => { scrub.dotRefs.current[i] = el; }}
-                    cx={0} cy={0} r={3}
-                    fill={s.color}
-                    className={styles.activeDot}
-                    style={{ display: 'none' }}
-                  />
-                ))}
+                    {lineSeries.map((s, i) => (
+                      <circle
+                        key={s.key}
+                        ref={(el) => { scrub.dotRefs.current[i] = el; }}
+                        cx={0} cy={0} r={3}
+                        fill={s.color}
+                        className={styles.activeDot}
+                        style={{ display: 'none' }}
+                      />
+                    ))}
+                  </>
+                )}
 
                 {/* Left Y axis labels */}
                 {yLabelsLeft.map(({ y, text }, i) => (

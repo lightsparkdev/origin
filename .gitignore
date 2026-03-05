@@ -46,3 +46,10 @@ origin.code-workspace
 
 # Cursor workspace handoff
 handoff/
+
+# Cursor auto-generated
+.cursor/environment.json
+
+# Ephemeral plan files
+.cursor/plans/
+docs/plans/

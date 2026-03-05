@@ -11,6 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/lightsparkdev/origin.git"
   },
+  "homepage": "https://github.com/lightsparkdev/origin#readme",
+  "bugs": {
+    "url": "https://github.com/lightsparkdev/origin/issues"
+  },
   "type": "module",
   "main": "./src/index.ts",
   "exports": {
@@ -58,8 +62,7 @@
     "@base-ui/utils": "^0.2.3",
     "@tanstack/react-table": "^8.21.3",
     "ajv": "^8.18.0",
-    "clsx": "^2.1.1",
-    "motion": "^12.23.26"
+    "clsx": "^2.1.1"
   },
   "peerDependencies": {
     "next": ">=14",

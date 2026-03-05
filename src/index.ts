@@ -15,6 +15,18 @@ export { Accordion } from './components/Accordion';
 export { AlertDialog } from './components/AlertDialog';
 export { Autocomplete } from './components/Autocomplete';
 export { Breadcrumb } from './components/Breadcrumb';
+export * as DatePicker from './components/DatePicker';
+export type {
+  DatePickerRootProps,
+  DatePickerHeaderProps,
+  DatePickerNavigationProps,
+  DatePickerGridProps,
+  DatePickerControlsProps,
+  DatePickerControlItemProps,
+  DatePickerFooterProps,
+  DateRange,
+} from './components/DatePicker';
+
 export { Card } from './components/Card';
 export { Collapsible } from './components/Collapsible';
 export type {
@@ -27,7 +39,7 @@ export { Command } from './components/Command';
 export { Combobox } from './components/Combobox';
 export { ContextMenu } from './components/ContextMenu';
 export { Dialog } from './components/Dialog';
-export { Drawer } from './components/Drawer';
+export { Drawer, createHandle } from './components/Drawer';
 export type {
   DrawerProviderProps,
   DrawerRootProps,
@@ -40,6 +52,7 @@ export type {
   DrawerTitleProps,
   DrawerDescriptionProps,
   DrawerCloseProps,
+  DrawerHandleProps,
   DrawerIndentProps,
   DrawerIndentBackgroundProps,
 } from './components/Drawer';
@@ -66,6 +79,7 @@ export { Progress } from './components/Progress';
 export { Radio } from './components/Radio';
 export { Select } from './components/Select';
 export { Sidebar } from './components/Sidebar';
+export { Skeleton } from './components/Skeleton';
 export { Table } from './components/Table';
 export { Tabs } from './components/Tabs';
 export { Toast } from './components/Toast';
@@ -100,6 +114,7 @@ export type {
   LineChartProps as ChartLineProps,
   Series as ChartSeries,
   ReferenceLine as ChartReferenceLine,
+  ReferenceBand as ChartReferenceBand,
   SparklineProps as ChartSparklineProps,
   StackedAreaChartProps as ChartStackedAreaProps,
   BarChartProps as ChartBarProps,
@@ -109,12 +124,22 @@ export type {
   ComposedSeries as ChartComposedSeries,
   LiveChartProps as ChartLiveProps,
   LivePoint as ChartLivePoint,
-  LiveValueProps as ChartLiveValueProps,
-  LiveDotProps as ChartLiveDotProps,
   GaugeChartProps as ChartGaugeProps,
   GaugeThreshold as ChartGaugeThreshold,
   BarListProps as ChartBarListProps,
   BarListItem as ChartBarListItem,
+  WaterfallChartProps as ChartWaterfallProps,
+  WaterfallSegment as ChartWaterfallSegment,
+  FunnelChartProps as ChartFunnelProps,
+  FunnelStage as ChartFunnelStage,
+  ScatterChartProps as ChartScatterProps,
+  ScatterSeries as ChartScatterSeries,
+  ScatterPoint as ChartScatterPoint,
+  UptimeChartProps as ChartUptimeProps,
+  UptimePoint as ChartUptimePoint,
+  LiveDotProps as ChartLiveDotProps,
+  LiveDotStatus as ChartLiveDotStatus,
+  LiveValueProps as ChartLiveValueProps,
 } from './components/Chart';
 
 // Simple components (direct exports)

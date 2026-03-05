@@ -80,7 +80,7 @@ const sortableColumns = [
 /**
  * Basic table with default styling
  */
-export function BasicTable() {
+export function BasicTable({ size }: { size?: 'default' | 'compact' } = {}) {
   const table = useReactTable({
     data: sampleData,
     columns: basicColumns,
@@ -88,7 +88,7 @@ export function BasicTable() {
   });
 
   return (
-    <Table.Root>
+    <Table.Root size={size}>
       <Table.Header>
         {table.getHeaderGroups().map((headerGroup) => (
           <Table.HeaderRow key={headerGroup.id}>

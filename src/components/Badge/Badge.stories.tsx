@@ -10,7 +10,7 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: { type: 'select' },
+      control: 'radio',
       options: ['gray', 'purple', 'blue', 'sky', 'pink', 'green', 'yellow', 'red'],
     },
     vibrant: { control: 'boolean' },
@@ -22,58 +22,17 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Label',
+    children: 'Badge',
     variant: 'gray',
+    vibrant: false,
   },
-};
-
-export const Purple: Story = {
-  args: {
-    children: 'Label',
-    variant: 'purple',
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['gray', 'purple', 'blue', 'sky', 'pink', 'green', 'yellow', 'red'],
+    },
   },
-};
-
-export const Blue: Story = {
-  args: {
-    children: 'Label',
-    variant: 'blue',
-  },
-};
-
-export const Sky: Story = {
-  args: {
-    children: 'Label',
-    variant: 'sky',
-  },
-};
-
-export const Pink: Story = {
-  args: {
-    children: 'Label',
-    variant: 'pink',
-  },
-};
-
-export const Green: Story = {
-  args: {
-    children: 'Label',
-    variant: 'green',
-  },
-};
-
-export const Yellow: Story = {
-  args: {
-    children: 'Label',
-    variant: 'yellow',
-  },
-};
-
-export const Red: Story = {
-  args: {
-    children: 'Label',
-    variant: 'red',
-  },
+  render: (args) => <Badge {...args} />,
 };
 
 export const Vibrant: Story = {

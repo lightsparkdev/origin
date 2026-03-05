@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface UptimePoint {
@@ -15,7 +16,7 @@ export interface UptimeChartProps extends React.ComponentPropsWithoutRef<'div'> 
   /** Array of status points, ordered chronologically. */
   data: UptimePoint[];
   /** Height of the status bars in px. */
-  barHeight?: number;
+  height?: number;
   /** Color map for statuses. Defaults to green/red/yellow/gray. */
   colors?: Partial<Record<UptimePoint['status'], string>>;
   /** Accessible label. */
@@ -32,7 +33,10 @@ export interface UptimeChartProps extends React.ComponentPropsWithoutRef<'div'> 
    */
   labelStatus?: UptimePoint['status'];
   /** Called when a bar is hovered. */
-  onHover?: (point: UptimePoint | null, index: number | null) => void;
+  onActiveChange?: (point: UptimePoint | null, index: number | null) => void;
+  loading?: boolean;
+  empty?: React.ReactNode;
+  analyticsName?: string;
 }
 
 const DEFAULT_COLORS: Record<UptimePoint['status'], string> = {
@@ -46,12 +50,15 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
   function Uptime(
     {
       data,
-      barHeight = 32,
+      height = 32,
       colors: colorsProp,
       ariaLabel,
       label: labelProp,
       labelStatus = 'up',
-      onHover,
+      onActiveChange,
+      loading,
+      empty,
+      analyticsName: _analyticsName,
       className,
       ...props
     },
@@ -61,39 +68,113 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
     const colors = { ...DEFAULT_COLORS, ...colorsProp };
     const showLabel = labelProp !== false;
 
-    const handleEnter = React.useCallback(
-      (i: number) => {
-        setActiveIndex(i);
-        onHover?.(data[i], i);
-      },
-      [data, onHover],
-    );
+    const onActiveChangeRef = React.useRef(onActiveChange);
+    React.useLayoutEffect(() => {
+      onActiveChangeRef.current = onActiveChange;
+    }, [onActiveChange]);
+
+    React.useEffect(() => {
+      onActiveChangeRef.current?.(
+        activeIndex !== null ? data[activeIndex] : null,
+        activeIndex,
+      );
+    }, [activeIndex, data]);
+
+    const handleEnter = React.useCallback((i: number) => {
+      setActiveIndex(i);
+    }, []);
 
     const handleLeave = React.useCallback(() => {
       setActiveIndex(null);
-      onHover?.(null, null);
-    }, [onHover]);
+    }, []);
+
+    const handleKeyDown = React.useCallback(
+      (e: React.KeyboardEvent) => {
+        if (data.length === 0) return;
+        switch (e.key) {
+          case 'ArrowRight':
+            e.preventDefault();
+            setActiveIndex((prev) => {
+              const next = prev === null ? 0 : (prev + 1) % data.length;
+              return next;
+            });
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            setActiveIndex((prev) => {
+              const next =
+                prev === null
+                  ? data.length - 1
+                  : (prev - 1 + data.length) % data.length;
+              return next;
+            });
+            break;
+          case 'Home':
+            e.preventDefault();
+            setActiveIndex(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            setActiveIndex(data.length - 1);
+            break;
+          case 'Escape':
+            e.preventDefault();
+            setActiveIndex(null);
+            break;
+          default:
+            return;
+        }
+      },
+      [data],
+    );
 
     const activePoint = activeIndex !== null ? data[activeIndex] : null;
     const displayLabel = activePoint?.label ?? labelProp ?? null;
     const displayStatus = activePoint?.status ?? labelStatus;
 
+    if (loading) {
+      return (
+        <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
+          <div className={styles.loading}>
+            <Skeleton style={{ width: '100%', height: '100%' }} />
+          </div>
+        </div>
+      );
+    }
+
+    if (data.length === 0 && empty !== undefined) {
+      return (
+        <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
+          <div className={styles.empty}>
+            {typeof empty === 'boolean' ? 'No data' : empty}
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div
         ref={ref}
         className={clsx(styles.uptime, className)}
-        role="img"
+        role="graphics-document document"
+        aria-roledescription="Uptime chart"
         aria-label={ariaLabel ?? `Uptime chart with ${data.length} periods`}
         {...props}
       >
-        <div className={styles.uptimeBars} style={{ height: barHeight }}>
+        <div
+          className={styles.uptimeBars}
+          style={{ height }}
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+        >
           {data.map((point, i) => (
             <div
               key={i}
-              className={clsx(
-                styles.uptimeBar,
-                activeIndex === i && styles.uptimeBarActive,
-              )}
+              className={styles.uptimeBar}
+              role="graphics-symbol img"
+              aria-roledescription="Period"
+              aria-label={`${point.status}${point.label ? `: ${point.label}` : ''}`}
+              data-active={activeIndex === i || undefined}
               style={{ backgroundColor: colors[point.status] }}
               onMouseEnter={() => handleEnter(i)}
               onMouseLeave={handleLeave}
@@ -115,6 +196,11 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
             )}
           </div>
         )}
+        <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+          {activeIndex !== null && data[activeIndex]
+            ? `${data[activeIndex].status}${data[activeIndex].label ? `: ${data[activeIndex].label}` : ''}`
+            : ''}
+        </div>
       </div>
     );
   },

@@ -7,29 +7,25 @@ const meta: Meta = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    value: { control: { type: 'range', min: 0, max: 100 } },
+    min: { control: { type: 'number' } },
+    max: { control: { type: 'number' } },
+  },
 };
 
 export default meta;
 
 export const Default: StoryObj = {
-  render: () => (
+  args: {
+    value: 50,
+    min: 0,
+    max: 100,
+  },
+  render: (args) => (
     <div style={{ width: 240 }}>
-      <Progress.Root value={50}>
+      <Progress.Root {...args}>
         <Progress.Label>Export data</Progress.Label>
-        <Progress.Value />
-        <Progress.Track>
-          <Progress.Indicator />
-        </Progress.Track>
-      </Progress.Root>
-    </div>
-  ),
-};
-
-export const Complete: StoryObj = {
-  render: () => (
-    <div style={{ width: 240 }}>
-      <Progress.Root value={100}>
-        <Progress.Label>Upload complete</Progress.Label>
         <Progress.Value />
         <Progress.Track>
           <Progress.Indicator />

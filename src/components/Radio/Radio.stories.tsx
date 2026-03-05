@@ -9,31 +9,29 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['default', 'card'],
+    },
+    disabled: { control: 'boolean' },
+  },
 } satisfies Meta<typeof Radio.Group>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  render: () => (
+  args: {
+    variant: 'default',
+    disabled: false,
+  },
+  render: (args) => (
     <Radio.Field>
       <Radio.Legend>Legend</Radio.Legend>
-      <Radio.Group defaultValue="option1">
+      <Radio.Group {...args} defaultValue="option1">
         <Radio.Item value="option1" label="Label" description="Description goes here." />
         <Radio.Item value="option2" label="Label" description="Description goes here." />
-      </Radio.Group>
-      <Radio.Description>Help text goes here.</Radio.Description>
-    </Radio.Field>
-  ),
-};
-
-export const CardVariant: Story = {
-  render: () => (
-    <Radio.Field style={{ width: 280 }}>
-      <Radio.Legend>Legend</Radio.Legend>
-      <Radio.Group defaultValue="card1" variant="card">
-        <Radio.Item value="card1" label="Label" description="Description goes here." />
-        <Radio.Item value="card2" label="Label" description="Description goes here." />
       </Radio.Group>
       <Radio.Description>Help text goes here.</Radio.Description>
     </Radio.Field>
@@ -61,32 +59,6 @@ export const WithoutDescriptions: Story = {
         <Radio.Item value="option1" label="Option 1" />
         <Radio.Item value="option2" label="Option 2" />
         <Radio.Item value="option3" label="Option 3" />
-      </Radio.Group>
-    </Radio.Field>
-  ),
-};
-
-export const Disabled: Story = {
-  render: () => (
-    <Radio.Field disabled>
-      <Radio.Legend>Legend</Radio.Legend>
-      <Radio.Group defaultValue="option1" variant="card" style={{ width: 280 }}>
-        <Radio.Item value="option1" label="Label" description="Description goes here." />
-        <Radio.Item value="option2" label="Label" description="Description goes here." />
-      </Radio.Group>
-      <Radio.Description>This field is disabled.</Radio.Description>
-    </Radio.Field>
-  ),
-};
-
-export const DisabledItem: Story = {
-  render: () => (
-    <Radio.Field>
-      <Radio.Legend>Legend</Radio.Legend>
-      <Radio.Group defaultValue="option1">
-        <Radio.Item value="option1" label="Option 1" description="Available" />
-        <Radio.Item value="option2" label="Option 2" description="Unavailable" disabled />
-        <Radio.Item value="option3" label="Option 3" description="Available" />
       </Radio.Group>
     </Radio.Field>
   ),

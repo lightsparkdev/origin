@@ -3,12 +3,16 @@ import { useState } from 'react';
 import { Combobox } from './index';
 import { Field } from '@/components/Field';
 
-const meta: Meta = {
+const meta: Meta<typeof Combobox.Root> = {
   title: 'Components/Combobox',
   component: Combobox.Root,
+  argTypes: {
+    disabled: { control: 'boolean' },
+  },
 };
 
 export default meta;
+type Story = StoryObj<typeof Combobox.Root>;
 
 const fruits = [
   'Apple',
@@ -23,9 +27,12 @@ const fruits = [
   'Lemon',
 ];
 
-export const Default: StoryObj = {
-  render: () => (
-    <Combobox.Root items={fruits}>
+export const Default: Story = {
+  args: {
+    disabled: false,
+  },
+  render: (args) => (
+    <Combobox.Root items={fruits} {...args}>
       <Combobox.InputWrapper>
         <Combobox.Input placeholder="Select a fruit..." />
         <Combobox.ActionButtons>
@@ -51,7 +58,7 @@ export const Default: StoryObj = {
   ),
 };
 
-export const WithClear: StoryObj = {
+export const WithClear: Story = {
   render: () => (
     <Combobox.Root items={fruits} defaultValue="Apple">
       <Combobox.InputWrapper>
@@ -80,7 +87,7 @@ export const WithClear: StoryObj = {
   ),
 };
 
-export const Multiple: StoryObj = {
+export const Multiple: Story = {
   render: () => (
     <Combobox.Root items={fruits} multiple>
       <Combobox.InputWrapper>
@@ -113,7 +120,7 @@ const groupedFruits = {
   exotic: ['Dragon Fruit', 'Mangosteen', 'Rambutan'],
 };
 
-export const WithGroups: StoryObj = {
+export const WithGroups: Story = {
   render: () => (
     <Combobox.Root items={[...groupedFruits.common, ...groupedFruits.exotic]}>
       <Combobox.InputWrapper>
@@ -153,34 +160,7 @@ export const WithGroups: StoryObj = {
   ),
 };
 
-export const Disabled: StoryObj = {
-  render: () => (
-    <Combobox.Root items={fruits} disabled>
-      <Combobox.InputWrapper>
-        <Combobox.Input placeholder="Disabled combobox..." />
-        <Combobox.ActionButtons>
-          <Combobox.Trigger aria-label="Open popup" />
-        </Combobox.ActionButtons>
-      </Combobox.InputWrapper>
-      <Combobox.Portal>
-        <Combobox.Positioner sideOffset={4}>
-          <Combobox.Popup>
-            <Combobox.List>
-              {(item: string) => (
-                <Combobox.Item key={item} value={item}>
-                  <Combobox.ItemIndicator />
-                  <Combobox.ItemText>{item}</Combobox.ItemText>
-                </Combobox.Item>
-              )}
-            </Combobox.List>
-          </Combobox.Popup>
-        </Combobox.Positioner>
-      </Combobox.Portal>
-    </Combobox.Root>
-  ),
-};
-
-export const Controlled: StoryObj = {
+export const Controlled: Story = {
   render: function Render() {
     const [value, setValue] = useState<string | null>(null);
 
@@ -215,7 +195,7 @@ export const Controlled: StoryObj = {
   },
 };
 
-export const WithField: StoryObj = {
+export const WithField: Story = {
   render: function WithField() {
     const [value, setValue] = useState<string | null>(null);
     const [touched, setTouched] = useState(false);

@@ -14,12 +14,15 @@ import {
   axisPadForLabels,
   type Point,
 } from './utils';
-import { useResizeWidth, useChartScrub } from './hooks';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
+import { useResizeWidth, useChartInteraction } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type Series,
   type ResolvedSeries,
   type TooltipProp,
   type ReferenceLine,
+  type ReferenceBand,
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
@@ -29,6 +32,8 @@ import {
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
 import styles from './Chart.module.scss';
+
+const clickIndexMeta = (index: number) => ({ index });
 
 export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: Record<string, unknown>[];
@@ -41,6 +46,8 @@ export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'d
   fillOpacity?: number;
   /** Horizontal reference lines at specific y-values. */
   referenceLines?: ReferenceLine[];
+  /** Shaded bands spanning a value range. Rendered behind area bands. */
+  referenceBands?: ReferenceBand[];
   /** Fixed Y-axis domain. When omitted, auto-scales from stacked totals. */
   yDomain?: [number, number];
   /** Show a legend below the chart for multi-series. */
@@ -49,9 +56,10 @@ export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'d
   loading?: boolean;
   /** Content to show when data is empty. `true` for default message. */
   empty?: React.ReactNode;
-  /** Control animation. Currently a no-op — provided for API consistency with other chart types. */
   animate?: boolean;
   ariaLabel?: string;
+  /** Disables interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
   onActiveChange?: (
     index: number | null,
     datum: Record<string, unknown> | null,
@@ -61,6 +69,8 @@ export interface StackedAreaChartProps extends React.ComponentPropsWithoutRef<'d
     index: number,
     datum: Record<string, unknown>,
   ) => void;
+  /** Analytics name for event tracking. */
+  analyticsName?: string;
   formatValue?: (value: number) => string;
   formatXLabel?: (value: unknown) => string;
   formatYLabel?: (value: number) => string;
@@ -78,14 +88,17 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       curve = 'monotone',
       fillOpacity = 0.4,
       referenceLines,
+      referenceBands,
       yDomain: yDomainProp,
       legend,
       loading,
       empty,
-      animate: _animate,
+      animate = true,
       ariaLabel,
+      interactive = true,
       onActiveChange,
       onClickDatum,
+      analyticsName,
       formatValue,
       formatXLabel,
       formatYLabel,
@@ -95,19 +108,16 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
     ref,
   ) {
     const { width, attachRef } = useResizeWidth();
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.StackedArea', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
+    );
     const tooltipMode = resolveTooltipMode(tooltipProp);
-    const showTooltip = tooltipMode !== 'off';
+    const showTooltip = interactive && tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
-    );
+    const mergedRef = useMergedRef(ref, attachRef);
 
     const series = React.useMemo<ResolvedSeries[]>(
       () => resolveSeries(seriesProp, undefined, undefined),
@@ -143,10 +153,16 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
           if (rl.value > max) max = rl.value;
         }
       }
+      if (referenceBands) {
+        for (const rb of referenceBands) {
+          const hi = Math.max(rb.from, rb.to);
+          if (hi > max) max = hi;
+        }
+      }
       if (max === -Infinity) max = 1;
       const result = niceTicks(0, max, tickTarget);
       return { yMin: result.min, yMax: result.max, yTicks: result.ticks };
-    }, [stacked, referenceLines, yDomainProp, tickTarget]);
+    }, [stacked, referenceLines, referenceBands, yDomainProp, tickTarget]);
 
     const padLeft = React.useMemo(() => {
       if (!showYAxis) return 0;
@@ -213,15 +229,16 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
       interpolatorsRef.current = interpolators;
     }, [interpolators]);
 
-    const scrub = useChartScrub({
+    const scrub = useChartInteraction({
       dataLength: data.length,
       seriesCount: series.length,
       plotWidth,
       padLeft,
-      tooltipMode,
+      tooltipMode: interactive ? tooltipMode : 'off',
       interpolatorsRef,
       data,
       onActiveChange,
+      onActivate: onClickDatum,
     });
 
     // X axis labels
@@ -255,8 +272,8 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
 
     const handleClick = React.useCallback(() => {
       if (!onClickDatum || scrub.activeIndex === null || scrub.activeIndex >= data.length) return;
-      onClickDatum(scrub.activeIndex, data[scrub.activeIndex]);
-    }, [onClickDatum, scrub.activeIndex, data]);
+      trackedClick(scrub.activeIndex, data[scrub.activeIndex]);
+    }, [onClickDatum, trackedClick, scrub.activeIndex, data]);
 
     const svgDesc = React.useMemo(() => {
       if (series.length === 0 || data.length === 0) return undefined;
@@ -275,14 +292,15 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={data.length}
         height={height}
         legend={legend}
         series={series}
-        activeIndex={scrub.activeIndex}
-        ariaLiveContent={ariaLiveContent}
+        className={className}
+        ariaLiveContent={interactive ? ariaLiveContent : undefined}
       >
       <div
         ref={mergedRef}
@@ -293,19 +311,20 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
+              aria-roledescription="Stacked area chart"
               aria-label={ariaLabel ?? svgDesc ?? 'Stacked area chart'}
-              tabIndex={0}
+              tabIndex={interactive ? 0 : undefined}
               width={width}
               height={height}
               className={styles.svg}
-              onMouseMove={scrub.handleMouseMove}
-              onMouseLeave={scrub.hideHover}
-              onTouchStart={scrub.handleTouchStart}
-              onTouchMove={scrub.handleTouchMove}
-              onTouchEnd={scrub.hideHover}
-              onTouchCancel={scrub.hideHover}
-              onKeyDown={scrub.handleKeyDown}
+              onMouseMove={interactive ? scrub.handleMouseMove : undefined}
+              onMouseLeave={interactive ? scrub.hideHover : undefined}
+              onTouchStart={interactive ? scrub.handleTouchStart : undefined}
+              onTouchMove={interactive ? scrub.handleTouchMove : undefined}
+              onTouchEnd={interactive ? scrub.hideHover : undefined}
+              onTouchCancel={interactive ? scrub.hideHover : undefined}
+              onKeyDown={interactive ? scrub.handleKeyDown : undefined}
               onClick={onClickDatum ? handleClick : undefined}
             >
               {svgDesc && <desc>{svgDesc}</desc>}
@@ -316,6 +335,37 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                   yLabels.map(({ y }, i) => (
                     <line key={i} x1={0} y1={y} x2={plotWidth} y2={y} className={styles.gridLine} />
                   ))}
+
+                {/* Reference bands */}
+                {referenceBands?.map((rb, i) => {
+                  const bandColor = rb.color ?? 'var(--stroke-primary)';
+                  if (rb.axis === 'x') {
+                    const x1 = data.length <= 1 ? 0 : (rb.from / (data.length - 1)) * plotWidth;
+                    const x2 = data.length <= 1 ? plotWidth : (rb.to / (data.length - 1)) * plotWidth;
+                    const bx = Math.min(x1, x2);
+                    const bw = Math.abs(x2 - x1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const y1 = linearScale(rb.from, yMin, yMax, plotHeight, 0);
+                  const y2 = linearScale(rb.to, yMin, yMax, plotHeight, 0);
+                  const by = Math.min(y1, y2);
+                  const bh = Math.abs(y1 - y2);
+                  return (
+                    <g key={`band-${i}`}>
+                      <rect x={0} y={by} width={plotWidth} height={bh} fill={bandColor} opacity={0.06} />
+                      {rb.label && (
+                        <text x={plotWidth / 2} y={by + bh / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {
@@ -344,32 +394,36 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
                 {/* Stacked area bands */}
                 {areaPaths.map((d, i) =>
                   d ? (
-                    <path key={`${series[i].key}-area`} d={d} fill={series[i].color} fillOpacity={fillOpacity} stroke="none" />
+                    <path key={`${series[i].key}-area`} d={d} fill={series[i].color} fillOpacity={fillOpacity} stroke="none" className={animate ? styles.pieSegment : undefined} style={animate ? { animationDelay: `${i * 80}ms` } : undefined} />
                   ) : null,
                 )}
                 {topPaths.map((d, i) =>
                   d ? (
-                    <path key={`${series[i].key}-edge`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" />
+                    <path key={`${series[i].key}-edge`} d={d} fill="none" stroke={series[i].color} strokeWidth={1} strokeOpacity={0.5} strokeLinejoin="round" className={animate ? styles.lineAnimate : undefined} style={animate ? { animationDelay: `${i * 80}ms` } : undefined} />
                   ) : null,
                 )}
 
-                <line
-                  ref={scrub.cursorRef}
-                  x1={0} y1={0} x2={0} y2={plotHeight}
-                  className={styles.cursorLine}
-                  style={{ display: 'none' }}
-                />
+                {interactive && (
+                  <>
+                    <line
+                      ref={scrub.cursorRef}
+                      x1={0} y1={0} x2={0} y2={plotHeight}
+                      className={styles.cursorLine}
+                      style={{ display: 'none' }}
+                    />
 
-                {series.map((s, i) => (
-                  <circle
-                    key={s.key}
-                    ref={(el) => { scrub.dotRefs.current[i] = el; }}
-                    cx={0} cy={0} r={3}
-                    fill={s.color}
-                    className={styles.activeDot}
-                    style={{ display: 'none' }}
-                  />
-                ))}
+                    {series.map((s, i) => (
+                      <circle
+                        key={s.key}
+                        ref={(el) => { scrub.dotRefs.current[i] = el; }}
+                        cx={0} cy={0} r={3}
+                        fill={s.color}
+                        className={styles.activeDot}
+                        style={{ display: 'none' }}
+                      />
+                    ))}
+                  </>
+                )}
 
                 {yLabels.map(({ y, text }, i) => (
                   <text key={i} x={-8} y={y} className={styles.axisLabel} textAnchor="end" dominantBaseline="middle">

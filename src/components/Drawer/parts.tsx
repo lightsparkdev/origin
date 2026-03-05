@@ -168,6 +168,22 @@ export const DrawerIndentBackground = React.forwardRef<HTMLDivElement, DrawerInd
   },
 );
 
+// Handle (drag bar for bottom sheets)
+export interface DrawerHandleProps extends React.ComponentPropsWithRef<'div'> {}
+
+export const DrawerHandle = React.forwardRef<HTMLDivElement, DrawerHandleProps>(
+  function DrawerHandle({ className, ...props }, ref) {
+    return (
+      <div
+        ref={ref}
+        aria-hidden="true"
+        className={clsx(styles.handle, className)}
+        {...props}
+      />
+    );
+  },
+);
+
 // Display names
 if (process.env.NODE_ENV !== 'production') {
   DrawerProvider.displayName = 'Drawer.Provider';
@@ -181,6 +197,7 @@ if (process.env.NODE_ENV !== 'production') {
   DrawerTitle.displayName = 'Drawer.Title';
   DrawerDescription.displayName = 'Drawer.Description';
   DrawerClose.displayName = 'Drawer.Close';
+  DrawerHandle.displayName = 'Drawer.Handle';
   DrawerIndent.displayName = 'Drawer.Indent';
   DrawerIndentBackground.displayName = 'Drawer.IndentBackground';
 }

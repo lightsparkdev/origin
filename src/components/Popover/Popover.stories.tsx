@@ -1,3 +1,4 @@
+import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Popover } from './Popover';
 import { Button } from '../Button';
@@ -17,8 +18,14 @@ type Story = StoryObj<typeof meta>;
 const contentStyle = { padding: 'var(--spacing-md)', maxWidth: 280 };
 
 export const Default: Story = {
-  render: () => (
-    <Popover.Root>
+  args: {
+    defaultOpen: false,
+  },
+  argTypes: {
+    defaultOpen: { control: 'boolean' },
+  },
+  render: (args) => (
+    <Popover.Root defaultOpen={args.defaultOpen}>
       <Popover.Trigger render={<Button variant="outline" />}>
         Open Popover
       </Popover.Trigger>
@@ -88,24 +95,30 @@ export const WithClose: Story = {
   ),
 };
 
-export const OpenByDefault: Story = {
-  render: () => (
-    <Popover.Root defaultOpen>
-      <Popover.Trigger render={<Button variant="outline" />}>
-        Already Open
-      </Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Positioner>
-          <Popover.Popup>
-            <div style={contentStyle}>
-              <Popover.Title style={{ margin: 0, fontSize: 14, fontWeight: 500 }}>Open by Default</Popover.Title>
-              <Popover.Description style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
-                This popover renders in its open state.
-              </Popover.Description>
-            </div>
-          </Popover.Popup>
-        </Popover.Positioner>
-      </Popover.Portal>
-    </Popover.Root>
-  ),
+export const Controlled: Story = {
+  render: function Controlled() {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+        <Button variant="outline" onClick={() => setOpen(!open)}>
+          Toggle: {open ? 'Open' : 'Closed'}
+        </Button>
+        <Popover.Root open={open} onOpenChange={setOpen}>
+          <Popover.Trigger render={<Button variant="outline">Controlled popover</Button>} />
+          <Popover.Portal>
+            <Popover.Positioner>
+              <Popover.Popup>
+                <div style={contentStyle}>
+                  <Popover.Title style={{ margin: 0, fontSize: 14, fontWeight: 500 }}>Controlled</Popover.Title>
+                  <Popover.Description style={{ margin: '4px 0 0', fontSize: 13, color: 'var(--text-secondary)' }}>
+                    Open state is controlled via React state.
+                  </Popover.Description>
+                </div>
+              </Popover.Popup>
+            </Popover.Positioner>
+          </Popover.Portal>
+        </Popover.Root>
+      </div>
+    );
+  },
 };

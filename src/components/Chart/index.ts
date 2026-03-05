@@ -1,5 +1,5 @@
 export { Line } from './LineChart';
-export type { LineChartProps, Series, TooltipProp, ReferenceLine } from './LineChart';
+export type { LineChartProps, Series, TooltipProp, ReferenceLine, ReferenceBand } from './LineChart';
 
 export { Sparkline } from './Sparkline';
 export type { SparklineProps } from './Sparkline';
@@ -25,14 +25,26 @@ export type { BarListProps, BarListItem } from './BarList';
 export { Uptime } from './UptimeChart';
 export type { UptimeChartProps, UptimePoint } from './UptimeChart';
 
-export { ActivityGrid } from './ActivityGrid';
-export type { ActivityGridProps, ActivityCell } from './ActivityGrid';
-
 export { Live } from './LiveChart';
 export type { LiveChartProps, LivePoint } from './LiveChart';
+
+export { LiveDot } from './LiveDot';
+export type { LiveDotProps, LiveDotStatus } from './LiveDot';
 
 export { LiveValue } from './LiveValue';
 export type { LiveValueProps } from './LiveValue';
 
-export { LiveDot } from './LiveDot';
-export type { LiveDotProps } from './LiveDot';
+export { Scatter } from './ScatterChart';
+export type { ScatterChartProps, ScatterSeries, ScatterPoint } from './ScatterChart';
+
+export { Split } from './SplitChart';
+export type { SplitChartProps, SplitSegment } from './SplitChart';
+
+export { Sankey } from './SankeyChart';
+export type { SankeyChartProps, SankeyData, SankeyNode, SankeyLink, LayoutNode, LayoutLink } from './SankeyChart';
+
+export { Funnel } from './FunnelChart';
+export type { FunnelChartProps, FunnelStage } from './FunnelChart';
+
+export { Waterfall } from './WaterfallChart';
+export type { WaterfallChartProps, WaterfallSegment } from './WaterfallChart';

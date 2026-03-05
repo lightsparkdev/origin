@@ -30,35 +30,10 @@ export const Default: Story = {
   },
 };
 
-export const Critical: Story = {
-  args: {
-    variant: 'critical',
-    title: 'Title',
-    description: 'Description here.',
-  },
-};
-
 export const TitleOnly: Story = {
   args: {
     variant: 'default',
     title: 'Title only alert',
-  },
-};
-
-export const NoIcon: Story = {
-  args: {
-    variant: 'default',
-    title: 'No icon alert',
-    description: 'This alert has no icon.',
-    icon: false,
-  },
-};
-
-export const Warning: Story = {
-  args: {
-    variant: 'warning',
-    title: 'Title',
-    description: 'Description here.',
   },
 };
 

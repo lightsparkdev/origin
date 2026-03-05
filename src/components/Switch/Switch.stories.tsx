@@ -12,13 +12,12 @@ const meta: Meta<typeof Switch> = {
   tags: ['autodocs'],
   argTypes: {
     size: {
-      control: 'select',
+      control: 'radio',
       options: ['sm', 'md'],
     },
-    checked: { control: 'boolean' },
+    defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
     readOnly: { control: 'boolean' },
-    required: { control: 'boolean' },
   },
 };
 
@@ -28,19 +27,9 @@ type Story = StoryObj<typeof Switch>;
 export const Default: Story = {
   args: {
     size: 'md',
-  },
-};
-
-export const Checked: Story = {
-  args: {
-    defaultChecked: true,
-    size: 'md',
-  },
-};
-
-export const Small: Story = {
-  args: {
-    size: 'sm',
+    defaultChecked: false,
+    disabled: false,
+    readOnly: false,
   },
 };
 
@@ -48,13 +37,6 @@ export const SmallChecked: Story = {
   args: {
     size: 'sm',
     defaultChecked: true,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    size: 'md',
   },
 };
 

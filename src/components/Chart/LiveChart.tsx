@@ -3,6 +3,8 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import { filerp, CHART_LABEL_FONT } from './utils';
+import { useMergedRef } from './useMergedRef';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface LivePoint {
@@ -24,14 +26,18 @@ export interface LiveChartProps extends React.ComponentPropsWithoutRef<'div'> {
   /** Show pulsing live dot. */
   pulse?: boolean;
   /** Show crosshair on hover. */
-  scrub?: boolean;
+  interactive?: boolean;
   height?: number;
   /** Interpolation speed (0-1). Higher = snappier. */
   lerpSpeed?: number;
   formatValue?: (v: number) => string;
-  formatTime?: (t: number) => string;
+  formatXLabel?: (t: number) => string;
   ariaLabel?: string;
-  onHover?: (point: { time: number; value: number; x: number; y: number } | null) => void;
+  onActiveChange?: (point: { time: number; value: number; x: number; y: number } | null) => void;
+  loading?: boolean;
+  empty?: React.ReactNode;
+  /** Analytics name for event tracking. */
+  analyticsName?: string;
 }
 
 // Layout constants
@@ -142,13 +148,16 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       grid = true,
       fill = true,
       pulse = true,
-      scrub = true,
+      interactive = true,
       height = 200,
       lerpSpeed = 0.08,
       formatValue,
-      formatTime,
+      formatXLabel,
       ariaLabel,
-      onHover,
+      onActiveChange,
+      loading,
+      empty,
+      analyticsName: _analyticsName,
       className,
       ...props
     },
@@ -173,13 +182,13 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
 
     // Config ref so rAF callback doesn't need recreation
     const configRef = React.useRef({
-      data, value, color, windowSecs, grid, fill, pulse, scrub,
-      lerpSpeed, formatValue, formatTime, onHover, height,
+      data, value, color, windowSecs, grid, fill, pulse, interactive,
+      lerpSpeed, formatValue, formatXLabel, onActiveChange, height, loading,
     });
     React.useLayoutEffect(() => {
       configRef.current = {
-        data, value, color, windowSecs, grid, fill, pulse, scrub,
-        lerpSpeed, formatValue, formatTime, onHover, height,
+        data, value, color, windowSecs, grid, fill, pulse, interactive,
+        lerpSpeed, formatValue, formatXLabel, onActiveChange, height, loading,
       };
     });
 
@@ -218,16 +227,16 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       const el = containerRef.current;
       if (!el) return;
       const onMove = (e: MouseEvent) => {
-        if (!configRef.current.scrub) return;
+        if (!configRef.current.interactive) return;
         const rect = el.getBoundingClientRect();
         hoverXRef.current = e.clientX - rect.left;
       };
       const onLeave = () => {
         hoverXRef.current = null;
-        configRef.current.onHover?.(null);
+        configRef.current.onActiveChange?.(null);
       };
       const onTouchMove = (e: TouchEvent) => {
-        if (!configRef.current.scrub || !e.touches[0]) return;
+        if (!configRef.current.interactive || !e.touches[0]) return;
         const rect = el.getBoundingClientRect();
         hoverXRef.current = e.touches[0].clientX - rect.left;
       };
@@ -249,8 +258,8 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
 
       const canvas = canvasRef.current;
       const { w, h } = sizeRef.current;
-      if (!canvas || w === 0 || h === 0) {
-        rafRef.current = requestAnimationFrame(draw);
+      if (!canvas || w === 0 || h === 0 || configRef.current.loading) {
+        rafRef.current = 0;
         return;
       }
 
@@ -323,7 +332,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       const toY = (v: number) => PAD.top + (1 - (v - st.displayMin) / (st.displayMax - st.displayMin)) * chartH;
       const clampY = (y: number) => Math.max(PAD.top, Math.min(PAD.top + chartH, y));
 
-      // Grid
+      // Grid lines (drawn before fade so lines fade at the left edge)
       if (cfg.grid) {
         const valRange = st.displayMax - st.displayMin;
         const pxPerUnit = chartH / (valRange || 1);
@@ -350,7 +359,6 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           if (!st.gridLabels.has(key)) st.gridLabels.set(key, 0.01);
         }
 
-        const fmtVal = cfg.formatValue ?? ((v: number) => v.toFixed(v % 1 === 0 ? 0 : 2));
         ctx.lineWidth = 1;
         for (const [key, alpha] of st.gridLabels) {
           if (alpha < 0.01) continue;
@@ -361,12 +369,6 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           ctx.setLineDash([1, 3]);
           ctx.beginPath(); ctx.moveTo(padLeft, y); ctx.lineTo(padLeft + chartW, y); ctx.stroke();
           ctx.setLineDash([]);
-          ctx.globalAlpha = alpha * 0.4;
-          ctx.fillStyle = 'rgb(0,0,0)';
-          ctx.font = CHART_LABEL_FONT;
-          ctx.textAlign = 'right';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(fmtVal(v), padLeft - 8, y);
         }
         ctx.globalAlpha = 1;
       }
@@ -418,9 +420,26 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       ctx.fillRect(0, 0, padLeft + FADE_EDGE_WIDTH, h);
       ctx.restore();
 
+      // Y-axis labels (drawn after fade so they remain visible)
+      if (cfg.grid) {
+        const fmtVal = cfg.formatValue ?? ((v: number) => v.toFixed(v % 1 === 0 ? 0 : 2));
+        ctx.font = CHART_LABEL_FONT;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgb(0,0,0)';
+        for (const [key, alpha] of st.gridLabels) {
+          if (alpha < 0.01) continue;
+          const v = key / 1000;
+          const y = Math.round(toY(v)) + 0.5;
+          ctx.globalAlpha = alpha * 0.4;
+          ctx.fillText(fmtVal(v), padLeft - 8, y);
+        }
+        ctx.globalAlpha = 1;
+      }
+
       // Time axis
       if (cfg.grid) {
-        const fmtTime = cfg.formatTime ?? formatDefaultTime;
+        const fmtTime = cfg.formatXLabel ?? formatDefaultTime;
         const timeStep = Math.max(1, Math.ceil(cfg.windowSecs / 5));
         const firstT = Math.ceil(leftEdge / timeStep) * timeStep;
         ctx.font = CHART_LABEL_FONT;
@@ -476,9 +495,9 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
         ctx.fill();
       }
 
-      // Crosshair / scrub
+      // Crosshair / interaction overlay
       const hoverX = hoverXRef.current;
-      const scrubTarget = hoverX !== null && cfg.scrub ? 1 : 0;
+      const scrubTarget = hoverX !== null && cfg.interactive ? 1 : 0;
       st.scrubAmount += (scrubTarget - st.scrubAmount) * 0.12;
       if (st.scrubAmount < 0.01) st.scrubAmount = 0;
       if (st.scrubAmount > 0.99) st.scrubAmount = 1;
@@ -515,7 +534,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
 
           // Tooltip text — tracks horizontally with crosshair
           const fmtVal = cfg.formatValue ?? ((v: number) => v.toFixed(2));
-          const fmtTime = cfg.formatTime ?? formatDefaultTime;
+          const fmtTime = cfg.formatXLabel ?? formatDefaultTime;
           const label = `${fmtVal(hoverVal)}  ·  ${fmtTime(hoverTime)}`;
           ctx.globalAlpha = opacity;
           ctx.font = CHART_LABEL_FONT.replace('11px', '12px');
@@ -529,7 +548,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
           ctx.fillStyle = 'rgb(26,26,26)';
           ctx.fillText(label, labelX, labelY);
 
-          cfg.onHover?.({ time: hoverTime, value: hoverVal, x: clampedX, y: hoverY });
+          cfg.onActiveChange?.({ time: hoverTime, value: hoverVal, x: clampedX, y: hoverY });
         }
       }
 
@@ -553,20 +572,40 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       };
     }, [draw]);
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref],
-    );
+    React.useEffect(() => {
+      if (!loading && !rafRef.current) {
+        lastFrameRef.current = 0;
+        rafRef.current = requestAnimationFrame(draw);
+      }
+    }, [loading, draw]);
+
+    const mergedRef = useMergedRef(ref, containerRef);
+
+    if (loading) {
+      return (
+        <div ref={mergedRef} className={clsx(styles.root, className)} style={{ height }}>
+          <div className={styles.loading}>
+            <Skeleton style={{ width: '100%', height: '100%' }} />
+          </div>
+        </div>
+      );
+    }
+
+    if (data.length === 0 && empty !== undefined) {
+      return (
+        <div ref={mergedRef} className={clsx(styles.root, className)} style={{ height }}>
+          <div className={styles.empty}>
+            {typeof empty === 'boolean' ? 'No data' : empty}
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div
         ref={mergedRef}
         className={clsx(styles.root, className)}
-        style={{ height, cursor: scrub ? 'crosshair' : undefined }}
+        style={{ height, cursor: interactive ? 'crosshair' : undefined }}
         {...props}
       >
         <canvas

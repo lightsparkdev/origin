@@ -2,16 +2,61 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Card } from './index';
 import { Button } from '../Button';
 
-const meta: Meta = {
+const meta: Meta<typeof Card.Root> = {
   title: 'Components/Card',
+  component: Card.Root,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['structured', 'simple'],
+    },
   },
 };
 
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Structured: StoryObj = {
+export const Default: Story = {
+  args: {
+    variant: 'structured',
+  },
+  render: (args) => (
+    <Card.Root variant={args.variant} style={{ width: 360 }}>
+      {args.variant === 'structured' ? (
+        <>
+          <Card.Header>
+            <Card.TitleGroup>
+              <Card.Title>Card title</Card.Title>
+              <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+            </Card.TitleGroup>
+          </Card.Header>
+          <Card.Body>
+            <p>Slot components in to the body here to extend the functionality of the card.</p>
+          </Card.Body>
+          <Card.Footer>
+            <Button>Button</Button>
+          </Card.Footer>
+        </>
+      ) : (
+        <>
+          <Card.TitleGroup>
+            <Card.Title>Card title</Card.Title>
+            <Card.Subtitle>Subtitle goes here.</Card.Subtitle>
+          </Card.TitleGroup>
+          <Card.Body>
+            <p>Slot components in to the body here to extend the functionality of the card.</p>
+          </Card.Body>
+          <Button>Button</Button>
+        </>
+      )}
+    </Card.Root>
+  ),
+};
+
+export const Structured: Story = {
   render: () => (
     <Card.Root variant="structured" style={{ width: 360 }}>
       <Card.Header>
@@ -30,7 +75,7 @@ export const Structured: StoryObj = {
   ),
 };
 
-export const StructuredWithBackButton: StoryObj = {
+export const StructuredWithBackButton: Story = {
   render: () => (
     <Card.Root variant="structured" style={{ width: 360 }}>
       <Card.Header>
@@ -50,7 +95,7 @@ export const StructuredWithBackButton: StoryObj = {
   ),
 };
 
-export const Simple: StoryObj = {
+export const Simple: Story = {
   render: () => (
     <Card.Root variant="simple" style={{ width: 360 }}>
       <Card.TitleGroup>
@@ -65,7 +110,7 @@ export const Simple: StoryObj = {
   ),
 };
 
-export const FullwidthBody: StoryObj = {
+export const FullwidthBody: Story = {
   render: () => (
     <Card.Root variant="structured" style={{ width: 360 }}>
       <Card.Header>
@@ -86,7 +131,7 @@ export const FullwidthBody: StoryObj = {
   ),
 };
 
-export const AllVariants: StoryObj = {
+export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
       <Card.Root variant="structured" style={{ width: 360 }}>

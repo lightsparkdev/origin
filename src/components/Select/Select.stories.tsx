@@ -6,8 +6,14 @@ import { CentralIcon } from '../Icon';
 
 const meta: Meta = {
   title: 'Components/Select',
+  component: Select.Root,
   parameters: {
     layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    disabled: { control: 'boolean' },
+    variant: { control: 'radio', options: ['default', 'ghost'] },
   },
 };
 
@@ -21,62 +27,16 @@ const fruits = [
   { value: 'mango', label: 'Mango' },
 ];
 
-export const Default: StoryObj = {
-  render: () => (
-    <Select.Root>
-      <Select.Trigger>
+export const Default: StoryObj<{ disabled?: boolean; variant?: 'default' | 'ghost' }> = {
+  args: {
+    disabled: false,
+    variant: 'default',
+  },
+  render: (args) => (
+    <Select.Root disabled={args.disabled}>
+      <Select.Trigger variant={args.variant}>
         <Select.Value placeholder="Select a fruit" />
-        <Select.Icon />
-      </Select.Trigger>
-      <Select.Portal>
-        <Select.Positioner>
-          <Select.Popup>
-            <Select.List>
-              {fruits.map((fruit) => (
-                <Select.Item key={fruit.value} value={fruit.value}>
-                  <Select.ItemIndicator />
-                  <Select.ItemText>{fruit.label}</Select.ItemText>
-                </Select.Item>
-              ))}
-            </Select.List>
-          </Select.Popup>
-        </Select.Positioner>
-      </Select.Portal>
-    </Select.Root>
-  ),
-};
-
-export const WithDefaultValue: StoryObj = {
-  render: () => (
-    <Select.Root defaultValue="banana">
-      <Select.Trigger>
-        <Select.Value placeholder="Select a fruit" />
-        <Select.Icon />
-      </Select.Trigger>
-      <Select.Portal>
-        <Select.Positioner>
-          <Select.Popup>
-            <Select.List>
-              {fruits.map((fruit) => (
-                <Select.Item key={fruit.value} value={fruit.value}>
-                  <Select.ItemIndicator />
-                  <Select.ItemText>{fruit.label}</Select.ItemText>
-                </Select.Item>
-              ))}
-            </Select.List>
-          </Select.Popup>
-        </Select.Positioner>
-      </Select.Portal>
-    </Select.Root>
-  ),
-};
-
-export const Disabled: StoryObj = {
-  render: () => (
-    <Select.Root disabled>
-      <Select.Trigger>
-        <Select.Value placeholder="Select a fruit" />
-        <Select.Icon />
+        {args.variant === 'ghost' ? <Select.GhostIcon /> : <Select.Icon />}
       </Select.Trigger>
       <Select.Portal>
         <Select.Positioner>
@@ -137,7 +97,7 @@ export const WithGroups: StoryObj = {
   ),
 };
 
-export const WithTrailingIcons: StoryObj = {
+export const WithIcons: StoryObj = {
   render: () => (
     <Select.Root>
       <Select.Trigger>
@@ -216,7 +176,7 @@ export const MultiSelect: StoryObj = {
   },
 };
 
-export const WithFieldValidation: StoryObj = {
+export const WithField: StoryObj = {
   render: function WithFieldValidation() {
     const [value, setValue] = React.useState<string | null>(null);
     const [submitted, setSubmitted] = React.useState(false);
@@ -300,56 +260,33 @@ export const Ghost: StoryObj = {
   },
 };
 
-export const GhostWithPlaceholder: StoryObj = {
-  render: () => (
-    <Select.Root>
-      <Select.Trigger variant="ghost">
-        <Select.Value placeholder="Select environment" />
-        <Select.GhostIcon />
-      </Select.Trigger>
-      <Select.Portal>
-        <Select.Positioner>
-          <Select.Popup>
-            <Select.List>
-              {environments.map((env) => (
-                <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemText>{env.label}</Select.ItemText>
-                  <Select.ItemIndicator />
-                </Select.Item>
-              ))}
-            </Select.List>
-          </Select.Popup>
-        </Select.Positioner>
-      </Select.Portal>
-    </Select.Root>
-  ),
-};
+export const Controlled: StoryObj = {
+  render: function Controlled() {
+    const [value, setValue] = React.useState<string | null>(null);
 
-export const GhostDisabled: StoryObj = {
-  render: () => (
-    <Select.Root disabled defaultValue="production">
-      <Select.Trigger variant="ghost">
-        <Select.Value>
-          {(selected) => environments.find(e => e.value === selected)?.label ?? selected}
-        </Select.Value>
-        <Select.GhostIcon />
-      </Select.Trigger>
-      <Select.Portal>
-        <Select.Positioner>
-          <Select.Popup>
-            <Select.List>
-              {environments.map((env) => (
-                <Select.Item key={env.value} value={env.value}>
-                  <Select.ItemText>{env.label}</Select.ItemText>
-                  <Select.ItemIndicator />
-                </Select.Item>
-              ))}
-            </Select.List>
-          </Select.Popup>
-        </Select.Positioner>
-      </Select.Portal>
-    </Select.Root>
-  ),
+    return (
+      <Select.Root value={value} onValueChange={setValue}>
+        <Select.Trigger>
+          <Select.Value placeholder="Select a fruit" />
+          <Select.Icon />
+        </Select.Trigger>
+        <Select.Portal>
+          <Select.Positioner>
+            <Select.Popup>
+              <Select.List>
+                {fruits.map((fruit) => (
+                  <Select.Item key={fruit.value} value={fruit.value}>
+                    <Select.ItemIndicator />
+                    <Select.ItemText>{fruit.label}</Select.ItemText>
+                  </Select.Item>
+                ))}
+              </Select.List>
+            </Select.Popup>
+          </Select.Positioner>
+        </Select.Portal>
+      </Select.Root>
+    );
+  },
 };
 
 const countries = [

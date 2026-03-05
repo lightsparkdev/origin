@@ -35,8 +35,9 @@ type Story = StoryObj<typeof Sidebar.Root>;
  * Default expanded sidebar with groups and items.
  */
 export const Default: Story = {
-  render: () => (
-    <Sidebar.Root>
+  args: { collapsed: false },
+  render: (args) => (
+    <Sidebar.Root collapsed={args.collapsed}>
       <Sidebar.Header>
         <div style={{ padding: 'var(--spacing-xs)', backgroundColor: 'var(--surface-secondary)', textAlign: 'center' }}>
           Header Slot
@@ -73,40 +74,6 @@ export const Default: Story = {
         <div style={{ padding: 'var(--spacing-xs)', backgroundColor: 'var(--surface-secondary)', textAlign: 'center' }}>
           Footer Slot
         </div>
-      </Sidebar.Footer>
-    </Sidebar.Root>
-  ),
-};
-
-/**
- * Collapsed sidebar showing only icons.
- */
-export const Collapsed: Story = {
-  render: () => (
-    <Sidebar.Root collapsed>
-      <Sidebar.Header>
-        <div style={{ width: 36, height: 36, backgroundColor: 'var(--surface-secondary)', borderRadius: 'var(--corner-radius-md)' }} />
-      </Sidebar.Header>
-      <Sidebar.Content>
-        <Sidebar.Group>
-          <Sidebar.Menu>
-            <Sidebar.Item icon={<CentralIcon name="IconHome" size={20} />} active>
-              Dashboard
-            </Sidebar.Item>
-            <Sidebar.Item icon={<CentralIcon name="IconPeopleCircle" size={20} />}>
-              Profile
-            </Sidebar.Item>
-            <Sidebar.Item icon={<CentralIcon name="IconSettingsGear1" size={20} />}>
-              Settings
-            </Sidebar.Item>
-            <Sidebar.Item icon={<CentralIcon name="IconSquareBehindSquare1" size={20} />}>
-              Projects
-            </Sidebar.Item>
-          </Sidebar.Menu>
-        </Sidebar.Group>
-      </Sidebar.Content>
-      <Sidebar.Footer>
-        <div style={{ width: 36, height: 36, backgroundColor: 'var(--surface-secondary)', borderRadius: 'var(--corner-radius-md)' }} />
       </Sidebar.Footer>
     </Sidebar.Root>
   ),

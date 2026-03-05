@@ -32,7 +32,6 @@ Fallback for CSS: `npm run figma:node "<figma-url>"`
 | Base UI exists | `components.mdc` |
 | Composed from Base UI | `components.mdc` |
 | No Base UI | `custom-components.mdc` |
-| Animations | `motion.mdc` |
 
 ## Code Style
 

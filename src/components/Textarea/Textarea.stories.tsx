@@ -24,6 +24,9 @@ type Story = StoryObj<typeof Textarea>;
 export const Default: Story = {
   args: {
     placeholder: 'Placeholder',
+    disabled: false,
+    readOnly: false,
+    rows: 3,
   },
 };
 
@@ -33,38 +36,10 @@ export const WithValue: Story = {
   },
 };
 
-export const Disabled: Story = {
-  args: {
-    placeholder: 'Placeholder',
-    disabled: true,
-  },
-};
-
-export const DisabledWithValue: Story = {
-  args: {
-    defaultValue: 'Content',
-    disabled: true,
-  },
-};
-
-export const ReadOnly: Story = {
-  args: {
-    defaultValue: 'Read only content',
-    readOnly: true,
-  },
-};
-
 export const Invalid: Story = {
   render: () => (
     <Textarea defaultValue="Invalid content" data-invalid="" />
   ),
-};
-
-export const WithRows: Story = {
-  args: {
-    placeholder: 'Tall textarea',
-    rows: 6,
-  },
 };
 
 export const Controlled: Story = {

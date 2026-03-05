@@ -8,18 +8,19 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    label: {
+      control: 'text',
+    },
+  },
 } satisfies Meta<typeof Loader>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
-};
-
-export const CustomLabel: Story = {
   args: {
-    label: 'Fetching data',
+    label: 'Loading',
   },
 };
 

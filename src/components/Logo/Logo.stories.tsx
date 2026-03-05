@@ -9,15 +9,15 @@ const meta: Meta<typeof Logo> = {
   },
   argTypes: {
     brand: {
-      control: 'select',
+      control: 'radio',
       options: ['lightspark', 'grid'],
     },
     variant: {
-      control: 'select',
+      control: 'radio',
       options: ['logo', 'logomark', 'wordmark'],
     },
     weight: {
-      control: 'select',
+      control: 'radio',
       options: ['regular', 'light'],
     },
     height: {
@@ -31,70 +31,13 @@ type Story = StoryObj<typeof Logo>;
 
 export const Default: Story = {
   args: {
-    'aria-label': 'Lightspark',
-  },
-};
-
-export const LogoVariant: Story = {
-  args: {
+    brand: 'lightspark',
     variant: 'logo',
     weight: 'regular',
+    height: 24,
     'aria-label': 'Lightspark',
   },
-};
-
-export const LogoLight: Story = {
-  args: {
-    variant: 'logo',
-    weight: 'light',
-    'aria-label': 'Lightspark',
-  },
-};
-
-export const Logomark: Story = {
-  args: {
-    variant: 'logomark',
-    weight: 'regular',
-    'aria-label': 'Lightspark',
-  },
-};
-
-export const LogomarkLight: Story = {
-  args: {
-    variant: 'logomark',
-    weight: 'light',
-    'aria-label': 'Lightspark',
-  },
-};
-
-export const Wordmark: Story = {
-  args: {
-    variant: 'wordmark',
-    'aria-label': 'Lightspark',
-  },
-};
-
-export const CustomHeight: Story = {
-  args: {
-    height: 40,
-    'aria-label': 'Lightspark',
-  },
-};
-
-export const GridLogo: Story = {
-  args: {
-    brand: 'grid',
-    variant: 'logo',
-    'aria-label': 'Grid',
-  },
-};
-
-export const GridLogomark: Story = {
-  args: {
-    brand: 'grid',
-    variant: 'logomark',
-    'aria-label': 'Grid',
-  },
+  render: (args) => <Logo {...args} />,
 };
 
 export const AllVariants: Story = {

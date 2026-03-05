@@ -289,7 +289,7 @@ The `tools/` directory is excluded from the main tsconfig since it has Figma-spe
 
 ## Related Files
 
-- **Figma Design System**: https://www.figma.com/design/3JvbUyTqbbPL8cCpwSX0j4/Origin-design-system
+- **Figma Design System**: Set `FIGMA_FILE_KEY` in `.env.local` — see `.env.example`
 - **Base UI Docs**: https://base-ui.com/react/components
 
 ---

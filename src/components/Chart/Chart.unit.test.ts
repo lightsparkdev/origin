@@ -23,6 +23,7 @@ import {
   type Point,
 } from './utils';
 import { resolveTooltipMode, resolveSeries, SERIES_COLORS, axisTickTarget } from './types';
+import { computeSankeyLayout, sankeyLinkPath } from './sankeyLayout';
 
 // ---------------------------------------------------------------------------
 // linearScale
@@ -723,5 +724,105 @@ describe('axisPadForLabels', () => {
     const positive = axisPadForLabels(['0', '1,000']);
     const withNeg = axisPadForLabels(['-1,000', '0', '1,000']);
     expect(withNeg).toBeGreaterThan(positive);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Sankey layout
+// ---------------------------------------------------------------------------
+
+describe('computeSankeyLayout', () => {
+  const simpleData = {
+    nodes: [
+      { id: 'a', label: 'A' },
+      { id: 'b', label: 'B' },
+      { id: 'c', label: 'C' },
+    ],
+    links: [
+      { source: 'a', target: 'c', value: 30 },
+      { source: 'b', target: 'c', value: 20 },
+    ],
+  };
+
+  it('returns all nodes and links', () => {
+    const result = computeSankeyLayout(simpleData, 400, 200, 12, 8);
+    expect(result.nodes).toHaveLength(3);
+    expect(result.links).toHaveLength(2);
+  });
+
+  it('assigns columns via BFS', () => {
+    const result = computeSankeyLayout(simpleData, 400, 200, 12, 8);
+    const nodeA = result.nodes.find((n) => n.id === 'a')!;
+    const nodeB = result.nodes.find((n) => n.id === 'b')!;
+    const nodeC = result.nodes.find((n) => n.id === 'c')!;
+    expect(nodeA.column).toBe(0);
+    expect(nodeB.column).toBe(0);
+    expect(nodeC.column).toBe(1);
+  });
+
+  it('source nodes are left of target nodes', () => {
+    const result = computeSankeyLayout(simpleData, 400, 200, 12, 8);
+    const nodeA = result.nodes.find((n) => n.id === 'a')!;
+    const nodeC = result.nodes.find((n) => n.id === 'c')!;
+    expect(nodeA.x1).toBeLessThanOrEqual(nodeC.x0);
+  });
+
+  it('node value equals max of in/out flow', () => {
+    const result = computeSankeyLayout(simpleData, 400, 200, 12, 8);
+    const nodeC = result.nodes.find((n) => n.id === 'c')!;
+    expect(nodeC.value).toBe(50);
+  });
+
+  it('node width matches nodeWidth param', () => {
+    const result = computeSankeyLayout(simpleData, 400, 200, 16, 8);
+    for (const node of result.nodes) {
+      expect(node.x1 - node.x0).toBe(16);
+    }
+  });
+
+  it('link widths are proportional to values', () => {
+    const result = computeSankeyLayout(simpleData, 400, 200, 12, 8);
+    const link30 = result.links.find((l) => l.value === 30)!;
+    const link20 = result.links.find((l) => l.value === 20)!;
+    expect(link30.width).toBeGreaterThan(link20.width);
+  });
+
+  it('handles empty input', () => {
+    const result = computeSankeyLayout({ nodes: [], links: [] }, 400, 200, 12, 8);
+    expect(result.nodes).toHaveLength(0);
+    expect(result.links).toHaveLength(0);
+  });
+
+  it('handles multi-column layout', () => {
+    const data = {
+      nodes: [
+        { id: 'a', label: 'A' },
+        { id: 'b', label: 'B' },
+        { id: 'c', label: 'C' },
+      ],
+      links: [
+        { source: 'a', target: 'b', value: 50 },
+        { source: 'b', target: 'c', value: 50 },
+      ],
+    };
+    const result = computeSankeyLayout(data, 600, 200, 12, 8);
+    const cols = result.nodes.map((n) => n.column);
+    expect(new Set(cols).size).toBe(3);
+  });
+});
+
+describe('sankeyLinkPath', () => {
+  it('produces a valid SVG path with cubic bezier', () => {
+    const data = {
+      nodes: [
+        { id: 'a', label: 'A' },
+        { id: 'b', label: 'B' },
+      ],
+      links: [{ source: 'a', target: 'b', value: 100 }],
+    };
+    const result = computeSankeyLayout(data, 400, 200, 12, 8);
+    const path = sankeyLinkPath(result.links[0]);
+    expect(path).toMatch(/^M/);
+    expect(path).toContain('C');
   });
 });

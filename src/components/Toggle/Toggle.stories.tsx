@@ -9,6 +9,9 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    defaultPressed: { control: 'boolean' },
+  },
 } satisfies Meta<typeof Toggle>;
 
 export default meta;
@@ -18,6 +21,7 @@ export const Default: Story = {
   args: {
     children: 'Toggle',
     'aria-label': 'Toggle',
+    defaultPressed: false,
   },
 };
 
@@ -25,14 +29,6 @@ export const WithIcon: Story = {
   args: {
     children: <CentralIcon name="IconBell" size={18} />,
     'aria-label': 'Notifications',
-  },
-};
-
-export const PressedByDefault: Story = {
-  args: {
-    children: 'Active',
-    defaultPressed: true,
-    'aria-label': 'Active toggle',
   },
 };
 

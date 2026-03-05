@@ -43,18 +43,6 @@ export const WithError: Story = {
   ),
 };
 
-export const Disabled: Story = {
-  render: () => (
-    <div style={{ width: '256px' }}>
-      <Field.Root disabled>
-        <Field.Label>Email</Field.Label>
-        <Input placeholder="Enter your email" />
-        <Field.Description>This field is disabled.</Field.Description>
-      </Field.Root>
-    </div>
-  ),
-};
-
 export const WithoutLabel: Story = {
   render: () => (
     <div style={{ width: '256px' }}>

@@ -2,20 +2,33 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Checkbox } from './Checkbox';
 
-const meta: Meta = {
+const meta: Meta<typeof Checkbox.Group> = {
   title: 'Components/Checkbox',
+  component: Checkbox.Group,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['default', 'card'],
+    },
+    disabled: { control: 'boolean' },
   },
 };
 
 export default meta;
+type Story = StoryObj<typeof Checkbox.Group>;
 
-export const Default: StoryObj = {
-  render: () => (
+export const Default: Story = {
+  args: {
+    variant: 'default',
+    disabled: false,
+  },
+  render: (args) => (
     <Checkbox.Field>
       <Checkbox.Legend>Legend</Checkbox.Legend>
-      <Checkbox.Group defaultValue={['option1']}>
+      <Checkbox.Group {...args} defaultValue={['option1']}>
         <Checkbox.Item value="option1" label="Label" description="Description goes here." />
         <Checkbox.Item value="option2" label="Label" description="Description goes here." />
         <Checkbox.Item value="option3" label="Label" description="Description goes here." />
@@ -26,20 +39,7 @@ export const Default: StoryObj = {
   ),
 };
 
-export const CardVariant: StoryObj = {
-  render: () => (
-    <Checkbox.Field>
-      <Checkbox.Legend>Legend</Checkbox.Legend>
-      <Checkbox.Group variant="card" defaultValue={['option1']}>
-        <Checkbox.Item value="option1" label="Label" description="Description goes here." />
-        <Checkbox.Item value="option2" label="Label" description="Description goes here." />
-      </Checkbox.Group>
-      <Checkbox.Description>Help text goes here.</Checkbox.Description>
-    </Checkbox.Field>
-  ),
-};
-
-export const WithError: StoryObj = {
+export const WithError: Story = {
   render: () => (
     <Checkbox.Field>
       <Checkbox.Legend>Legend</Checkbox.Legend>
@@ -54,19 +54,7 @@ export const WithError: StoryObj = {
   ),
 };
 
-export const Disabled: StoryObj = {
-  render: () => (
-    <Checkbox.Field>
-      <Checkbox.Legend>Legend</Checkbox.Legend>
-      <Checkbox.Group disabled>
-        <Checkbox.Item value="option1" label="Label" description="Description goes here." />
-        <Checkbox.Item value="option2" label="Label" description="Description goes here." defaultChecked />
-      </Checkbox.Group>
-    </Checkbox.Field>
-  ),
-};
-
-export const DisabledCard: StoryObj = {
+export const DisabledCard: Story = {
   render: () => (
     <Checkbox.Field>
       <Checkbox.Legend>Legend</Checkbox.Legend>
@@ -78,7 +66,7 @@ export const DisabledCard: StoryObj = {
   ),
 };
 
-export const Indeterminate: StoryObj = {
+export const Indeterminate: Story = {
   render: function IndeterminateStory() {
     const [value, setValue] = useState<string[]>(['child1']);
     const allValues = ['child1', 'child2', 'child3'];
@@ -99,7 +87,7 @@ export const Indeterminate: StoryObj = {
   },
 };
 
-export const Controlled: StoryObj = {
+export const Controlled: Story = {
   render: function ControlledStory() {
     const [value, setValue] = useState<string[]>(['option2']);
 
@@ -119,7 +107,7 @@ export const Controlled: StoryObj = {
   },
 };
 
-export const AllStates: StoryObj = {
+export const AllStates: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 48 }}>
       <div>

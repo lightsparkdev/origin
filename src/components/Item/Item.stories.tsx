@@ -62,22 +62,6 @@ export const WithSwitch: Story = {
   render: () => <WithSwitchComponent />,
 };
 
-export const Selected: Story = {
-  args: {
-    title: 'Selected item',
-    selected: true,
-    trailing: <CentralIcon name="IconCheckmark2Small" size={24} />,
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    title: 'Disabled item',
-    description: 'This item is disabled',
-    disabled: true,
-  },
-};
-
 function SelectableListComponent() {
   const [selected, setSelected] = React.useState<string>('item-1');
   const items = [

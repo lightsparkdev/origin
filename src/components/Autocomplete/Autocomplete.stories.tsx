@@ -21,19 +21,27 @@ const fruits: Fruit[] = [
   { value: 'honeydew', label: 'Honeydew' },
 ];
 
-const meta: Meta = {
+const meta: Meta<typeof Autocomplete.Root> = {
   title: 'Components/Autocomplete',
+  component: Autocomplete.Root,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    disabled: { control: 'boolean' },
   },
 };
 
 export default meta;
+type Story = StoryObj<typeof Autocomplete.Root>;
 
-export const Basic: StoryObj = {
-  render: () => (
+export const Basic: Story = {
+  args: {
+    disabled: false,
+  },
+  render: (args) => (
     <div style={{ width: 300 }}>
-      <Autocomplete.Root items={fruits}>
+      <Autocomplete.Root items={fruits} {...args}>
         <Autocomplete.Input placeholder="Search fruits..." />
         <Autocomplete.Portal>
           <Autocomplete.Positioner>
@@ -54,7 +62,7 @@ export const Basic: StoryObj = {
   ),
 };
 
-export const WithLeadingIcons: StoryObj = {
+export const WithLeadingIcons: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <Autocomplete.Root items={fruits}>
@@ -82,7 +90,7 @@ export const WithLeadingIcons: StoryObj = {
   ),
 };
 
-export const Grouped: StoryObj = {
+export const Grouped: Story = {
   render: () => {
     const groupedItems = [
       {
@@ -134,7 +142,7 @@ export const Grouped: StoryObj = {
   },
 };
 
-export const AsyncLoading: StoryObj = {
+export const AsyncLoading: Story = {
   render: function AsyncAutocomplete() {
     const [items, setItems] = React.useState<Fruit[]>([]);
     const [loading, setLoading] = React.useState(false);
@@ -184,30 +192,7 @@ export const AsyncLoading: StoryObj = {
   },
 };
 
-export const Disabled: StoryObj = {
-  render: () => (
-    <div style={{ width: 300 }}>
-      <Autocomplete.Root items={fruits} disabled>
-        <Autocomplete.Input placeholder="Search fruits..." />
-        <Autocomplete.Portal>
-          <Autocomplete.Positioner>
-            <Autocomplete.Popup>
-              <Autocomplete.List>
-                {(item: Fruit) => (
-                  <Autocomplete.Item key={item.value} value={item}>
-                    {item.label}
-                  </Autocomplete.Item>
-                )}
-              </Autocomplete.List>
-            </Autocomplete.Popup>
-          </Autocomplete.Positioner>
-        </Autocomplete.Portal>
-      </Autocomplete.Root>
-    </div>
-  ),
-};
-
-export const DisabledItems: StoryObj = {
+export const DisabledItems: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <Autocomplete.Root items={fruits}>
@@ -235,7 +220,7 @@ export const DisabledItems: StoryObj = {
   ),
 };
 
-export const Controlled: StoryObj = {
+export const Controlled: Story = {
   render: function ControlledAutocomplete() {
     const [value, setValue] = React.useState('');
 
@@ -344,11 +329,11 @@ function FuzzyMatchingDemo() {
   );
 }
 
-export const FuzzyMatching: StoryObj = {
+export const FuzzyMatching: Story = {
   render: () => <FuzzyMatchingDemo />,
 };
 
-export const WithField: StoryObj = {
+export const WithField: Story = {
   render: function WithField() {
     const [value, setValue] = React.useState('');
     const [touched, setTouched] = React.useState(false);

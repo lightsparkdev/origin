@@ -3,16 +3,32 @@ import { useState } from 'react';
 import { Collapsible } from './index';
 import { CentralIcon } from '../Icon';
 
-const meta: Meta = {
+const meta: Meta<typeof Collapsible.Root> = {
   title: 'Components/Collapsible',
   component: Collapsible.Root,
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    defaultOpen: {
+      control: 'boolean',
+    },
+    disabled: {
+      control: 'boolean',
+    },
+  },
 };
 
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Default: StoryObj = {
-  render: () => (
-    <Collapsible.Root>
+export const Default: Story = {
+  args: {
+    defaultOpen: false,
+    disabled: false,
+  },
+  render: (args) => (
+    <Collapsible.Root defaultOpen={args.defaultOpen} disabled={args.disabled}>
       <Collapsible.Trigger>Advanced settings</Collapsible.Trigger>
       <Collapsible.Panel>
         These settings are for experienced users. Adjust with caution.
@@ -21,40 +37,7 @@ export const Default: StoryObj = {
   ),
 };
 
-export const DefaultOpen: StoryObj = {
-  render: () => (
-    <Collapsible.Root defaultOpen>
-      <Collapsible.Trigger>Details</Collapsible.Trigger>
-      <Collapsible.Panel>
-        This panel starts open by default.
-      </Collapsible.Panel>
-    </Collapsible.Root>
-  ),
-};
-
-export const Disabled: StoryObj = {
-  render: () => (
-    <Collapsible.Root disabled>
-      <Collapsible.Trigger>Cannot toggle</Collapsible.Trigger>
-      <Collapsible.Panel>
-        This content is locked.
-      </Collapsible.Panel>
-    </Collapsible.Root>
-  ),
-};
-
-export const HideIcon: StoryObj = {
-  render: () => (
-    <Collapsible.Root>
-      <Collapsible.Trigger hideIcon>Show more</Collapsible.Trigger>
-      <Collapsible.Panel>
-        The trigger has no chevron icon.
-      </Collapsible.Panel>
-    </Collapsible.Root>
-  ),
-};
-
-export const CustomIcon: StoryObj = {
+export const CustomIcon: Story = {
   render: () => (
     <Collapsible.Root>
       <Collapsible.Trigger icon={<CentralIcon name="IconPlus" size={16} />}>
@@ -67,7 +50,7 @@ export const CustomIcon: StoryObj = {
   ),
 };
 
-export const Controlled: StoryObj = {
+export const Controlled: Story = {
   render: function Render() {
     const [open, setOpen] = useState(false);
 
@@ -85,4 +68,21 @@ export const Controlled: StoryObj = {
       </div>
     );
   },
+};
+
+export const Nested: Story = {
+  render: () => (
+    <Collapsible.Root defaultOpen>
+      <Collapsible.Trigger>Parent section</Collapsible.Trigger>
+      <Collapsible.Panel>
+        <p style={{ marginBottom: '12px' }}>Parent content.</p>
+        <Collapsible.Root>
+          <Collapsible.Trigger>Child section</Collapsible.Trigger>
+          <Collapsible.Panel>
+            Nested collapsible content.
+          </Collapsible.Panel>
+        </Collapsible.Root>
+      </Collapsible.Panel>
+    </Collapsible.Root>
+  ),
 };

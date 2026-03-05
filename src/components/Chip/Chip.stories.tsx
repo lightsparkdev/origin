@@ -14,6 +14,7 @@ const meta = {
       options: ['sm', 'md'],
     },
     disabled: { control: 'boolean' },
+    children: { control: 'text' },
     onDismiss: { action: 'dismissed' },
   },
 } satisfies Meta<typeof Chip>;
@@ -25,13 +26,7 @@ export const Default: Story = {
   args: {
     children: 'label',
     size: 'md',
-  },
-};
-
-export const Small: Story = {
-  args: {
-    children: 'label',
-    size: 'sm',
+    disabled: false,
   },
 };
 
@@ -39,22 +34,7 @@ export const WithDismiss: Story = {
   args: {
     children: 'label',
     size: 'md',
-    onDismiss: () => {},
-  },
-};
-
-export const SmallWithDismiss: Story = {
-  args: {
-    children: 'label',
-    size: 'sm',
-    onDismiss: () => {},
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    children: 'label',
-    disabled: true,
+    disabled: false,
     onDismiss: () => {},
   },
 };

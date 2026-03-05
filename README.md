@@ -25,7 +25,8 @@ src/
 └── app/                # Next.js app
 
 tools/
-└── base-ui-lint/       # Figma structure validation plugin
+├── base-ui-lint/       # Figma structure validation plugin
+└── figma-styles/       # Internal Figma style sync (requires credentials)
 
 tokens/
 └── figma/              # Raw Figma token exports
@@ -61,6 +62,10 @@ import { CentralIcon } from '@/components/Icon';
 
 213 vendored icons from Central Icons. Edit `scripts/extract-icons.mjs` to add icons, then run `npm run icons:extract`.
 
+## Tokens
+
+Color and spacing tokens are built from exported Figma variables (`npm run tokens:build`). Typography mixins (`_text-styles.scss`) and shadow variables (`_effects.scss`) are generated from an internal Figma file and committed to the repo — external contributors don't need to regenerate them. Don't edit these generated files by hand.
+
 ## Scripts
 
 | Command | Description |
@@ -74,6 +79,8 @@ import { CentralIcon } from '@/components/Icon';
 | `npm run test:unit` | Vitest unit tests |
 | `npm run test:all` | Run both test suites |
 | `npm run lint` | Run ESLint |
+
+Internal maintainers with Figma credentials also have `figma:styles` and `figma:node` for syncing styles from the design file.
 
 ## Using as a Package
 
@@ -149,7 +156,7 @@ For full setup details, see [Using Origin in Your App](docs/using-origin-in-your
 
 ## Typography
 
-Suisse Intl requires font metric overrides to prevent an oversized text caret in inputs:
+Suisse Intl uses font metric overrides for precise line-height control:
 
 ```scss
 @font-face {
@@ -160,7 +167,7 @@ Suisse Intl requires font metric overrides to prevent an oversized text caret in
 }
 ```
 
-These values are applied to all weights (Regular, Book, Medium) in `_fonts.scss`. Consuming apps **must** import Origin's fonts to get correct input rendering.
+These values are applied to all weights (Regular, Book, Medium) in `_fonts.scss`. Consuming apps should import Origin's fonts for correct input rendering. Without the font, the system falls back to `system-ui`.
 
 ## Documentation
 

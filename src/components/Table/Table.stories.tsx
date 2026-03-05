@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Table } from './index';
 import {
   BasicTable,
   SortableTable,
@@ -6,26 +7,33 @@ import {
   AlignedTable,
   LoadingTable,
   ResizableTable,
-  CompactTable,
   SlotsTable,
   DescriptionTable,
   FooterTable,
   CompactFooterTable,
 } from './Table.test-stories';
 
-const meta: Meta = {
+const meta: Meta<typeof Table.Root> = {
   title: 'Components/Table',
+  component: Table.Root,
   parameters: {
     layout: 'padded',
+  },
+  argTypes: {
+    size: {
+      control: 'radio',
+      options: ['default', 'compact'],
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<typeof Table.Root>;
 
 export const Basic: Story = {
-  render: () => <BasicTable />,
+  args: { size: 'default' },
+  render: (args) => <BasicTable size={args.size} />,
 };
 
 export const Sortable: Story = {
@@ -78,17 +86,6 @@ export const Resizable: Story = {
     docs: {
       description: {
         story: 'Drag column borders to resize.',
-      },
-    },
-  },
-};
-
-export const Compact: Story = {
-  render: () => <CompactTable />,
-  parameters: {
-    docs: {
-      description: {
-        story: 'Compact density with shorter row heights (header 32px, cell 36px).',
       },
     },
   },

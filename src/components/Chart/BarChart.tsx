@@ -4,24 +4,30 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { linearScale, niceTicks, thinIndices, dynamicTickTarget, measureLabelWidth, axisPadForLabels } from './utils';
 import { useResizeWidth } from './hooks';
+import { useMergedRef } from './useMergedRef';
 import {
   type Series,
   type ResolvedSeries,
   type TooltipProp,
   type ReferenceLine,
+  type ReferenceBand,
   PAD_TOP,
   PAD_RIGHT,
   PAD_BOTTOM_AXIS,
   BAR_GROUP_GAP,
   BAR_ITEM_GAP,
+  TOOLTIP_GAP,
   resolveSeries,
   resolveTooltipMode,
   axisTickTarget,
 } from './types';
 import { ChartWrapper } from './ChartWrapper';
+import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 import styles from './Chart.module.scss';
 
 const EMPTY_TICKS = { min: 0, max: 1, ticks: [0, 1] } as const;
+
+const clickIndexMeta = (index: number) => ({ index });
 
 export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   data: Record<string, unknown>[];
@@ -37,6 +43,8 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   color?: string;
   /** Horizontal reference lines at specific y-values. */
   referenceLines?: ReferenceLine[];
+  /** Shaded bands spanning a value range. Rendered behind bars. */
+  referenceBands?: ReferenceBand[];
   ariaLabel?: string;
   onActiveChange?: (
     index: number | null,
@@ -55,6 +63,9 @@ export interface BarChartProps extends React.ComponentPropsWithoutRef<'div'> {
   empty?: React.ReactNode;
   /** Click handler called with the active data index and datum. */
   onClickDatum?: (index: number, datum: Record<string, unknown>) => void;
+  analyticsName?: string;
+  /** Disables interaction, cursor, dots, and tooltip. */
+  interactive?: boolean;
   /** Control bar mount animation. Defaults to `true`. */
   animate?: boolean;
   /** Per-data-point color override. Return a CSS color string to override `series.color`, or `undefined` to keep the default. */
@@ -77,6 +88,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       stacked = false,
       color,
       referenceLines,
+      referenceBands,
       ariaLabel,
       onActiveChange,
       formatValue,
@@ -87,6 +99,8 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       loading,
       empty,
       onClickDatum,
+      analyticsName,
+      interactive: interactiveProp = true,
       animate = true,
       getBarColor,
       orientation = 'vertical',
@@ -100,17 +114,15 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
     const tooltipMode = resolveTooltipMode(tooltipProp);
-    const showTooltip = tooltipMode !== 'off';
+    const showTooltip = interactiveProp && tooltipMode !== 'off';
     const tooltipRender =
       typeof tooltipProp === 'function' ? tooltipProp : undefined;
 
-    const mergedRef = React.useCallback(
-      (node: HTMLDivElement | null) => {
-        attachRef(node);
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref, attachRef],
+    const mergedRef = useMergedRef(ref, attachRef);
+
+    const trackedClick = useTrackedCallback(
+      analyticsName, 'Chart.Bar', 'click', onClickDatum,
+      onClickDatum ? clickIndexMeta : undefined,
     );
 
     const series = React.useMemo<ResolvedSeries[]>(
@@ -121,8 +133,9 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
     const isHorizontal = orientation === 'horizontal';
     const showCategoryAxis = Boolean(xKey);
     const showValueAxis = grid;
+    const barAnimClass = isHorizontal ? styles.barAnimateHorizontal : styles.barAnimate;
 
-    const padBottom = !isHorizontal && showCategoryAxis ? PAD_BOTTOM_AXIS : 0;
+    const padBottom = (isHorizontal ? showValueAxis : showCategoryAxis) ? PAD_BOTTOM_AXIS : 0;
     const plotHeight = Math.max(0, height - PAD_TOP - padBottom);
 
     // Value domain — split into raw max + tick generation so we can
@@ -151,8 +164,14 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
           if (rl.value > max) max = rl.value;
         }
       }
+      if (referenceBands) {
+        for (const rb of referenceBands) {
+          const hi = Math.max(rb.from, rb.to);
+          if (hi > max) max = hi;
+        }
+      }
       return max === -Infinity ? 1 : max;
-    }, [data, series, stacked, referenceLines, yDomain]);
+    }, [data, series, stacked, referenceLines, referenceBands, yDomain]);
 
     // Vertical: compute ticks first, then measure labels for padLeft.
     // Horizontal: measure category labels for padLeft, then compute
@@ -245,17 +264,24 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
             tip.style.transform = 'none';
           } else {
             const absX = padLeft + (idx + 0.5) * slotSize;
-            const isLeftHalf = raw <= categoryLength / 2;
+            const totalW = padLeft + plotWidth + padRight;
+            tip.style.display = '';
+            const tipW = tip.offsetWidth;
+            const fitsRight = absX + TOOLTIP_GAP + tipW <= totalW;
+            const fitsLeft = absX - TOOLTIP_GAP - tipW >= 0;
+            const preferRight = raw <= categoryLength / 2;
             tip.style.left = `${absX}px`;
             tip.style.top = `${PAD_TOP}px`;
-            tip.style.transform = isLeftHalf
-              ? 'translateX(12px)'
-              : 'translateX(calc(-100% - 12px))';
+            if ((preferRight && fitsRight) || !fitsLeft) {
+              tip.style.transform = `translateX(${TOOLTIP_GAP}px)`;
+            } else {
+              tip.style.transform = `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
+            }
           }
           tip.style.display = '';
         }
       },
-      [data.length, categoryLength, padLeft, slotSize, isHorizontal, plotWidth],
+      [data.length, categoryLength, padLeft, padRight, slotSize, isHorizontal, plotWidth],
     );
 
     const handleMouseLeave = React.useCallback(() => {
@@ -289,22 +315,100 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
       return parts.join(', ');
     }, [activeIndex, data, series, xKey, fmtValue]);
 
+    const handleTouch = React.useCallback(
+      (e: React.TouchEvent<SVGSVGElement>) => {
+        if (!e.touches[0]) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const raw = isHorizontal
+          ? e.touches[0].clientY - rect.top - PAD_TOP
+          : e.touches[0].clientX - rect.left - padLeft;
+        const idx = Math.max(0, Math.min(data.length - 1, Math.floor(raw / slotSize)));
+        setActiveIndex(idx);
+      },
+      [data.length, slotSize, padLeft, isHorizontal],
+    );
+
+    const handleKeyDown = React.useCallback(
+      (e: React.KeyboardEvent) => {
+        if (data.length === 0) return;
+        let next = activeIndex ?? -1;
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'ArrowDown':
+            next = Math.min(data.length - 1, next + 1);
+            break;
+          case 'ArrowLeft':
+          case 'ArrowUp':
+            next = Math.max(0, next - 1);
+            break;
+          case 'Home':
+            next = 0;
+            break;
+          case 'End':
+            next = data.length - 1;
+            break;
+          case 'Enter':
+          case ' ':
+            if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
+              e.preventDefault();
+              trackedClick(activeIndex, data[activeIndex]);
+            }
+            return;
+          case 'Escape':
+            handleMouseLeave();
+            return;
+          default:
+            return;
+        }
+        e.preventDefault();
+        setActiveIndex(next);
+        const tip = tooltipRef.current;
+        if (tip) {
+          if (isHorizontal) {
+            tip.style.top = `${PAD_TOP + (next + 0.5) * slotSize}px`;
+            tip.style.left = `${padLeft + plotWidth + 8}px`;
+            tip.style.transform = 'none';
+          } else {
+            const absX = padLeft + (next + 0.5) * slotSize;
+            const totalW = padLeft + plotWidth + padRight;
+            tip.style.display = '';
+            const tipW = tip.offsetWidth;
+            const fitsRight = absX + TOOLTIP_GAP + tipW <= totalW;
+            const fitsLeft = absX - TOOLTIP_GAP - tipW >= 0;
+            const preferRight = next < data.length / 2;
+            tip.style.left = `${absX}px`;
+            tip.style.top = `${PAD_TOP}px`;
+            if ((preferRight && fitsRight) || !fitsLeft) {
+              tip.style.transform = `translateX(${TOOLTIP_GAP}px)`;
+            } else {
+              tip.style.transform = `translateX(calc(-100% - ${TOOLTIP_GAP}px))`;
+            }
+          }
+          tip.style.display = '';
+        }
+      },
+      [activeIndex, data, slotSize, padLeft, padRight, plotWidth, isHorizontal, onClickDatum, trackedClick, handleMouseLeave],
+    );
+
+    const interactive = interactiveProp;
+
     const handleClick = React.useCallback(() => {
       if (onClickDatum && activeIndex !== null && activeIndex < data.length) {
-        onClickDatum(activeIndex, data[activeIndex]);
+        trackedClick(activeIndex, data[activeIndex]);
       }
-    }, [onClickDatum, activeIndex, data]);
+    }, [onClickDatum, activeIndex, data, trackedClick]);
 
     return (
       <ChartWrapper
+        ref={mergedRef}
         loading={loading}
         empty={empty}
         dataLength={data.length}
         height={height}
         legend={legend}
         series={series}
-        activeIndex={activeIndex}
-        ariaLiveContent={showTooltip ? ariaLiveContent : undefined}
+        className={className}
+        ariaLiveContent={interactiveProp ? ariaLiveContent : undefined}
       >
         <div
           ref={mergedRef}
@@ -315,48 +419,20 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
+              aria-roledescription="Bar chart"
               aria-label={ariaLabel ?? svgDesc ?? 'Bar chart'}
               width={width}
               height={height}
               className={styles.svg}
-              tabIndex={0}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              onTouchStart={(e) => { if (e.touches[0]) { const rect = e.currentTarget.getBoundingClientRect(); const raw = isHorizontal ? e.touches[0].clientY - rect.top - PAD_TOP : e.touches[0].clientX - rect.left - padLeft; const idx = Math.max(0, Math.min(data.length - 1, Math.floor(raw / slotSize))); setActiveIndex(idx); } }}
-              onTouchMove={(e) => { if (e.touches[0]) { const rect = e.currentTarget.getBoundingClientRect(); const raw = isHorizontal ? e.touches[0].clientY - rect.top - PAD_TOP : e.touches[0].clientX - rect.left - padLeft; const idx = Math.max(0, Math.min(data.length - 1, Math.floor(raw / slotSize))); setActiveIndex(idx); } }}
-              onTouchEnd={handleMouseLeave}
-              onTouchCancel={handleMouseLeave}
-              onKeyDown={(e) => {
-                if (data.length === 0) return;
-                let next = activeIndex ?? -1;
-                switch (e.key) {
-                  case 'ArrowRight': case 'ArrowDown': next = Math.min(data.length - 1, next + 1); break;
-                  case 'ArrowLeft': case 'ArrowUp': next = Math.max(0, next - 1); break;
-                  case 'Home': next = 0; break;
-                  case 'End': next = data.length - 1; break;
-                  case 'Escape': handleMouseLeave(); return;
-                  default: return;
-                }
-                e.preventDefault();
-                setActiveIndex(next);
-                const tip = tooltipRef.current;
-                if (tip) {
-                  if (isHorizontal) {
-                    tip.style.top = `${PAD_TOP + (next + 0.5) * slotSize}px`;
-                    tip.style.left = `${padLeft + plotWidth + 8}px`;
-                    tip.style.transform = 'none';
-                  } else {
-                    const absX = padLeft + (next + 0.5) * slotSize;
-                    tip.style.left = `${absX}px`;
-                    tip.style.top = `${PAD_TOP}px`;
-                    tip.style.transform = next < data.length / 2
-                      ? 'translateX(12px)'
-                      : 'translateX(calc(-100% - 12px))';
-                  }
-                  tip.style.display = '';
-                }
-              }}
+              tabIndex={interactive ? 0 : undefined}
+              onMouseMove={interactive ? handleMouseMove : undefined}
+              onMouseLeave={interactive ? handleMouseLeave : undefined}
+              onTouchStart={interactive ? handleTouch : undefined}
+              onTouchMove={interactive ? handleTouch : undefined}
+              onTouchEnd={interactive ? handleMouseLeave : undefined}
+              onTouchCancel={interactive ? handleMouseLeave : undefined}
+              onKeyDown={interactive ? handleKeyDown : undefined}
               onClick={onClickDatum ? handleClick : undefined}
             >
               {svgDesc && <desc>{svgDesc}</desc>}
@@ -371,6 +447,51 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                       <line key={i} x1={0} y1={pos} x2={plotWidth} y2={pos} className={styles.gridLine} />
                     ),
                   )}
+
+                {/* Reference bands */}
+                {referenceBands?.map((rb, i) => {
+                  const bandColor = rb.color ?? 'var(--stroke-primary)';
+                  if (isHorizontal) {
+                    const x1 = linearScale(rb.from, yMin, yMax, 0, plotWidth);
+                    const x2 = linearScale(rb.to, yMin, yMax, 0, plotWidth);
+                    const bx = Math.min(x1, x2);
+                    const bw = Math.abs(x2 - x1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  if (rb.axis === 'x') {
+                    const bx1 = data.length > 0 ? rb.from * slotSize : 0;
+                    const bx2 = data.length > 0 ? rb.to * slotSize : plotWidth;
+                    const bx = Math.min(bx1, bx2);
+                    const bw = Math.abs(bx2 - bx1);
+                    return (
+                      <g key={`band-${i}`}>
+                        <rect x={bx} y={0} width={bw} height={plotHeight} fill={bandColor} opacity={0.06} />
+                        {rb.label && (
+                          <text x={bx + bw / 2} y={plotHeight / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                        )}
+                      </g>
+                    );
+                  }
+                  const y1 = linearScale(rb.from, yMin, yMax, plotHeight, 0);
+                  const y2 = linearScale(rb.to, yMin, yMax, plotHeight, 0);
+                  const by = Math.min(y1, y2);
+                  const bh = Math.abs(y1 - y2);
+                  return (
+                    <g key={`band-${i}`}>
+                      <rect x={0} y={by} width={plotWidth} height={bh} fill={bandColor} opacity={0.06} />
+                      {rb.label && (
+                        <text x={plotWidth / 2} y={by + bh / 2} textAnchor="middle" dominantBaseline="middle" className={styles.referenceLineLabel} fill={bandColor} fillOpacity={0.45}>{rb.label}</text>
+                      )}
+                    </g>
+                  );
+                })}
 
                 {/* Reference lines */}
                 {referenceLines?.map((rl, i) => {
@@ -438,14 +559,16 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                             const barX = linearScale(cum - v, yMin, yMax, 0, plotWidth);
                             return (
                               <rect key={s.key} x={barX} y={slotStart} width={Math.max(0, barW)} height={barThickness} fill={barFill}
-                                className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
+                                role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
+                                className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                             );
                           }
                           const barH = ((v - yMin) / (yMax - yMin)) * plotHeight;
                           const barY = linearScale(cum, yMin, yMax, plotHeight, 0);
                           return (
                             <rect key={s.key} x={slotStart} y={barY} width={barThickness} height={Math.max(0, barH)} fill={barFill}
-                              className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
+                              role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
+                              className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                           );
                         })}
                       </g>
@@ -462,14 +585,16 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                           const barW = ((v - yMin) / (yMax - yMin)) * plotWidth;
                           return (
                             <rect key={s.key} x={0} y={barOffset} width={Math.max(0, barW)} height={barThickness} fill={barFill}
-                              className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
+                              role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
+                              className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                           );
                         }
                         const barH = ((v - yMin) / (yMax - yMin)) * plotHeight;
                         const barY = plotHeight - barH;
                         return (
                           <rect key={s.key} x={barOffset} y={barY} width={barThickness} height={Math.max(0, barH)} fill={barFill}
-                            className={animate ? styles.barAnimate : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
+                            role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
+                            className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                         );
                       })}
                     </g>
@@ -509,7 +634,11 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
             {showTooltip && (
               <div
                 ref={tooltipRef}
-                className={styles.tooltip}
+                className={clsx(
+                  styles.tooltip,
+                  tooltipMode === 'simple' && styles.tooltipSimple,
+                  tooltipMode === 'compact' && styles.tooltipCompact,
+                )}
                 style={{
                   position: 'absolute',
                   top: PAD_TOP,
@@ -522,6 +651,38 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                   activeIndex < data.length &&
                   (tooltipMode === 'custom' && tooltipRender ? (
                     tooltipRender(data[activeIndex], series)
+                  ) : tooltipMode === 'simple' ? (
+                    xKey && (
+                      <span className={styles.tooltipInlineTime}>
+                        {formatXLabel
+                          ? formatXLabel(data[activeIndex][xKey])
+                          : String(data[activeIndex][xKey] ?? '')}
+                      </span>
+                    )
+                  ) : tooltipMode === 'compact' ? (
+                    <>
+                      {series.map((s, i) => {
+                        const v = Number(data[activeIndex!][s.key]);
+                        return (
+                          <React.Fragment key={s.key}>
+                            {i > 0 && <span className={styles.tooltipInlineSep}>{'  ·  '}</span>}
+                            <span className={styles.tooltipInlineValue}>
+                              {isNaN(v) ? '--' : fmtValue(v)}
+                            </span>
+                          </React.Fragment>
+                        );
+                      })}
+                      {xKey && (
+                        <>
+                          <span className={styles.tooltipInlineSep}>{'  ·  '}</span>
+                          <span className={styles.tooltipInlineTime}>
+                            {formatXLabel
+                              ? formatXLabel(data[activeIndex][xKey])
+                              : String(data[activeIndex][xKey] ?? '')}
+                          </span>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <>
                       {xKey && (

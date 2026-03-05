@@ -28,61 +28,29 @@ const meta: Meta<typeof Button> = {
   },
   argTypes: {
     variant: {
-      control: 'select',
+      control: 'radio',
       options: ['filled', 'secondary', 'outline', 'ghost', 'critical', 'link'],
     },
     size: {
-      control: 'select',
+      control: 'radio',
       options: ['default', 'compact', 'dense'],
     },
     loading: { control: 'boolean' },
     disabled: { control: 'boolean' },
-    iconOnly: { control: 'boolean' },
+    children: { control: 'text' },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-export const Filled: Story = {
+export const Default: Story = {
   args: {
     variant: 'filled',
-    children: 'Filled Button',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    variant: 'secondary',
-    children: 'Secondary Button',
-  },
-};
-
-export const Outline: Story = {
-  args: {
-    variant: 'outline',
-    children: 'Outline Button',
-  },
-};
-
-export const Ghost: Story = {
-  args: {
-    variant: 'ghost',
-    children: 'Ghost Button',
-  },
-};
-
-export const Critical: Story = {
-  args: {
-    variant: 'critical',
-    children: 'Delete',
-  },
-};
-
-export const Link: Story = {
-  args: {
-    variant: 'link',
-    children: 'Learn more',
+    size: 'default',
+    loading: false,
+    disabled: false,
+    children: 'Button',
   },
 };
 
@@ -94,20 +62,6 @@ export const Sizes: Story = {
       <Button size="default">Default</Button>
     </div>
   ),
-};
-
-export const Loading: Story = {
-  args: {
-    loading: true,
-    children: 'Loading',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    disabled: true,
-    children: 'Disabled',
-  },
 };
 
 export const WithLeadingIcon: Story = {

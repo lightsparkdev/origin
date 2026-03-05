@@ -5,14 +5,24 @@ import { Tabs } from './index';
 const meta: Meta = {
   title: 'Components/Tabs',
   component: Tabs.Root,
+  argTypes: {
+    variant: {
+      control: 'radio',
+      options: ['default', 'minimal'],
+      description: 'Tabs.List variant',
+    },
+  },
 };
 
 export default meta;
 
 export const Default: StoryObj = {
-  render: () => (
+  args: {
+    variant: 'default',
+  },
+  render: (args) => (
     <Tabs.Root defaultValue="account">
-      <Tabs.List>
+      <Tabs.List variant={args.variant}>
         <Tabs.Tab value="account">Account</Tabs.Tab>
         <Tabs.Tab value="password">Password</Tabs.Tab>
         <Tabs.Tab value="settings">Settings</Tabs.Tab>
@@ -25,27 +35,6 @@ export const Default: StoryObj = {
       </Tabs.Panel>
       <Tabs.Panel value="settings">
         Configure application settings.
-      </Tabs.Panel>
-    </Tabs.Root>
-  ),
-};
-
-export const Minimal: StoryObj = {
-  render: () => (
-    <Tabs.Root defaultValue="tab1">
-      <Tabs.List variant="minimal">
-        <Tabs.Tab value="tab1">Overview</Tabs.Tab>
-        <Tabs.Tab value="tab2">Details</Tabs.Tab>
-        <Tabs.Tab value="tab3">History</Tabs.Tab>
-      </Tabs.List>
-      <Tabs.Panel value="tab1">
-        Overview content without container background.
-      </Tabs.Panel>
-      <Tabs.Panel value="tab2">
-        Details content.
-      </Tabs.Panel>
-      <Tabs.Panel value="tab3">
-        History content.
       </Tabs.Panel>
     </Tabs.Root>
   ),

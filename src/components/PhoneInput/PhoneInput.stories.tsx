@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PhoneInput } from './';
 import { Field } from '@/components/Field';
 
-// Example country data
 const exampleCountries = [
   { code: 'US', name: 'United States', dialCode: '+1' },
   { code: 'GB', name: 'United Kingdom', dialCode: '+44' },
@@ -21,15 +20,19 @@ const exampleCountries = [
 
 type Country = typeof exampleCountries[number];
 
-// Circle-flags CDN URL helper
 function getFlagUrl(code: string) {
   return `https://hatscripts.github.io/circle-flags/flags/${code.toLowerCase()}.svg`;
 }
 
 const meta: Meta = {
   title: 'Components/PhoneInput',
+  component: PhoneInput.Root,
   parameters: {
     layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    disabled: { control: 'boolean' },
   },
 };
 
@@ -37,12 +40,10 @@ export default meta;
 
 function PhoneInputExample({
   disabled = false,
-  invalid = false,
   placeholder = 'Enter phone',
   defaultCountry = exampleCountries[0],
 }: {
   disabled?: boolean;
-  invalid?: boolean;
   placeholder?: string;
   defaultCountry?: Country;
 }) {
@@ -51,7 +52,7 @@ function PhoneInputExample({
 
   return (
     <div style={{ width: 300 }}>
-      <PhoneInput.Root disabled={disabled} invalid={invalid}>
+      <PhoneInput.Root disabled={disabled}>
         <PhoneInput.CountrySelect
           value={selectedCountry}
           onValueChange={setSelectedCountry}
@@ -95,24 +96,15 @@ function PhoneInputExample({
   );
 }
 
-export const Default: StoryObj = {
-  render: () => <PhoneInputExample />,
+export const Default: StoryObj<{ disabled?: boolean }> = {
+  args: {
+    disabled: false,
+  },
+  render: (args) => <PhoneInputExample disabled={args.disabled} />,
 };
 
-export const Disabled: StoryObj = {
-  render: () => <PhoneInputExample disabled />,
-};
-
-export const Invalid: StoryObj = {
-  render: () => <PhoneInputExample invalid />,
-};
-
-export const WithDifferentCountry: StoryObj = {
+export const WithDefaultCountry: StoryObj = {
   render: () => <PhoneInputExample defaultCountry={exampleCountries[1]} />,
-};
-
-export const CustomPlaceholder: StoryObj = {
-  render: () => <PhoneInputExample placeholder="(555) 123-4567" />,
 };
 
 // Controlled example with form

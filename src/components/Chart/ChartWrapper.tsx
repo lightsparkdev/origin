@@ -3,46 +3,51 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import type { ResolvedSeries } from './types';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface ChartWrapperProps {
+  ref?: React.Ref<HTMLDivElement>;
   loading?: boolean;
   empty?: React.ReactNode;
   dataLength: number;
+  isEmpty?: boolean;
   height: number;
   legend?: boolean;
   series?: ResolvedSeries[];
   children: React.ReactNode;
   className?: string;
-  activeIndex?: number | null;
   ariaLiveContent?: string;
 }
 
 export function ChartWrapper({
+  ref,
   loading,
   empty,
   dataLength,
+  isEmpty,
   height,
   legend,
   series,
   children,
   className,
-  activeIndex: _activeIndex,
   ariaLiveContent,
 }: ChartWrapperProps) {
+  const showEmpty = isEmpty ?? (dataLength === 0);
+
   if (loading) {
     return (
-      <div className={clsx(styles.root, className)} style={{ height }}>
+      <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
         <div className={styles.loading}>
-          <div className={styles.loadingSkeleton} />
+          <Skeleton style={{ width: '100%', height: '100%' }} />
         </div>
       </div>
     );
   }
 
-  if (dataLength === 0 && empty !== undefined) {
+  if (showEmpty && empty !== undefined) {
     return (
-      <div className={clsx(styles.root, className)} style={{ height }}>
+      <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
         <div className={styles.empty}>
           {typeof empty === 'boolean' ? 'No data' : empty}
         </div>
