@@ -389,28 +389,6 @@
   height: 100%;
 }
 
-.loadingSkeleton {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--surface-secondary) 25%,
-    var(--surface-tertiary, var(--surface-secondary)) 50%,
-    var(--surface-secondary) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-  @include smooth-corners(var(--corner-radius-xs));
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
-
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
 
 .empty {
   display: flex;
@@ -425,7 +403,7 @@
   font-size: 12px;
 }
 
-// Shared empty and skeleton for HTML-based charts
+// Shared empty for HTML-based charts
 
 .chartEmpty {
   display: flex;
@@ -439,21 +417,6 @@
   font-size: 12px;
 }
 
-.chartSkeleton {
-  height: 32px;
-  background: linear-gradient(
-    90deg,
-    var(--surface-secondary) 25%,
-    var(--surface-tertiary, var(--surface-secondary)) 50%,
-    var(--surface-secondary) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
 
 // Screen reader only
 
@@ -718,21 +681,6 @@
   font-size: 12px;
 }
 
-.barListSkeleton {
-  height: 32px;
-  background: linear-gradient(
-    90deg,
-    var(--surface-secondary) 25%,
-    var(--surface-tertiary, var(--surface-secondary)) 50%,
-    var(--surface-secondary) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
 
 // Uptime
 
@@ -840,22 +788,6 @@
   }
 }
 
-.splitSkeleton {
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--surface-secondary) 25%,
-    var(--surface-tertiary, var(--surface-secondary)) 50%,
-    var(--surface-secondary) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-  }
-}
 
 .splitTooltipInline {
   display: flex;

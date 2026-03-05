@@ -4,6 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import styles from './Table.module.scss';
 import { CentralIcon } from '../Icon';
+import { Skeleton } from '../Skeleton';
 import { useTrackedCallback } from '../Analytics/useTrackedCallback';
 
 // ============================================================================
@@ -293,7 +294,7 @@ export const Cell = React.forwardRef<HTMLTableCellElement, CellProps>(
         {...props}
       >
         {loading ? (
-          <span className={styles.skeleton} />
+          <Skeleton style={{ width: '100%', height: 16 }} />
         ) : hasSlots ? (
           <span className={styles.cellLayout}>
             {leading && (

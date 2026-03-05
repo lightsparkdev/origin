@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface UptimePoint {
@@ -135,7 +136,7 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
       return (
         <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
           <div className={styles.loading}>
-            <div className={styles.loadingSkeleton} />
+            <Skeleton style={{ width: '100%', height: '100%' }} />
           </div>
         </div>
       );
@@ -155,7 +156,8 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
       <div
         ref={ref}
         className={clsx(styles.uptime, className)}
-        role="img"
+        role="graphics-document document"
+        aria-roledescription="Uptime chart"
         aria-label={ariaLabel ?? `Uptime chart with ${data.length} periods`}
         {...props}
       >
@@ -169,6 +171,9 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
             <div
               key={i}
               className={styles.uptimeBar}
+              role="graphics-symbol img"
+              aria-roledescription="Period"
+              aria-label={`${point.status}${point.label ? `: ${point.label}` : ''}`}
               data-active={activeIndex === i || undefined}
               style={{ backgroundColor: colors[point.status] }}
               onMouseEnter={() => handleEnter(i)}
@@ -191,6 +196,11 @@ export const Uptime = React.forwardRef<HTMLDivElement, UptimeChartProps>(
             )}
           </div>
         )}
+        <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+          {activeIndex !== null && data[activeIndex]
+            ? `${data[activeIndex].status}${data[activeIndex].label ? `: ${data[activeIndex].label}` : ''}`
+            : ''}
+        </div>
       </div>
     );
   },

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import clsx from 'clsx';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface GaugeThreshold {
@@ -64,8 +65,8 @@ export const Gauge = React.forwardRef<HTMLDivElement, GaugeChartProps>(
     if (loading) {
       return (
         <div ref={ref} className={clsx(styles.root, className)} {...props}>
-          <div className={styles.loading}>
-            <div className={styles.loadingSkeleton} />
+          <div className={styles.loading} style={{ minHeight: 56 }}>
+            <Skeleton style={{ width: '100%', height: '100%' }} />
           </div>
         </div>
       );

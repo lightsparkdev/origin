@@ -3,6 +3,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
 import type { ResolvedSeries } from './types';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface ChartWrapperProps {
@@ -38,7 +39,7 @@ export function ChartWrapper({
     return (
       <div ref={ref} className={clsx(styles.root, className)} style={{ height }}>
         <div className={styles.loading}>
-          <div className={styles.loadingSkeleton} />
+          <Skeleton style={{ width: '100%', height: '100%' }} />
         </div>
       </div>
     );

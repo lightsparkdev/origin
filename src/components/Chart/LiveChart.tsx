@@ -4,6 +4,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { filerp, CHART_LABEL_FONT } from './utils';
 import { useMergedRef } from './useMergedRef';
+import { Skeleton } from '../Skeleton';
 import styles from './Chart.module.scss';
 
 export interface LivePoint {
@@ -584,7 +585,7 @@ export const Live = React.forwardRef<HTMLDivElement, LiveChartProps>(
       return (
         <div ref={mergedRef} className={clsx(styles.root, className)} style={{ height }}>
           <div className={styles.loading}>
-            <div className={styles.loadingSkeleton} />
+            <Skeleton style={{ width: '100%', height: '100%' }} />
           </div>
         </div>
       );
