@@ -27,6 +27,7 @@ export function Sparkline() {
       data={SAMPLE_DATA}
       dataKey="value"
       height={170}
+      interactive={false}
       data-testid="chart"
     />
   );
@@ -38,6 +39,7 @@ export function SparklineWithColor() {
       data={SAMPLE_DATA}
       dataKey="value"
       height={170}
+      interactive={false}
       color="rgb(0, 0, 255)"
       data-testid="chart"
     />
