@@ -39,6 +39,7 @@ import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
 import { Separator } from '@/components/Separator';
 import { Sidebar } from '@/components/Sidebar';
+import { Skeleton } from '@/components/Skeleton';
 import { Shortcut } from '@/components/Shortcut';
 import { Switch } from '@/components/Switch';
 import { Textarea } from '@/components/Textarea';
@@ -3929,6 +3930,127 @@ export default function Home() {
           </Sidebar.Provider>
         </div>
       </div>
+      <h2 style={{ marginBottom: '1rem' }}>Skeleton Component</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '128px' }}>
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>Standalone</h3>
+          <Skeleton style={{ width: 200, height: 20 }} />
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>Text lines (grouped)</h3>
+          <Skeleton.Group>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)', maxWidth: 320 }}>
+              <Skeleton style={{ width: '100%', height: 16 }} />
+              <Skeleton style={{ width: '100%', height: 16 }} />
+              <Skeleton style={{ width: '75%', height: 16 }} />
+            </div>
+          </Skeleton.Group>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>Avatar + name (grouped)</h3>
+          <Skeleton.Group>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+              <Skeleton style={{ width: 40, height: 40, borderRadius: 'var(--corner-radius-round)', flexShrink: 0 }} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <Skeleton style={{ width: 150, height: 16 }} />
+                <Skeleton style={{ width: 100, height: 16 }} />
+              </div>
+            </div>
+          </Skeleton.Group>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>Card (grouped)</h3>
+          <Skeleton.Group>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)', width: 300, padding: 'var(--spacing-md)', borderRadius: 'var(--corner-radius-md)', border: 'var(--stroke-xs) solid var(--border-primary)' }}>
+              <Skeleton style={{ width: '100%', aspectRatio: '16 / 9' }} />
+              <Skeleton style={{ width: '75%', height: 16 }} />
+              <Skeleton style={{ width: '50%', height: 16 }} />
+            </div>
+          </Skeleton.Group>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>Table rows (grouped)</h3>
+          <Skeleton.Group>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xs)', width: 400 }}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
+                  <Skeleton style={{ flex: 1, height: 16 }} />
+                  <Skeleton style={{ width: 80, height: 16 }} />
+                  <Skeleton style={{ width: 60, height: 16 }} />
+                </div>
+              ))}
+            </div>
+          </Skeleton.Group>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>Form (grouped)</h3>
+          <Skeleton.Group>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-lg)', width: 280 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <Skeleton style={{ width: 80, height: 14 }} />
+                <Skeleton style={{ width: '100%', height: 36 }} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                <Skeleton style={{ width: 100, height: 14 }} />
+                <Skeleton style={{ width: '100%', height: 36 }} />
+              </div>
+              <Skeleton style={{ width: 80, height: 36 }} />
+            </div>
+          </Skeleton.Group>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>On surface-secondary</h3>
+          <div style={{ background: 'var(--surface-secondary)', borderRadius: 'var(--corner-radius-md)', padding: 'var(--spacing-md)' }}>
+            <Skeleton.Group>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                <Skeleton style={{ width: 40, height: 40, borderRadius: 'var(--corner-radius-round)', flexShrink: 0 }} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                  <Skeleton style={{ width: 150, height: 16 }} />
+                  <Skeleton style={{ width: 100, height: 16 }} />
+                </div>
+              </div>
+            </Skeleton.Group>
+          </div>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>On surface-tertiary</h3>
+          <div style={{ background: 'var(--surface-tertiary)', borderRadius: 'var(--corner-radius-md)', padding: 'var(--spacing-md)' }}>
+            <Skeleton.Group>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                <Skeleton style={{ width: 40, height: 40, borderRadius: 'var(--corner-radius-round)', flexShrink: 0 }} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                  <Skeleton style={{ width: 150, height: 16 }} />
+                  <Skeleton style={{ width: 100, height: 16 }} />
+                </div>
+              </div>
+            </Skeleton.Group>
+          </div>
+        </div>
+
+        <div>
+          <h3 style={{ fontSize: '14px', marginBottom: '0.75rem', color: 'var(--text-secondary)' }}>On dark surface</h3>
+          <div data-theme="dark" style={{ background: 'var(--surface-primary)', borderRadius: 'var(--corner-radius-md)', padding: 'var(--spacing-md)' }}>
+            <Skeleton.Group>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)' }}>
+                <Skeleton style={{ width: 40, height: 40, borderRadius: 'var(--corner-radius-round)', flexShrink: 0 }} />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2xs)' }}>
+                  <Skeleton style={{ width: 150, height: 16 }} />
+                  <Skeleton style={{ width: 100, height: 16 }} />
+                </div>
+              </div>
+            </Skeleton.Group>
+          </div>
+        </div>
+      </div>
+
       <h2 style={{ marginBottom: '1rem' }}>Switch Component</h2>
       
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '128px' }}>
