@@ -286,8 +286,9 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
         {ready && (
           <>
             <svg
-              role="img"
-              aria-label={ariaLabel ?? svgDesc ?? 'Funnel chart'}
+                role="graphics-document document"
+                aria-roledescription="Funnel chart"
+                aria-label={ariaLabel ?? svgDesc ?? 'Funnel chart'}
               width={width}
               height={height}
               className={styles.svg}
@@ -401,6 +402,9 @@ export const Funnel = React.forwardRef<HTMLDivElement, FunnelChartProps>(
                 )}
               </div>
             )}
+            <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+              {tooltipContent ? `${tooltipContent.label}: ${tooltipContent.value}${tooltipContent.rate ? ` (${tooltipContent.rate})` : ''}` : ''}
+            </div>
           </>
         )}
       </div>

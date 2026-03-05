@@ -250,7 +250,8 @@ export const Pie = React.forwardRef<HTMLDivElement, PieChartProps>(
           {ready && (
             <>
               <svg
-                role="img"
+                role="graphics-document document"
+                aria-roledescription="Pie chart"
                 aria-label={ariaLabel ?? svgDesc ?? 'Pie chart'}
                 width={svgSize}
                 height={svgSize}

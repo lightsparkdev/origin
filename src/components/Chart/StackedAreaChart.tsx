@@ -311,7 +311,8 @@ export const StackedArea = React.forwardRef<HTMLDivElement, StackedAreaChartProp
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
+              aria-roledescription="Stacked area chart"
               aria-label={ariaLabel ?? svgDesc ?? 'Stacked area chart'}
               tabIndex={interactive ? 0 : undefined}
               width={width}

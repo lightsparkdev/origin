@@ -468,10 +468,11 @@ test.describe('Scatter chart', () => {
     expect(count).toBe(4);
   });
 
-  test('has role="img" and aria-label', async ({ mount, page }) => {
+  test('has role="graphics-document" and aria-roledescription', async ({ mount, page }) => {
     await mount(<ScatterBasic />);
     const svg = page.locator('[data-testid="scatter-chart"] svg');
-    await expect(svg).toHaveAttribute('role', 'img');
+    await expect(svg).toHaveAttribute('role', 'graphics-document document');
+    await expect(svg).toHaveAttribute('aria-roledescription', 'Scatter chart');
     await expect(svg).toHaveAttribute('aria-label');
   });
 
@@ -506,7 +507,7 @@ test.describe('Split chart', () => {
     await mount(<SplitBasic />);
     const root = page.locator('[data-testid="split-chart"]');
     await expect(root).toBeVisible();
-    const barWrap = root.locator('[role="img"]');
+    const barWrap = root.locator('[role="graphics-document document"]');
     await expect(barWrap).toBeAttached();
   });
 
@@ -586,10 +587,11 @@ test.describe('Waterfall chart', () => {
     expect(count).toBeGreaterThanOrEqual(1);
   });
 
-  test('has role="img" and aria-label', async ({ mount, page }) => {
+  test('has role="graphics-document" and aria-roledescription', async ({ mount, page }) => {
     await mount(<WaterfallBasic />);
     const svg = page.locator('[data-testid="waterfall-chart"] svg');
-    await expect(svg).toHaveAttribute('role', 'img');
+    await expect(svg).toHaveAttribute('role', 'graphics-document document');
+    await expect(svg).toHaveAttribute('aria-roledescription', 'Waterfall chart');
     await expect(svg).toHaveAttribute('aria-label');
   });
 
@@ -624,7 +626,7 @@ test.describe('Sankey chart', () => {
   test('has role="graphics-document" and aria-roledescription', async ({ mount, page }) => {
     await mount(<SankeyBasic />);
     const svg = page.locator('[data-testid="sankey-chart"] svg');
-    await expect(svg).toHaveAttribute('role', 'graphics-document');
+    await expect(svg).toHaveAttribute('role', 'graphics-document document');
     await expect(svg).toHaveAttribute('aria-roledescription', 'Flow diagram');
   });
 
@@ -670,10 +672,11 @@ test.describe('Funnel chart', () => {
     await expect(tooltip).toContainText('42%');
   });
 
-  test('has role="img" and aria-label', async ({ mount, page }) => {
+  test('has role="graphics-document" and aria-roledescription', async ({ mount, page }) => {
     await mount(<FunnelBasic />);
     const svg = page.locator('[data-testid="funnel-chart"] svg');
-    await expect(svg).toHaveAttribute('role', 'img');
+    await expect(svg).toHaveAttribute('role', 'graphics-document document');
+    await expect(svg).toHaveAttribute('aria-roledescription', 'Funnel chart');
     await expect(svg).toHaveAttribute('aria-label');
   });
 

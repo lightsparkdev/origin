@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/experimental-ct-react';
-import * as React from 'react';
-import { Skeleton } from './Skeleton';
 import {
   BasicSkeleton,
   CircleSkeleton,
   CustomClassSkeleton,
   GroupedSkeletons,
+  RefSkeleton,
 } from './Skeleton.test-stories';
 
 test.describe('Skeleton', () => {
@@ -42,21 +41,7 @@ test.describe('Skeleton', () => {
   });
 
   test('forwards ref', async ({ mount, page }) => {
-    const TestRef = () => {
-      const ref = React.useRef<HTMLDivElement>(null);
-      const [tag, setTag] = React.useState('');
-      React.useEffect(() => {
-        if (ref.current) setTag(ref.current.tagName);
-      }, []);
-      return (
-        <>
-          <Skeleton ref={ref} data-testid="skeleton" style={{ width: 100, height: 16 }} />
-          <span data-testid="tag">{tag}</span>
-        </>
-      );
-    };
-
-    await mount(<TestRef />);
+    await mount(<RefSkeleton />);
     const tag = page.getByTestId('tag');
     await expect(tag).toHaveText('DIV');
   });

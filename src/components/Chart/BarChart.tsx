@@ -419,7 +419,8 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
+              aria-roledescription="Bar chart"
               aria-label={ariaLabel ?? svgDesc ?? 'Bar chart'}
               width={width}
               height={height}
@@ -558,6 +559,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                             const barX = linearScale(cum - v, yMin, yMax, 0, plotWidth);
                             return (
                               <rect key={s.key} x={barX} y={slotStart} width={Math.max(0, barW)} height={barThickness} fill={barFill}
+                                role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
                                 className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                             );
                           }
@@ -565,6 +567,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                           const barY = linearScale(cum, yMin, yMax, plotHeight, 0);
                           return (
                             <rect key={s.key} x={slotStart} y={barY} width={barThickness} height={Math.max(0, barH)} fill={barFill}
+                              role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
                               className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                           );
                         })}
@@ -582,6 +585,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                           const barW = ((v - yMin) / (yMax - yMin)) * plotWidth;
                           return (
                             <rect key={s.key} x={0} y={barOffset} width={Math.max(0, barW)} height={barThickness} fill={barFill}
+                              role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
                               className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                           );
                         }
@@ -589,6 +593,7 @@ export const Bar = React.forwardRef<HTMLDivElement, BarChartProps>(
                         const barY = plotHeight - barH;
                         return (
                           <rect key={s.key} x={barOffset} y={barY} width={barThickness} height={Math.max(0, barH)} fill={barFill}
+                            role="graphics-symbol img" aria-roledescription="Bar" aria-label={`${s.label}: ${fmtValue(v)}`}
                             className={animate ? barAnimClass : undefined} style={animate ? { animationDelay: `${delay}ms` } : undefined} />
                         );
                       })}

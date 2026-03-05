@@ -133,7 +133,8 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
           ref={barRef}
           className={styles.splitBarWrap}
           style={{ height }}
-          role="img"
+          role="graphics-document document"
+          aria-roledescription="Distribution chart"
           aria-label={desc}
           tabIndex={0}
           onKeyDown={handleKeyDown}
@@ -144,6 +145,9 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
               <div
                 key={seg.key ?? i}
                 className={styles.splitSegment}
+                role="graphics-symbol img"
+                aria-roledescription="Segment"
+                aria-label={`${seg.label}: ${fmtValue(seg.value)} (${Math.round(seg.pct)}%)`}
                 data-clickable={onClickDatum ? true : undefined}
                 style={{
                   flexBasis: `${seg.pct}%`,
@@ -184,6 +188,11 @@ export const Split = React.forwardRef<HTMLDivElement, SplitChartProps>(
             )}
           </div>
         )}
+        <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+          {activeIndex !== null && segments[activeIndex]
+            ? `${segments[activeIndex].label}: ${fmtValue(segments[activeIndex].value)} (${Math.round(segments[activeIndex].pct)}%)`
+            : ''}
+        </div>
       </div>
       </ChartWrapper>
     );

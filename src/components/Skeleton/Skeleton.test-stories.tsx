@@ -5,6 +5,20 @@ export function BasicSkeleton() {
   return <Skeleton data-testid="skeleton" style={{ width: 200, height: 20 }} />;
 }
 
+export function RefSkeleton() {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [tag, setTag] = React.useState('');
+  React.useEffect(() => {
+    if (ref.current) setTag(ref.current.tagName);
+  }, []);
+  return (
+    <>
+      <Skeleton ref={ref} data-testid="skeleton" style={{ width: 100, height: 16 }} />
+      <span data-testid="tag">{tag}</span>
+    </>
+  );
+}
+
 export function CircleSkeleton() {
   return (
     <Skeleton

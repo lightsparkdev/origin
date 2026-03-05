@@ -380,7 +380,8 @@ export const Composed = React.forwardRef<HTMLDivElement, ComposedChartProps>(
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
+              aria-roledescription="Chart"
               aria-label={ariaLabel ?? svgDesc ?? 'Composed chart'}
               tabIndex={interactive ? 0 : undefined}
               width={width}

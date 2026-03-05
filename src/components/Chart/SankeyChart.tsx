@@ -353,7 +353,7 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
         {ready && (
           <>
             <svg
-              role="img"
+              role="graphics-document document"
               aria-roledescription="Flow diagram"
               aria-label={ariaLabel ?? svgDesc ?? 'Sankey diagram'}
               width={width}
@@ -559,6 +559,9 @@ export const Sankey = React.forwardRef<HTMLDivElement, SankeyChartProps>(
                 )}
               </div>
             )}
+            <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+              {tooltipContent ? `${tooltipContent.label}: ${tooltipContent.value}` : ''}
+            </div>
           </>
         )}
       </div>

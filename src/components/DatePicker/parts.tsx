@@ -276,7 +276,6 @@ export const Root = React.forwardRef<HTMLDivElement, DatePickerRootProps>(
 
     if (process.env.NODE_ENV !== 'production') {
       if (monthProp !== undefined && !onMonthChange) {
-        // eslint-disable-next-line no-console
         console.warn(
           'DatePicker: `month` prop provided without `onMonthChange`. ' +
             'The date picker will navigate internally but the controlled prop will become stale.',
@@ -1074,7 +1073,7 @@ export const Grid = React.forwardRef<HTMLTableElement, DatePickerGridProps>(
     }
 
     function handleKeyDown(event: React.KeyboardEvent) {
-      let nextDate: Date | null = null;
+      let nextDate: Date | null;
 
       switch (event.key) {
         case 'ArrowRight':

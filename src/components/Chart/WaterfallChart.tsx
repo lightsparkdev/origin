@@ -303,7 +303,8 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
           {ready && (
             <>
               <svg
-                role="img"
+                role="graphics-document document"
+                aria-roledescription="Waterfall chart"
                 aria-label={ariaLabel ?? svgDesc ?? 'Waterfall chart'}
                 width={width}
                 height={height}
@@ -375,6 +376,9 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
                         width={barWidth}
                         height={barH}
                         fill={bar.fill}
+                        role="graphics-symbol img"
+                        aria-roledescription="Bar"
+                        aria-label={`${data[i].label}: ${fmtValue(data[i].value)}`}
                         className={animate ? styles.barAnimate : undefined}
                         style={animate ? { animationDelay: `${delay}ms` } : undefined}
                       />
@@ -480,6 +484,11 @@ export const Waterfall = React.forwardRef<HTMLDivElement, WaterfallChartProps>(
               )}
             </>
           )}
+          <div role="status" aria-live="polite" aria-atomic="true" className={styles.srOnly}>
+            {activeIndex !== null && activeIndex < data.length
+              ? `${data[activeIndex].label}: ${fmtValue(data[activeIndex].value)}`
+              : ''}
+          </div>
         </div>
       </ChartWrapper>
     );

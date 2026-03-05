@@ -412,7 +412,8 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
           {ready && (
             <>
               <svg
-                role="img"
+                role="graphics-document document"
+                aria-roledescription="Scatter chart"
                 aria-label={ariaLabel ?? svgDesc ?? 'Scatter chart'}
                 tabIndex={interactive ? 0 : undefined}
                 width={width}
@@ -523,6 +524,9 @@ export const Scatter = React.forwardRef<HTMLDivElement, ScatterChartProps>(
                           r={isActive ? r + 2 : r}
                           fill={point.color ?? series[si].color}
                           opacity={1}
+                          role="graphics-symbol img"
+                          aria-roledescription="Data point"
+                          aria-label={`${series[si].label}: ${fmtValue(point.x)}, ${fmtValue(point.y)}`}
                           className={animate ? styles.scatterDotAnimate : undefined}
                           style={animate ? { animationDelay: `${Math.min(pi * 15, 300)}ms` } : undefined}
                         />
