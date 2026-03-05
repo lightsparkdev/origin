@@ -113,12 +113,17 @@ jobs:
       - name: Create release branch and PR
         if: github.event_name == 'workflow_dispatch'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Use a PAT so the push and PR creation trigger CI workflows.
+          # GITHUB_TOKEN events don't trigger workflows (GitHub anti-recursion).
+          GH_TOKEN: ${{ secrets.RELEASE_PAT }}
         run: |
           OLD_VERSION="${{ steps.changes.outputs.old_version }}"
           NEW_VERSION="${{ steps.bump.outputs.new_version }}"
           VERSION_BUMP="${{ steps.ai.outputs.version_bump }}"
           BRANCH="release/v${NEW_VERSION}"
+
+          # Configure git to push with the PAT
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
 
           git checkout -b "$BRANCH"
           git add package.json package-lock.json CHANGELOG.md
