@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { TextareaGroup } from './';
 import { Chip } from '@/components/Chip';
+import { Field } from '@/components/Field';
 
 const meta: Meta<typeof TextareaGroup.Root> = {
   title: 'Components/TextareaGroup',
@@ -10,15 +11,21 @@ const meta: Meta<typeof TextareaGroup.Root> = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    disabled: { control: 'boolean' },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof TextareaGroup.Root>;
 
 export const Default: Story = {
-  render: () => (
+  args: {
+    disabled: false,
+  },
+  render: (args) => (
     <div style={{ width: 400 }}>
-      <TextareaGroup.Root>
+      <TextareaGroup.Root {...args}>
         <TextareaGroup.Textarea placeholder="Write a message..." />
       </TextareaGroup.Root>
     </div>
@@ -98,38 +105,6 @@ export const WithMaxHeight: Story = {
   ),
 };
 
-export const Disabled: Story = {
-  render: () => (
-    <div style={{ width: 400 }}>
-      <TextareaGroup.Root disabled>
-        <TextareaGroup.Header>
-          <Chip>tag-1</Chip>
-        </TextareaGroup.Header>
-        <TextareaGroup.Textarea placeholder="Write a message..." />
-        <TextareaGroup.Footer>
-          <div />
-          <div>
-            <button type="button">Send</button>
-          </div>
-        </TextareaGroup.Footer>
-      </TextareaGroup.Root>
-    </div>
-  ),
-};
-
-export const Invalid: Story = {
-  render: () => (
-    <div style={{ width: 400 }}>
-      <TextareaGroup.Root invalid>
-        <TextareaGroup.Textarea
-          placeholder="Write a message..."
-          defaultValue="Bad content"
-        />
-      </TextareaGroup.Root>
-    </div>
-  ),
-};
-
 export const Controlled: Story = {
   render: function ControlledComposer() {
     const [value, setValue] = useState('');
@@ -153,6 +128,32 @@ export const Controlled: Story = {
         <span style={{ fontSize: 12, color: '#7c7c7c' }}>
           Characters: {value.length}
         </span>
+      </div>
+    );
+  },
+};
+
+export const WithField: Story = {
+  render: function WithFieldExample() {
+    const [value, setValue] = useState('');
+    const [touched, setTouched] = useState(false);
+    const invalid = touched && value.length > 0 && value.length < 10;
+
+    return (
+      <div style={{ width: 400 }}>
+        <Field.Root invalid={invalid}>
+          <Field.Label>Message</Field.Label>
+          <TextareaGroup.Root invalid={invalid}>
+            <TextareaGroup.Textarea
+              placeholder="Write a message..."
+              value={value}
+              onChange={(e) => setValue((e.target as HTMLTextAreaElement).value)}
+              onBlur={() => setTouched(true)}
+            />
+          </TextareaGroup.Root>
+          <Field.Description>Enter at least 10 characters</Field.Description>
+          <Field.Error>Enter at least 10 characters</Field.Error>
+        </Field.Root>
       </div>
     );
   },

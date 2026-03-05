@@ -3,25 +3,15 @@ import * as React from 'react';
 import { Pagination } from './Pagination';
 import { Select } from '../Select';
 
-const meta: Meta = {
-  title: 'Components/Pagination',
-  parameters: {
-    layout: 'centered',
-  },
-};
-
-export default meta;
-
-// Interactive wrapper for controlled pagination
 function PaginationDemo({
   initialPage = 1,
-  totalItems = 2500,
-  initialPageSize = 100,
+  totalItems,
+  initialPageSize,
   showSelect = true,
 }: {
   initialPage?: number;
-  totalItems?: number;
-  initialPageSize?: number;
+  totalItems: number;
+  initialPageSize: number;
   showSelect?: boolean;
 }) {
   const [page, setPage] = React.useState(initialPage);
@@ -58,10 +48,10 @@ function PaginationDemo({
                     <Select.ItemText>100</Select.ItemText>
                   </Select.Item>
                 </Select.List>
-              </Select.Popup>
-            </Select.Positioner>
-          </Select.Portal>
-        </Select.Root>
+                </Select.Popup>
+              </Select.Positioner>
+            </Select.Portal>
+          </Select.Root>
       )}
       <Pagination.Range />
       <Pagination.Navigation>
@@ -72,34 +62,50 @@ function PaginationDemo({
   );
 }
 
-export const Default: StoryObj = {
-  render: () => <PaginationDemo />,
+const meta: Meta<typeof Pagination.Root> = {
+  title: 'Components/Pagination',
+  component: Pagination.Root,
+  parameters: {
+    layout: 'centered',
+  },
+  argTypes: {
+    totalItems: {
+      control: { type: 'number' },
+    },
+    pageSize: {
+      control: { type: 'number' },
+    },
+  },
 };
 
-export const FirstPage: StoryObj = {
-  render: () => <PaginationDemo initialPage={1} />,
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Controlled: Story = {
+  args: {
+    totalItems: 2500,
+    pageSize: 100,
+  },
+  render: (args) => (
+    <PaginationDemo
+      initialPage={1}
+      totalItems={args.totalItems}
+      initialPageSize={args.pageSize}
+    />
+  ),
 };
 
-export const LastPage: StoryObj = {
-  render: () => <PaginationDemo initialPage={25} />,
-};
-
-export const MiddlePage: StoryObj = {
-  render: () => <PaginationDemo initialPage={12} />,
-};
-
-export const SinglePage: StoryObj = {
-  render: () => <PaginationDemo initialPage={1} totalItems={50} />,
-};
-
-export const EmptyState: StoryObj = {
-  render: () => <PaginationDemo initialPage={1} totalItems={0} />,
-};
-
-export const WithoutSelect: StoryObj = {
-  render: () => <PaginationDemo showSelect={false} />,
-};
-
-export const SmallPageSize: StoryObj = {
-  render: () => <PaginationDemo initialPageSize={10} />,
+export const WithoutSelect: Story = {
+  args: {
+    totalItems: 2500,
+    pageSize: 100,
+  },
+  render: (args) => (
+    <PaginationDemo
+      initialPage={1}
+      totalItems={args.totalItems}
+      initialPageSize={args.pageSize}
+      showSelect={false}
+    />
+  ),
 };

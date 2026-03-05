@@ -5,16 +5,23 @@ import { Button } from '../Button';
 
 const meta: Meta = {
   title: 'Components/AlertDialog',
+  component: AlertDialog.Root,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    defaultOpen: { control: 'boolean' },
   },
 };
 
 export default meta;
 
 export const Default: StoryObj = {
-  render: () => (
-    <AlertDialog.Root>
+  args: {
+    defaultOpen: false,
+  },
+  render: (args) => (
+    <AlertDialog.Root defaultOpen={args.defaultOpen}>
       <AlertDialog.Trigger render={<Button variant="outline" />}>
         Delete Item
       </AlertDialog.Trigger>

@@ -34,80 +34,23 @@ const meta: Meta<typeof ButtonGroup> = {
 export default meta;
 type Story = StoryObj<typeof ButtonGroup>;
 
-export const FilledHorizontal: Story = {
-  name: 'Filled (Horizontal)',
-  render: () => (
-    <ButtonGroup>
-      <Button variant="filled">Button</Button>
-      <Button variant="filled">Button</Button>
-      <Button variant="filled" iconOnly aria-label="More">
+export const Default: Story = {
+  args: {
+    orientation: 'horizontal',
+    variant: 'filled',
+  },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Button variant={args.variant}>Button</Button>
+      <Button variant={args.variant}>Button</Button>
+      <Button variant={args.variant} iconOnly aria-label="More">
         <ChevronIcon />
       </Button>
-    </ButtonGroup>
-  ),
-};
-
-export const OutlineHorizontal: Story = {
-  name: 'Outline (Horizontal)',
-  render: () => (
-    <ButtonGroup variant="outline">
-      <Button variant="outline">Button</Button>
-      <Button variant="outline">Button</Button>
-      <Button variant="outline" iconOnly aria-label="More">
-        <ChevronIcon />
-      </Button>
-    </ButtonGroup>
-  ),
-};
-
-export const SecondaryHorizontal: Story = {
-  name: 'Secondary (Horizontal)',
-  render: () => (
-    <ButtonGroup variant="secondary">
-      <Button variant="secondary">Button</Button>
-      <Button variant="secondary">Button</Button>
-      <Button variant="secondary" iconOnly aria-label="More">
-        <ChevronIcon />
-      </Button>
-    </ButtonGroup>
-  ),
-};
-
-export const FilledVertical: Story = {
-  name: 'Filled (Vertical)',
-  render: () => (
-    <ButtonGroup orientation="vertical">
-      <Button variant="filled">Button</Button>
-      <Button variant="filled">Button</Button>
-      <Button variant="filled">Button</Button>
-    </ButtonGroup>
-  ),
-};
-
-export const OutlineVertical: Story = {
-  name: 'Outline (Vertical)',
-  render: () => (
-    <ButtonGroup orientation="vertical" variant="outline">
-      <Button variant="outline">Button</Button>
-      <Button variant="outline">Button</Button>
-      <Button variant="outline">Button</Button>
-    </ButtonGroup>
-  ),
-};
-
-export const SecondaryVertical: Story = {
-  name: 'Secondary (Vertical)',
-  render: () => (
-    <ButtonGroup orientation="vertical" variant="secondary">
-      <Button variant="secondary">Button</Button>
-      <Button variant="secondary">Button</Button>
-      <Button variant="secondary">Button</Button>
     </ButtonGroup>
   ),
 };
 
 export const TwoButtons: Story = {
-  name: 'Two Buttons',
   render: () => (
     <ButtonGroup variant="outline">
       <Button variant="outline">Yes</Button>
@@ -117,7 +60,6 @@ export const TwoButtons: Story = {
 };
 
 export const WithAriaLabel: Story = {
-  name: 'With aria-label',
   render: () => (
     <ButtonGroup variant="outline" aria-label="Text formatting">
       <Button variant="outline">B</Button>

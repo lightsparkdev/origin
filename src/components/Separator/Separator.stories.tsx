@@ -10,11 +10,11 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: { type: 'select' },
+      control: { type: 'radio' },
       options: ['default', 'hairline'],
     },
     orientation: {
-      control: { type: 'select' },
+      control: { type: 'radio' },
       options: ['horizontal', 'vertical'],
     },
   },
@@ -32,52 +32,6 @@ export const Default: Story = {
     (Story) => (
       <div style={{ width: '200px' }}>
         <Story />
-      </div>
-    ),
-  ],
-};
-
-export const Hairline: Story = {
-  args: {
-    variant: 'hairline',
-    orientation: 'horizontal',
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: '200px' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const Vertical: Story = {
-  args: {
-    variant: 'default',
-    orientation: 'vertical',
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ display: 'flex', alignItems: 'center', height: '48px', gap: '16px' }}>
-        <span>Left</span>
-        <Story />
-        <span>Right</span>
-      </div>
-    ),
-  ],
-};
-
-export const VerticalHairline: Story = {
-  args: {
-    variant: 'hairline',
-    orientation: 'vertical',
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ display: 'flex', alignItems: 'center', height: '48px', gap: '16px' }}>
-        <span>Left</span>
-        <Story />
-        <span>Right</span>
       </div>
     ),
   ],

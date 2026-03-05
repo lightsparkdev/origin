@@ -5,13 +5,19 @@ import { Accordion } from './index';
 const meta: Meta = {
   title: 'Components/Accordion',
   component: Accordion.Root,
+  argTypes: {
+    multiple: { control: 'boolean' },
+  },
 };
 
 export default meta;
 
 export const Default: StoryObj = {
-  render: () => (
-    <Accordion.Root defaultValue={['item-1']}>
+  args: {
+    multiple: false,
+  },
+  render: (args) => (
+    <Accordion.Root defaultValue={['item-1']} multiple={args.multiple}>
       <Accordion.Item value="item-1">
         <Accordion.Header>
           <Accordion.Trigger>
@@ -44,31 +50,6 @@ export const Default: StoryObj = {
         <Accordion.Panel>
           Yes, all components follow WAI-ARIA patterns.
         </Accordion.Panel>
-      </Accordion.Item>
-    </Accordion.Root>
-  ),
-};
-
-export const Multiple: StoryObj = {
-  render: () => (
-    <Accordion.Root multiple>
-      <Accordion.Item value="item-1">
-        <Accordion.Header>
-          <Accordion.Trigger>
-            First
-  
-          </Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Panel>Multiple items can be open.</Accordion.Panel>
-      </Accordion.Item>
-      <Accordion.Item value="item-2">
-        <Accordion.Header>
-          <Accordion.Trigger>
-            Second
-  
-          </Accordion.Trigger>
-        </Accordion.Header>
-        <Accordion.Panel>This stays open when others open.</Accordion.Panel>
       </Accordion.Item>
     </Accordion.Root>
   ),

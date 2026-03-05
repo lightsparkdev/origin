@@ -5,16 +5,23 @@ import { Button } from '../Button';
 
 const meta: Meta = {
   title: 'Components/Dialog',
+  component: Dialog.Root,
   parameters: {
     layout: 'centered',
+  },
+  argTypes: {
+    modal: { control: 'boolean' },
   },
 };
 
 export default meta;
 
 export const Default: StoryObj = {
-  render: () => (
-    <Dialog.Root>
+  args: {
+    modal: true,
+  },
+  render: (args) => (
+    <Dialog.Root modal={args.modal}>
       <Dialog.Trigger render={<Button variant="outline" />}>
         Open Dialog
       </Dialog.Trigger>

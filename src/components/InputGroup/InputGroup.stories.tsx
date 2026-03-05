@@ -5,15 +5,20 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { InputGroup } from './';
 import { Field } from '@/components/Field';
 
-const meta: Meta = {
+const meta: Meta<typeof InputGroup.Root> = {
   title: 'Components/InputGroup',
+  component: InputGroup.Root,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  argTypes: {
+    disabled: { control: 'boolean' },
+  },
 };
 
 export default meta;
+type Story = StoryObj<typeof InputGroup.Root>;
 
 function SearchIcon() {
   return (
@@ -41,10 +46,13 @@ function LinkIcon() {
   );
 }
 
-export const Default: StoryObj = {
-  render: () => (
+export const Default: Story = {
+  args: {
+    disabled: false,
+  },
+  render: (args) => (
     <div style={{ width: 300 }}>
-      <InputGroup.Root>
+      <InputGroup.Root {...args}>
         <InputGroup.Addon>
           <SearchIcon />
         </InputGroup.Addon>
@@ -54,7 +62,7 @@ export const Default: StoryObj = {
   ),
 };
 
-export const TrailingAddon: StoryObj = {
+export const TrailingAddon: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
@@ -67,7 +75,7 @@ export const TrailingAddon: StoryObj = {
   ),
 };
 
-export const LeadingAndTrailing: StoryObj = {
+export const LeadingAndTrailing: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
@@ -83,7 +91,7 @@ export const LeadingAndTrailing: StoryObj = {
   ),
 };
 
-export const WithGhostButton: StoryObj = {
+export const WithGhostButton: Story = {
   name: 'Button (Ghost)',
   render: () => (
     <div style={{ width: 300 }}>
@@ -98,7 +106,7 @@ export const WithGhostButton: StoryObj = {
   ),
 };
 
-export const WithOutlineButton: StoryObj = {
+export const WithOutlineButton: Story = {
   name: 'Button (Outline)',
   render: () => (
     <div style={{ width: 300 }}>
@@ -113,7 +121,7 @@ export const WithOutlineButton: StoryObj = {
   ),
 };
 
-export const WithGhostSelectTrigger: StoryObj = {
+export const WithGhostSelectTrigger: Story = {
   name: 'Select Trigger (Ghost)',
   render: () => (
     <div style={{ width: 300 }}>
@@ -125,7 +133,7 @@ export const WithGhostSelectTrigger: StoryObj = {
   ),
 };
 
-export const WithOutlineSelectTrigger: StoryObj = {
+export const WithOutlineSelectTrigger: Story = {
   name: 'Select Trigger (Outline)',
   render: () => (
     <div style={{ width: 300 }}>
@@ -137,7 +145,7 @@ export const WithOutlineSelectTrigger: StoryObj = {
   ),
 };
 
-export const Cap: StoryObj = {
+export const Cap: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
@@ -148,7 +156,7 @@ export const Cap: StoryObj = {
   ),
 };
 
-export const TrailingCap: StoryObj = {
+export const TrailingCap: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
@@ -159,7 +167,7 @@ export const TrailingCap: StoryObj = {
   ),
 };
 
-export const CapWithButton: StoryObj = {
+export const CapWithButton: Story = {
   name: 'Cap with Button',
   render: () => (
     <div style={{ width: 300 }}>
@@ -173,7 +181,7 @@ export const CapWithButton: StoryObj = {
   ),
 };
 
-export const CapWithIconButton: StoryObj = {
+export const CapWithIconButton: Story = {
   name: 'Cap with Icon Button',
   render: () => (
     <div style={{ width: 300 }}>
@@ -189,7 +197,7 @@ export const CapWithIconButton: StoryObj = {
   ),
 };
 
-export const WithText: StoryObj = {
+export const WithText: Story = {
   render: () => (
     <div style={{ width: 300 }}>
       <InputGroup.Root>
@@ -201,33 +209,7 @@ export const WithText: StoryObj = {
   ),
 };
 
-export const Disabled: StoryObj = {
-  render: () => (
-    <div style={{ width: 300 }}>
-      <InputGroup.Root disabled>
-        <InputGroup.Addon>
-          <SearchIcon />
-        </InputGroup.Addon>
-        <InputGroup.Input placeholder="Search..." />
-      </InputGroup.Root>
-    </div>
-  ),
-};
-
-export const Invalid: StoryObj = {
-  render: () => (
-    <div style={{ width: 300 }}>
-      <InputGroup.Root invalid>
-        <InputGroup.Addon>
-          <MailIcon />
-        </InputGroup.Addon>
-        <InputGroup.Input defaultValue="not-an-email" />
-      </InputGroup.Root>
-    </div>
-  ),
-};
-
-export const Controlled: StoryObj = {
+export const Controlled: Story = {
   render: function ControlledExample() {
     const [value, setValue] = React.useState('');
     return (
@@ -250,7 +232,7 @@ export const Controlled: StoryObj = {
   },
 };
 
-export const WithField: StoryObj = {
+export const WithField: Story = {
   render: function WithFieldExample() {
     const [value, setValue] = React.useState('');
     const [touched, setTouched] = React.useState(false);
@@ -282,7 +264,7 @@ export const WithField: StoryObj = {
   },
 };
 
-export const URLInput: StoryObj = {
+export const URLInput: Story = {
   name: 'URL Input',
   render: () => (
     <div style={{ width: 360 }}>
@@ -295,7 +277,7 @@ export const URLInput: StoryObj = {
   ),
 };
 
-export const CurrencyInput: StoryObj = {
+export const CurrencyInput: Story = {
   name: 'Currency Input',
   render: () => (
     <div style={{ width: 300 }}>
@@ -308,7 +290,7 @@ export const CurrencyInput: StoryObj = {
   ),
 };
 
-export const AllVariants: StoryObj = {
+export const AllVariants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 300 }}>
       <div>

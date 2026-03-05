@@ -9,9 +9,12 @@ const meta: Meta = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    delay: { control: 'number' },
+  },
   decorators: [
-    (Story) => (
-      <Tooltip.Provider>
+    (Story, context) => (
+      <Tooltip.Provider delay={context.args?.delay}>
         <Story />
       </Tooltip.Provider>
     ),
@@ -21,6 +24,9 @@ const meta: Meta = {
 export default meta;
 
 export const Default: StoryObj = {
+  args: {
+    delay: 0,
+  },
   render: () => (
     <Tooltip.Root>
       <Tooltip.Trigger render={<Button variant="outline">Hover me</Button>} />
@@ -99,24 +105,6 @@ export const Placements: StoryObj = {
         </Tooltip.Root>
       ))}
     </div>
-  ),
-};
-
-export const DelayedOpen: StoryObj = {
-  render: () => (
-    <Tooltip.Provider delay={500}>
-      <Tooltip.Root>
-        <Tooltip.Trigger render={<Button variant="outline">500ms delay</Button>} />
-        <Tooltip.Portal>
-          <Tooltip.Positioner sideOffset={8}>
-            <Tooltip.Popup>
-              This tooltip has a 500ms delay
-              <Tooltip.Arrow />
-            </Tooltip.Popup>
-          </Tooltip.Positioner>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
   ),
 };
 

@@ -23,33 +23,14 @@ type Story = StoryObj<typeof Input>;
 export const Default: Story = {
   args: {
     placeholder: 'Placeholder',
+    disabled: false,
+    readOnly: false,
   },
 };
 
 export const WithValue: Story = {
   args: {
     defaultValue: 'Content',
-  },
-};
-
-export const Disabled: Story = {
-  args: {
-    placeholder: 'Placeholder',
-    disabled: true,
-  },
-};
-
-export const DisabledWithValue: Story = {
-  args: {
-    defaultValue: 'Content',
-    disabled: true,
-  },
-};
-
-export const ReadOnly: Story = {
-  args: {
-    defaultValue: 'Read only content',
-    readOnly: true,
   },
 };
 
