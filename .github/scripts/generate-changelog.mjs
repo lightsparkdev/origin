@@ -14,19 +14,22 @@ if (!apiKey) {
 const oldVersion = process.env.OLD_VERSION || "0.0.0";
 const commits = process.env.COMMITS || "";
 const diffstat = process.env.DIFFSTAT || "";
+const prDetails = process.env.PR_DETAILS || "";
 const today = new Date().toISOString().split("T")[0];
 
 const prompt = `You are generating a release changelog for @lightsparkdev/origin, a React component library and design system.
 
 Current version: ${oldVersion}
-Diff stat: ${diffstat}
 
-Commits since last release:
+Merge commits since last release:
 ${commits}
+${prDetails ? `\nPR descriptions (written by the authors — use these as your primary source):\n${prDetails}` : ""}
+Files changed (diff stat):
+${diffstat}
 
 Tasks:
 1. Determine if this is a "minor" or "patch" release. Use minor if there are new components, new features, or new public API surface. Use patch for bug fixes, docs, internal refactors, CI changes, and dependency updates. Never use major.
-2. Write a concise changelog entry that summarizes ONLY changes that impact consumers of the package (new components, API changes, bug fixes, style changes). Omit CI, docs, internal tooling, and repo maintenance.
+2. Write a concise changelog entry that summarizes ONLY changes that impact consumers of the package (new components, API changes, bug fixes, style changes). Omit CI, docs, internal tooling, and repo maintenance. Use the PR descriptions as your primary source of truth for what changed — they contain the most accurate and detailed information.
 
 Respond in EXACTLY this format with no other text:
 
