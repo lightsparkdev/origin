@@ -37,6 +37,7 @@ import { PhoneInput } from '@/components/PhoneInput';
 import { Progress } from '@/components/Progress';
 import { Radio } from '@/components/Radio';
 import { Select } from '@/components/Select';
+import { SegmentedNav } from '@/components/SegmentedNav';
 import { Separator } from '@/components/Separator';
 import { Sidebar } from '@/components/Sidebar';
 import { Skeleton } from '@/components/Skeleton';
@@ -1955,6 +1956,42 @@ export default function Home() {
               </Breadcrumb.Item>
             </Breadcrumb.List>
           </Breadcrumb.Root>
+        </div>
+      </div>
+      <h2 style={{ marginBottom: '1rem' }}>SegmentedNav Component</h2>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Payout sections</span>
+          <SegmentedNav aria-label="Payout sections">
+            <SegmentedNav.Link render={<a href="/payouts" />}>
+              Overview
+            </SegmentedNav.Link>
+            <SegmentedNav.Link active render={<a href="/payouts/activity" />}>
+              Activity
+            </SegmentedNav.Link>
+            <SegmentedNav.Link render={<a href="/payouts/recipients" />}>
+              Recipients
+            </SegmentedNav.Link>
+            <SegmentedNav.Link render={<a href="/payouts/customers" />}>
+              Customers
+            </SegmentedNav.Link>
+          </SegmentedNav>
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Longer labels</span>
+          <SegmentedNav aria-label="Customer payout sections">
+            <SegmentedNav.Link render={<a href="/customers/overview" />}>
+              Customer overview
+            </SegmentedNav.Link>
+            <SegmentedNav.Link active render={<a href="/customers/platform-payouts" />}>
+              Platform payouts
+            </SegmentedNav.Link>
+            <SegmentedNav.Link render={<a href="/customers/reconciliation" />}>
+              Reconciliation
+            </SegmentedNav.Link>
+          </SegmentedNav>
         </div>
       </div>
       <h2 style={{ marginBottom: '1rem' }}>Button Component</h2>

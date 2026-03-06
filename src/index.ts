@@ -78,6 +78,8 @@ export { PhoneInput } from './components/PhoneInput';
 export { Progress } from './components/Progress';
 export { Radio } from './components/Radio';
 export { Select } from './components/Select';
+export { SegmentedNav } from './components/SegmentedNav';
+export type { SegmentedNavRootProps, SegmentedNavLinkProps } from './components/SegmentedNav';
 export { Sidebar } from './components/Sidebar';
 export { Skeleton } from './components/Skeleton';
 export { Table } from './components/Table';
