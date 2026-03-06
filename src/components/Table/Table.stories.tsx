@@ -7,6 +7,7 @@ import {
   AlignedTable,
   LoadingTable,
   ResizableTable,
+  ColumnSizingTable,
   SlotsTable,
   DescriptionTable,
   FooterTable,
@@ -86,6 +87,18 @@ export const Resizable: Story = {
     docs: {
       description: {
         story: 'Drag column borders to resize.',
+      },
+    },
+  },
+};
+
+export const ColumnSizing: Story = {
+  render: () => <ColumnSizingTable />,
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Hug columns (checkbox, status, amount, actions) get explicit widths; fill columns (customer, product, note) omit width and split remaining space equally. Tag hug columns with `meta: { sizing: "hug" }` and only pass `style.width` when that flag is set.',
       },
     },
   },

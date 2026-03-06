@@ -761,6 +761,150 @@ export function ClickableRowTable() {
 }
 
 /**
+ * Table with hug/fill column sizing.
+ * Hug columns get an explicit width; fill columns omit width
+ * and split remaining space equally via table-layout: fixed.
+ */
+export function ColumnSizingTable() {
+  interface Order {
+    id: string;
+    customer: string;
+    product: string;
+    note: string;
+    amount: number;
+    status: 'completed' | 'pending' | 'failed';
+  }
+
+  const data: Order[] = [
+    { id: 'ORD-001', customer: 'Alice Johnson', product: 'Widget Pro', note: 'Rush delivery requested', amount: 249.99, status: 'completed' },
+    { id: 'ORD-002', customer: 'Bob Smith', product: 'Gadget Max', note: 'Gift wrap', amount: 149.50, status: 'pending' },
+    { id: 'ORD-003', customer: 'Carol White', product: 'Gizmo Ultra', note: '', amount: 89.00, status: 'failed' },
+    { id: 'ORD-004', customer: 'David Brown', product: 'Widget Pro', note: 'Include invoice', amount: 499.99, status: 'completed' },
+    { id: 'ORD-005', customer: 'Eve Davis', product: 'Gadget Max', note: 'Second order this month', amount: 149.50, status: 'pending' },
+  ];
+
+  const orderColumnHelper = createColumnHelper<Order>();
+
+  const columns = [
+    orderColumnHelper.display({
+      id: 'select',
+      meta: { sizing: 'hug' },
+      size: 40,
+      header: () => null,
+      cell: () => (
+        <BaseCheckbox.Root
+          aria-label="Select row"
+          style={{
+            width: 16, height: 16, borderRadius: 4,
+            border: '1px solid var(--border-secondary)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+          }}
+        >
+          <BaseCheckbox.Indicator style={{ color: 'var(--icon-on-color)', fontSize: 12 }}>
+            ✓
+          </BaseCheckbox.Indicator>
+        </BaseCheckbox.Root>
+      ),
+    }),
+    orderColumnHelper.accessor('customer', {
+      header: 'Customer',
+    }),
+    orderColumnHelper.accessor('product', {
+      header: 'Product',
+    }),
+    orderColumnHelper.accessor('note', {
+      header: 'Note',
+    }),
+    orderColumnHelper.accessor('status', {
+      header: 'Status',
+      meta: { sizing: 'hug' },
+      size: 100,
+    }),
+    orderColumnHelper.accessor('amount', {
+      header: 'Amount',
+      meta: { sizing: 'hug', align: 'right' as const },
+      size: 100,
+      cell: (info) => `$${info.getValue().toFixed(2)}`,
+    }),
+    orderColumnHelper.display({
+      id: 'actions',
+      meta: { sizing: 'hug' },
+      size: 64,
+      header: () => null,
+      cell: () => (
+        <button
+          style={{
+            width: 32, height: 32, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', background: 'none', border: 'none',
+            cursor: 'pointer', borderRadius: 'var(--corner-radius-sm)',
+            color: 'var(--icon-tertiary)',
+          }}
+          aria-label="More actions"
+        >
+          ···
+        </button>
+      ),
+    }),
+  ];
+
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
+  return (
+    <Table.Root>
+      <Table.Header>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Table.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => {
+              const meta = header.column.columnDef.meta as
+                | { sizing?: string; align?: 'left' | 'right' }
+                | undefined;
+              return (
+                <Table.HeaderCell
+                  key={header.id}
+                  variant={header.id === 'select' ? 'checkbox' : 'default'}
+                  align={meta?.align}
+                  style={{
+                    width: meta?.sizing === 'hug' ? header.getSize() : undefined,
+                  }}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Table.HeaderCell>
+              );
+            })}
+          </Table.HeaderRow>
+        ))}
+      </Table.Header>
+      <Table.Body>
+        {table.getRowModel().rows.map((row) => (
+          <Table.Row key={row.id}>
+            {row.getVisibleCells().map((cell) => {
+              const meta = cell.column.columnDef.meta as
+                | { sizing?: string; align?: 'left' | 'right' }
+                | undefined;
+              return (
+                <Table.Cell
+                  key={cell.id}
+                  variant={cell.column.id === 'select' ? 'checkbox' : 'default'}
+                  align={meta?.align}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Table.Cell>
+              );
+            })}
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table.Root>
+  );
+}
+
+/**
  * Table with cell description (secondary text)
  */
 export function DescriptionTable() {

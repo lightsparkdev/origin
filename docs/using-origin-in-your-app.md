@@ -130,6 +130,62 @@ If you need app-specific tokens or mixins, create them in a local `src/tokens/` 
 @use "pkg:@lightsparkdev/origin/tokens/text-styles" as *; // from Origin
 ```
 
+## Table Column Sizing
+
+`Table.Root` uses `table-layout: fixed` so column widths are predictable and text truncates cleanly. The sizing model is simple:
+
+- **Hug columns** — Set an explicit width via `style`. The column stays at that size. Use for checkboxes, status badges, action menus, and other fixed-width content.
+- **Fill columns** — Don't set a width. The browser divides remaining space equally among columns without explicit widths.
+
+```tsx
+<Table.HeaderCell variant="checkbox" style={{ width: 40 }}>
+  {/* checkbox — hug */}
+</Table.HeaderCell>
+
+<Table.HeaderCell>
+  Name {/* fill — no width */}
+</Table.HeaderCell>
+
+<Table.HeaderCell>
+  Email {/* fill — no width */}
+</Table.HeaderCell>
+
+<Table.HeaderCell style={{ width: 64 }} align="right">
+  <span className="visuallyHidden">Actions</span> {/* hug */}
+</Table.HeaderCell>
+```
+
+### With TanStack React Table
+
+TanStack defaults every column to `size: 150`, so `header.getSize()` always returns a number. If you pass that to every header cell, `table-layout: fixed` distributes surplus space proportionally and inflates hug columns.
+
+Only set width on columns that need it:
+
+```tsx
+// In your column definitions, tag hug columns via meta:
+columnHelper.display({
+  id: 'select',
+  meta: { sizing: 'hug' },
+  size: 40,
+})
+
+columnHelper.accessor('name', {
+  header: 'Name',
+  // no size, no meta — this column fills
+})
+
+// In the render loop:
+<Table.HeaderCell
+  style={{
+    width: (header.column.columnDef.meta as { sizing?: string })?.sizing === 'hug'
+      ? header.getSize()
+      : undefined,
+  }}
+>
+```
+
+See the **ColumnSizing** story in Storybook for a working example.
+
 ## Sync
 
 Tokens are imported directly from the package — no manual copying needed. When Origin publishes a new version:
