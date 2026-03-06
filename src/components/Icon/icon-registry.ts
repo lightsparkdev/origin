@@ -69,6 +69,7 @@ import { IconClipboard2 } from './icons/IconClipboard2';
 import { IconClipboard2Sparkle } from './icons/IconClipboard2Sparkle';
 import { IconClock } from './icons/IconClock';
 import { IconCmdBox } from './icons/IconCmdBox';
+import { IconCoinsAdd } from './icons/IconCoinsAdd';
 import { IconConnectors1 } from './icons/IconConnectors1';
 import { IconConnectors2 } from './icons/IconConnectors2';
 import { IconConsoleSparkle } from './icons/IconConsoleSparkle';
@@ -125,6 +126,7 @@ import { IconOffline } from './icons/IconOffline';
 import { IconOngoing } from './icons/IconOngoing';
 import { IconOngoing as IconOngoingFilled } from './icons/IconOngoingFilled';
 import { IconPaperclip1 } from './icons/IconPaperclip1';
+import { IconPaperPlaneTopRight } from './icons/IconPaperPlaneTopRight';
 import { IconPassport } from './icons/IconPassport';
 import { IconPassword } from './icons/IconPassword';
 import { IconPasswordStars } from './icons/IconPasswordStars';
@@ -301,6 +303,7 @@ export const ICON_REGISTRY = {
   IconClipboard2Sparkle,
   IconClock,
   IconCmdBox,
+  IconCoinsAdd,
   IconConnectors1,
   IconConnectors2,
   IconConsoleSparkle,
@@ -356,6 +359,7 @@ export const ICON_REGISTRY = {
   IconOffline,
   IconOngoing,
   IconOngoingFilled,
+  IconPaperPlaneTopRight,
   IconPaperclip1,
   IconPassport,
   IconPassword,
