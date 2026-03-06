@@ -98,6 +98,73 @@ export const SidePanel: StoryObj = {
   },
 };
 
+export const Panel: StoryObj = {
+  render: function Render() {
+    const [open, setOpen] = React.useState(false);
+
+    return (
+      <div>
+        <Button variant="outline" onClick={() => setOpen(true)}>
+          Send payout
+        </Button>
+        <Drawer.Root open={open} onOpenChange={setOpen} swipeDirection="right">
+          <Drawer.Portal>
+            <Drawer.Backdrop />
+            <Drawer.Viewport>
+              <Drawer.Popup
+                style={{
+                  '--drawer-margin': 'var(--spacing-xs)',
+                  '--drawer-surface': 'var(--surface-primary)',
+                  '--drawer-radius': 'var(--corner-radius-md)',
+                } as React.CSSProperties}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 'var(--spacing-md) var(--spacing-xl)', borderBottom: 'var(--stroke-xs) solid var(--border-primary)' }}>
+                  <span className="headline-sm" style={{ color: 'var(--text-primary)' }}>
+                    Send payout
+                  </span>
+                  <Drawer.Close render={<Button variant="ghost" size="compact" iconOnly aria-label="Close" />}>
+                    <CentralIcon name="IconCrossSmall" size={16} />
+                  </Drawer.Close>
+                </div>
+                <Drawer.Content>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                    <div>
+                      <label className="label" htmlFor="panel-recipient" style={{ display: 'block', marginBottom: 'var(--spacing-2xs)', color: 'var(--text-secondary)' }}>Recipient</label>
+                      <input id="panel-recipient" type="text" placeholder="Name or email" style={{ width: '100%', padding: 'var(--spacing-sm) var(--spacing-md)', border: 'var(--stroke-xs) solid var(--border-primary)', borderRadius: 'var(--corner-radius-sm)', fontSize: 14, color: 'var(--text-primary)', backgroundColor: 'var(--surface-primary)', boxSizing: 'border-box' }} />
+                    </div>
+                    <div>
+                      <label className="label" htmlFor="panel-amount" style={{ display: 'block', marginBottom: 'var(--spacing-2xs)', color: 'var(--text-secondary)' }}>Amount</label>
+                      <input id="panel-amount" type="text" placeholder="$0.00" style={{ width: '100%', padding: 'var(--spacing-sm) var(--spacing-md)', border: 'var(--stroke-xs) solid var(--border-primary)', borderRadius: 'var(--corner-radius-sm)', fontSize: 14, color: 'var(--text-primary)', backgroundColor: 'var(--surface-primary)', boxSizing: 'border-box' }} />
+                    </div>
+                    <div>
+                      <label className="label" htmlFor="panel-note" style={{ display: 'block', marginBottom: 'var(--spacing-2xs)', color: 'var(--text-secondary)' }}>Note</label>
+                      <textarea id="panel-note" rows={2} placeholder="Optional" style={{ width: '100%', padding: 'var(--spacing-sm) var(--spacing-md)', border: 'var(--stroke-xs) solid var(--border-primary)', borderRadius: 'var(--corner-radius-sm)', fontSize: 14, color: 'var(--text-primary)', backgroundColor: 'var(--surface-primary)', resize: 'vertical', boxSizing: 'border-box' }} />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--spacing-xs)', marginTop: 'var(--spacing-lg)' }}>
+                    <Drawer.Close render={<Button variant="outline" />}>
+                      Cancel
+                    </Drawer.Close>
+                    <Button variant="filled">Send</Button>
+                  </div>
+                </Drawer.Content>
+              </Drawer.Popup>
+            </Drawer.Viewport>
+          </Drawer.Portal>
+        </Drawer.Root>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Inset floating panel using CSS custom properties: `--drawer-margin`, `--drawer-surface`, `--drawer-radius`. Side panels default to `auto` height (stretch minus margin). No new props needed — set these on `Drawer.Popup` via `style`.',
+      },
+    },
+  },
+};
+
 export const LeftPanel: StoryObj = {
   render: function Render() {
     const [open, setOpen] = React.useState(false);
