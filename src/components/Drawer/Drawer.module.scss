@@ -86,8 +86,8 @@
   margin-bottom: calc(-1 * var(--bleed));
   padding-bottom: calc(var(--bleed) + env(safe-area-inset-bottom, 0px));
   overflow: visible;
-  background-color: var(--surface-panel);
-  border-radius: var(--corner-radius-lg) var(--corner-radius-lg) 0 0;
+  background-color: var(--drawer-surface, var(--surface-panel));
+  border-radius: var(--drawer-radius, var(--corner-radius-lg) var(--corner-radius-lg) 0 0);
   outline: var(--stroke-xs) solid var(--border-secondary);
   box-shadow: var(--shadow-lg);
   touch-action: none;
@@ -162,12 +162,16 @@
     width: var(--drawer-width, 420px);
     max-width: calc(100vw - var(--spacing-2xl));
     max-height: none;
-    height: 100%;
-    margin-bottom: 0;
+    height: var(--drawer-height-override, auto);
+    margin: var(--drawer-margin, 0);
     padding-bottom: 0;
-    border-radius: 0;
+    border-radius: var(--drawer-radius, 0);
     transform-origin: center center;
     transform: translateX(var(--drawer-swipe-movement-x, 0px));
+
+    &::before {
+      display: none;
+    }
 
     &[data-starting-style],
     &[data-ending-style] {
@@ -182,10 +186,20 @@
     max-height: calc(100dvh - var(--spacing-2xl));
     margin-bottom: 0;
     padding-bottom: 0;
-    border-radius: 0 0 var(--corner-radius-lg) var(--corner-radius-lg);
+    border-radius: var(--drawer-radius, 0 0 var(--corner-radius-lg) var(--corner-radius-lg));
     box-shadow: var(--shadow-lg);
     transform-origin: center center;
     transform: translateY(var(--drawer-swipe-movement-y, 0px));
+
+    &::before {
+      display: none;
+    }
+
+    &[data-expanded] {
+      border-radius: 0;
+      outline: none;
+      box-shadow: none;
+    }
 
     &[data-starting-style],
     &[data-ending-style] {
@@ -200,12 +214,16 @@
     width: var(--drawer-width, 420px);
     max-width: calc(100vw - var(--spacing-2xl));
     max-height: none;
-    height: 100%;
-    margin-bottom: 0;
+    height: var(--drawer-height-override, auto);
+    margin: var(--drawer-margin, 0);
     padding-bottom: 0;
-    border-radius: 0;
+    border-radius: var(--drawer-radius, 0);
     transform-origin: center center;
     transform: translateX(var(--drawer-swipe-movement-x, 0px));
+
+    &::before {
+      display: none;
+    }
 
     &[data-starting-style],
     &[data-ending-style] {
