@@ -55,6 +55,7 @@ import { IconBrokenHeart } from './icons/IconBrokenHeart';
 import { IconBrowserTabs } from './icons/IconBrowserTabs';
 import { IconBubble3 } from './icons/IconBubble3';
 import { IconBubbleWideSparkle } from './icons/IconBubbleWideSparkle';
+import { IconBuildings } from './icons/IconBuildings';
 import { IconCalendarDays } from './icons/IconCalendarDays';
 import { IconCheckmark2 } from './icons/IconCheckmark2';
 import { IconCheckmark2Small } from './icons/IconCheckmark2Small';
@@ -206,6 +207,7 @@ import { IconVoiceSettings } from './icons/IconVoiceSettings';
 import { IconVoiceSparkle } from './icons/IconVoiceSparkle';
 
 // User & People
+import { IconPeople } from './icons/IconPeople';
 import { IconUserAdded } from './icons/IconUserAdded';
 import { IconUserAddRight } from './icons/IconUserAddRight';
 import { IconUserBlock } from './icons/IconUserBlock';
@@ -291,6 +293,7 @@ export const ICON_REGISTRY = {
   IconBrowserTabs,
   IconBubble3,
   IconBubbleWideSparkle,
+  IconBuildings,
   IconCalendarDays,
   IconCheckmark2,
   IconCheckmark2Small,
@@ -442,6 +445,7 @@ export const ICON_REGISTRY = {
   IconVoiceSparkle,
 
   // User & People
+  IconPeople,
   IconUserAddRight,
   IconUserAdded,
   IconUserBlock,

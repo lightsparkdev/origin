@@ -96,6 +96,7 @@ const SECTIONS = [
       { name: 'IconBell' },
       { name: 'IconBellOff' },
       { name: 'IconBlackpoint' },
+      { name: 'IconBuildings' },
       { name: 'IconBrackets1' },
       { name: 'IconBrokenHeart' },
       { name: 'IconBrowserTabs' },
@@ -261,6 +262,7 @@ const SECTIONS = [
   {
     section: 'User & People',
     icons: [
+      { name: 'IconPeople' },
       { name: 'IconUserAdded' },
       { name: 'IconUserAddRight' },
       { name: 'IconUserBlock' },
