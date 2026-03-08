@@ -5,6 +5,9 @@ import {
   PlainAnchorSegmentedNav,
   LinkPropForwardingSegmentedNav,
   ClickableSegmentedNav,
+  PlainLinksRouteHarness,
+  RenderLinksRouteHarness,
+  ControlRouteHarness,
 } from './SegmentedNav.test-stories';
 
 const axeConfig = {
@@ -63,6 +66,36 @@ test.describe('SegmentedNav', () => {
 
     await page.getByRole('link', { name: 'Interactive' }).click();
     await expect(page.getByText('Clicked')).toBeVisible();
+  });
+
+  test('container-only plain links commit repeated route changes', async ({ mount, page }) => {
+    await mount(<PlainLinksRouteHarness />);
+
+    await page.getByRole('link', { name: 'Route B' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-b');
+
+    await page.getByRole('link', { name: 'Route C' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-c');
+  });
+
+  test('SegmentedNav.Link commits repeated route changes', async ({ mount, page }) => {
+    await mount(<RenderLinksRouteHarness />);
+
+    await page.getByRole('link', { name: 'Route B' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-b');
+
+    await page.getByRole('link', { name: 'Route C' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-c');
+  });
+
+  test('non-SegmentedNav control also commits repeated route changes', async ({ mount, page }) => {
+    await mount(<ControlRouteHarness />);
+
+    await page.getByRole('link', { name: 'Route B' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-b');
+
+    await page.getByRole('link', { name: 'Route C' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-c');
   });
 
   test('has no accessibility violations', async ({ mount, page }) => {
