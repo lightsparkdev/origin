@@ -8,12 +8,37 @@
 
 .list {
   display: inline-flex;
-  gap: var(--spacing-2xs);
   align-items: center;
   padding: var(--spacing-3xs);
   overflow: clip;
   background: var(--surface-secondary);
   @include smooth-corners(var(--corner-radius-sm));
+}
+
+.list > .link + .link {
+  margin-inline-start: var(--spacing-2xs);
+}
+
+.group {
+  position: relative;
+  display: inline-flex;
+  gap: var(--spacing-2xs);
+  align-items: center;
+}
+
+.group + .group {
+  margin-inline-start: var(--spacing-xs);
+  padding-inline-start: var(--spacing-xs);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--spacing-3xs));
+    bottom: calc(-1 * var(--spacing-3xs));
+    inset-inline-start: 0;
+    width: var(--stroke-xs);
+    background: var(--border-secondary);
+  }
 }
 
 .link {

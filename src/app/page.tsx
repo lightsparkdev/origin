@@ -1709,6 +1709,78 @@ function DatePickerDemo() {
   );
 }
 
+function SegmentedNavDemo({
+  ariaLabel,
+  items,
+  initialActive,
+}: {
+  ariaLabel: string;
+  items: string[];
+  initialActive: string;
+}) {
+  const [activeItem, setActiveItem] = React.useState(initialActive);
+
+  return (
+    <SegmentedNav aria-label={ariaLabel}>
+      {items.map((item) => (
+        <SegmentedNav.Link
+          key={item}
+          active={activeItem === item}
+          render={
+            <a
+              href="/"
+              onClick={(event) => {
+                event.preventDefault();
+                setActiveItem(item);
+              }}
+            />
+          }
+        >
+          {item}
+        </SegmentedNav.Link>
+      ))}
+    </SegmentedNav>
+  );
+}
+
+function GroupedSegmentedNavDemo({
+  ariaLabel,
+  groups,
+  initialActive,
+}: {
+  ariaLabel: string;
+  groups: string[][];
+  initialActive: string;
+}) {
+  const [activeItem, setActiveItem] = React.useState(initialActive);
+
+  return (
+    <SegmentedNav aria-label={ariaLabel}>
+      {groups.map((group, index) => (
+        <SegmentedNav.Group key={`group-${index}`}>
+          {group.map((item) => (
+            <SegmentedNav.Link
+              key={item}
+              active={activeItem === item}
+              render={
+                <a
+                  href="/"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setActiveItem(item);
+                  }}
+                />
+              }
+            >
+              {item}
+            </SegmentedNav.Link>
+          ))}
+        </SegmentedNav.Group>
+      ))}
+    </SegmentedNav>
+  );
+}
+
 export default function Home() {
   return (
     <main style={{ padding: '2rem', maxWidth: '600px' }}>
@@ -1920,42 +1992,6 @@ export default function Home() {
               </Breadcrumb.Item>
             </Breadcrumb.List>
           </Breadcrumb.Root>
-        </div>
-      </div>
-      <h2 style={{ marginBottom: '1rem' }}>SegmentedNav Component</h2>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Payout sections</span>
-          <SegmentedNav aria-label="Payout sections">
-            <SegmentedNav.Link render={<a href="/payouts" />}>
-              Overview
-            </SegmentedNav.Link>
-            <SegmentedNav.Link active render={<a href="/payouts/activity" />}>
-              Activity
-            </SegmentedNav.Link>
-            <SegmentedNav.Link render={<a href="/payouts/recipients" />}>
-              Recipients
-            </SegmentedNav.Link>
-            <SegmentedNav.Link render={<a href="/payouts/customers" />}>
-              Customers
-            </SegmentedNav.Link>
-          </SegmentedNav>
-        </div>
-
-        <div>
-          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Longer labels</span>
-          <SegmentedNav aria-label="Customer payout sections">
-            <SegmentedNav.Link render={<a href="/customers/overview" />}>
-              Customer overview
-            </SegmentedNav.Link>
-            <SegmentedNav.Link active render={<a href="/customers/platform-payouts" />}>
-              Platform payouts
-            </SegmentedNav.Link>
-            <SegmentedNav.Link render={<a href="/customers/reconciliation" />}>
-              Reconciliation
-            </SegmentedNav.Link>
-          </SegmentedNav>
         </div>
       </div>
       <h2 style={{ marginBottom: '1rem' }}>Button Component</h2>
@@ -3514,6 +3550,39 @@ export default function Home() {
           </Radio.Group>
           <Radio.Error match>Error text goes here.</Radio.Error>
         </Radio.Field>
+      </div>
+      <h2 style={{ marginBottom: '1rem' }}>SegmentedNav Component</h2>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '128px' }}>
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Flat links</span>
+          <SegmentedNavDemo
+            ariaLabel="Payout sections"
+            items={['Overview', 'Activity', 'Recipients', 'Customers']}
+            initialActive="Activity"
+          />
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Grouped links</span>
+          <GroupedSegmentedNavDemo
+            ariaLabel="Grouped payout sections"
+            groups={[
+              ['Overview', 'Platform payouts', 'Recipients'],
+              ['Customer payouts'],
+            ]}
+            initialActive="Platform payouts"
+          />
+        </div>
+
+        <div>
+          <span style={{ fontSize: '14px', color: '#7c7c7c', marginBottom: '0.5rem', display: 'block' }}>Longer labels</span>
+          <SegmentedNavDemo
+            ariaLabel="Customer payout sections"
+            items={['Customer overview', 'Platform payouts', 'Reconciliation']}
+            initialActive="Platform payouts"
+          />
+        </div>
       </div>
       <h2 style={{ marginBottom: '1rem' }}>Select Component</h2>
       
