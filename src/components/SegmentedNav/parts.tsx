@@ -23,6 +23,15 @@ export const Root = React.forwardRef<HTMLElement, RootProps>(function Root(
   );
 });
 
+export interface GroupProps extends React.ComponentPropsWithoutRef<'div'> {}
+
+export const Group = React.forwardRef<HTMLDivElement, GroupProps>(function Group(
+  { className, ...props },
+  ref
+) {
+  return <div ref={ref} className={clsx(styles.group, className)} {...props} />;
+});
+
 export interface LinkProps extends Omit<React.ComponentPropsWithoutRef<'a'>, 'href'> {
   active?: boolean;
   render: React.ReactElement;
@@ -44,9 +53,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link
 
 if (process.env.NODE_ENV !== 'production') {
   Root.displayName = 'SegmentedNav';
+  Group.displayName = 'SegmentedNav.Group';
   Link.displayName = 'SegmentedNav.Link';
 }
 
 export const SegmentedNav = Object.assign(Root, {
+  Group,
   Link,
 });

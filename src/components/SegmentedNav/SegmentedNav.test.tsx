@@ -3,10 +3,12 @@ import AxeBuilder from '@axe-core/playwright';
 import {
   DefaultSegmentedNav,
   PlainAnchorSegmentedNav,
+  GroupedSegmentedNav,
   LinkPropForwardingSegmentedNav,
   ClickableSegmentedNav,
   PlainLinksRouteHarness,
   RenderLinksRouteHarness,
+  GroupedLinksRouteHarness,
   ControlRouteHarness,
 } from './SegmentedNav.test-stories';
 
@@ -44,6 +46,22 @@ test.describe('SegmentedNav', () => {
     await expect(page.getByRole('link', { name: 'Activity' })).not.toHaveAttribute('data-active');
   });
 
+  test('renders grouped links as one navigation landmark', async ({ mount, page }) => {
+    await mount(<GroupedSegmentedNav />);
+
+    await expect(page.getByRole('navigation', { name: 'Payout sections' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Customer payouts' })).toBeVisible();
+  });
+
+  test('marks the active grouped link with aria-current on the real link', async ({ mount, page }) => {
+    await mount(<GroupedSegmentedNav />);
+
+    await expect(page.getByRole('link', { name: 'Platform payouts' })).toHaveAttribute(
+      'aria-current',
+      'page'
+    );
+  });
+
   test('merges child props onto the rendered link', async ({ mount, page }) => {
     await mount(<LinkPropForwardingSegmentedNav />);
 
@@ -68,6 +86,39 @@ test.describe('SegmentedNav', () => {
     await expect(page.getByText('Clicked')).toBeVisible();
   });
 
+  test('keeps native keyboard focus behavior for grouped links', async ({ mount, page }) => {
+    await mount(<GroupedSegmentedNav />);
+
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('link', { name: 'Overview' })).toBeFocused();
+  });
+
+  test('renders the grouped separator edge to edge within the segmented row', async ({
+    mount,
+    page,
+  }) => {
+    await mount(<GroupedSegmentedNav />);
+
+    const separatorMetrics = await page.getByTestId('grouped-secondary-group').evaluate((element) => {
+      const beforeStyles = window.getComputedStyle(element, '::before');
+      const groupStyles = window.getComputedStyle(element);
+      const listStyles = element.parentElement ? window.getComputedStyle(element.parentElement) : null;
+      const listHeight = element.parentElement?.getBoundingClientRect().height ?? 0;
+
+      return {
+        beforeHeight: Number.parseFloat(beforeStyles.height),
+        listHeight,
+        groupMarginInlineStart: Number.parseFloat(groupStyles.marginInlineStart),
+        groupPaddingInlineStart: Number.parseFloat(groupStyles.paddingInlineStart),
+        listPaddingInline: listStyles ? Number.parseFloat(listStyles.paddingInlineStart) : 0,
+      };
+    });
+
+    expect(separatorMetrics.beforeHeight).toBe(separatorMetrics.listHeight);
+    expect(separatorMetrics.groupMarginInlineStart).toBeGreaterThan(separatorMetrics.listPaddingInline);
+    expect(separatorMetrics.groupPaddingInlineStart).toBeGreaterThan(separatorMetrics.listPaddingInline);
+  });
+
   test('container-only plain links commit repeated route changes', async ({ mount, page }) => {
     await mount(<PlainLinksRouteHarness />);
 
@@ -80,6 +131,16 @@ test.describe('SegmentedNav', () => {
 
   test('SegmentedNav.Link commits repeated route changes', async ({ mount, page }) => {
     await mount(<RenderLinksRouteHarness />);
+
+    await page.getByRole('link', { name: 'Route B' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-b');
+
+    await page.getByRole('link', { name: 'Route C' }).click();
+    await expect(page.getByTestId('current-route')).toHaveText('/route-c');
+  });
+
+  test('grouped SegmentedNav links commit repeated route changes', async ({ mount, page }) => {
+    await mount(<GroupedLinksRouteHarness />);
 
     await page.getByRole('link', { name: 'Route B' }).click();
     await expect(page.getByTestId('current-route')).toHaveText('/route-b');

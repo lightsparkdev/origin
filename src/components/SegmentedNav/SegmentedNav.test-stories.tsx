@@ -108,6 +108,29 @@ export function PlainAnchorSegmentedNav() {
   );
 }
 
+export function GroupedSegmentedNav() {
+  return (
+    <SegmentedNav aria-label="Payout sections">
+      <SegmentedNav.Group>
+        <SegmentedNav.Link render={<a href="/payouts" />}>
+          Overview
+        </SegmentedNav.Link>
+        <SegmentedNav.Link active render={<a href="/payouts/activity" />}>
+          Platform payouts
+        </SegmentedNav.Link>
+        <SegmentedNav.Link render={<a href="/payouts/recipients" />}>
+          Recipients
+        </SegmentedNav.Link>
+      </SegmentedNav.Group>
+      <SegmentedNav.Group data-testid="grouped-secondary-group">
+        <SegmentedNav.Link render={<a href="/payouts/customers" />}>
+          Customer payouts
+        </SegmentedNav.Link>
+      </SegmentedNav.Group>
+    </SegmentedNav>
+  );
+}
+
 export function LinkPropForwardingSegmentedNav() {
   return (
     <SegmentedNav aria-label="Forwarded props">
@@ -179,6 +202,28 @@ export function RenderLinksRouteHarness() {
         <SegmentedNav.Link render={<RouteLink href="/route-c" />}>
           Route C
         </SegmentedNav.Link>
+      </SegmentedNav>
+    </RouteHarness>
+  );
+}
+
+export function GroupedLinksRouteHarness() {
+  return (
+    <RouteHarness>
+      <SegmentedNav aria-label="Route harness grouped links">
+        <SegmentedNav.Group>
+          <SegmentedNav.Link render={<RouteLink href="/route-a" />}>
+            Route A
+          </SegmentedNav.Link>
+          <SegmentedNav.Link render={<RouteLink href="/route-b" />}>
+            Route B
+          </SegmentedNav.Link>
+        </SegmentedNav.Group>
+        <SegmentedNav.Group>
+          <SegmentedNav.Link render={<RouteLink href="/route-c" />}>
+            Route C
+          </SegmentedNav.Link>
+        </SegmentedNav.Group>
       </SegmentedNav>
     </RouteHarness>
   );
