@@ -31,6 +31,28 @@ function getScaleXFromTransform(transform: string): number | null {
   return Number.isNaN(scaleX) ? null : scaleX;
 }
 
+async function getResolvedColor(
+  page: import('@playwright/experimental-ct-react').Page,
+  cssProperty: 'backgroundColor' | 'outlineColor',
+  token: string,
+) {
+  return page.evaluate(
+    ({ cssProperty, token }) => {
+      const probe = document.createElement('div');
+      if (cssProperty === 'backgroundColor') {
+        probe.style.backgroundColor = `var(${token})`;
+      } else {
+        probe.style.outline = `1px solid var(${token})`;
+      }
+      document.body.appendChild(probe);
+      const resolved = getComputedStyle(probe)[cssProperty];
+      probe.remove();
+      return resolved;
+    },
+    { cssProperty, token },
+  );
+}
+
 test.describe('Drawer', () => {
   test.describe('Core', () => {
     test('has no accessibility violations', async ({ mount, page }) => {
@@ -60,6 +82,26 @@ test.describe('Drawer', () => {
       await mount(<TestDefault />);
       const backdrop = page.getByTestId('backdrop');
       await expect(backdrop).toBeAttached();
+    });
+
+    test('uses surface-primary and border-primary by default', async ({ mount, page }) => {
+      await mount(<TestDefault />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+
+      const expectedBackgroundColor = await getResolvedColor(page, 'backgroundColor', '--surface-primary');
+      const expectedOutlineColor = await getResolvedColor(page, 'outlineColor', '--border-primary');
+
+      const popupStyles = await popup.evaluate((element) => {
+        const styles = getComputedStyle(element);
+        return {
+          backgroundColor: styles.backgroundColor,
+          outlineColor: styles.outlineColor,
+        };
+      });
+
+      expect(popupStyles.backgroundColor).toBe(expectedBackgroundColor);
+      expect(popupStyles.outlineColor).toBe(expectedOutlineColor);
     });
   });
 

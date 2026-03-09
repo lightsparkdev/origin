@@ -89,9 +89,9 @@
   margin-bottom: calc(-1 * var(--bleed));
   padding-bottom: calc(var(--bleed) + env(safe-area-inset-bottom, 0px));
   overflow: visible;
-  background-color: var(--drawer-surface, var(--surface-panel));
+  background-color: var(--drawer-surface, var(--surface-primary));
   border-radius: var(--drawer-radius, var(--corner-radius-lg) var(--corner-radius-lg) 0 0);
-  outline: var(--stroke-xs) solid var(--border-secondary);
+  outline: var(--stroke-xs) solid var(--border-primary);
   box-shadow: var(--shadow-lg);
   touch-action: none;
   transform-origin: 50% calc(100% - var(--bleed));
