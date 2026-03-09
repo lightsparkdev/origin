@@ -15,6 +15,116 @@ const meta: Meta = {
 
 export default meta;
 
+type NestedStackDirection = 'right' | 'left' | 'up';
+
+function getNestedStackPopupStyle(direction: NestedStackDirection): React.CSSProperties | undefined {
+  if (direction === 'up') {
+    return undefined;
+  }
+
+  return {
+    '--drawer-width': '420px',
+    '--drawer-margin': 'var(--spacing-xs)',
+    '--drawer-radius': 'var(--corner-radius-md)',
+  } as React.CSSProperties;
+}
+
+function NestedStackExample({
+  direction,
+  nestedMotion,
+  label,
+}: {
+  direction: NestedStackDirection;
+  nestedMotion?: 'stack';
+  label: string;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const [childOpen, setChildOpen] = React.useState(false);
+
+  const popupStyle = getNestedStackPopupStyle(direction);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--spacing-sm)',
+        padding: 'var(--spacing-lg)',
+        border: 'var(--stroke-xs) solid var(--border-primary)',
+        borderRadius: 'var(--corner-radius-md)',
+        backgroundColor: 'var(--surface-primary)',
+      }}
+    >
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4xs)' }}>
+        <span className="label" style={{ color: 'var(--text-primary)' }}>
+          {label}
+        </span>
+        <span className="body-sm" style={{ color: 'var(--text-secondary)' }}>
+          {nestedMotion === 'stack'
+            ? 'Parent recesses when the child drawer opens'
+            : 'Parent keeps the default nested behavior'}
+        </span>
+      </div>
+
+      <Drawer.Root
+        open={open}
+        onOpenChange={(nextOpen) => {
+          setOpen(nextOpen);
+          if (!nextOpen) {
+            setChildOpen(false);
+          }
+        }}
+        swipeDirection={direction}
+      >
+        <Button variant="outline" onClick={() => setOpen(true)}>
+          Open {direction} drawer
+        </Button>
+        <Drawer.Portal>
+          <Drawer.Backdrop />
+          <Drawer.Viewport>
+            <Drawer.Popup nestedMotion={nestedMotion} style={popupStyle}>
+              <Drawer.Title>{label}</Drawer.Title>
+              <Drawer.Content>
+                <Drawer.Description>
+                  Open the child drawer to compare default nested behavior with the stacked opt-in.
+                </Drawer.Description>
+                <div style={{ marginTop: 'var(--spacing-lg)', display: 'flex', gap: 'var(--spacing-xs)' }}>
+                  <Button variant="outline" onClick={() => setChildOpen(true)}>
+                    Open child drawer
+                  </Button>
+                  <Drawer.Close render={<Button variant="outline" />}>
+                    Close
+                  </Drawer.Close>
+                </div>
+
+                <Drawer.Root open={childOpen} onOpenChange={setChildOpen} swipeDirection={direction}>
+                  <Drawer.Portal>
+                    <Drawer.Viewport>
+                      <Drawer.Popup style={popupStyle}>
+                        <Drawer.Title>Child drawer</Drawer.Title>
+                        <Drawer.Content>
+                          <Drawer.Description>
+                            This child keeps the default frontmost motion while the parent decides whether to recess.
+                          </Drawer.Description>
+                          <div style={{ marginTop: 'var(--spacing-lg)' }}>
+                            <Drawer.Close render={<Button variant="outline" />}>
+                              Close child
+                            </Drawer.Close>
+                          </div>
+                        </Drawer.Content>
+                      </Drawer.Popup>
+                    </Drawer.Viewport>
+                  </Drawer.Portal>
+                </Drawer.Root>
+              </Drawer.Content>
+            </Drawer.Popup>
+          </Drawer.Viewport>
+        </Drawer.Portal>
+      </Drawer.Root>
+    </div>
+  );
+}
+
 export const BottomSheet: StoryObj = {
   args: {
     modal: true,
@@ -327,6 +437,37 @@ export const NestedDrawers: StoryObj = {
         </div>
       </Drawer.Indent>
     </Drawer.Provider>
+  ),
+};
+
+export const NestedDirectionalStacking: StoryObj = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-xl)', padding: 'var(--spacing-xl)' }}>
+      {(['right', 'left', 'up'] as const).map((direction) => (
+        <section key={direction} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-4xs)' }}>
+            <h3 className="headline-sm" style={{ margin: 0, color: 'var(--text-primary)' }}>
+              {direction === 'up' ? 'Top sheets' : `${direction[0].toUpperCase()}${direction.slice(1)} panels`}
+            </h3>
+            <p className="body-sm" style={{ margin: 0, color: 'var(--text-secondary)' }}>
+              Compare the default nested behavior with the popup-level stacked opt-in.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gap: 'var(--spacing-md)', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))' }}>
+            <NestedStackExample
+              direction={direction}
+              label={`${direction === 'up' ? 'Top sheet' : 'Panel'} without nestedMotion`}
+            />
+            <NestedStackExample
+              direction={direction}
+              nestedMotion="stack"
+              label={`${direction === 'up' ? 'Top sheet' : 'Panel'} with nestedMotion="stack"`}
+            />
+          </div>
+        </section>
+      ))}
+    </div>
   ),
 };
 

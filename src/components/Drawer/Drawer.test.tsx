@@ -7,9 +7,29 @@ import {
   TestSnapPoints,
   TestWithHandle,
   TestSidePanel,
+  TestStackedSidePanel,
+  TestEndingStackedRightPanel,
+  TestEndingStackedLeftPanel,
+  TestNestedRightPanel,
+  TestNestedRightPanelStacked,
+  TestNestedLeftPanel,
+  TestNestedLeftPanelStacked,
+  TestNestedTopSheet,
+  TestNestedTopSheetStacked,
   TestNested,
   TestIndent,
 } from './Drawer.test-stories';
+
+function getScaleXFromTransform(transform: string): number | null {
+  const match = transform.match(/matrix\(([^)]+)\)/);
+
+  if (!match) {
+    return null;
+  }
+
+  const [scaleX] = match[1].split(',').map((value) => Number(value.trim()));
+  return Number.isNaN(scaleX) ? null : scaleX;
+}
 
 test.describe('Drawer', () => {
   test.describe('Core', () => {
@@ -147,6 +167,31 @@ test.describe('Drawer', () => {
       await expect(popup).toHaveAttribute('data-swipe-direction', 'right');
     });
 
+    test('adds a popup hook when nestedMotion is stack', async ({ mount, page }) => {
+      await mount(<TestStackedSidePanel />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+      await expect(popup).toHaveAttribute('data-nested-motion', 'stack');
+    });
+
+    test('keeps stacked right panel scaled while exiting', async ({ mount, page }) => {
+      await mount(<TestEndingStackedRightPanel />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+
+      const transform = await popup.evaluate((element) => getComputedStyle(element).transform);
+      expect(getScaleXFromTransform(transform)).toBeCloseTo(0.95, 2);
+    });
+
+    test('keeps stacked left panel scaled while exiting', async ({ mount, page }) => {
+      await mount(<TestEndingStackedLeftPanel />);
+      const popup = page.getByTestId('popup');
+      await expect(popup).toBeVisible();
+
+      const transform = await popup.evaluate((element) => getComputedStyle(element).transform);
+      expect(getScaleXFromTransform(transform)).toBeCloseTo(0.95, 2);
+    });
+
     test('closes on escape', async ({ mount, page }) => {
       await mount(<TestSidePanel />);
       const popup = page.getByTestId('popup');
@@ -169,6 +214,176 @@ test.describe('Drawer', () => {
       await childTrigger.click();
       const childPopup = page.getByTestId('child-popup');
       await expect(childPopup).toBeVisible();
+    });
+
+    test('keeps default nested right panels unstacked', async ({ mount, page }) => {
+      await mount(<TestNestedRightPanel />);
+      const parentPopup = page.getByTestId('parent-popup');
+
+      const beforeTransform = await parentPopup.evaluate((element) => getComputedStyle(element).transform);
+
+      await page.getByTestId('child-trigger').click();
+      await expect(parentPopup).toHaveAttribute('data-nested-drawer-open', '');
+
+      await expect
+        .poll(
+          async () => parentPopup.evaluate((element) => getComputedStyle(element).transform),
+          { timeout: 1000 }
+        )
+        .toBe(beforeTransform);
+    });
+
+    test('stacks nested right panels when opted in', async ({ mount, page }) => {
+      await mount(<TestNestedRightPanelStacked />);
+      const parentPopup = page.getByTestId('parent-popup');
+      const childPopup = page.getByTestId('child-popup');
+
+      const beforeTransform = await parentPopup.evaluate((element) => getComputedStyle(element).transform);
+
+      await page.getByTestId('child-trigger').click();
+      await expect(parentPopup).toHaveAttribute('data-nested-drawer-open', '');
+      await expect(childPopup).toBeVisible();
+
+      await expect
+        .poll(
+          async () => parentPopup.evaluate((element) => getComputedStyle(element).transform),
+          { timeout: 1000 }
+        )
+        .not.toBe(beforeTransform);
+
+      await expect
+        .poll(
+          async () => {
+            const parentBox = await parentPopup.boundingBox();
+            const childBox = await childPopup.boundingBox();
+
+            if (!parentBox || !childBox) {
+              return null;
+            }
+
+            return Number((childBox.x - parentBox.x).toFixed(2));
+          },
+          { timeout: 1000 }
+        )
+        .toBeGreaterThanOrEqual(11);
+
+      await expect
+        .poll(
+          async () => {
+            const parentBox = await parentPopup.boundingBox();
+            const childBox = await childPopup.boundingBox();
+
+            if (!parentBox || !childBox) {
+              return null;
+            }
+
+            return Number((childBox.x - parentBox.x).toFixed(2));
+          },
+          { timeout: 1000 }
+        )
+        .toBeLessThanOrEqual(13);
+    });
+
+    test('keeps default nested left panels unstacked', async ({ mount, page }) => {
+      await mount(<TestNestedLeftPanel />);
+      const parentPopup = page.getByTestId('parent-popup');
+
+      const beforeTransform = await parentPopup.evaluate((element) => getComputedStyle(element).transform);
+
+      await page.getByTestId('child-trigger').click();
+      await expect(parentPopup).toHaveAttribute('data-nested-drawer-open', '');
+
+      await expect
+        .poll(
+          async () => parentPopup.evaluate((element) => getComputedStyle(element).transform),
+          { timeout: 1000 }
+        )
+        .toBe(beforeTransform);
+    });
+
+    test('stacks nested left panels when opted in', async ({ mount, page }) => {
+      await mount(<TestNestedLeftPanelStacked />);
+      const parentPopup = page.getByTestId('parent-popup');
+      const childPopup = page.getByTestId('child-popup');
+
+      const beforeTransform = await parentPopup.evaluate((element) => getComputedStyle(element).transform);
+
+      await page.getByTestId('child-trigger').click();
+      await expect(parentPopup).toHaveAttribute('data-nested-drawer-open', '');
+      await expect(childPopup).toBeVisible();
+
+      await expect
+        .poll(
+          async () => parentPopup.evaluate((element) => getComputedStyle(element).transform),
+          { timeout: 1000 }
+        )
+        .not.toBe(beforeTransform);
+
+      await expect
+        .poll(
+          async () => {
+            const parentBox = await parentPopup.boundingBox();
+            const childBox = await childPopup.boundingBox();
+
+            if (!parentBox || !childBox) {
+              return null;
+            }
+
+            return Number((parentBox.x + parentBox.width - (childBox.x + childBox.width)).toFixed(2));
+          },
+          { timeout: 1000 }
+        )
+        .toBeGreaterThanOrEqual(11);
+
+      await expect
+        .poll(
+          async () => {
+            const parentBox = await parentPopup.boundingBox();
+            const childBox = await childPopup.boundingBox();
+
+            if (!parentBox || !childBox) {
+              return null;
+            }
+
+            return Number((parentBox.x + parentBox.width - (childBox.x + childBox.width)).toFixed(2));
+          },
+          { timeout: 1000 }
+        )
+        .toBeLessThanOrEqual(13);
+    });
+
+    test('keeps default nested top sheets unstacked', async ({ mount, page }) => {
+      await mount(<TestNestedTopSheet />);
+      const parentPopup = page.getByTestId('parent-popup');
+
+      const beforeTransform = await parentPopup.evaluate((element) => getComputedStyle(element).transform);
+
+      await page.getByTestId('child-trigger').click();
+      await expect(parentPopup).toHaveAttribute('data-nested-drawer-open', '');
+
+      await expect
+        .poll(
+          async () => parentPopup.evaluate((element) => getComputedStyle(element).transform),
+          { timeout: 1000 }
+        )
+        .toBe(beforeTransform);
+    });
+
+    test('stacks nested top sheets when opted in', async ({ mount, page }) => {
+      await mount(<TestNestedTopSheetStacked />);
+      const parentPopup = page.getByTestId('parent-popup');
+
+      const beforeTransform = await parentPopup.evaluate((element) => getComputedStyle(element).transform);
+
+      await page.getByTestId('child-trigger').click();
+      await expect(parentPopup).toHaveAttribute('data-nested-drawer-open', '');
+
+      await expect
+        .poll(
+          async () => parentPopup.evaluate((element) => getComputedStyle(element).transform),
+          { timeout: 1000 }
+        )
+        .not.toBe(beforeTransform);
     });
   });
 

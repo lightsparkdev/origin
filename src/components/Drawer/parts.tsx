@@ -70,14 +70,17 @@ export const DrawerViewport = React.forwardRef<HTMLDivElement, DrawerViewportPro
 );
 
 // Popup
-export interface DrawerPopupProps extends BaseDrawer.Popup.Props {}
+export interface DrawerPopupProps extends BaseDrawer.Popup.Props {
+  nestedMotion?: 'stack';
+}
 
 export const DrawerPopup = React.forwardRef<HTMLDivElement, DrawerPopupProps>(
-  function DrawerPopup({ className, ...props }, ref) {
+  function DrawerPopup({ className, nestedMotion, ...props }, ref) {
     return (
       <BaseDrawer.Popup
         ref={ref}
         className={clsx(styles.popup, className)}
+        data-nested-motion={nestedMotion}
         {...props}
       />
     );
