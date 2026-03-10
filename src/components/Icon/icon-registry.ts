@@ -139,6 +139,8 @@ import { IconPencil3 } from './icons/IconPencil3';
 import { IconPencilAi } from './icons/IconPencilAi';
 import { IconPeople2 } from './icons/IconPeople2';
 import { IconPeople2 as IconPeople2Filled } from './icons/IconPeople2Filled';
+import { IconPeopleAdd } from './icons/IconPeopleAdd';
+import { IconPeopleAdd as IconPeopleAddFilled } from './icons/IconPeopleAddFilled';
 import { IconPeopleCircle } from './icons/IconPeopleCircle';
 import { IconPeopleIdCard } from './icons/IconPeopleIdCard';
 import { IconPhone } from './icons/IconPhone';
@@ -377,6 +379,8 @@ export const ICON_REGISTRY = {
   IconPencilAi,
   IconPeople2,
   IconPeople2Filled,
+  IconPeopleAdd,
+  IconPeopleAddFilled,
   IconPeopleCircle,
   IconPeopleIdCard,
   IconPhone,
