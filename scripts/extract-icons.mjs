@@ -185,6 +185,8 @@ const SECTIONS = [
       { name: 'IconPencilAi' },
       { name: 'IconPeople2' },
       { name: 'IconPeople2', variant: 'filled', exportAs: 'IconPeople2Filled' },
+      { name: 'IconPeopleAdd' },
+      { name: 'IconPeopleAdd', variant: 'filled', exportAs: 'IconPeopleAddFilled' },
       { name: 'IconPeopleCircle' },
       { name: 'IconPeopleIdCard' },
       { name: 'IconPhone' },
