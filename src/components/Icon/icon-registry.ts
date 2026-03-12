@@ -46,6 +46,7 @@ import { IconChevronTopSmall } from './icons/IconChevronTopSmall';
 import { IconAdjustPhoto } from './icons/IconAdjustPhoto';
 import { IconAt } from './icons/IconAt';
 import { IconAutoCrop } from './icons/IconAutoCrop';
+import { IconBank } from './icons/IconBank';
 import { IconBarsThree2 } from './icons/IconBarsThree2';
 import { IconBell } from './icons/IconBell';
 import { IconBellOff } from './icons/IconBellOff';
@@ -76,6 +77,7 @@ import { IconConnectors1 } from './icons/IconConnectors1';
 import { IconConnectors2 } from './icons/IconConnectors2';
 import { IconConsoleSparkle } from './icons/IconConsoleSparkle';
 import { IconCrossLarge } from './icons/IconCrossLarge';
+import { IconCrossMedium } from './icons/IconCrossMedium';
 import { IconCrossSmall } from './icons/IconCrossSmall';
 import { IconCryptoWallet } from './icons/IconCryptoWallet';
 import { IconDevices } from './icons/IconDevices';
@@ -100,6 +102,7 @@ import { IconFileArrowRightOut } from './icons/IconFileArrowRightOut';
 import { IconFileBend } from './icons/IconFileBend';
 import { IconFilter2 } from './icons/IconFilter2';
 import { IconFingerPrint1 } from './icons/IconFingerPrint1';
+import { IconFolderAddRight } from './icons/IconFolderAddRight';
 import { IconFormPyramide } from './icons/IconFormPyramide';
 import { IconForYou } from './icons/IconForYou';
 import { IconFullScreen } from './icons/IconFullScreen';
@@ -165,6 +168,7 @@ import { IconShield2 } from './icons/IconShield2';
 import { IconShieldKeyhole } from './icons/IconShieldKeyhole';
 import { IconSidebarSimpleLeftWide } from './icons/IconSidebarSimpleLeftWide';
 import { IconSpacebar } from './icons/IconSpacebar';
+import { IconSquareArrowTopRight2 } from './icons/IconSquareArrowTopRight2';
 import { IconSquareBehindSquare1 } from './icons/IconSquareBehindSquare1';
 import { IconSquareBehindSquare6 } from './icons/IconSquareBehindSquare6';
 import { IconSquareInfo } from './icons/IconSquareInfo';
@@ -286,6 +290,7 @@ export const ICON_REGISTRY = {
   IconAdjustPhoto,
   IconAt,
   IconAutoCrop,
+  IconBank,
   IconBarsThree2,
   IconBell,
   IconBellOff,
@@ -316,6 +321,7 @@ export const ICON_REGISTRY = {
   IconConnectors2,
   IconConsoleSparkle,
   IconCrossLarge,
+  IconCrossMedium,
   IconCrossSmall,
   IconCryptoWallet,
   IconDevices,
@@ -340,6 +346,7 @@ export const ICON_REGISTRY = {
   IconFileBend,
   IconFilter2,
   IconFingerPrint1,
+  IconFolderAddRight,
   IconForYou,
   IconFormPyramide,
   IconFullScreen,
@@ -405,6 +412,7 @@ export const ICON_REGISTRY = {
   IconShieldKeyhole,
   IconSidebarSimpleLeftWide,
   IconSpacebar,
+  IconSquareArrowTopRight2,
   IconSquareBehindSquare1,
   IconSquareBehindSquare6,
   IconSquareInfo,
