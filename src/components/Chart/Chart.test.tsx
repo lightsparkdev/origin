@@ -557,7 +557,7 @@ test.describe('Split detailed variant', () => {
   test('does not render default dot legend', async ({ mount, page }) => {
     await mount(<SplitDetailed />);
     const root = page.locator('[data-testid="split-chart"]');
-    const defaultLegend = root.locator('[class*="legend"]:not([class*="Detailed"])');
+    const defaultLegend = root.locator('[class*="legendItem"]');
     await expect(defaultLegend).toHaveCount(0);
   });
 });
