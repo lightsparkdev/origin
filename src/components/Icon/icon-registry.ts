@@ -46,6 +46,7 @@ import { IconChevronTopSmall } from './icons/IconChevronTopSmall';
 import { IconAdjustPhoto } from './icons/IconAdjustPhoto';
 import { IconAt } from './icons/IconAt';
 import { IconAutoCrop } from './icons/IconAutoCrop';
+import { IconBank } from './icons/IconBank';
 import { IconBarsThree2 } from './icons/IconBarsThree2';
 import { IconBell } from './icons/IconBell';
 import { IconBellOff } from './icons/IconBellOff';
@@ -55,6 +56,7 @@ import { IconBrokenHeart } from './icons/IconBrokenHeart';
 import { IconBrowserTabs } from './icons/IconBrowserTabs';
 import { IconBubble3 } from './icons/IconBubble3';
 import { IconBubbleWideSparkle } from './icons/IconBubbleWideSparkle';
+import { IconBuildings } from './icons/IconBuildings';
 import { IconCalendarDays } from './icons/IconCalendarDays';
 import { IconCheckmark2 } from './icons/IconCheckmark2';
 import { IconCheckmark2Small } from './icons/IconCheckmark2Small';
@@ -69,10 +71,13 @@ import { IconClipboard2 } from './icons/IconClipboard2';
 import { IconClipboard2Sparkle } from './icons/IconClipboard2Sparkle';
 import { IconClock } from './icons/IconClock';
 import { IconCmdBox } from './icons/IconCmdBox';
+import { IconCoinsAdd } from './icons/IconCoinsAdd';
+import { IconCoinsAdd as IconCoinsAddFilled } from './icons/IconCoinsAddFilled';
 import { IconConnectors1 } from './icons/IconConnectors1';
 import { IconConnectors2 } from './icons/IconConnectors2';
 import { IconConsoleSparkle } from './icons/IconConsoleSparkle';
 import { IconCrossLarge } from './icons/IconCrossLarge';
+import { IconCrossMedium } from './icons/IconCrossMedium';
 import { IconCrossSmall } from './icons/IconCrossSmall';
 import { IconCryptoWallet } from './icons/IconCryptoWallet';
 import { IconDevices } from './icons/IconDevices';
@@ -97,6 +102,7 @@ import { IconFileArrowRightOut } from './icons/IconFileArrowRightOut';
 import { IconFileBend } from './icons/IconFileBend';
 import { IconFilter2 } from './icons/IconFilter2';
 import { IconFingerPrint1 } from './icons/IconFingerPrint1';
+import { IconFolderAddRight } from './icons/IconFolderAddRight';
 import { IconFormPyramide } from './icons/IconFormPyramide';
 import { IconForYou } from './icons/IconForYou';
 import { IconFullScreen } from './icons/IconFullScreen';
@@ -125,6 +131,8 @@ import { IconOffline } from './icons/IconOffline';
 import { IconOngoing } from './icons/IconOngoing';
 import { IconOngoing as IconOngoingFilled } from './icons/IconOngoingFilled';
 import { IconPaperclip1 } from './icons/IconPaperclip1';
+import { IconPaperPlaneTopRight } from './icons/IconPaperPlaneTopRight';
+import { IconPaperPlaneTopRight as IconPaperPlaneTopRightFilled } from './icons/IconPaperPlaneTopRightFilled';
 import { IconPassport } from './icons/IconPassport';
 import { IconPassword } from './icons/IconPassword';
 import { IconPasswordStars } from './icons/IconPasswordStars';
@@ -134,6 +142,8 @@ import { IconPencil3 } from './icons/IconPencil3';
 import { IconPencilAi } from './icons/IconPencilAi';
 import { IconPeople2 } from './icons/IconPeople2';
 import { IconPeople2 as IconPeople2Filled } from './icons/IconPeople2Filled';
+import { IconPeopleAdd } from './icons/IconPeopleAdd';
+import { IconPeopleAdd as IconPeopleAddFilled } from './icons/IconPeopleAddFilled';
 import { IconPeopleCircle } from './icons/IconPeopleCircle';
 import { IconPeopleIdCard } from './icons/IconPeopleIdCard';
 import { IconPhone } from './icons/IconPhone';
@@ -158,6 +168,7 @@ import { IconShield2 } from './icons/IconShield2';
 import { IconShieldKeyhole } from './icons/IconShieldKeyhole';
 import { IconSidebarSimpleLeftWide } from './icons/IconSidebarSimpleLeftWide';
 import { IconSpacebar } from './icons/IconSpacebar';
+import { IconSquareArrowTopRight2 } from './icons/IconSquareArrowTopRight2';
 import { IconSquareBehindSquare1 } from './icons/IconSquareBehindSquare1';
 import { IconSquareBehindSquare6 } from './icons/IconSquareBehindSquare6';
 import { IconSquareInfo } from './icons/IconSquareInfo';
@@ -202,6 +213,7 @@ import { IconVoiceSettings } from './icons/IconVoiceSettings';
 import { IconVoiceSparkle } from './icons/IconVoiceSparkle';
 
 // User & People
+import { IconPeople } from './icons/IconPeople';
 import { IconUserAdded } from './icons/IconUserAdded';
 import { IconUserAddRight } from './icons/IconUserAddRight';
 import { IconUserBlock } from './icons/IconUserBlock';
@@ -278,6 +290,7 @@ export const ICON_REGISTRY = {
   IconAdjustPhoto,
   IconAt,
   IconAutoCrop,
+  IconBank,
   IconBarsThree2,
   IconBell,
   IconBellOff,
@@ -287,6 +300,7 @@ export const ICON_REGISTRY = {
   IconBrowserTabs,
   IconBubble3,
   IconBubbleWideSparkle,
+  IconBuildings,
   IconCalendarDays,
   IconCheckmark2,
   IconCheckmark2Small,
@@ -301,10 +315,13 @@ export const ICON_REGISTRY = {
   IconClipboard2Sparkle,
   IconClock,
   IconCmdBox,
+  IconCoinsAdd,
+  IconCoinsAddFilled,
   IconConnectors1,
   IconConnectors2,
   IconConsoleSparkle,
   IconCrossLarge,
+  IconCrossMedium,
   IconCrossSmall,
   IconCryptoWallet,
   IconDevices,
@@ -329,6 +346,7 @@ export const ICON_REGISTRY = {
   IconFileBend,
   IconFilter2,
   IconFingerPrint1,
+  IconFolderAddRight,
   IconForYou,
   IconFormPyramide,
   IconFullScreen,
@@ -356,6 +374,8 @@ export const ICON_REGISTRY = {
   IconOffline,
   IconOngoing,
   IconOngoingFilled,
+  IconPaperPlaneTopRight,
+  IconPaperPlaneTopRightFilled,
   IconPaperclip1,
   IconPassport,
   IconPassword,
@@ -366,6 +386,8 @@ export const ICON_REGISTRY = {
   IconPencilAi,
   IconPeople2,
   IconPeople2Filled,
+  IconPeopleAdd,
+  IconPeopleAddFilled,
   IconPeopleCircle,
   IconPeopleIdCard,
   IconPhone,
@@ -390,6 +412,7 @@ export const ICON_REGISTRY = {
   IconShieldKeyhole,
   IconSidebarSimpleLeftWide,
   IconSpacebar,
+  IconSquareArrowTopRight2,
   IconSquareBehindSquare1,
   IconSquareBehindSquare6,
   IconSquareInfo,
@@ -434,6 +457,7 @@ export const ICON_REGISTRY = {
   IconVoiceSparkle,
 
   // User & People
+  IconPeople,
   IconUserAddRight,
   IconUserAdded,
   IconUserBlock,
