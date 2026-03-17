@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { DrawerPreview as BaseDrawer } from '@base-ui/react/drawer';
+import { Drawer as BaseDrawer } from '@base-ui/react/drawer';
 import clsx from 'clsx';
 import { useTrackedOpenChange } from '../Analytics/useTrackedOpenChange';
 import styles from './Drawer.module.scss';
