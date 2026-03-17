@@ -19,6 +19,7 @@ import {
   ScatterBasic,
   ScatterMultiSeries,
   SplitBasic,
+  SplitDetailed,
   BarListRanked,
   WaterfallBasic,
   SankeyBasic,
@@ -528,6 +529,36 @@ test.describe('Split chart', () => {
       })
       .analyze();
     expect(results.violations).toEqual([]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Split detailed variant
+// ---------------------------------------------------------------------------
+
+test.describe('Split detailed variant', () => {
+  test('renders formatted value per segment', async ({ mount, page }) => {
+    await mount(<SplitDetailed />);
+    const root = page.locator('[data-testid="split-chart"]');
+    await expect(root.getByText('$246.1M')).toBeVisible();
+    await expect(root.getByText('$87.8M')).toBeVisible();
+    await expect(root.getByText('Incoming')).toBeVisible();
+  });
+
+  test('shows percentage with one decimal place', async ({ mount, page }) => {
+    await mount(<SplitDetailed />);
+    const root = page.locator('[data-testid="split-chart"]');
+    const countText = root.locator('[class*="splitDetailedCount"]').first();
+    await expect(countText).toContainText('%');
+    const text = await countText.textContent();
+    expect(text).toMatch(/\d+\.\d%/);
+  });
+
+  test('does not render default dot legend', async ({ mount, page }) => {
+    await mount(<SplitDetailed />);
+    const root = page.locator('[data-testid="split-chart"]');
+    const defaultLegend = root.locator('[class*="legendItem"]');
+    await expect(defaultLegend).toHaveCount(0);
   });
 });
 

@@ -506,17 +506,48 @@ const SPLIT_DATA = [
   { label: 'Refunds', value: 320, color: 'var(--color-blue-100)' },
 ];
 
+const SPLIT_DETAILED_DATA = [
+  { label: 'Incoming', value: 246_100_000, color: 'var(--color-blue-700)' },
+  { label: 'Outgoing', value: 87_800_000, color: 'var(--color-blue-400)' },
+  { label: 'Bidirectional', value: 4_600_000, color: 'var(--color-green-600)' },
+];
+
 export const Split: Story = {
   args: {
+    variant: 'default',
     height: 24,
     showValues: true,
     showPercentage: true,
     legend: true,
     loading: false,
   },
+  argTypes: {
+    variant: { control: 'inline-radio', options: ['default', 'detailed'] },
+  },
   render: (args) => (
     <div style={{ width: 500 }}>
       <Chart.Split data={SPLIT_DATA} formatValue={(v: number) => `$${v.toLocaleString()}`} {...args} />
+    </div>
+  ),
+};
+
+export const SplitDetailed: Story = {
+  args: {
+    height: 24,
+    showPercentage: true,
+  },
+  render: (args) => (
+    <div style={{ width: 600 }}>
+      <Chart.Split
+        data={SPLIT_DETAILED_DATA}
+        variant="detailed"
+        formatValue={(v: number) => {
+          if (v >= 1_000_000) return `$${(v / 1_000_000).toFixed(1)}M`;
+          if (v >= 1_000) return `$${(v / 1_000).toFixed(0)}K`;
+          return `$${v}`;
+        }}
+        {...args}
+      />
     </div>
   ),
 };

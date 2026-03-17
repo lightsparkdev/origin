@@ -789,6 +789,44 @@
 }
 
 
+.splitDetailedLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm) var(--spacing-xl);
+  padding-top: var(--spacing-xs);
+}
+
+.splitDetailedItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3xs);
+}
+
+.splitDetailedLabel {
+  @include label-sm;
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.splitDetailedValue {
+  @include body;
+
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.splitDetailedCount {
+  @include body-sm;
+
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
 .splitTooltipInline {
   display: flex;
   align-items: center;
