@@ -162,6 +162,140 @@ export function TestSidePanel() {
   );
 }
 
+export function TestStackedSidePanel() {
+  return (
+    <Drawer.Root defaultOpen swipeDirection="right">
+      <Drawer.Trigger data-testid="trigger">Open stacked side panel</Drawer.Trigger>
+      <Drawer.Portal>
+        <Drawer.Backdrop />
+        <Drawer.Viewport>
+          <Drawer.Popup nestedMotion="stack" data-testid="popup">
+            <Drawer.Content>
+              <Drawer.Title data-testid="title">Stacked side panel</Drawer.Title>
+              <Drawer.Close data-testid="close">Close</Drawer.Close>
+            </Drawer.Content>
+          </Drawer.Popup>
+        </Drawer.Viewport>
+      </Drawer.Portal>
+    </Drawer.Root>
+  );
+}
+
+function TestEndingStackedPanel({ direction }: { direction: 'right' | 'left' }) {
+  return (
+    <Drawer.Root defaultOpen swipeDirection={direction}>
+      <Drawer.Trigger data-testid="trigger">Open stacked side panel</Drawer.Trigger>
+      <Drawer.Portal>
+        <Drawer.Backdrop />
+        <Drawer.Viewport>
+          <Drawer.Popup
+            nestedMotion="stack"
+            data-ending-style=""
+            data-nested-drawer-open=""
+            data-testid="popup"
+            style={getNestedPanelStyle(direction)}
+          >
+            <Drawer.Content>
+              <Drawer.Title data-testid="title">Stacked side panel</Drawer.Title>
+              <Drawer.Close data-testid="close">Close</Drawer.Close>
+            </Drawer.Content>
+          </Drawer.Popup>
+        </Drawer.Viewport>
+      </Drawer.Portal>
+    </Drawer.Root>
+  );
+}
+
+export function TestEndingStackedRightPanel() {
+  return <TestEndingStackedPanel direction="right" />;
+}
+
+export function TestEndingStackedLeftPanel() {
+  return <TestEndingStackedPanel direction="left" />;
+}
+
+type NestedPanelDirection = 'right' | 'left' | 'up';
+
+interface NestedPanelProps {
+  direction: NestedPanelDirection;
+  stacked?: boolean;
+}
+
+function getNestedPanelStyle(direction: NestedPanelDirection): React.CSSProperties | undefined {
+  if (direction === 'up') {
+    return undefined;
+  }
+
+  return {
+    '--drawer-width': '420px',
+    '--drawer-margin': 'var(--spacing-xs)',
+    '--drawer-radius': 'var(--corner-radius-md)',
+  } as React.CSSProperties;
+}
+
+function TestNestedPanel({ direction, stacked = false }: NestedPanelProps) {
+  const popupStyle = getNestedPanelStyle(direction);
+
+  return (
+    <Drawer.Provider>
+      <Drawer.Root defaultOpen swipeDirection={direction}>
+        <Drawer.Trigger data-testid="parent-trigger">Open parent</Drawer.Trigger>
+        <Drawer.Portal>
+          <Drawer.Backdrop />
+          <Drawer.Viewport>
+            <Drawer.Popup
+              data-testid="parent-popup"
+              nestedMotion={stacked ? 'stack' : undefined}
+              style={popupStyle}
+            >
+              <Drawer.Content>
+                <Drawer.Title>Parent panel</Drawer.Title>
+                <Drawer.Root swipeDirection={direction}>
+                  <Drawer.Trigger data-testid="child-trigger">Open child</Drawer.Trigger>
+                  <Drawer.Portal>
+                    <Drawer.Viewport>
+                      <Drawer.Popup data-testid="child-popup" style={popupStyle}>
+                        <Drawer.Content>
+                          <Drawer.Title>Child panel</Drawer.Title>
+                          <Drawer.Close data-testid="child-close">Close child</Drawer.Close>
+                        </Drawer.Content>
+                      </Drawer.Popup>
+                    </Drawer.Viewport>
+                  </Drawer.Portal>
+                </Drawer.Root>
+              </Drawer.Content>
+            </Drawer.Popup>
+          </Drawer.Viewport>
+        </Drawer.Portal>
+      </Drawer.Root>
+    </Drawer.Provider>
+  );
+}
+
+export function TestNestedRightPanel() {
+  return <TestNestedPanel direction="right" />;
+}
+
+export function TestNestedRightPanelStacked() {
+  return <TestNestedPanel direction="right" stacked />;
+}
+
+export function TestNestedLeftPanel() {
+  return <TestNestedPanel direction="left" />;
+}
+
+export function TestNestedLeftPanelStacked() {
+  return <TestNestedPanel direction="left" stacked />;
+}
+
+export function TestNestedTopSheet() {
+  return <TestNestedPanel direction="up" />;
+}
+
+export function TestNestedTopSheetStacked() {
+  return <TestNestedPanel direction="up" stacked />;
+}
+
 export function TestNested() {
   return (
     <Drawer.Provider>

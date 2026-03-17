@@ -78,6 +78,76 @@ import { Button, Input, Field, CentralIcon } from '@lightsparkdev/origin';
 <CentralIcon name="IconHome" size={24} />
 ```
 
+## Drawer Composition
+
+Use `Drawer` in two distinct ways:
+
+- stacked nested drawers
+- indented shell layouts
+
+These are separate patterns.
+
+### Stacked nested drawers
+
+Use this when one drawer opens another drawer and the parent should remain visible behind the child.
+
+- Bottom drawers use the built-in nested stacking path
+- Side panels and top sheets opt into stacked motion with `nestedMotion="stack"` on the parent `Drawer.Popup`
+- This does not require `Drawer.Indent` or `Drawer.IndentBackground`
+
+```tsx
+<Drawer.Provider>
+  <Drawer.Root swipeDirection="right">
+    <Drawer.Trigger>Open parent drawer</Drawer.Trigger>
+    <Drawer.Portal>
+      <Drawer.Backdrop />
+      <Drawer.Viewport>
+        <Drawer.Popup nestedMotion="stack">
+          <Drawer.Content>
+            <Drawer.Root swipeDirection="right">
+              <Drawer.Trigger>Open child drawer</Drawer.Trigger>
+              <Drawer.Portal>
+                <Drawer.Viewport>
+                  <Drawer.Popup>
+                    <Drawer.Content>{/* child drawer content */}</Drawer.Content>
+                  </Drawer.Popup>
+                </Drawer.Viewport>
+              </Drawer.Portal>
+            </Drawer.Root>
+          </Drawer.Content>
+        </Drawer.Popup>
+      </Drawer.Viewport>
+    </Drawer.Portal>
+  </Drawer.Root>
+</Drawer.Provider>
+```
+
+Use this for:
+
+- nested settings flows
+- multi-step side panels
+- child drawers that should stack above a parent drawer
+
+### Indented shell layouts
+
+Use this when the page or app shell behind the drawer should scale down and round its corners.
+
+- This is an optional layout treatment
+- Add it only when you explicitly want the shell-shrink effect
+- Avoid it for floating side panels or layouts where the surrounding app chrome should stay stable
+
+```tsx
+<Drawer.Provider>
+  <Drawer.IndentBackground />
+  <Drawer.Indent className={styles.indent}>
+    {children}
+  </Drawer.Indent>
+</Drawer.Provider>
+```
+
+Recommendation:
+Default to stacked drawers without indent. Add `Drawer.IndentBackground` and `Drawer.Indent` only when the layout specifically wants the shell-shrink treatment.
+
 ## Token Usage
 
 The default stylesheet includes Origin tokens, fonts, effects, typography classes, reset styles, and utility classes.
