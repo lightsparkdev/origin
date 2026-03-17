@@ -7,11 +7,11 @@
  *
  * Zero drift from Base UI patterns.
  *
- * @baseui-version 1.2.0
- * @synced 2026-02-11
+ * @baseui-version 1.3.0
+ * @synced 2026-03-17
  *
  * To check for updates: npm run check:baseui
- * To sync: Compare files below with node_modules/@base-ui/react/esm/utils/
+ * To sync: Compare files below with node_modules/@base-ui/react/utils/
  *
  * ## Direct imports (always prefer these)
  *
