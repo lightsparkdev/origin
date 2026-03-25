@@ -32,7 +32,7 @@ export type {
   DrawerIndentBackgroundProps,
 } from './parts';
 
-export { DrawerPreview as BaseDrawer } from '@base-ui/react/drawer';
+export { Drawer as BaseDrawer } from '@base-ui/react/drawer';
 
 import {
   DrawerProvider,
@@ -51,9 +51,9 @@ import {
   DrawerIndentBackground,
 } from './parts';
 
-import { DrawerPreview } from '@base-ui/react/drawer';
+import { Drawer as BaseDrawer } from '@base-ui/react/drawer';
 
-export const createHandle = DrawerPreview.createHandle;
+export const createHandle = BaseDrawer.createHandle;
 
 export const Drawer = {
   Provider: DrawerProvider,
@@ -70,5 +70,5 @@ export const Drawer = {
   Handle: DrawerHandle,
   Indent: DrawerIndent,
   IndentBackground: DrawerIndentBackground,
-  createHandle: DrawerPreview.createHandle,
+  createHandle: BaseDrawer.createHandle,
 };

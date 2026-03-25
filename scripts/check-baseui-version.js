@@ -13,13 +13,13 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const UTILS_FILE = path.join(__dirname, '../src/lib/base-ui-utils.ts');
-const BASE_UI_PKG = path.join(__dirname, '../node_modules/@base-ui-components/react/package.json');
+const BASE_UI_PKG = path.join(__dirname, '../node_modules/@base-ui/react/package.json');
 
 // Files we copied from Base UI
 const COPIED_FILES = [
-  'esm/utils/getStateAttributesProps.js',
-  'esm/utils/createBaseUIEventDetails.js',
-  'esm/utils/reason-parts.js',
+  'utils/getStateAttributesProps.js',
+  'utils/createBaseUIEventDetails.js',
+  'utils/reason-parts.js',
 ];
 
 function getInstalledVersion() {
@@ -48,7 +48,7 @@ function main() {
     console.log('');
     console.log('Review these files for changes:');
     COPIED_FILES.forEach(file => {
-      console.log(`  node_modules/@base-ui-components/react/${file}`);
+      console.log(`  node_modules/@base-ui/react/${file}`);
     });
     console.log('');
     console.log('After syncing, update @baseui-version in src/lib/base-ui-utils.ts');
