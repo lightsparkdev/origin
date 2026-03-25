@@ -1612,6 +1612,84 @@ function DrawerDemo() {
   );
 }
 
+const LOCALES = [
+  { code: 'en-US', label: 'English (US)', weekStart: 0 as const },
+  { code: 'en-GB', label: 'English (UK)', weekStart: 1 as const },
+  { code: 'fr-FR', label: 'French', weekStart: 1 as const },
+  { code: 'de-DE', label: 'German', weekStart: 1 as const },
+  { code: 'es-ES', label: 'Spanish', weekStart: 1 as const },
+  { code: 'pt-BR', label: 'Portuguese (BR)', weekStart: 0 as const },
+  { code: 'ja-JP', label: 'Japanese', weekStart: 0 as const },
+  { code: 'ko-KR', label: 'Korean', weekStart: 0 as const },
+  { code: 'zh-CN', label: 'Chinese (CN)', weekStart: 1 as const },
+  { code: 'ar-SA', label: 'Arabic (SA)', weekStart: 0 as const },
+];
+
+function LocalizedDatePicker() {
+  const [localeCode, setLocaleCode] = React.useState(LOCALES[0].code);
+  const [value, setValue] = React.useState<Date | DateRange | null>(null);
+  const [mode, setMode] = React.useState<'single' | 'range'>('range');
+  const [includeTime, setIncludeTime] = React.useState(false);
+  const locale = LOCALES.find((l) => l.code === localeCode) ?? LOCALES[0];
+
+  return (
+    <div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-xs)', marginBottom: 'var(--spacing-xs)' }}>
+        <p className="label-sm" style={{ color: 'var(--text-tertiary)', margin: 0 }}>Localized</p>
+        <Select.Root value={localeCode} onValueChange={(v) => { if (v) setLocaleCode(v); }}>
+          <Select.Trigger variant="ghost">
+            <Select.Value />
+            <Select.Icon />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Positioner>
+              <Select.Popup>
+                <Select.List>
+                  {LOCALES.map((l) => (
+                    <Select.Item key={l.code} value={l.code}>
+                      <Select.ItemText>{l.label}</Select.ItemText>
+                    </Select.Item>
+                  ))}
+                </Select.List>
+              </Select.Popup>
+            </Select.Positioner>
+          </Select.Portal>
+        </Select.Root>
+      </div>
+      <DatePicker.Root
+        mode={mode}
+        includeTime={includeTime}
+        value={value}
+        onValueChange={setValue}
+        locale={locale.code}
+        weekStartsOn={locale.weekStart}
+      >
+        <DatePicker.Header />
+        <DatePicker.Navigation />
+        <DatePicker.Grid />
+        <DatePicker.Controls>
+          <DatePicker.ControlItem label="End date">
+            <Switch
+              size="sm"
+              checked={mode === 'range'}
+              onCheckedChange={(v) => {
+                setMode(v ? 'range' : 'single');
+                setValue(null);
+              }}
+            />
+          </DatePicker.ControlItem>
+          <DatePicker.ControlItem label="Include time">
+            <Switch size="sm" checked={includeTime} onCheckedChange={setIncludeTime} />
+          </DatePicker.ControlItem>
+        </DatePicker.Controls>
+        <DatePicker.Footer>
+          <Button variant="outline" size="compact" style={{ width: '100%' }}>Apply</Button>
+        </DatePicker.Footer>
+      </DatePicker.Root>
+    </div>
+  );
+}
+
 function DatePickerDemo() {
   const [singleDate, setSingleDate] = React.useState<Date | null>(null);
   const [rangeValue, setRangeValue] = React.useState<Date | DateRange | null>(null);
@@ -1662,49 +1740,7 @@ function DatePickerDemo() {
           </DatePicker.Footer>
         </DatePicker.Root>
       </div>
-      <div>
-        <p className="label-sm" style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--spacing-xs)' }}>French (locale)</p>
-        <DatePicker.Root
-          mode={mode}
-          includeTime={includeTime}
-          value={rangeValue}
-          onValueChange={setRangeValue}
-          locale="fr-FR"
-          weekStartsOn={1}
-          labels={{
-            previousMonth: 'Mois pr\u00e9c\u00e9dent',
-            nextMonth: 'Mois suivant',
-            date: 'Date',
-            time: 'Heure',
-            startDate: 'Date de d\u00e9but',
-            endDate: 'Date de fin',
-            startTime: 'Heure de d\u00e9but',
-            endTime: 'Heure de fin',
-          }}
-        >
-          <DatePicker.Header />
-          <DatePicker.Navigation />
-          <DatePicker.Grid />
-          <DatePicker.Controls>
-            <DatePicker.ControlItem label="Date de fin">
-              <Switch
-                size="sm"
-                checked={mode === 'range'}
-                onCheckedChange={(v) => {
-                  setMode(v ? 'range' : 'single');
-                  setRangeValue(null);
-                }}
-              />
-            </DatePicker.ControlItem>
-            <DatePicker.ControlItem label="Inclure l'heure">
-              <Switch size="sm" checked={includeTime} onCheckedChange={setIncludeTime} />
-            </DatePicker.ControlItem>
-          </DatePicker.Controls>
-          <DatePicker.Footer>
-            <Button variant="outline" size="compact" style={{ width: '100%' }}>Appliquer</Button>
-          </DatePicker.Footer>
-        </DatePicker.Root>
-      </div>
+      <LocalizedDatePicker />
     </div>
   );
 }
